@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+import './app.scss';
 
 const App = () => (
-  <div>Rss lang</div>
+  <div className="test">Rss lang</div>
 );
 
 export default App;

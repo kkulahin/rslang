@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
 
 module.exports = (env = {}) => {
   const { mode = 'development' } = env;
@@ -62,6 +61,14 @@ module.exports = (env = {}) => {
               name: '[name].[ext]',
             },
           }],
+        },
+        {
+          test: /\.s[ac]ss$/i,
+          use: [
+            { loader: getLoader() },
+            { loader: 'css-loader' },
+            { loader: 'sass-loader' },
+          ],
         },
         {
           test: /\.css$/,
