@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { useAuth0 } from './Auth/auth0';
+import { useAuth0 } from './auth/auth0';
 import Login from './login';
 
 const AuthRoute = ({ component: Component, path, ...rest }) => {
