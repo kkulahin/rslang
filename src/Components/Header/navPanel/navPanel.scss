@@ -1,0 +1,11 @@
+.header__wrapper {
+    display: flex;
+}
+
+.header__nav {
+    flex: 1 90%;
+}
+
+.header__nav + div {
+    flex: 2;
+}
