@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = (env = {}) => {
   const { mode = 'development' } = env;
@@ -17,6 +18,7 @@ module.exports = (env = {}) => {
       }),
     ];
     if (isProd) {
+      plugins.push(new CleanWebpackPlugin());
       plugins.push(new MiniCssExtractPlugin({
         filename: '[name]-[hash:8].css',
       }));
