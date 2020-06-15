@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import History from '../utils/history';
@@ -8,7 +7,7 @@ import LoginPage from './route/LoginPage';
 import Dictionary from './route/Dictionary';
 import Statistic from './route/Statistic';
 import Promo from './route/Promo';
-import About from './route/about';
+import About from './route/About';
 /* import AuthRoute from './authRoute'; */
 
 import Header from './header/Header';
