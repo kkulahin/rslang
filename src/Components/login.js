@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth0 } from './Auth/auth0';
+import { useAuth0 } from './auth/auth0';
 
 const Login = () => {
   const { loginWithRedirect } = useAuth0();
