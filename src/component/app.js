@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import History from '../util/history';
+import History from '../utils/history';
 import Home from './route/Home';
 import NotFound from './route/NotFound';
 import LoginPage from './route/LoginPage';
@@ -18,13 +18,17 @@ const App = () => (
   <Router history={History}>
     <Header />
     <Switch>
-      <Route path="/signin" component={LoginPage} />
-      <Route path="/dictionary" component={Dictionary} />
+      <Route path="/signin">
+        <LoginPage />
+      </Route>
+      <Route path="/dictionary">
+        <Dictionary />
+      </Route>
       <Route path="/statistic" component={Statistic} />
       <Route path="/promo" component={Promo} />
       <Route path="/about" component={About} />
       <Route exact path="/" component={Home} />
-      <Route path="*" component={NotFound} />
+      <Route component={NotFound} />
     </Switch>
   </Router>
 );
