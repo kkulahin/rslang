@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Menu } from 'semantic-ui-react';
 
-import Logo from '../../../image/icon/reload.png';
+import Logo from '../../../assets/image/icon/reload.png';
 
 import './navPanel.scss';
 

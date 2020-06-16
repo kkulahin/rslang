@@ -1,16 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import History from '../utils/history';
-import Home from './route/Home';
-import NotFound from './route/NotFound';
-import LoginPage from './route/LoginPage';
-import Dictionary from './route/Dictionary';
-import Statistic from './route/Statistic';
-import Promo from './route/Promo';
-import About from './route/About';
+import History from './utils/history';
+import Home from './pages/Home';
+import NotFound from './pages/NotFound';
+import LoginPage from './pages/LoginPage';
+import Dictionary from './pages/Dictionary';
+import Statistic from './pages/Statistic';
+import Promo from './pages/Promo';
+import About from './pages/About';
 /* import AuthRoute from './authRoute'; */
 
-import Header from './header/Header';
+import Header from './components/header/Header';
 
 import './app.scss';
 
