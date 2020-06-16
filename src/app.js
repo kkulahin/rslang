@@ -1,3 +1,4 @@
+// eslint-disable-next-line linebreak-style
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import History from './utils/history';
@@ -20,12 +21,8 @@ const App = () => (
       <Header />
       <div className="app-main">
         <Switch>
-          <Route path="/signin">
-            <LoginPage />
-          </Route>
-          <Route path="/dictionary">
-            <Dictionary />
-          </Route>
+          <Route path="/signin" component={LoginPage} />
+          <Route path="/dictionary" component={Dictionary} />
           <Route path="/statistic" component={Statistic} />
           <Route path="/promo" component={Promo} />
           <Route path="/about" component={About} />

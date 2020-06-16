@@ -1,7 +1,8 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { useAuth0 } from './auth/auth0';
-import Login from './login';
+import { useAuth0 } from './components/auth/auth0';
+import Login from './components/login/login';
 
 const AuthRoute = ({ component: Component, path, ...rest }) => {
   const { isAuthenticated } = useAuth0();
