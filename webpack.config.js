@@ -1,12 +1,12 @@
 /* eslint-disable linebreak-style */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+/* const { CleanWebpackPlugin } = require('clean-webpack-plugin'); */
+const path = require('path');
 
 module.exports = (env = {}) => {
-  const { mode = 'development' } = env;
-  const isProd = mode === 'production';
-  const isDev = mode === 'development';
+  const isProd = env === 'production';
+  const isDev = env === 'development';
 
   const getLoader = () => (isProd ? MiniCssExtractPlugin.loader : 'style-loader');
 
@@ -18,7 +18,7 @@ module.exports = (env = {}) => {
       }),
     ];
     if (isProd) {
-      plugins.push(new CleanWebpackPlugin());
+      /* plugins.push(new CleanWebpackPlugin()); */
       plugins.push(new MiniCssExtractPlugin({
         filename: '[name]-[hash:8].css',
       }));
@@ -28,6 +28,12 @@ module.exports = (env = {}) => {
 
   return {
     mode: isProd ? 'production' : isDev && 'development',
+    entry: './src/index.js',
+    output: {
+      path: path.join(__dirname, '/dist'),
+      publicPath: isDev ? '/' : './',
+      filename: 'main.js',
+    },
     module: {
       rules: [
         {
@@ -86,6 +92,7 @@ module.exports = (env = {}) => {
 
     devServer: {
       open: true,
+      historyApiFallback: true,
     },
   };
 };
