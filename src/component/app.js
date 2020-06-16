@@ -16,20 +16,24 @@ import './app.scss';
 
 const App = () => (
   <Router history={History}>
-    <Header />
-    <Switch>
-      <Route path="/signin">
-        <LoginPage />
-      </Route>
-      <Route path="/dictionary">
-        <Dictionary />
-      </Route>
-      <Route path="/statistic" component={Statistic} />
-      <Route path="/promo" component={Promo} />
-      <Route path="/about" component={About} />
-      <Route exact path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
+    <div className="app-wrapper">
+      <Header />
+      <div className="app-main">
+        <Switch>
+          <Route path="/signin">
+            <LoginPage />
+          </Route>
+          <Route path="/dictionary">
+            <Dictionary />
+          </Route>
+          <Route path="/statistic" component={Statistic} />
+          <Route path="/promo" component={Promo} />
+          <Route path="/about" component={About} />
+          <Route exact path="/" component={Home} />
+          <Route component={NotFound} />
+        </Switch>
+      </div>
+    </div>
   </Router>
 );
 

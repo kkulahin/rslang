@@ -1,33 +1,32 @@
 /* eslint-disable import/no-unresolved */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Segment } from 'semantic-ui-react';
+import { Icon, Menu } from 'semantic-ui-react';
+
+import Logo from '../../../image/icon/reload.png';
 
 import './navPanel.scss';
 
 const NavPanel = () => {
   const [activeItem, setActiveItem] = useState({ link: '' });
-
-  useEffect(() => {
-
-  }, [activeItem]);
-
   const handleItemClick = (e) => {
     const activeLink = e.target.getAttribute('name');
     setActiveItem({ link: activeLink });
   };
-
   return (
-    <Segment inverted className="header__wrapper">
-      <Menu className="header__nav" inverted pointing secondary>
+    <div className="vertical menu">
+      <div className="logo-wrapper">
+        <img src={Logo} alt="" />
+      </div>
+      <Menu icon="labeled" vertical>
         <Link
           className={activeItem.link === 'home' ? 'item active' : 'item'}
           name="home"
           to="/"
           onClick={handleItemClick}
         >
-          {' '}
-          Main page
+          <Icon name="home" />
+          Main
         </Link>
         <Link
           className={activeItem.link === 'dictionary' ? 'item active' : 'item'}
@@ -35,8 +34,8 @@ const NavPanel = () => {
           to="/dictionary"
           onClick={handleItemClick}
         >
-          {' '}
-          Dictionary
+          <Icon name="graduation cap" />
+          Learn
         </Link>
         <Link
           className={activeItem.link === 'statistic' ? 'item active' : 'item'}
@@ -44,17 +43,8 @@ const NavPanel = () => {
           to="/statistic"
           onClick={handleItemClick}
         >
-          {' '}
-          Statistic
-        </Link>
-        <Link
-          className={activeItem.link === 'promo' ? 'item active' : 'item'}
-          name="promo"
-          to="/promo"
-          onClick={handleItemClick}
-        >
-          {' '}
-          Promo
+          <Icon name="area chart" />
+          Chart
         </Link>
         <Link
           className={activeItem.link === 'about' ? 'item active' : 'item'}
@@ -62,19 +52,29 @@ const NavPanel = () => {
           to="/about"
           onClick={handleItemClick}
         >
-          {' '}
+          <Icon name="users" />
           About
         </Link>
+        <Link
+          className={activeItem.link === 'promo' ? 'item active' : 'item'}
+          name="promo"
+          to="/promo"
+          onClick={handleItemClick}
+        >
+          <Icon name="settings" />
+          Settings
+        </Link>
       </Menu>
-      <div>
+
+      <div className="login">
         <Link to="/signin">
-          <button className="ui button" type="button">
-            {' '}
+          <button type="button" className="ui icon button">
+            <i className="icon angle double right" />
             Login
           </button>
         </Link>
       </div>
-    </Segment>
+    </div>
   );
 };
 

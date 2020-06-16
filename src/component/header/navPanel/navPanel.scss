@@ -1,11 +1,17 @@
-.header__wrapper {
+.vertical.menu {
+    flex: 0 100px;
+}
+
+.logo-wrapper {
     display: flex;
+    justify-content: center;
 }
 
-.header__nav {
-    flex: 1 90%;
+.logo-wrapper img {
+    width: 50px;
 }
 
-.header__nav + div {
-    flex: 2;
+.login {
+    display: flex;
+    justify-content: center;
 }
