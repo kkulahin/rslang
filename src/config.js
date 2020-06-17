@@ -4,4 +4,4 @@ const auth0Config = {
   redirect_uri: 'http://localhost:8080',
 };
 
-export default auth0Config;
+export default { auth0Config };

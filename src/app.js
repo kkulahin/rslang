@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import History from './utils/history';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
-import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/loginPage/LoginPage';
+import SignupPage from './pages/signupPage/SignupPage';
 import Dictionary from './pages/Dictionary';
 import Statistic from './pages/Statistic';
 import Promo from './pages/Promo';
@@ -22,6 +23,7 @@ const App = () => (
       <div className="app-main">
         <Switch>
           <Route path="/signin" component={LoginPage} />
+          <Route path="/signup" component={SignupPage} />
           <Route path="/dictionary" component={Dictionary} />
           <Route path="/statistic" component={Statistic} />
           <Route path="/promo" component={Promo} />

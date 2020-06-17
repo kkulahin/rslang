@@ -1,0 +1,72 @@
+.register-wrapper {
+    display: flex;
+    height: 100vh;
+    align-items: center !important;
+    justify-content: center;
+}
+
+.register-column {
+    width: 500px !important;
+}
+
+.register-header {
+    color: #25CEDE;
+    text-align: center;
+    font-size: 64px;
+    line-height: 76px;
+    font-weight: bold;
+}
+
+.register-header .image {
+    position: absolute !important;
+    left: -3.51%;
+    top: -14.45%;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #2C2F33 !important;
+    box-shadow: 6.22302px 6.22302px 18.6691px #000000, -6.22302px -6.22302px 18.6691px #3B4451;
+    border-radius: 25px;
+}
+
+.form-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    color: #fff;
+}
+
+.form-header .description {
+    width: 80%;
+    font-size: 14px;
+    color: #676a6d;
+    margin-bottom: 20px;
+}
+
+.register-form .field {
+    margin-top: 30px;
+    width: 90%;
+}
+
+.register-form .button {
+    width: 80%;
+    padding: 20px !important;
+    margin: 30px auto !important;
+    color: #fff !important;
+    background-color: #25CEDE !important;
+    border-radius: 24.8921px !important;
+    box-shadow: 12.446px 12.446px 31.1151px rgba(0, 0, 0, 0.5), -12.446px -12.446px 31.1151px #3B4451 !important;
+}
+
+.register-form .error.field {
+    position:relative;
+}
+
+.error.field .pointing.label {
+    position: absolute;
+    top:-40px;
+}

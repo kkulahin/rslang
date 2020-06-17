@@ -1,0 +1,122 @@
+.login-wrapper {
+    display: flex;
+    height: 100vh;
+    align-items: center !important;
+    justify-content: center;
+}
+
+.login-column {
+    width: 500px !important;
+}
+
+.login-header {
+    color: #25CEDE;
+    text-align: center;
+    font-size: 64px;
+    line-height: 76px;
+    font-weight: bold;
+}
+
+.login-header .image {
+    position: absolute !important;
+    left: -3.51%;
+    top: -14.45%;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #2C2F33 !important;
+    box-shadow: 6.22302px 6.22302px 18.6691px #000000, -6.22302px -6.22302px 18.6691px #3B4451;
+    border-radius: 25px;
+}
+
+.login-form .label {
+    width: 200px;
+    margin: 25px auto;
+    color: #fff;
+    font-weight: 500;
+    font-size: 19.9809px;
+    line-height: 24px;
+}
+
+.login-form .field {
+    width: 90%;
+}
+
+.ui.fluid input {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+    background: #EEEEEE !important;
+    box-shadow: inset 5.9893px 5.9893px 17.9679px rgba(136, 160, 183, 0.25), inset -5.9893px -5.9893px 17.9679px rgba(255, 255, 255, 0.5) !important;
+    border-radius: 18px !important;
+}
+
+
+input[type="checkbox"] {
+    display:none;
+}
+
+input[type="checkbox"] + label {
+    color:#f2f2f2;
+}
+
+input[type="checkbox"] + label span {
+    display:inline-block;
+    width:19px;
+    height:19px;
+    margin:-2px 10px 0 0;
+    vertical-align:middle;
+    background:url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/check_radio_sheet.png) left top no-repeat;
+    cursor:pointer;
+}
+
+input[type="checkbox"]:checked + label span {
+    background:url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/check_radio_sheet.png) -19px top no-repeat;
+}
+
+.field {
+	display: flex;
+	color: #fff;
+}
+
+.checkbox-wrapper {
+	flex: 0 50%;
+	font-weight: 600;
+}
+
+.field a {
+	color: #fff !important;
+	font-weight: 600;
+}
+
+.login-button {
+	width: 80%;
+	padding: 20px !important;
+	background: #25CEDE !important;
+	box-shadow: 12.446px 12.446px 31.1151px rgba(0, 0, 0, 0.5), -12.446px -12.446px 31.1151px #3B4451 !important;
+	border-radius: 24.8921px !important;
+	color: #fff !important;
+	font-weight: 500;
+	font-size: 21.5615px !important;
+	line-height: 26px !important;
+}
+
+.form .field:last-child {
+	width: 175px;
+    margin: 15px !important;
+}
+
+span.login-signup {
+	color: #fff !important;
+	font-weight: 400 !important;
+}
+
+.ui.form .field:last-child span {
+	flex: 0 100px;
+}
+
+a.login-signup {
+	color: #25CEDE !important;
+}
