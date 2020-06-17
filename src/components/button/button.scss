@@ -1,0 +1,52 @@
+$background-color: #2C2F33;
+$background-color-light: #25CEDE;
+
+.button {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+
+  background-color: $background-color;
+  color: #ffffff;
+  font-weight: bold;
+
+  box-shadow: 5px 5px 15px #000000, 
+            -5px -5px 15px #3B4451;
+  border-radius: 111.005px;
+
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  transition: 0.3s linear;
+
+  &-light {
+    background-color: $background-color-light;
+  }
+  
+
+  &-check {
+    color: $background-color-light;
+  }
+
+  &-press {
+    transition: 0.5s linear;
+    background: #2C2F33;
+    box-shadow: inset 6.22302px 6.22302px 18.6691px #000000, inset -6.22302px -6.22302px 18.6691px #3B4451;
+    border-radius: 124.46px;
+  }
+
+  &:hover {
+    color: rgba(37, 206, 222, 0.5);
+  }
+
+  &-light:hover {
+    color: #ffffff !important;
+  }
+
+  &:active {
+    transform: scale(0.8);
+  }
+
+  
+}
