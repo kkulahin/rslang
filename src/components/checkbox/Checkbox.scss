@@ -1,0 +1,62 @@
+$element-size: 30px;
+$element-color: #25CEDE;
+$element-hover-cover: rgba(37, 206, 222, 0.5);
+$box-shadow-first-color: #000000;
+$box-shadow-second-color: #3B4451;
+$transition-duration: 0.2s;
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+.checkbox {
+  position: relative;
+  background-color:#2C2F33;
+  border-radius: 40%;
+  box-shadow: 6px 6px 18px $box-shadow-first-color, -6px -6px 18px $box-shadow-second-color;  
+  color: $element-color;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: box-shadow $transition-duration, color $transition-duration;
+
+  @include size($element-size);
+
+  &:checked {
+
+    &::after {
+      content: '\00AC';
+      position: absolute;
+      top: 5%;
+      left: 27%;
+      line-height: 1;
+      font-size: ($element-size * 0.8);
+      font-weight: bold;
+      transform: rotate(130deg);
+    }
+  }
+
+  &:active {
+    box-shadow: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      box-shadow: inset 4px 4px 6px $box-shadow-first-color, inset -6px -6px 6px $box-shadow-second-color;
+      border-radius: 40%;
+      transition: box-shadow $transition-duration $transition-duration;    
+
+      @include size(100%);
+    }
+  }
+
+  &:hover {
+    color: $element-hover-cover;
+  }
+}
