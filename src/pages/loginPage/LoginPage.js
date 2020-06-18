@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-  Button, Form, Grid, Image,
+  Button, Form, Grid, Image, Checkbox,
 } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import responseFromServer from '../../utils/responseFromServer';
@@ -35,21 +35,35 @@ const notification = {
   status: null,
 };
 
+const isRememberUserDefault = () => (localStorage.getItem('rememberUser') !== null
+  ? JSON.parse(localStorage.getItem('rememberUser')) : false);
+
+const defaultUserData = () => (localStorage.getItem('userData') !== null
+  ? JSON.parse(localStorage.getItem('userData')) : userData);
+
 const LoginForm = () => {
   const [isValid] = useState(errorState);
   const [isDisabled, setButtonBehaviour] = useState(true);
-  const [data, setUserData] = useState(userData);
+  const [data, setUserData] = useState(defaultUserData);
   const [userNotification, setUserNotification] = useState(notification);
   const [redirectToHome, setRedirect] = useState(false);
+  const [rememberUser, setRememberUser] = useState(isRememberUserDefault());
 
   useEffect(() => {
-    const { email, password } = isValid;
-    if (!email.isChanged && !password.isChanged) {
-      if (data.email !== '' && data.password !== '') {
-        setButtonBehaviour(false);
-      }
+    if (data.email === '' || data.password === '') {
+      setButtonBehaviour(true);
+    } else {
+      setButtonBehaviour(false);
     }
-  }, [data.email, data.password, isValid]);
+  }, [data.email, data.password]);
+
+  useEffect(() => {
+    if (rememberUser) {
+      localStorage.setItem('userData', JSON.stringify(data));
+    } else {
+      localStorage.setItem('userData', JSON.stringify(userData));
+    }
+  }, [rememberUser, data]);
 
   const setEmail = (e) => {
     const userEmail = {
@@ -65,6 +79,13 @@ const LoginForm = () => {
       password: e.target.value,
     };
     setUserData(userPassword);
+  };
+
+  const isChecked = (e) => {
+    const { currentTarget } = e;
+    const checkBoxValue = !currentTarget.querySelector('input.hidden').checked;
+    localStorage.setItem('rememberUser', checkBoxValue);
+    setRememberUser(checkBoxValue);
   };
 
   const onSubmit = () => {
@@ -116,6 +137,7 @@ const LoginForm = () => {
             iconPosition="left"
             placeholder="E-mail address"
             onChange={setEmail}
+            defaultValue={data.email}
           />
           <Form.Input
             fluid
@@ -124,14 +146,15 @@ const LoginForm = () => {
             placeholder="Password"
             type="password"
             onChange={setPassword}
+            defaultValue={data.password}
           />
           <div className="field">
             <div className="checkbox-wrapper">
-              <input type="checkbox" id="login-checkbox" name="login-checkbox" />
-              <label htmlFor="login-checkbox">
-                <span />
-                Rememeber me
-              </label>
+              <Checkbox
+                label="remember me"
+                onChange={isChecked}
+                defaultChecked={rememberUser}
+              />
             </div>
             <div>
               <a href="/forgot">Forgot password?</a>
