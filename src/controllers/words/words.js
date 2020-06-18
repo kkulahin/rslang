@@ -1,4 +1,4 @@
-import { SchoolURL } from '../../default';
+import { SchoolURL } from '../../config/default';
 import responseFromServer from '../../utils/responseFromServer';
 
 import random from '../../utils/random';

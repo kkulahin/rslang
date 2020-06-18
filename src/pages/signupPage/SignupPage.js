@@ -6,7 +6,7 @@ import {
   Button, Form, Grid, Image,
 } from 'semantic-ui-react';
 import VectorMan from '../../assets/image/vector_man.png';
-import { SchoolURL } from '../../default';
+import { SchoolURL } from '../../config/default';
 import responseFromServer from '../../utils/responseFromServer';
 import {
   patternValidate, emailError, passwordError, requiredFieldError,

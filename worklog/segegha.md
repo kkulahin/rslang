@@ -8,3 +8,4 @@
 | Create number-picker component | 19.06.2020 | 20.06.2020 | 4 h |
 | Refactor app styles | 21.06.2020 | 22.06.2020 | 8 h |
 | Create greeting wrapper component | 22.06.2020 | 22.06.2020 | 1 h |
+| Create settings page | 18.06.2020 | 24.06.2020 | 30 h |
