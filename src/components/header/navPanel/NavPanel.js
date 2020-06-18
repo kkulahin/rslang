@@ -56,13 +56,22 @@ const NavPanel = () => {
           About
         </Link>
         <Link
+          className={activeItem.link === 'settings' ? 'item active' : 'item'}
+          name="settings"
+          to="/settings"
+          onClick={handleItemClick}
+        >
+          <Icon name="settings" />
+          Settings
+        </Link>
+        <Link
           className={activeItem.link === 'promo' ? 'item active' : 'item'}
           name="promo"
           to="/promo"
           onClick={handleItemClick}
         >
-          <Icon name="settings" />
-          Settings
+          <Icon name="caret square right outline" />
+          Promo
         </Link>
       </Menu>
 

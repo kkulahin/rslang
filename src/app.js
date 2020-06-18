@@ -10,7 +10,7 @@ import Dictionary from './pages/Dictionary';
 import Statistic from './pages/Statistic';
 import Promo from './pages/Promo';
 import About from './pages/About';
-/* import AuthRoute from './authRoute'; */
+import Settings from './pages/Settings';
 
 import Header from './components/header/Header';
 
@@ -26,6 +26,7 @@ const App = () => (
           <Route path="/signup" component={SignupPage} />
           <Route path="/dictionary" component={Dictionary} />
           <Route path="/statistic" component={Statistic} />
+          <Route path="/settings" component={Settings} />
           <Route path="/promo" component={Promo} />
           <Route path="/about" component={About} />
           <Route exact path="/" component={Home} />
