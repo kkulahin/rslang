@@ -70,3 +70,21 @@
     position: absolute;
     top:-40px;
 }
+
+.user-notification {
+    position: absolute;
+    top: 80px;
+    height: 5vh;
+    width: 50%;
+    background-color: #25CEDE;
+    line-height: 5vh;
+    text-align: center;
+    border-radius: 20px;
+    font-weight: 600;
+    font-variant: small-caps;
+    color: #fff;
+}
+
+.user-notification.error {
+    background-color: #de2576;
+}

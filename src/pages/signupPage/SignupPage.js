@@ -1,12 +1,16 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   Button, Form, Grid, Image,
 } from 'semantic-ui-react';
 import VectorMan from '../../assets/image/vector_man.png';
-import URL from '../../default';
+import { SchoolURL } from '../../default';
 import responseFromServer from '../../utils/responseFromServer';
+import {
+  patternValidate, emailError, passwordError, requiredFieldError,
+} from './validation';
 
 import './SignupPage.scss';
 
@@ -23,35 +27,22 @@ const errorState = {
   },
 };
 
-const patternValidate = {
-  email: '[A-Za-z-]*@[A-Za-z-]*.[a-z]{2,3}',
-  password: '^[A-Z]{1}[A-Za-z!@#$%^&**-=]{7,}$',
-};
-
-const emailError = {
-  content: 'Please enter valid email',
-  pointing: 'below',
-};
-
-const passwordError = {
-  content: 'Please enter valid password. Password should contain 1 special sumbol',
-  pointing: 'below',
-};
-
-const requiredFieldError = {
-  content: "It's field required",
-  pointing: 'below',
-};
-
 const userData = {
   email: '',
   password: '',
 };
 
+const notification = {
+  msg: '',
+  status: null,
+};
+
 const SignUpForm = () => {
-  const [isChecked, setValidate] = useState(errorState);
+  const [isValid, setValidate] = useState(errorState);
   const [isDisabled, setButtonBehaviour] = useState(true);
   const [data, setUserData] = useState(userData);
+  const [userNotification, setUserNotification] = useState(notification);
+  const [redirectToLogin, setRedirect] = useState(false);
 
   const isEmptyField = (field) => field.length === 0;
   const isValidatePattern = (field, pattern) => {
@@ -61,8 +52,8 @@ const SignUpForm = () => {
 
   useEffect(() => {
     let errors = true;
-    Object.keys(isChecked).forEach((field) => {
-      if (isChecked[field].isChanged && !isChecked[field].isRequired && !isChecked[field].error) {
+    Object.keys(isValid).forEach((field) => {
+      if (isValid[field].isChanged && !isValid[field].isRequired && !isValid[field].error) {
         errors = false;
       } else {
         errors = true;
@@ -70,10 +61,10 @@ const SignUpForm = () => {
     });
     // eslint-disable-next-line no-unused-expressions
     errors === true ? setButtonBehaviour(true) : setButtonBehaviour(false);
-  }, [isChecked]);
+  }, [isValid]);
 
   const validateEmail = (e) => {
-    const { email } = isChecked;
+    const { email } = isValid;
 
     if (!email.isChanged) {
       email.isChanged = true;
@@ -100,7 +91,7 @@ const SignUpForm = () => {
   };
 
   const validatePassword = (e) => {
-    const { password } = isChecked;
+    const { password } = isValid;
     if (!password.isChanged) {
       password.isChanged = true;
       const newErrorState = {
@@ -126,7 +117,7 @@ const SignUpForm = () => {
   };
 
   const sendErrorEmail = () => {
-    const { email } = isChecked;
+    const { email } = isValid;
     if (email.isRequired) {
       return requiredFieldError;
     }
@@ -137,7 +128,7 @@ const SignUpForm = () => {
   };
 
   const sendErrorPassword = () => {
-    const { password } = isChecked;
+    const { password } = isValid;
     if (password.isRequired) {
       return requiredFieldError;
     }
@@ -150,8 +141,15 @@ const SignUpForm = () => {
   const onSubmit = () => {
     const createUser = async () => {
       try {
-        const response = await responseFromServer(`${URL}/users`, 'POST', data);
-        console.log(response);
+        const userMsg = {
+          msg: 'User created successfully. You will be redirected',
+          status: true,
+        };
+        const response = await responseFromServer(`${SchoolURL}/users`, userMsg, 'POST', data);
+        setUserNotification(response.notification);
+        if (response.notification.status) {
+          setTimeout(() => setRedirect(true), 3000);
+        }
       } catch (error) {
         throw new Error('invalid request');
       }
@@ -161,6 +159,13 @@ const SignUpForm = () => {
 
   return (
     <Grid className="register-wrapper">
+      {redirectToLogin ? <Redirect to="/signin" /> : null}
+      { userNotification.status !== null ? (
+        <div className={userNotification.status ? 'user-notification success' : 'user-notification error'}>
+          {' '}
+          {userNotification?.msg}
+        </div>
+      ) : null}
       <Grid.Column className="register-column">
         <div className="register-header">
           <Image src={VectorMan} />
@@ -176,7 +181,7 @@ const SignUpForm = () => {
             </div>
           </div>
           <Form.Input
-            error={isChecked.email.isChanged ? sendErrorEmail() : null}
+            error={isValid.email.isChanged ? sendErrorEmail() : null}
             fluid
             autoComplete="off"
             icon="user"
@@ -185,7 +190,7 @@ const SignUpForm = () => {
             onChange={validateEmail}
           />
           <Form.Input
-            error={isChecked.email.isChanged ? sendErrorPassword() : null}
+            error={isValid.email.isChanged ? sendErrorPassword() : null}
             fluid
             required
             autoComplete="off"

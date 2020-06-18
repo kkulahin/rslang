@@ -1,4 +1,7 @@
-const responseFromServer = async (url, method = 'GET', userData = null) => {
+const responseFromServer = async (url,
+  notification = { msg: '', status: null },
+  method = 'GET', userData = null) => {
+  let setNotification = notification;
   let response;
   if (method === 'POST') {
     response = await fetch(url, {
@@ -12,9 +15,12 @@ const responseFromServer = async (url, method = 'GET', userData = null) => {
   } else {
     response = await fetch(url);
   }
+  if (!response.ok) {
+    setNotification = { msg: `${response.statusText}: ${response.status}`, status: false };
+  }
 
   const data = await response.json();
-  return data;
+  return { data, notification: setNotification };
 };
 
 export default responseFromServer;
