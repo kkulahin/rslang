@@ -1,0 +1,100 @@
+.about_page{
+    display: flex;
+    justify-content: center;
+    min-width: 100%;
+    min-height: 100vh;
+    background-color: #2c2f33;
+    color: #FFFFFF
+}
+.about_container{   
+    padding-top: 15px;
+    margin: 30px;
+    max-width: 90vw; 
+    border-radius: 25px;
+    background-color: #2c2f33;
+    box-shadow: 12.5px 12.5px 31px rgba(0, 0, 0, 0.5), -12.5px -12.5px 31px #3B4451;
+}
+
+
+.our_team{
+    margin-left: 31px; 
+    margin-bottom: 10px;
+    font-size: 36px;
+    text-align: left;
+}
+
+.wrapper_card{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;  
+    padding-bottom: 20px; 
+}
+
+.cards_person{
+    width: 270px;
+    height: 320px;  
+    padding: 10px;
+    margin: 20px 20px;
+    border-radius: 25px;
+    box-shadow: 12.5px 12.5px 31px rgba(0, 0, 0, 0.3), -12.5px -12.5px 31px rgba(59, 68, 81, 0.5);
+}
+
+.avatar_and_name{
+display: flex;
+justify-content: space-evenly;
+align-items: center;
+}
+
+.img_avatar{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.full_name{
+    margin: 0 0 0 30px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.wrapper_contribution_line{
+    margin-left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.about_person p{    
+    text-align: center;
+    font-size: 16px;
+}
+
+.wrapper_contribution_line{
+    width: 80%;
+    height: 5px;
+    background-color: rgb(216, 212, 212);
+    border-radius: 5px;
+}
+
+.contribution_line{
+    height: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 6px 1px #25CEDE;
+    background-color: #25CEDE;
+
+}
+
+.github_img{
+    width: 50px;
+    height: 50px;
+    margin-top: 20px;
+    border-radius: 50%;
+    background-color: #25CEDE;
+}
+
+.github_img:hover{
+    box-shadow: 12.5px 12.5px 31px rgba(0, 0, 0, 0.5), -12.5px -12.5px 31px #3B4451;
+    background-color: white;  
+}
+
+.link_github{
+margin-top: 45px;
+}
