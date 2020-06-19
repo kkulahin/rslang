@@ -1,0 +1,49 @@
+$element-size: 30px;
+$main-color: #2C2F33;
+$transition-duration: 0.5s;
+$box-shadow-standard-color: #000000;
+$box-shadow-standard-setup: 4px 4px 6px;
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+.switcher_stylise {
+  @include size(($element-size * 2), $element-size);
+
+  & input[type="checkbox"] {
+    position: relative;
+    @include size(100%);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: $main-color;
+    border-radius: ($element-size * 0.83);
+    outline: none;
+    box-shadow: inset $box-shadow-standard-setup $box-shadow-standard-color, inset -2px -2px 6px #3B4451;
+    transition: $transition-duration;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: ($element-size * 0.1);
+      @include size(($element-size * 0.8));
+      border-radius: 50%;
+      background-color: #EEEEEE;
+      box-shadow: $box-shadow-standard-setup $box-shadow-standard-color;
+      transition: $transition-duration;
+    }
+  }
+
+  & input:checked[type="checkbox"] {
+    background-color: #25CEDE;
+
+    &::before {
+      left: 50%;
+      box-shadow: $box-shadow-standard-setup rgba(0, 0, 0, 0.5);
+    }
+  }
+}
