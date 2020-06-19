@@ -1,0 +1,105 @@
+// container
+$element-height: 30px;
+$element-width: 250px;
+$element-padding: 40px;
+
+$element-font-size: 24px;
+
+$element-color-text: #FFFFFF;
+$element-color-background: transparent;
+
+// track
+$track-width: calc(#{$element-width} - 2 * #{$element-padding});
+$track-border-radius: calc(#{$element-height} * 0.5);
+$margin-text: 10px;
+
+$track-color-background: #2C2F33;
+
+$shadow-first-setup: inset 4px 4px 7px;
+$shadow-first-color: #000000;
+$shadow-second-setup: inset -7px -7px 7px;
+$shadow-second-color: #3B4451;
+
+// thumb
+$thumb-color-background: #25CEDE;
+$shadow-thumb-setup: 1px 1px 3px;
+$shadow-thumb-color: rgba(136, 160, 183, 0.35);
+$transition-duration: 0.5s;
+
+@mixin font ($size, $height, $weight, $style: normal) {
+  font-size: $size;
+  line-height: $height;
+  font-weight: $weight;
+  font-style: $style;
+}
+
+.linear-progress-bar__container {
+  width: $element-width;
+  height: $element-height;
+  padding: 0 $element-padding;
+
+  background-color: $element-color-background;
+
+  font: inherit;
+  color: $element-color-text;
+
+  @include font ($size: #{$element-font-size}, $height: 1, $weight: 500);
+
+  user-select: none;
+}
+
+.linear-progress-bar__track {
+  position: relative;
+
+  width: $track-width;
+  height: 100%;
+
+  border: none;
+  border-radius: $track-border-radius;
+  background-color: $track-color-background;
+  box-shadow: $shadow-first-setup $shadow-first-color, $shadow-second-setup $shadow-second-color;
+
+  &::before {
+    content: attr(data-value);
+
+    display: inline-block;
+
+    position: absolute;
+    right: calc(100% + #{$margin-text});
+    top: 50%;
+    transform: translateY(-50%);
+
+    font: inherit;
+    color: inherit;
+  }
+
+  &::after {
+    content: attr(data-size);
+
+    display: inline-block;
+
+    position: absolute;
+    left: calc(100% + #{$margin-text});
+    top: 50%;
+    transform: translateY(-50%);
+
+    font: inherit;
+    color: inherit;
+  }
+}
+
+.linear-progress-bar__thumb {
+  position: absolute;
+  left: 0;
+
+  z-index: 1;
+
+  height: 100%;
+
+  border: none;
+  border-radius: $track-border-radius;
+  background-color: $thumb-color-background;
+  box-shadow: $shadow-thumb-setup $shadow-thumb-color;
+
+  transition: width $transition-duration;
+}
