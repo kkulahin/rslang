@@ -5,3 +5,4 @@
 | Create sheckbox component | 18.06.2020 | 18.06.2020 | 2 h |
 | Create greeting component | 19.06.2020 | 19.06.2020 | 1 h |
 | Create continue training block | 19.06.2020 | 19.06.2020 | 3 h |
+| Create number-picker component | 19.06.2020 | 20.06.2020 | 4 h |
