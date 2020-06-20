@@ -1,0 +1,34 @@
+.games-header {
+    display: flex;
+justify-content: center;
+align-items: center;
+height: 20vh;
+color: #fff !important;
+}
+
+.games-cards .container-with-shadow {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 10px !important;
+}
+
+.games-cards .container-with-shadow img {
+    width: 60%;
+}
+
+.games-card__header {
+    color: #fff !important;
+}
+
+.games-card__description {
+    width: 80%;
+    height: 220px;
+    font-size: 16px;
+    color: #6e6e6e;
+    overflow: hidden;
+}
+
+.games-wrapper {
+    width: 100%;
+}
