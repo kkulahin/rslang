@@ -1,0 +1,50 @@
+$element-size: 40px;
+$background-color: #2C2F33;
+$box-shadow: inset 6px 6px 18px #000000, inset -6px -6px 18px #3B4451;
+$border-radius: 10px;
+$color: #EEEEEE;
+
+@mixin flex($flex-direction, $align-items: center, $justify-content: center) {
+  display: flex;
+  flex-direction: $flex-direction;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+.number-picker {
+
+  @include flex(row, center, space-between);
+
+  @include size(($element-size * 4.5), $element-size);
+  user-select: none;
+
+  .input {
+
+    @include size(($element-size * 1.5), $element-size);
+    padding: 0;
+    text-align: center;
+    color: $color;
+    background-color: $background-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+
+    &:required:focus:not(:placeholder-shown):valid,
+    &:required:focus:not(:placeholder-shown):invalid {
+      box-shadow: $box-shadow;
+    }
+  }
+
+  .button {
+
+    @include flex(row, center, center);
+
+    @include size($element-size);
+    padding: 0;
+    border-radius: $border-radius;
+  }
+}
