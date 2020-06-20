@@ -4,13 +4,13 @@ import { deleteCookie } from '../../utils/cookie';
 
 const Logout = () => {
   const [isRedirectToHome, setRedirect] = useState(false);
-  const removetUser = () => {
+  const removeUser = () => {
     deleteCookie('auth');
     setRedirect(true);
   };
   return (
     <div>
-      {isRedirectToHome ? <Redirect to="/" /> : removetUser()}
+      {isRedirectToHome ? <Redirect to="/" /> : removeUser()}
     </div>
   );
 };
