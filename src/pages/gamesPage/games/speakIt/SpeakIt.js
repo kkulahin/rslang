@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Header, Icon, Image, Step as SemanticStep, Button,
+  Header, Icon, Image, Button,
 } from 'semantic-ui-react';
 
 import { ProgressBar, Step } from 'react-step-progress-bar';
