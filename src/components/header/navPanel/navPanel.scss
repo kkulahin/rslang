@@ -1,10 +1,25 @@
 .vertical.menu {
-    flex: 0 100px;
+    position: sticky;
+    top: 0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 100vh;
+    background-color: #2C2F33;
 }
 
 .logo-wrapper {
-    display: flex;
+	display: flex;
+	flex: 1 80px;
     justify-content: center;
+    align-items: center;
+    height: 90px;
+}
+
+.app-link {
+	flex: 2 60%;
+	width: 95%;
 }
 
 .logo-wrapper img {
@@ -12,6 +27,73 @@
 }
 
 .login {
-    display: flex;
-    justify-content: center;
+    flex: 4
+}
+
+.ui.vertical.menu.app-menu {
+	display: flex !important;
+    height: 90%;
+    background-color: #2C2F33;
+    border-radius: 26px;
+	box-shadow: 6.22302px 6.22302px 18.6691px #000000, -6.22302px -6.22302px 18.6691px #3B4451;
+	transition: all .5s ease-in-out;
+}
+
+.app-menu.min {
+	width: 50% !important;
+}
+
+.app-menu.max {
+	width: 90% !important;
+}
+
+.app-menu a.item {
+    display: flex !important;
+    flex-direction: unset !important;
+    justify-content: space-between;
+    align-items: center !important;
+    color: #fff !important;
+}
+
+.app-menu a.item:hover {
+	color:rgba(37, 206, 222, 0.5) !important;
+}
+
+.app-menu a.item .icon {
+	flex: 0 50px;
+}
+
+.app-menu a.item p {
+	flex: 1;
+	text-align: left;
+	transition: opacity .4s ease-in-out;
+}
+
+.app-menu a.item  p.visible {
+	opacity: 1;
+}
+
+.app-menu a.item  p.invisible {
+	opacity: 0;
+}
+
+.app-menu__resize {
+	flex: 3 30px;
+	width: 100%;
+	font-size: 24px;
+	color: #fff;
+	font-weight: 600;
+	font-variant: all-small-caps;
+}
+
+.app-menu__resize-wrapper {
+	box-shadow: 6.22302px 6.22302px 18.6691px #000000, -6.22302px -6.22302px 18.6691px #3B4451;
+}
+
+.app-menu__resize .item {
+	min-width: 100% !important;
+}
+
+.app-menu .login {
+	flex: 4;
 }
