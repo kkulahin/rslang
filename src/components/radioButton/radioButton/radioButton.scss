@@ -1,0 +1,20 @@
+.radio-button {
+  margin: 0 20px;
+  padding: 0 25px;
+  background: #2C2F33;
+  font-weight: normal;
+  font-size: 22.4029px;
+  line-height: 36px;
+
+  text-align: center;
+  color: #25CEDE;
+  border-radius: 124.46px;
+
+  border: none;
+  outline: none;
+
+  &.radio-button--checked {
+    box-shadow: inset 6.22302px 6.22302px 18.6691px #000000, 
+    inset -6.22302px -6.22302px 18.6691px #3B4451;
+  }
+}
