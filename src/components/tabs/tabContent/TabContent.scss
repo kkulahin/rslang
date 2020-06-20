@@ -1,0 +1,46 @@
+.tab-content {
+  display       : flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  &__header {
+    padding-bottom: 5px;
+    border-bottom : 1px solid #FFFFFF;
+  }
+}
+
+.row {
+  display        : flex;
+  justify-content: space-between;
+
+  &__item {
+    width      : 25%;
+    margin-top : 20px;
+    font-weight: normal;
+    font-size  : 18px;
+    line-height: 21px;
+    color      : #FFFFFF;
+    text-align : left;
+  }
+
+  &__item:last-child {
+    text-align: right;
+  }
+
+  &__crash-icon {
+    cursor: pointer;
+
+    &:hover {
+      color: #25CEDE; 
+      opacity: 0.5;
+    }
+  }
+}
+
+
+
+
+
+
+
