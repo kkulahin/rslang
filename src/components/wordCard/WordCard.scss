@@ -1,11 +1,18 @@
 $font-size-big: 32px;
 $font-size-main: 24px;
-$font-size-small: 24px;
+$font-size-small: 16px;
 
 $font-color: #fff;
 
-//navigate
+// navigate
 $navigate-width: 40px;
+
+
+// word container
+$element-border-radius: 3px;
+// word input
+$word-input-padding: 7px;
+$word-bg-color: #25CEDE;
 
 @mixin font ($size, $height, $weight, $style: normal) {
   font-style: $style;
@@ -66,7 +73,7 @@ $navigate-width: 40px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-.help-content__picture {
+.help-content__image {
   width: 40%;
   min-width: 280px;
 
@@ -78,7 +85,7 @@ $navigate-width: 40px;
   border-radius: 5px;
 }
 
-.help-content__picture img {
+.help-content__image img {
   width: 100%;
   height: auto;
 }
@@ -86,9 +93,99 @@ $navigate-width: 40px;
 .help-content__text {
   flex-grow: 1;
 
-  margin-left: 20px;
+  margin: 0 0 0 20px;
+  padding: 0;
+
+  font-size: $font-size-main;
+  line-height: 1.2;
+
+  list-style: none;
+}
+
+.help-content-text__item + .help-content-text__item {
+  margin-top: 20px;
+}
+
+.text-item {
+  margin: 0;
+  padding: 0;
+
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.text-item + .text-item {
+  margin-top: 5px;
+  padding-left: 10px;
+
+  font-size: $font-size-small;
+
+  opacity: 0.5;
 }
 
 .learn-content {
-  padding-top: 20px;
+  padding-top: 10px;
+
+  @include flex($justify-content: space-between);
+}
+
+.word__container {
+  flex-grow: 1;
+}
+
+.word__wrapper {
+  position: relative;
+
+  display: inline-block;
+
+  padding: $element-border-radius 0;
+
+  font-size: $font-size-big;
+  line-height: 1.2;
+
+  background-color: $word-bg-color;
+
+  border: none;
+  border-radius: $element-border-radius;
+}
+
+.word__size {
+  display: inline-block;
+  
+  visibility: hidden;
+
+  padding: 0 $word-input-padding;
+
+  pointer-events: none;
+  cursor: none;
+}
+
+.word__input {
+  position: absolute;
+  bottom: $element-border-radius;
+  left: 0;
+  z-index: 1;
+
+  display: inline-block;
+
+  width: 100%;
+  height: calc(100% - 2 * #{$element-border-radius});
+  padding: 0 $word-input-padding;
+
+  font: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+
+  background-color: transparent;
+  border: none;
+  border-radius: inherit;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.button {
+  font-size: $font-size-small;
 }
