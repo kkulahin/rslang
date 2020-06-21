@@ -9,24 +9,17 @@ color: #fff !important;
 .games-cards .container-with-shadow {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-evenly;
     padding: 10px !important;
 }
 
 .games-cards .container-with-shadow img {
-    width: 60%;
+    width: 90%;
+    border-radius: 20px;
 }
 
 .games-card__header {
     color: #fff !important;
-}
-
-.games-card__description {
-    width: 80%;
-    height: 220px;
-    font-size: 16px;
-    color: #6e6e6e;
-    overflow: hidden;
 }
 
 .games-wrapper {
