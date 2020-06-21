@@ -7,8 +7,8 @@ const Switcher = ({
   parrentClassName, switcherId, isChecked, isRequired, onChange,
 }) => {
   const switcherClassName = (parrentClassName)
-    ? `${parrentClassName}__switcher switcher_stylise`
-    : 'switcher switcher_stylise';
+    ? `${parrentClassName}__switcher switcher--stylise`
+    : 'switcher switcher--stylise';
 
   return (
     <div className={switcherClassName}>

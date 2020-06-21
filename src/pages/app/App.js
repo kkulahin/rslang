@@ -3,21 +3,21 @@ import React from 'react';
 import {
   BrowserRouter as Router, Route, Switch,
 } from 'react-router-dom';
-import History from './utils/history';
-import Home from './pages/Home';
-import NotFound from './pages/NotFound';
-import LoginPage from './pages/loginPage/LoginPage';
-import Logout from './pages/logoutPage/Logout';
-import SignupPage from './pages/signupPage/SignupPage';
-import Dictionary from './pages/Dictionary';
-import Statistic from './pages/Statistic';
-import Promo from './pages/Promo';
-import About from './pages/About';
-import Settings from './pages/Settings';
+import History from '../../utils/history';
+import Home from '../Home';
+import NotFound from '../NotFound';
+import LoginPage from '../loginPage/LoginPage';
+import Logout from '../logoutPage/Logout';
+import SignupPage from '../signupPage/SignupPage';
+import Dictionary from '../Dictionary';
+import Statistic from '../Statistic';
+import Promo from '../Promo';
+import About from '../About';
+import Settings from '../Settings';
 
-import Header from './components/header/Header';
+import Header from '../../components/header/Header';
 
-import './app.scss';
+import './App.scss';
 
 const App = () => (
   <Router history={History}>
