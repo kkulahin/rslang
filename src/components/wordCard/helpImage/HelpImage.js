@@ -16,9 +16,11 @@ const HelpImage = ({ helpSettings: { isHelpImage }, word: { image, wordTranslate
 export default HelpImage;
 
 HelpImage.propTypes = {
-	helpSettings: PropTypes.object.isRequired,
-	word: PropTypes.object.isRequired,
-	// wordTranslate: PropTypes.string.isRequired,
-	// image: PropTypes.string.isRequired,
-	// isHelpImage: PropTypes.bool.isRequired,
+	helpSettings: PropTypes.shape({
+		isHelpImage: PropTypes.bool.isRequired,
+	}),
+	word: PropTypes.shape({
+		wordTranslate: PropTypes.string.isRequired,
+		image: PropTypes.string.isRequired,
+	}),
 };
