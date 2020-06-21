@@ -1,41 +1,45 @@
+@import '../../../styles/mixin.scss';
+
+@import '../../../styles/variables.scss';
+
 .vertical.menu {
-    position: sticky;
-    top: 0;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    width: 200px;
-    height: 100vh;
-    background-color: #2C2F33;
+  position: sticky;
+  top: 0;
+	background-color: $background-color;
+		
+	@include flex(row, center, center);
+
+	@include size(200px, 100vh);
 }
 
 .logo-wrapper {
-	display: flex;
 	flex: 1 80px;
-    justify-content: center;
-    align-items: center;
-    height: 90px;
+	height: 90px;
+	
+	@include flex(row, center, center);
+
+	img {
+    width: 50px;
+	}
 }
 
 .app-link {
 	flex: 2 60%;
 	width: 95%;
-}
-
-.logo-wrapper img {
-    width: 50px;
+	font-size: 1.6rem;
 }
 
 .login {
-    flex: 4
+  flex: 4
 }
 
 .ui.vertical.menu.app-menu {
 	display: flex !important;
-    height: 90%;
-    background-color: #2C2F33;
-    border-radius: 26px;
-	box-shadow: 6.22302px 6.22302px 18.6691px #000000, -6.22302px -6.22302px 18.6691px #3B4451;
+  height: 90%;
+	font-family: inherit;
+  background-color: $background-color;
+  border-radius: $container-border-radius;
+	box-shadow: $container-box-shadow;
 	transition: all .5s ease-in-out;
 }
 
@@ -48,15 +52,19 @@
 }
 
 .app-menu a.item {
-    display: flex !important;
-    flex-direction: unset !important;
-    justify-content: space-between;
-    align-items: center !important;
-    color: #fff !important;
+  display: flex !important;
+  flex-direction: unset !important;
+  justify-content: space-between;
+  align-items: center !important;
+	color: $main-color !important;
+	
+	&[name="login"] {
+		font-size:1.6rem;
+	}
 }
 
 .app-menu a.item:hover {
-	color:rgba(37, 206, 222, 0.5) !important;
+	color:$hover-color !important;
 }
 
 .app-menu a.item .icon {
@@ -80,14 +88,14 @@
 .app-menu__resize {
 	flex: 3 30px;
 	width: 100%;
-	font-size: 24px;
-	color: #fff;
-	font-weight: 600;
+	font-size: 2.4rem;
+	color: $main-color;
+	font-weight: 500;
 	font-variant: all-small-caps;
 }
 
 .app-menu__resize-wrapper {
-	box-shadow: 6.22302px 6.22302px 18.6691px #000000, -6.22302px -6.22302px 18.6691px #3B4451;
+	box-shadow: $container-box-shadow;
 }
 
 .app-menu__resize .item {
