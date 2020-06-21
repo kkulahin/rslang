@@ -1,0 +1,74 @@
+$navigate-width: 40px;
+$btn-padding: 10px;
+$transition-duration: 0.5s;
+
+@mixin flex($flex-direction: row, $align-items: center, $justify-content: center) {
+  display: flex;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}
+
+.navigate {
+  width: $navigate-width;
+
+  background-color: transparent;
+}
+
+.navigate__btn {
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+
+  @include flex();
+
+  background-color: transparent;
+
+  border: none;
+
+  transition: padding $transition-duration;
+
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.next {
+  justify-content: flex-end;
+  padding-right: $btn-padding;
+
+  &:hover {
+    padding-right: 0;
+    padding-left: $btn-padding;
+  }
+}
+
+.prev {
+  justify-content: flex-start;
+  padding-left: $btn-padding;
+
+  &:hover {
+    padding-right: $btn-padding;
+    padding-left: 0;
+  }
+}
+
+.navigate__icon {
+  width: 100%;
+  height: 100%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.next > .navigate__icon {
+  background-image: url('./navigateNext.svg');
+}
+
+.prev > .navigate__icon {
+  background-image: url('./navigateNext.svg');
+  transform: rotate(180deg);
+}
