@@ -1,15 +1,33 @@
-import SchoolURL from '../../default';
+import { SchoolURL } from '../../default';
 import responseFromServer from '../../utils/responseFromServer';
+
+import random from '../../utils/random';
 
 const wordsNotification = {
   msg: '',
   status: true,
 };
 
-const getWords = async (group, page, wordsPerPage = 10, notification = wordsNotification) => {
+const defParamsForWords = {
+  maxGroup: 6,
+  maxPages: 30,
+};
+
+const getRandomPage = () => random(0, defParamsForWords.maxPages);
+
+const getRandomGroup = () => random(0, defParamsForWords.maxGroup);
+
+const getWords = async (group = 0,
+  page = 0,
+  randomPage = false,
+  randomGroup = false,
+  wordsPerPage = 10,
+  notification = wordsNotification) => {
   try {
     const response = await responseFromServer(
-      `${SchoolURL}/words?page=${page}&group=${group}&wordsPerPage=${wordsPerPage}`, null, notification,
+      `${SchoolURL}/words?page=${randomPage
+        ? getRandomPage() : page}&group=${randomGroup
+        ? getRandomGroup() : group}&wordsPerPage=${wordsPerPage}`, null, notification,
     );
     return response;
   } catch (error) {

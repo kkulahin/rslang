@@ -1,4 +1,4 @@
-import SchoolURL from '../../default';
+import { SchoolURL } from '../../default';
 import responseFromServer from '../../utils/responseFromServer';
 
 const wordsNotification = {
