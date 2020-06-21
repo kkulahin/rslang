@@ -10,6 +10,8 @@ import { getWords } from '../../../../controllers/words/words';
 import './speakIt.scss';
 import 'react-step-progress-bar/styles.css';
 
+const gitDataUrl = 'https://raw.githubusercontent.com/kaxaru/rslang-data/master/';
+
 const stepPic = [
   'https://vignette.wikia.nocookie.net/pkmnshuffle/images/9/9d/Pichu.png/revision/latest?cb=20170407222851',
   'https://vignette.wikia.nocookie.net/pkmnshuffle/images/9/97/Pikachu_%28Smiling%29.png/revision/latest?cb=20170410234508',
@@ -33,16 +35,25 @@ const defGameOption = {
 const SpeackIt = () => {
   const [gameOption, setGameOption] = useState(defGameOption);
   const [activeWord, setActiveWord] = useState(null);
+  const [activeWordParams, setActiveWordParams] = useState(null);
 
-  const getWordsForStage = (stage = 0) => {
-    getWords(gameOption.curStage, stage, true).then((resp) => {
-      const words = resp.data;
-      const stagesOption = {};
-      stagesOption[`stage${gameOption.curStage}`] = words;
-      const newGameOption = {
-        ...gameOption,
-        stagesOption: [...gameOption.stagesOption, stagesOption],
-      };
+  const getWordsForStage = () => {
+    const getWordsPromises = [];
+    for (let stage = 0; stage <= defGameOption.maxStage; stage += 1) {
+      getWordsPromises.push(getWords(gameOption.curStage, stage, true));
+    }
+    let newGameOption = {};
+    Promise.all(getWordsPromises).then((resps) => {
+      resps.forEach((resp, index) => {
+        const words = resp.data;
+        const stagesOption = {};
+        stagesOption[`stage${index}`] = words;
+        newGameOption.stagesOption = newGameOption.stagesOption || gameOption.stagesOption;
+        newGameOption = {
+          ...gameOption,
+          stagesOption: [...newGameOption.stagesOption, stagesOption],
+        };
+      });
       setGameOption(newGameOption);
     });
   };
@@ -52,6 +63,19 @@ const SpeackIt = () => {
       getWordsForStage();
     }
   });
+
+  useEffect(() => {
+    const activeEl = document.querySelector(`.speakIt [data-value=${activeWord}]`);
+    if (activeEl !== null) {
+      const wordParams = {
+        value: activeEl.getAttribute('data-value'),
+        translate: activeEl.getAttribute('data-translate'),
+        image: activeEl.getAttribute('data-image'),
+        audio: activeEl.getAttribute('data-audio'),
+      };
+      setActiveWordParams(wordParams);
+    }
+  }, [activeWord]);
 
   const restart = () => {
     setGameOption(defGameOption);
@@ -82,7 +106,7 @@ const SpeackIt = () => {
   };
 
   const onClickWord = (e) => {
-    const word = e.currentTarget.querySelector('.item-content [data-value]');
+    const word = e.currentTarget.querySelector('.item-content');
     setActiveWord(word.getAttribute('data-value'));
   };
 
@@ -99,13 +123,24 @@ const SpeackIt = () => {
         <div className="item-icon">
           <Icon name="assistive listening systems" />
         </div>
-        <div className="item-content">
-          <p data-value={words !== null ? words[w].word : null}>{words !== null ? words[w].word : null}</p>
+        <div
+          className="item-content"
+          data-value={words !== null ? words[w].word : null}
+          data-translate={words !== null ? words[w].wordTranslate : null}
+          data-image={words !== null ? words[w].image : null}
+          data-audio={words !== null ? words[w].audio : null}
+        >
+          <p>{words !== null ? words[w].word : null}</p>
           <p>{words !== null ? words[w].transcription : null}</p>
         </div>
       </div>
     ));
     return <>{wordEl}</>;
+  };
+
+  const getImage = () => {
+    if (activeWordParams === null) return TestImage;
+    return `${gitDataUrl}${activeWordParams.image}`;
   };
 
   return (
@@ -121,8 +156,8 @@ const SpeackIt = () => {
         {buildProgressStep()}
       </div>
       <div className="speakIt-image__wrapper">
-        <Image src={TestImage} size="medium" bordered alt="" />
-        <p>{activeWord}</p>
+        <Image src={getImage()} size="medium" bordered alt="" />
+        <p>{activeWordParams?.translate}</p>
       </div>
       <div className="speakIt-items">
         {buildWordEl()}
