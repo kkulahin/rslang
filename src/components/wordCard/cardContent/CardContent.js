@@ -1,19 +1,30 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
-import HelpPicture from '../helpPicture/HelpPicture';
+import HelpImage from '../helpImage/HelpImage';
+import HelpTranscription from '../helpTranscription/HelpTranscription';
+import HelpWordTranslate from '../helpWordTranslate/HelpWordTranslate';
+import HelpTextMeaning from '../helpTextMeaning/HelpTextMeaning';
+import HelpTextExample from '../helpTextExample/HelpTextExample';
+import WordInput from '../wordInput/WordInput';
+import Button from '../../button/Button';
 
-const CardContent = (props) => {
-	const { word } = props;
+const CardContent = ({ helpSettings, word }) => {
 
 	return (
 		<div className='card-content'>
 			<div className='help-content'>
-				<HelpPicture isHelpPicture={true} src='https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001.jpg' word={word}/>
-				<div className='help-content__text'>{word}</div>
+				<HelpImage helpSettings={helpSettings} word={word} />
+				<ul className='help-content__text'>
+					<HelpTranscription helpSettings={helpSettings} word={word} />
+					<HelpWordTranslate helpSettings={helpSettings} word={word} />
+					<HelpTextMeaning helpSettings={helpSettings} word={word} />
+					<HelpTextExample helpSettings={helpSettings} word={word} />
+				</ul>
 			</div>
 			<div className='learn-content'>
-				{word}
+				<WordInput word={word}/>
+				<Button name='check' label='Show the answer' />
 			</div>
 		</div>
 	);
@@ -26,5 +37,5 @@ CardContent.defaultProps = {
 export default CardContent;
 
 CardContent.propTypes = {
-	props: PropTypes.any,
+	// props: PropTypes.any,
 };

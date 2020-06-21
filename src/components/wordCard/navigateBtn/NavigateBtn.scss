@@ -11,6 +11,8 @@ $transition-duration: 0.5s;
 .navigate {
   width: $navigate-width;
 
+  flex-shrink: 0;
+
   background-color: transparent;
 }
 
