@@ -6,40 +6,33 @@ const wordsNotification = {
   status: true,
 };
 
-const UserWordFailMsg = {
-  msg: '',
-  status: true,
-};
-
-const getAllUserWords = async (id, notification = wordsNotification) => {
+const getWords = async (group, page, wordsPerPage = 10, notification = wordsNotification) => {
   try {
-    const response = await responseFromServer(`${SchoolURL}/${id}/words`, notification);
+    const response = await responseFromServer(
+      `${SchoolURL}/words?page=${page}&group=${group}&wordsPerPage=${wordsPerPage}`, null, notification,
+    );
     return response;
   } catch (error) {
     throw new Error('invalid request');
   }
 };
 
-const getUserWordById = async (id, wordsId, notification = wordsNotification) => {
+const getWordsCount = async (group = 0, notification = wordsNotification) => {
   try {
-    const response = await responseFromServer(`${SchoolURL}/${id}/words/${wordsId}`, notification);
+    const response = await responseFromServer(`${SchoolURL}/words?group=${group}/count`, null, notification);
     return response;
   } catch (error) {
     throw new Error('invalid request');
   }
 };
 
-const createUserWordById = async (id, wordsId, data, notification = wordsNotification) => {
+const getWordsById = async (id, page, notification = wordsNotification) => {
   try {
-    const response = await responseFromServer(`${SchoolURL}/${id}/words/${wordsId}`, notification, 'POST', data);
+    const response = await responseFromServer(`${SchoolURL}/words/${id}`, null, notification);
     return response;
   } catch (error) {
-    const failResponse = {
-      data: null,
-      notification: UserWordFailMsg,
-    };
-    return failResponse;
+    throw new Error('invalid request');
   }
 };
 
-export { getAllUserWords, getUserWordById, createUserWordById };
+export { getWords, getWordsCount, getWordsById };

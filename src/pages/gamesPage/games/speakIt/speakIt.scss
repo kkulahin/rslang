@@ -38,13 +38,16 @@
 }
 
 .speakIt-items {
-    display: flex;
+	display: flex;
+	flex-wrap: wrap;
+	width: 1200px;
+	margin: 20px auto;
 }
 
 .speakIt .item {
     display: grid; 
     grid-template-columns: repeat(2, 5rem);
-    width: 33%;
+    width:19%;
     min-height: 50px;
     margin: 5px;
     border: 1px solid #fff;
@@ -70,7 +73,7 @@
 .speakIt-panel {
     display: flex;
     width: 60%;
-    margin-top: 20px;
+    margin: 20px auto;
 }
 
 .speakIt button:first-child {
