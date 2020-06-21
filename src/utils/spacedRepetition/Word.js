@@ -1,5 +1,6 @@
 import parameters from './parameters';
-import WordDefinition from './WordDefinition';
+
+// TODO: reset todayCount on next day
 
 export default class Word {
   /**
@@ -44,10 +45,16 @@ export default class Word {
 
   setTime = () => {
     this.time = new Date().getTime();
+    this.todayCount += 1;
+    this.totalRepetition += 1;
   }
 
   setMistake = () => {
     this.mistakes.push(new Date().getTime());
+    if (this.mistakes.length > 9) {
+      this.mistakes.shift();
+    }
+    this.totalMistakes += 1;
   }
 
   upgradePhase = () => {
@@ -105,7 +112,7 @@ export default class Word {
   /**
    * @return {number} when this word will be repeated in days
    */
-  getNextRepetition() {
+  getNextRepetition() { // TODO fix: add education
     if (this.isAgain) {
       return 0;
     }
@@ -127,9 +134,31 @@ export default class Word {
     const nextDate = new Date(this.time);
     nextDate.setSeconds(nextDate.getSeconds() + this.getNextPhase().time);
     const dayToday = currentDate.getDate();
-    const dayNext = currentDate.getDate();
+    const dayNext = nextDate.getDate();
     const daysInMonths = ([31, Word.isLeapYear() ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])[currentDate.getMonth()];
     return (daysInMonths + dayToday - dayNext) % daysInMonths;
+  }
+
+  getNextEducationTime = () => {
+    if (this.time === 0) {
+      return this.time;
+    }
+    return this.getNextPhase().time + this.time;
+  }
+
+  getNextRepetitionTime = () => {
+    if (this.difficulty.name === parameters.difficulty.evaluation) {
+      if (this.todayCount < parameters.difficultyEvaluationTimesPerDay) {
+        return new Date();
+      }
+      return undefined;
+    }
+    const currentDate = new Date();
+    const nextDate = new Date(this.time);
+    nextDate.setSeconds(nextDate.getSeconds() + this.getNextPhase().time);
+    const dayToday = currentDate.getDate();
+    const dayNext = nextDate.getDate();
+    return dayToday === dayNext ? dayToday : undefined;
   }
 
   /**
