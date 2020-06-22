@@ -16,6 +16,7 @@ import About from '../About';
 import Settings from '../Settings';
 
 import Header from '../../components/header/Header';
+import GreetingWrapper from '../../components/greetingWrapper/GreetingWrapper';
 
 import './App.scss';
 
@@ -24,6 +25,7 @@ const App = () => (
     <div className="app-wrapper">
       <Header />
       <div className="app-main">
+        <GreetingWrapper />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/signin" component={LoginPage} />
