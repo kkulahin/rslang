@@ -8,8 +8,8 @@ import Button from '../../button/Button';
 
 const CardContent = (props) => {
 	const {
-		settings: { isShowAnswerBtn },
-		helpSettings, word, isWordInput, onShowBtnClick,
+		settings: { isShowAnswerBtn, isDeleteBtn, isHardBtn },
+		helpSettings, word, isWordInput, onShowBtnClick, onDeleteBtnClick, onHardBtnClick, isAudioPlayBtn, onAudioPlayBtnClick
 	} = props;
 
 	const ShowAnswerBtn = (
@@ -20,15 +20,44 @@ const CardContent = (props) => {
 		/>
 	);
 
+	const DeleteBtn = (
+		<Button
+			name='check'
+			label='Delete'
+			clickHandler={() => onDeleteBtnClick()}
+		/>
+	);
+
+	const HardBtn = (
+		<Button
+			name='check'
+			label='Hard'
+			clickHandler={() => onHardBtnClick()}
+		/>
+	);
+
+	const AudioPlayBtn = (
+		<Button
+			name='check'
+			label='AudioPlay'
+			clickHandler={() => onAudioPlayBtnClick()}
+		/>
+	);
+
 	return (
 		<div className='card-content'>
 			<div className='help-content'>
 				<HelpImage helpSettings={helpSettings} word={word} />
 				<HelpText helpSettings={helpSettings} word={word} isWordInput={isWordInput} />
 			</div>
+			<div className='card-controls'>
+				{isHardBtn && HardBtn}
+				{isDeleteBtn && DeleteBtn}
+				{isShowAnswerBtn && ShowAnswerBtn}
+				{isAudioPlayBtn && AudioPlayBtn}
+			</div>
 			<div className='learn-content'>
 				<WordInput {...props} />
-				{isShowAnswerBtn && ShowAnswerBtn}
 			</div>
 		</div>
 	);

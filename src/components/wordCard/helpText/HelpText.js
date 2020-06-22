@@ -41,9 +41,9 @@ const HelpText = ({
 		</li>
 	);
 
-	let classes = 'text-item text-item--hidden';
+	let classes = 'text-item--translate text-item--hidden';
 	if (isWordInput) {
-		classes = 'text-item';
+		classes = 'text-item--translate';
 	}
 
 	const textExampleElement = (
