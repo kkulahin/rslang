@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 const WordInput = ({
 	word: { word, wordTranslate },
 	helpSettings: { isTranslateShow },
-	onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect,
+	onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect, isPrevWord,
 }) => {
 
 	let classesTranslate = 'text-item--translate text-item--hidden';
-	if (isWordInput) {
+	if (isWordInput || isPrevWord) {
 		classesTranslate = 'text-item--translate';
 	}
 
 	let classes = 'word__size';
-	if (isWordInput && isCorrect) {
+	if ((isWordInput && isCorrect) || isPrevWord) {
 		classes += ' word__size--correct';
 	}
 
@@ -28,7 +28,7 @@ const WordInput = ({
 				<input className='word__input'
 					type='text'
 					value={value}
-					disabled={isCorrect}
+					disabled={isCorrect || isPrevWord}
 					autoFocus='on'
 					onKeyUp={(evt) => onInputEnter(evt)}
 					onFocus={() => onInputFocus()}
