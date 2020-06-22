@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Header, Icon, Image, Button,
+  Header, Icon, Image, Button, Input,
 } from 'semantic-ui-react';
 
 import { ProgressBar, Step } from 'react-step-progress-bar';
@@ -36,6 +36,7 @@ const SpeackIt = () => {
   const [gameOption, setGameOption] = useState(defGameOption);
   const [activeWord, setActiveWord] = useState(null);
   const [activeWordParams, setActiveWordParams] = useState(null);
+  const [gameMode, setGameMode] = useState(false);
 
   const getWordsForStage = () => {
     const getWordsPromises = [];
@@ -77,19 +78,44 @@ const SpeackIt = () => {
     }
   }, [activeWord]);
 
+  useEffect(() => {
+    if (activeWordParams !== null && !gameMode) {
+      const audio = document.querySelector('.speakIt-audio');
+      audio.play();
+    }
+  }, [activeWordParams, gameMode]);
+
   const restart = () => {
     setGameOption(defGameOption);
+    setGameMode(false);
+  };
+
+  const start = () => {
+    setGameMode(true);
+  };
+
+  const onClickTest = (e) => {
+    if (e.target.nodeName === 'IMG') {
+      const cStep = e.target.getAttribute('data-step');
+      const newGameOption = {
+        ...gameOption,
+        curStage: cStep,
+      };
+      setGameOption(newGameOption);
+    }
+    return false;
   };
 
   const buildProgressStep = () => {
     const stepSize = Array.from({ length: defaultParams.StepCounter }, (v, k) => k);
     const stepEls = stepSize.map((s, index) => (
-      <Step transition="scale" key={s} onClicl={() => console.log(`click ${index}`)}>
+      <Step transition="scale" key={s}>
         {({ accomplished }) => (
           <img
             style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
             width="30"
             src={stepPic[index]}
+            data-step={index}
             alt=""
           />
         )}
@@ -99,15 +125,35 @@ const SpeackIt = () => {
       <ProgressBar
         percent={(gameOption.curStage * 100) / gameOption.maxStage}
         filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"
+        onClick={onClickTest}
       >
         {stepEls}
       </ProgressBar>
     );
   };
 
-  const onClickWord = (e) => {
-    const word = e.currentTarget.querySelector('.item-content');
+  const onClickSetWord = (e) => {
+    const item = e.currentTarget;
+    /* item.classList.add('active'); */
+    const word = item.querySelector('.item-content');
     setActiveWord(word.getAttribute('data-value'));
+  };
+
+  const isActiveItemClass = (cWord, index) => {
+    if (cWord === null) return '';
+    if (!gameMode && cWord[index].word === activeWord) {
+      return 'active';
+    }
+    return '';
+  };
+
+  const isImageDescription = () => {
+    if (gameMode) {
+      return <Input className="speakIt-mic" icon="microphone" iconPosition="left" readOnly />;
+    }
+    return (
+      <p>{activeWordParams?.translate}</p>
+    );
   };
 
   const buildWordEl = () => {
@@ -119,7 +165,8 @@ const SpeackIt = () => {
       console.log(words);
     }
     const wordEl = wordSize.map((w) => (
-      <div className="item" key={w} onClick={onClickWord}>
+      // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+      <div className={`${isActiveItemClass(words, w)} item`} key={w} onClick={onClickSetWord} role="menuitem" tabIndex={w}>
         <div className="item-icon">
           <Icon name="assistive listening systems" />
         </div>
@@ -152,22 +199,29 @@ const SpeackIt = () => {
         </Header>
       </div>
       <div className="app-speakIt" />
-      <div className="speakIt-progressbar">
+      <div className="speakIt-progressbar" onClick={onClickTest}>
         {buildProgressStep()}
       </div>
       <div className="speakIt-image__wrapper">
         <Image src={getImage()} size="medium" bordered alt="" />
-        <p>{activeWordParams?.translate}</p>
+        {isImageDescription()}
       </div>
       <div className="speakIt-items">
         {buildWordEl()}
       </div>
       <div className="speakIt-panel">
         <Button primary onClick={restart}>Restart</Button>
-        <Button primary>Speak</Button>
+        <Button primary onClick={start}>Speak</Button>
         <Button primary>Results</Button>
-
       </div>
+      {gameMode ? null : (
+        <audio
+          className="speakIt-audio"
+          src={activeWordParams ? `${gitDataUrl}/${activeWordParams?.audio}` : null}
+        >
+          <track kind="captions" />
+        </audio>
+      )}
     </div>
   );
 };

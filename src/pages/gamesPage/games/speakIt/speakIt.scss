@@ -87,3 +87,12 @@
 .speakIt button:last-child {
     flex: 3 25%
 }
+
+.speakIt .active.item {
+    background: black;
+}
+
+.speakIt-mic {
+    width: 400px;
+    margin: 20px auto;
+}

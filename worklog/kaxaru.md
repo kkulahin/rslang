@@ -6,4 +6,5 @@
 | signin Page | 17.06.2020 | 17.06.2020 | 5 h |
 | header component | 19.06.2020 | 19.06.2020 | 2 h |
 | added games page and simple controller, begin speakIt game controller  | 20.06.2020 | 20.06.2020 | 3 h |
+| speak it  | 20.06.2020 | 20.06.2020 | 5 h |
 
