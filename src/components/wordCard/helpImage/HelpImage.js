@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const HelpImage = ({ helpSettings: { isHelpImage }, word: { image, wordTranslate } }) => {
+const HelpImage = ({ helpSettings: { isImageShow }, word: { image, wordTranslate } }) => {
 	const element = (
 		<div className='help-content__image'>
 			<img src={image} alt={`image to ${wordTranslate}`}/>
@@ -9,7 +9,7 @@ const HelpImage = ({ helpSettings: { isHelpImage }, word: { image, wordTranslate
 	);
 
 	return (
-		isHelpImage ? element : null
+		isImageShow ? element : null
 	);
 }
 
@@ -17,7 +17,7 @@ export default HelpImage;
 
 HelpImage.propTypes = {
 	helpSettings: PropTypes.shape({
-		isHelpImage: PropTypes.bool.isRequired,
+		isImageShow: PropTypes.bool.isRequired,
 	}),
 	word: PropTypes.shape({
 		wordTranslate: PropTypes.string.isRequired,

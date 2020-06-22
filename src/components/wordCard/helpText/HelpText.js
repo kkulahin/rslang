@@ -5,10 +5,11 @@ import HelpTextFormatted from './HelpTextFormatted';
 
 const HelpText = ({
 	helpSettings: {
-		isHelpTranscription,
-		isHelpWordTranslate,
-		isHelpTextExample,
-		isHelpTextMeaning,
+		isTranscriptionShow,
+		isWordTranslateShow,
+		isTextExampleShow,
+		isTextMeaningShow,
+		isTranslateShow,
 	},
 	word: {
 		word,
@@ -22,11 +23,11 @@ const HelpText = ({
 	isWordInput,
 }) => {
 
-	const transcriptionElem = (isHelpTranscription)
+	const transcriptionElem = (isTranscriptionShow)
 		? transcription
 		: null
 
-	const wordTranslateElem = (isHelpWordTranslate)
+	const wordTranslateElem = (isWordTranslateShow)
 		? wordTranslate
 		: null
 
@@ -50,7 +51,7 @@ const HelpText = ({
 			<p className='text-item'>
 				<HelpTextFormatted text={textExample} word={word} isWordInput={isWordInput} />
 			</p>
-			<p className={classes}>{textExampleTranslate}</p>
+			{isTranslateShow && <p className={classes}>{textExampleTranslate}</p>}
 		</li>
 	);
 
@@ -59,15 +60,15 @@ const HelpText = ({
 			<p className='text-item'>
 				<HelpTextFormatted text={textMeaning} word={word} isWordInput={isWordInput} />
 			</p>
-			<p className={classes}>{textMeaningTranslate}</p>
+			{isTranslateShow && <p className={classes}>{textMeaningTranslate}</p>}
 		</li>
 	);
 
 	return (
 		<ul className='help-content__text'>
-			{(isHelpTranscription || isHelpWordTranslate) ? helpElement : null}
-			{isHelpTextExample ? textExampleElement : null}
-			{isHelpTextMeaning ? textMeaningElement : null}
+			{(isTranscriptionShow || isWordTranslateShow) ? helpElement : null}
+			{isTextExampleShow ? textExampleElement : null}
+			{isTextMeaningShow ? textMeaningElement : null}
 		</ul>
 	);
 }
@@ -76,10 +77,11 @@ export default HelpText;
 
 HelpText.propTypes = {
 	helpSettings: PropTypes.shape({
-		isHelpTranscription: PropTypes.bool.isRequired,
-		isHelpWordTranslate: PropTypes.bool.isRequired,
-		isHelpTextExample: PropTypes.bool.isRequired,
-		isHelpTextMeaning: PropTypes.bool.isRequired,
+		isTranscriptionShow: PropTypes.bool.isRequired,
+		isWordTranslateShow: PropTypes.bool.isRequired,
+		isTextExampleShow: PropTypes.bool.isRequired,
+		isTextMeaningShow: PropTypes.bool.isRequired,
+		isTranslateShow: PropTypes.bool.isRequired,
 	}),
 	word: PropTypes.shape({
 		word: PropTypes.string.isRequired,

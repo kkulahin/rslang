@@ -101,6 +101,7 @@ $word-bg-color: #25CEDE;
 }
 
 .text-item {
+  max-height: 200px;
   margin: 0;
   padding: 0;
 
@@ -109,22 +110,26 @@ $word-bg-color: #25CEDE;
 
   opacity: 1;
 
-  transition: opacity $transition-duration;
+  transition: opacity $transition-duration ease-in-out, max-height 0.2s ease-in-out;
 
   &--hidden {
     visibility: hidden;
+    max-height: 0;
     pointer-events: none;
     opacity: 0;
   }
 }
 
-.text-item + .text-item {
+.text-item + .text-item,
+.word__wrapper + .text-item {
   margin-top: 5px;
   padding-left: 10px;
 
   font-size: $font-size-small;
 
   opacity: 0.5;
+
+  user-select: none;
 }
 
 .text--marked {

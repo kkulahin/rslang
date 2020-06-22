@@ -2,8 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const WordInput = ({
-	word: { word }, onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect
+	word: { word, wordTranslate },
+	helpSettings: { isTranslateShow },
+	onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect,
 }) => {
+
+	let classesTranslate = 'text-item text-item--hidden';
+	if (isWordInput) {
+		classesTranslate = 'text-item';
+	}
 
 	let classes = 'word__size';
 	if (isWordInput && isCorrect) {
@@ -29,6 +36,7 @@ const WordInput = ({
 					ref={inputRef}
 				/>
 			</span>
+			{isTranslateShow && <p className={classesTranslate}>{wordTranslate}</p>}
 		</div>
 	);
 
