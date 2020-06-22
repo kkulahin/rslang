@@ -7,42 +7,54 @@ import CardContent from './cardContent/CardContent';
 
 import './WordCard.scss';
 
-const helpSettings = {
-	isImageShow: true,
-	isTranscriptionShow: true,
-	isWordTranslateShow: true,
-	isTextExampleShow: true,
-	isTextMeaningShow: true,
-	isTranslateShow: true,
-};
+// const helpSettings = {
+// 	isImageShow: true,
+// 	isTranscriptionShow: true,
+// 	isWordTranslateShow: true,
+// 	isTextExampleShow: true,
+// 	isTextMeaningShow: true,
+// 	isTranslateShow: true,
+// };
 
-const settings = {
-	isShowAnswerBtn: true,
-	isDeleteBtn: true,
-	isHardBtn: true,
-	isAudioAuto: true,
-};
+// const settings = {
+// 	isShowAnswerBtn: true,
+// 	isDeleteBtn: true,
+// 	isHardBtn: true,
+// 	isAudioAuto: true,
+// };
 
-const wordJSON = {
-	"word": "agree",
-	"image": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001.jpg",
-	"audio": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001.mp3",
-	"audioMeaning": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001_meaning.mp3",
-	"audioExample": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001_example.mp3",
-	"textMeaning": "To <i>agree</i> is to have the same opinion or belief as another person",
-	"textExample": "The students <b>agree</b> they have too much homework",
-	"transcription": "[əgríː]",
-	"wordTranslate": "согласна",
-	"textMeaningTranslate": "Согласиться - значит иметь то же мнение или убеждение, что и другой человек",
-	"textExampleTranslate": "Студенты согласны, что у них слишком много домашней работы",
-	"id": 1,
-};
+// const wordJSON = {
+// 	"word": "agree",
+// 	"image": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001.jpg",
+// 	"audio": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001.mp3",
+// 	"audioMeaning": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001_meaning.mp3",
+// 	"audioExample": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001_example.mp3",
+// 	"textMeaning": "To <i>agree</i> is to have the same opinion or belief as another person",
+// 	"textExample": "The students <b>agree</b> they have too much homework",
+// 	"transcription": "[əgríː]",
+// 	"wordTranslate": "согласна",
+// 	"textMeaningTranslate": "Согласиться - значит иметь то же мнение или убеждение, что и другой человек",
+// 	"textExampleTranslate": "Студенты согласны, что у них слишком много домашней работы",
+// 	"id": 1,
+// };
 
 const checkCorrect = ({ value, word }) => {
 	return value.toLowerCase() === word.toLowerCase();
 }
 
-const WordCard = () => {
+const WordCard = ({
+	helpSettings,
+	settings,
+	wordJSON,
+	onErrorAnswer,
+	onPrevBtnClick,
+	onNextBtnClick,
+	onHardBtnClick,
+	onDeleteBtnClick,
+	isFirstWord,
+	isPrevWord,
+}) => {
+
 	const { word, audio, audioExample, audioMeaning } = wordJSON;
 	const { isTextExampleShow, isTextMeaningShow } = helpSettings;
 	const { isAudioAuto } = settings;
@@ -55,7 +67,8 @@ const WordCard = () => {
 	const inputRef = useRef();
 	const audioRef = useRef();
 
-	const tracks = [];
+	let currentTruck = 0;
+	const tracks = [audio];
 	if (isTextExampleShow) {
 		tracks.push(audioExample);
 	}
@@ -63,12 +76,18 @@ const WordCard = () => {
 		tracks.push(audioMeaning);
 	}
 
-	let currentTruck = 0;
+	const audioPlay = () => {
+		currentTruck = 0;
+		audioRef.current.src = tracks[currentTruck];
+		audioRef.current.play();
+		setIsAudioPlay(true);
+	}
+
 	const onAudioEnded = () => {
-		if (currentTruck < tracks.length) {
+		if (currentTruck < tracks.length - 1) {
+			currentTruck += 1;
 			audioRef.current.src = tracks[currentTruck];
 			audioRef.current.play();
-			currentTruck += 1;
 		} else {
 			setIsAudioPlay(false);
 		}
@@ -84,10 +103,13 @@ const WordCard = () => {
 			setIsWordInput(true);
 			setIsCorrect(checkCorrect({ value, word }));
 			inputRef.current.blur();
+
+			onNextBtnClick();
 		}
 
 		if (id === 'prev') {
-			console.log('---', id, '---');
+			setIsWordInput(false);
+			onPrevBtnClick();
 		}
 	}
 
@@ -96,8 +118,7 @@ const WordCard = () => {
 
 		if (evt.key === 'Enter') {
 			if (isAudioAuto) {
-				audioRef.current.play();
-				setIsAudioPlay(true);
+				audioPlay();
 			}
 			setValue('');
 			setIsWordInput(true);
@@ -109,52 +130,50 @@ const WordCard = () => {
 	const handleInputFocus = () => {
 		if (isWordInput) {
 			setIsWordInput(false);
+			audioRef.current.pause();
 		}
 	}
 
 	const handleShowBtnClick = () => {
 		setValue('');
 		setIsWordInput(true);
-	}
-
-	const handleDeleteBtnClick = () => {
-		console.log('---- delete button ----');
-	}
-
-	const handleHardBtnClick = () => {
-		console.log('---- hard button ----');
+		onErrorAnswer();
 	}
 
 	const handleAudioPlayBtnClick = () => {
-		audioRef.current.play();
-		setIsAudioPlay(true);
+		audioPlay();
 	}
+
+	const cardContentProps = {
+		helpSettings: helpSettings,
+		settings: settings,
+		word: wordJSON,
+		onInputEnter: handleInputEnter,
+		onInputFocus: handleInputFocus,
+		onInputChange: handleInputChange,
+		onShowBtnClick: handleShowBtnClick,
+		onDeleteBtnClick: onDeleteBtnClick,
+		onHardBtnClick: onHardBtnClick,
+		onAudioPlayBtnClick: handleAudioPlayBtnClick,
+		inputRef: inputRef,
+		value: value,
+		isAudioPlayBtn: true,
+		isWordInput: isWordInput,
+		isCorrect: isCorrect,
+		isPrevWord: isPrevWord,
+	};
 
 	return (
 		<div className='card-unit'>
 			<div className='card__container'>
-				<NavigateBtn classes='prev' id='prev' onClick={handleNavigateClick}/>
+				{<NavigateBtn classes='prev' id='prev' onClick={handleNavigateClick} isInvisible={isFirstWord || isPrevWord}/>}
 				<ContainerWithShadow>
 					<CardContent
-						helpSettings={helpSettings}
-						settings={settings}
-						word={wordJSON}
-						onInputEnter={handleInputEnter}
-						onInputFocus={handleInputFocus}
-						onInputChange={handleInputChange}
-						onShowBtnClick={handleShowBtnClick}
-						onDeleteBtnClick={handleDeleteBtnClick}
-						onHardBtnClick={handleHardBtnClick}
-						onAudioPlayBtnClick={handleAudioPlayBtnClick}
-						inputRef={inputRef}
-						value={value}
-						isAudioPlayBtn={true}
-						isWordInput={isWordInput}
-						isCorrect={isCorrect}
+						{...cardContentProps}
 					/>
 				</ContainerWithShadow>
 				<NavigateBtn classes='next' id='next' onClick={handleNavigateClick}/>
-				<audio ref={audioRef} src={audio} preload='auto' onEnded={onAudioEnded} />
+				<audio ref={audioRef} src={tracks[0]} preload='auto' onEnded={onAudioEnded} />
 			</div>
 		</div>
 	);

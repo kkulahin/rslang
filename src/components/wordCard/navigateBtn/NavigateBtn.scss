@@ -35,6 +35,13 @@ $transition-duration: 0.5s;
   &:focus {
     outline: none;
   }
+
+  &--invisible {
+    visibility: hidden;
+    pointer-events: none;
+    cursor: none;
+    user-select: none;
+  }
 }
 
 .next {

@@ -9,7 +9,7 @@ import Button from '../../button/Button';
 const CardContent = (props) => {
 	const {
 		settings: { isShowAnswerBtn, isDeleteBtn, isHardBtn },
-		helpSettings, word, isWordInput, onShowBtnClick, onDeleteBtnClick, onHardBtnClick, isAudioPlayBtn, onAudioPlayBtnClick
+		helpSettings, isPrevWord, word, isWordInput, onShowBtnClick, onDeleteBtnClick, onHardBtnClick, isAudioPlayBtn, onAudioPlayBtnClick
 	} = props;
 
 	const ShowAnswerBtn = (
@@ -48,13 +48,13 @@ const CardContent = (props) => {
 		<div className='card-content'>
 			<div className='help-content'>
 				<HelpImage helpSettings={helpSettings} word={word} />
-				<HelpText helpSettings={helpSettings} word={word} isWordInput={isWordInput} />
+				<HelpText helpSettings={helpSettings} word={word} isWordInput={isWordInput || isPrevWord} />
 			</div>
 			<div className='card-controls'>
 				{isHardBtn && HardBtn}
 				{isDeleteBtn && DeleteBtn}
-				{isShowAnswerBtn && ShowAnswerBtn}
-				{isAudioPlayBtn && AudioPlayBtn}
+				{isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
+				{isAudioPlayBtn && isPrevWord && AudioPlayBtn}
 			</div>
 			<div className='learn-content'>
 				<WordInput {...props} />
@@ -67,6 +67,7 @@ export default CardContent;
 
 CardContent.propTypes = {
 	isWordInput: PropTypes.bool.isRequired,
+	isPrevWord: PropTypes.bool.isRequired,
 	onShowBtnClick: PropTypes.func.isRequired,
 	helpSettings: PropTypes.object.isRequired,
 	word: PropTypes.object.isRequired,
