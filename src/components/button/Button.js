@@ -23,15 +23,15 @@ const Button = (props) => {
   }
 
   if (name === 'check' && active) {
-    className += ` button-${name}`;
+    className += ` button--${name}`;
   }
 
   if (name === 'press' && active) {
-    className += ` button-${name}`;
+    className += ` button--${name}`;
   }
 
   if (name === 'light') {
-    className += ` button-${name}`;
+    className += ` button--${name}`;
   }
 
   return (

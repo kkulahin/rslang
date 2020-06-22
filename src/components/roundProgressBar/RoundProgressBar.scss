@@ -1,86 +1,51 @@
-// container
-$element-color-background: #2C2F33;
+@import '../../styles/mixin.scss';
 
-$shadow-first-setup: inset 16px 16px 40px;
-$shadow-first-color: #000000;
-$shadow-second-setup: inset -16px -16px 40px;
-$shadow-second-color: #3B4451;
+@import '../../styles/variables.scss';
 
 // inner-ring
-$inner-ring-color-background: #2C2F33;
-
-$shadow-inner-ring-setup: 16px 16px 40px;
-$shadow-inner-ring-color: rgba(0, 0, 0, 0.5);
+$inner-ring-color-background: $background-color;
 
 // core
-$core-color-background: #2C2F33;
-
-$shadow-core-first-setup: inset 16px 16px 40px;
 $shadow-core-first-color: rgba(0, 0, 0, 0.5);
-$shadow-core-second-setup: inset -16px -16px 40px;
 $shadow-core-second-color: rgba(59, 68, 81, 0.5);
 
-$core-font-size: 18px;
-$core-color-text: #FFFFFF;
+.round-progress-bar {
 
-@mixin font ($size, $height, $weight, $style: normal) {
-  font-style: $style;
-  font-size: $size;
-  line-height: $height;
-  font-weight: $weight;
-}
+  &__container {
+    position: relative;
+    background-color: $background-color;
+    border: none;
+    border-radius: 50%;
+    box-shadow: inset 16px 16px 40px $box-shadow-first-color, inset -16px -16px 40px $box-shadow-second-color;
+    user-select: none;
 
-.round-progress-bar__container {
-  position: relative;
+    @include flex(row);
+  }
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  &__inner-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    background-color: $inner-ring-color-background;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 16px 16px 40px rgba(0, 0, 0, 0.5);
+    transform: translate(-50%, -50%);
 
-  background: $element-color-background;
+    @include flex(row);
+  }
 
-  border: none;
-  border-radius: 50%;
-
-  box-shadow: $shadow-first-setup $shadow-first-color, $shadow-second-setup $shadow-second-color;
-
-  user-select: none;
-}
-
-.round-progress-bar__inner-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  z-index: 1;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: $inner-ring-color-background;
-
-  border: none;
-  border-radius: 50%;
-
-  box-shadow: $shadow-inner-ring-setup $shadow-inner-ring-color;
-
-  transform: translate(-50%, -50%);
-}
-
-.round-progress-bar__core {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font: inherit;
-  color: $core-color-text;
-
-  background-color: $core-color-background;
-
-  border: none;
-  border-radius: 50%;
-  box-shadow: $shadow-core-first-setup $shadow-core-first-color, $shadow-core-second-setup $shadow-core-second-color;
-
-  @include font ($size: #{$core-font-size}, $height: 1, $weight: 500);
+  &__core {
+    font-family: inherit;
+    color: $main-color;
+    background-color: $background-color;
+    border: none;
+    border-radius: 50%;
+    box-shadow: inset 16px 16px 40px $shadow-core-first-color, inset -16px -16px 40px $shadow-core-second-color;
+  
+    @include flex(row);
+  
+    @include font (1.8rem, 1, 500);
+  }
 }

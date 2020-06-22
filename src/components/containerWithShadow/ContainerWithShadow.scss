@@ -1,33 +1,20 @@
-$element-font-size: 24px;
-$element-color-text: #FFFFFF;
-$element-color-background: #2C2F33;
+@import '../../styles/mixin.scss';
 
-$element-border-radius: 25px;
-
-$shadow-first: 6px 6px 18px #000000;
-$shadow-second: -6px -6px 18px #3B4451;
-
-@mixin font ($size, $height, $weight, $style: normal) {
-  font-style: $style;
-  font-size: $size;
-  line-height: $height;
-  font-weight: $weight;
-}
+@import '../../styles/variables.scss';
 
 .container-with-shadow {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+  @include flex(row);
 
   font: inherit;
-  color: $element-color-text;
+  color: $main-color;
 
-  background-color: $element-color-background;
+  background-color: $background-color;
 
   border: none;
-  border-radius: $element-border-radius;
+  border-radius: $container-border-radius;
 
-  box-shadow: $shadow-first, $shadow-second;
+  box-shadow: $container-box-shadow;
 
-  @include font ($size: #{$element-font-size}, $height: 1, $weight: 500);
+  @include font (2.4rem, 1, 400);
 }

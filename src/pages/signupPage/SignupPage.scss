@@ -1,90 +1,92 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
 .register-wrapper {
-    display: flex;
-    height: 100vh;
-    align-items: center !important;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+  align-items: center !important;
+  height: 100vh;
 }
 
 .register-column {
-    width: 500px !important;
+  width: 500px !important;
 }
 
 .register-header {
-    color: #25CEDE;
-    text-align: center;
-    font-size: 64px;
-    line-height: 76px;
-    font-weight: bold;
+  font-size: 6.4rem;
+  line-height: 1.2em;
+  text-align: center;
+  color: $enabled-color;
+  font-weight: 800;
 }
 
 .register-header .image {
-    position: absolute !important;
-    left: -3.51%;
-    top: -14.45%;
+  position: absolute !important;
+  top: -14.45%;
+  left: -3.51%;
 }
 
 .register-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #2C2F33 !important;
-    box-shadow: 6.22302px 6.22302px 18.6691px #000000, -6.22302px -6.22302px 18.6691px #3B4451;
-    border-radius: 25px;
+  background-color: $background-color !important;
+  border-radius: $container-border-radius;
+  box-shadow: $container-box-shadow;
+
+  @include flex(column, center, stretch);
 }
 
 .form-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-    color: #fff;
+  margin-top: 20px;
+  color: $main-color;
+
+  @include flex(column, center, stretch);
 }
 
 .form-header .description {
-    width: 80%;
-    font-size: 14px;
-    color: #676a6d;
-    margin-bottom: 20px;
+  width: 80%;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  color: rgb(103, 106, 109);
 }
 
 .register-form .field {
-    margin-top: 30px;
-    width: 90%;
+  width: 90%;
+  margin-top: 30px;
 }
 
 .register-form .button {
-    width: 80%;
-    padding: 20px !important;
-    margin: 30px auto !important;
-    color: #fff !important;
-    background-color: #25CEDE !important;
-    border-radius: 24.8921px !important;
-    box-shadow: 12.446px 12.446px 31.1151px rgba(0, 0, 0, 0.5), -12.446px -12.446px 31.1151px #3B4451 !important;
+  width: 80%;
+  margin: 30px auto !important;
+  padding: 20px !important;
+  color: $main-color !important;
+  background-color: $enabled-color !important;
+  border-radius: $container-border-radius !important;
+  box-shadow: 12px 12px 31px rgba(0, 0, 0, 0.5), -12px -12px 31px rgb(59, 68, 81) !important;
 }
 
 .register-form .error.field {
-    position:relative;
+  position:relative;
 }
 
 .error.field .pointing.label {
-    position: absolute;
-    top:-40px;
+  position: absolute;
+  top:-40px;
 }
 
 .user-notification {
-    position: absolute;
-    top: 80px;
-    height: 5vh;
-    width: 50%;
-    background-color: #25CEDE;
-    line-height: 5vh;
-    text-align: center;
-    border-radius: 20px;
-    font-weight: 600;
-    font-variant: small-caps;
-    color: #fff;
+  position: absolute;
+  top: 80px;
+  line-height: 5vh;
+  text-align: center;
+  color: #fff;
+  background-color: $enabled-color;
+  border-radius: 20px;
+  font-weight: 500;
+  font-variant: small-caps;
+
+  @include size(50%, 5vh);
 }
 
 .user-notification.error {
-    background-color: #de2576;
+  background-color: rgb(222, 37, 118);
 }
