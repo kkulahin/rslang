@@ -2,22 +2,12 @@ import Word from './Word';
 import WordDefinition from './WordDefinition';
 
 export default class WordController {
-  /**
-   * Class to create a queue of the words
-   * @param {[{}]} words array of flat words ( new or already prepared for this day)
-   * @param {[{}]} userWords array of flat words (if not specified words will be treted as today words)
-   */
-  constructor(words, userWords) {
+  constructor() {
     /** @type {[Word]} */
     this.words = [];
     this.queue = [];
-    if (userWords) {
-      this.makeQueue(words, userWords);
-    } else {
-      words.forEach((word) => this.words.push(new Word(new WordDefinition(word)), word));
-      WordController.fillQueue(this.words, this.queue);
-      this.queue.sort(WordController.queueSort);
-    }
+    this.repeatCount = 0;
+    this.queueLength = 0;
   }
 
   static MAX_NEW_WORDS = 20;
@@ -26,15 +16,36 @@ export default class WordController {
 
   static queueSort = (queueWord1, queueWord2) => queueWord1.nextTime - queueWord2.nextTime;
 
+  /**
+   * create a new queue of the words
+   * @param {[{}]} words array of flat words ( new or already prepared for this day)
+   * @param {[{}]} userWords array of flat words (if not specified words will be treted as today words)
+   */
   makeQueue = (newWords, userWords) => {
-    newWords.forEach((word) => this.words.push(new Word(new WordDefinition(word)), {}));
+    newWords.forEach((word) => this.words.push(new Word(new WordDefinition(word), {})));
     const pontentialWords = [];
     const potentialQueue = [];
-    userWords.forEach((word) => pontentialWords.push(new Word(new WordDefinition(word)), word));
+    userWords.forEach((word) => pontentialWords.push(new Word(new WordDefinition(word), word)));
     WordController.fillQueue(pontentialWords, potentialQueue);
     WordController.fillQueue(this.words, this.queue);
     this.filterUserWordsByCount(potentialQueue);
   }
+
+  /**
+   * create a new queue of the words
+   * @param {Object} queueSettings queue settings
+   * @param {[number]} queueSettings.queue array of word ids
+   * @param {number} queueSettings.length queue length
+   * @param {[{}]} words array of flat words ( new or already prepared for this day)
+   */
+  usePredefinedQueue = (queueSettings, words) => {
+    this.words = words;
+    this.queueLength = queueSettings.length;
+    queueSettings.queue.forEach((qWord) => {
+      const { queueWord } = words.filter((word) => qWord.id === word.wordId);
+      this.queue.push({ word: new Word(new WordDefinition(queueWord), queueWord), isEducation: qWord.isEd });
+    });
+  };
 
   static fillQueue = (words, queue) => {
     words.forEach((word) => WordController.addToQueueIfNeeded(word, queue));
@@ -73,15 +84,24 @@ export default class WordController {
   }
 
   static addToQueueIfNeeded = (word, queue) => {
-    const educationTime = word.getNextEducationTime();
+    const educationTimes = word.getNextEducationTimes();
     const repetitionTime = word.getRepetitionTime();
     if (repetitionTime) {
       queue.push({ word, isEducation: false, nextTime: repetitionTime });
     }
-    if (educationTime) {
-      queue.push({ word, isEducation: true, nextTime: educationTime });
-    }
+    educationTimes.forEach((time) => queue.push({ word, isEducation: true, nextTime: time }));
   }
 
   getTodayWords = () => this.words.map((word) => word.definition.wordId);
+
+  getLength= () => this.queueLength;
+
+  getCurrentLength = () => this.queue.getCurrentLength();
+
+  getQueueToSave= () => ({
+    queue: this.queue.map((qWord) => ({ id: qWord.word.definition.wordId, isEd: qWord.isEducation })),
+    length: this.queueLength,
+  });
+
+  getWordsToSave= () => this.words;
 }
