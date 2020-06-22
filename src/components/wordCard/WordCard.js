@@ -8,11 +8,17 @@ import CardContent from './cardContent/CardContent';
 import './WordCard.scss';
 
 const helpSettings = {
-	isHelpImage: true,
-	isHelpTranscription: true,
-	isHelpWordTranslate: true,
-	isHelpTextMeaning: true,
-	isHelpTextExample: true,
+	isImageShow: true,
+	isTranscriptionShow: true,
+	isWordTranslateShow: true,
+	isTextExampleShow: true,
+	isTextMeaningShow: true,
+	isTranslateShow: true,
+};
+
+const settings = {
+	isShowAnswerBtn: true,
+	isAudioAuto: true,
 };
 
 const wordJSON = {
@@ -35,12 +41,36 @@ const checkCorrect = ({ value, word }) => {
 }
 
 const WordCard = () => {
-	const inputRef = useRef();
+	const { word, audio, audioExample, audioMeaning } = wordJSON;
+	const { isTextExampleShow, isTextMeaningShow } = helpSettings;
+	const { isAudioAuto } = settings;
+
 	const [isWordInput, setIsWordInput] = useState(false);
 	const [isCorrect, setIsCorrect] = useState(null);
 	const [value, setValue] = useState('');
+	const [isAudioPlay, setIsAudioPlay] = useState(false);
 
-	const { word } = wordJSON;
+	const inputRef = useRef();
+	const audioRef = useRef();
+
+	const tracks = [];
+	if (isTextExampleShow) {
+		tracks.push(audioExample);
+	}
+	if (isTextMeaningShow) {
+		tracks.push(audioMeaning);
+	}
+
+	let currentTruck = 0;
+	const onAudioEnded = () => {
+		if (currentTruck < tracks.length) {
+			audioRef.current.src = tracks[currentTruck];
+			audioRef.current.play();
+			currentTruck += 1;
+		} else {
+			setIsAudioPlay(false);
+		}
+	}
 
 	const handleInputChange = (evt) => {
 		setValue(evt.target.value);
@@ -48,10 +78,9 @@ const WordCard = () => {
 
 	const handleNavigateClick = ({ id }) => {
 		if (id === 'next') {
-			const isCorrectValue = checkCorrect({ value, word });
 			setValue('');
 			setIsWordInput(true);
-			setIsCorrect(isCorrectValue);
+			setIsCorrect(checkCorrect({ value, word }));
 			inputRef.current.blur();
 		}
 
@@ -62,12 +91,15 @@ const WordCard = () => {
 
 	const handleInputEnter = (evt) => {
 		const { value } = evt.target;
-		const isCorrectValue = checkCorrect({ value, word });
 
 		if (evt.key === 'Enter') {
+			if (isAudioAuto) {
+				audioRef.current.play();
+				setIsAudioPlay(true);
+			}
 			setValue('');
 			setIsWordInput(true);
-			setIsCorrect(isCorrectValue);
+			setIsCorrect(checkCorrect({ value, word }));
 			inputRef.current.blur();
 		}
 	}
@@ -90,6 +122,7 @@ const WordCard = () => {
 				<ContainerWithShadow>
 					<CardContent
 						helpSettings={helpSettings}
+						settings={settings}
 						word={wordJSON}
 						onInputEnter={handleInputEnter}
 						onInputFocus={handleInputFocus}
@@ -102,18 +135,16 @@ const WordCard = () => {
 					/>
 				</ContainerWithShadow>
 				<NavigateBtn classes='next' id='next' onClick={handleNavigateClick}/>
+				<audio ref={audioRef} src={audio} preload='auto' onEnded={onAudioEnded} />
 			</div>
 		</div>
 	);
 }
-
-WordCard.defaultProps = {
-	// children: null,
-};
 
 export default WordCard;
 
 WordCard.propTypes = {
 	// word: PropTypes.object.isRequired,
 	// helpSettings: PropTypes.object.isRequired,
+	// settings: PropTypes.object.isRequired,
 };
