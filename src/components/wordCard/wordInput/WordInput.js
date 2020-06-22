@@ -7,9 +7,9 @@ const WordInput = ({
 	onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect,
 }) => {
 
-	let classesTranslate = 'text-item text-item--hidden';
+	let classesTranslate = 'text-item--translate text-item--hidden';
 	if (isWordInput) {
-		classesTranslate = 'text-item';
+		classesTranslate = 'text-item--translate';
 	}
 
 	let classes = 'word__size';

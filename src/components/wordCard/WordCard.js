@@ -18,6 +18,8 @@ const helpSettings = {
 
 const settings = {
 	isShowAnswerBtn: true,
+	isDeleteBtn: true,
+	isHardBtn: true,
 	isAudioAuto: true,
 };
 
@@ -85,7 +87,7 @@ const WordCard = () => {
 		}
 
 		if (id === 'prev') {
-			console.log(id);
+			console.log('---', id, '---');
 		}
 	}
 
@@ -115,6 +117,19 @@ const WordCard = () => {
 		setIsWordInput(true);
 	}
 
+	const handleDeleteBtnClick = () => {
+		console.log('---- delete button ----');
+	}
+
+	const handleHardBtnClick = () => {
+		console.log('---- hard button ----');
+	}
+
+	const handleAudioPlayBtnClick = () => {
+		audioRef.current.play();
+		setIsAudioPlay(true);
+	}
+
 	return (
 		<div className='card-unit'>
 			<div className='card__container'>
@@ -128,8 +143,12 @@ const WordCard = () => {
 						onInputFocus={handleInputFocus}
 						onInputChange={handleInputChange}
 						onShowBtnClick={handleShowBtnClick}
+						onDeleteBtnClick={handleDeleteBtnClick}
+						onHardBtnClick={handleHardBtnClick}
+						onAudioPlayBtnClick={handleAudioPlayBtnClick}
 						inputRef={inputRef}
 						value={value}
+						isAudioPlayBtn={true}
 						isWordInput={isWordInput}
 						isCorrect={isCorrect}
 					/>
