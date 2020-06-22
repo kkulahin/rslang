@@ -1,93 +1,55 @@
 import parameters from './parameters';
 
-// TODO: reset todayCount on next day
-
 export default class Word {
   /**
    * Constructor to create a word
+   * @param {WordController} wordController if this word should be repeated
    * @param {WordDefinition} definition word definition
    * @param {Object} param param
    * @param {number} param.difficultyId from new to completed
    * @param {number} param.time time when word was repeated
-   * @param {number} param.todayCount count of repetitions today
    * @param {number} param.repetitionPhaseId current repetition phase
-   * @param {number} param.missTimes when word was missed
-   * @param {[number]} param.mistakes dates of mistakes
+   * @param {number} param.lastMistake dates of mistakes
    * @param {number} param.totalMistakes total mistakes in this word
    * @param {number} param.totalRepetition total mistakes in this word
-   * @param {boolean} param.isAgain if this word should be repeated
    */
   constructor(
+    wordController,
     definition,
     {
       difficultyId = 0,
       time = 0,
-      todayCount = 0,
       repetitionPhaseId = 0,
-      missTimes = 0,
-      mistakes = [],
+      lastMistake = 0,
       totalMistakes = 0,
       totalRepetition = 0,
-      isAgain = false,
     },
   ) {
     this.definition = definition;
     this.difficulty = difficultyId;
     this.time = time;
-    this.todayCount = todayCount;
     this.repetitionPhase = repetitionPhaseId;
-    this.missTimes = missTimes;
-    this.mistakes = mistakes;
+    this.lastMistake = lastMistake;
     this.totalMistakes = totalMistakes;
     this.totalRepetition = totalRepetition;
-    this.isAgain = isAgain;
+    this.wordController = wordController;
   }
 
   setTime = () => {
     this.time = new Date().getTime();
-    this.todayCount += 1;
     this.totalRepetition += 1;
   }
 
   setMistake = () => {
-    this.mistakes.push(new Date().getTime());
-    if (this.mistakes.length > 9) {
-      this.mistakes.shift();
-    }
+    this.lastMistake = new Date().getTime();
     this.totalMistakes += 1;
+    this.changeDifficulty();
   }
 
   upgradePhase = () => {
     if (this.repetitionPhase < parameters.phase.length - 1) {
       this.repetitionPhase += 1;
     }
-    this.missTimes = 0;
-  }
-
-  downgradePhase = () => {
-    if (parameters.maxMissTimes < this.missTimes) {
-      this.repetitionPhase = this.getNextPhase().downgragePhase;
-      this.missTimes = 0;
-    }
-  }
-
-  updateMissed = () => {
-    if (this.isMissed()) {
-      this.missTimes += 1;
-    }
-  }
-
-  isMissed = () => {
-    const nextPhase = this.getNextPhase();
-    if (nextPhase.delta === parameters.unlimited) {
-      return false;
-    }
-    const currentTime = new Date().getTime();
-    const deltaTime = (currentTime - this.time) / 1000;
-    if (deltaTime > nextPhase.time + nextPhase.delta) {
-      return true;
-    }
-    return false;
   }
 
   getNextPhase = () => {
@@ -97,12 +59,28 @@ export default class Word {
     return parameters.phase[this.repetitionPhase];
   }
 
+  getNewPhases = () => parameters.phase.filter((e, i) => i < 4);
+
   setDifficulty = (difficulty) => {
     this.difficulty = difficulty;
   }
 
-  changeDifficulty = () => {
-    // TODO
+  getWhenWasLastMistake = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const lastMistakeDate = new Date(this.lastMistake);
+    return Math.ceil((today - lastMistakeDate) / 1000 / 60 / 60 / 24);
+  }
+
+  upgradeDifficulty = () => {
+    if (this.getWhenWasLastMistake() >= parameters.difficulty[this.difficulty].maxDays) {
+      if (this.difficulty + 1 < parameters.difficulty.length) {
+        this.difficulty += 1;
+      }
+    }
+  }
+
+  downgradeDifficulty = () => {
   }
 
   prepareStatistics = () => {
@@ -112,59 +90,30 @@ export default class Word {
   /**
    * @return {number} when this word will be repeated in days
    */
-  getNextRepetition() { // TODO fix: add education
-    if (this.isAgain) {
-      return 0;
-    }
-    const currentDate = new Date();
-    if (this.difficulty.name === parameters.difficultyNames.new) {
-      const nextDate = new Date();
-      nextDate.setSeconds(currentDate.getSeconds() + this.getNextPhase().time);
-      if (currentDate.getDate() !== nextDate.getDate()) {
-        return 1;
-      }
-      return 0;
-    }
-    if (this.difficulty.name === parameters.difficultyNames.evaluation) {
-      if (this.todayCount < parameters.difficultyEvaluationTimesPerDay) {
-        return 0;
-      }
-      return 1;
-    }
-    const nextDate = new Date(this.time);
-    nextDate.setSeconds(nextDate.getSeconds() + this.getNextPhase().time);
-    const dayToday = currentDate.getDate();
-    const dayNext = nextDate.getDate();
-    const daysInMonths = ([31, Word.isLeapYear() ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])[currentDate.getMonth()];
-    return (daysInMonths + dayToday - dayNext) % daysInMonths;
+  getNextRepetition() {
+    return this.wordController.queue.any((qWord) => qWord.word === this.word);
   }
 
   getNextEducationTime = () => {
     if (this.time === 0) {
-      return this.time;
+      return this.getNewPhases().map((phase) => this.time + (phase.time + Math.random(10)) * 1000);
     }
-    return this.getNextPhase().time + this.time;
+    const nextTime = new Date(this.getNextPhase().time + this.time * 1000);
+    const today = new Date();
+    if (nextTime.getDate() === today.getDate()
+      && nextTime.getMonth() === today.getMonth()
+      && nextTime.getFullYear() === today.getFullYear()) {
+      return [nextTime];
+    }
+    return [];
   }
 
   getNextRepetitionTime = () => {
-    if (this.difficulty.name === parameters.difficulty.evaluation) {
-      if (this.todayCount < parameters.difficultyEvaluationTimesPerDay) {
-        return new Date();
-      }
-      return undefined;
-    }
     const currentDate = new Date();
     const nextDate = new Date(this.time);
     nextDate.setSeconds(nextDate.getSeconds() + this.getNextPhase().time);
     const dayToday = currentDate.getDate();
     const dayNext = nextDate.getDate();
     return dayToday === dayNext ? dayToday : undefined;
-  }
-
-  /**
-   * @param {Date} date
-   */
-  static isLeapYear(date) {
-    return ((date.getFullYear() % 4 === 0) && (date.getFullYear() % 100 !== 0)) || (date.getFullYear() % 400 === 0);
   }
 }
