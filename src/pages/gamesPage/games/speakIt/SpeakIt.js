@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Header, Icon, Image, Button, Input,
+  Header, Icon, Image, Button,
 } from 'semantic-ui-react';
 
 import { ProgressBar, Step } from 'react-step-progress-bar';
@@ -39,6 +39,7 @@ const SpeackIt = () => {
   const [gameOption, setGameOption] = useState(defGameOption);
   const [activeWord, setActiveWord] = useState(null);
   const [activeWordParams, setActiveWordParams] = useState(null);
+  const [activeWordStatistic, setActiveWordStatistic] = useState(null);
   const [gameMode, setGameMode] = useState(false);
   const [userRecWord, setUserRecWord] = useState(null);
   const [gameplayWords, setGamePlayWords] = useState({ errors: {}, rights: {} });
@@ -101,13 +102,25 @@ const SpeackIt = () => {
       setGamePlayWords(newGamePlayWords);
     } else {
       setGamePlayWords({ errors: {}, rights: {} });
+      setActiveWordStatistic(null);
     }
   }, [gameMode, gameOption.stagesOption]);
+
+  /* useEffect(() => {
+    const { errors, rights } = gameplayWords;
+    if (!gameMode || userRecWord === null) {
+      return undefined;
+		}
+
+    console.log(errors);
+  }, [userRecWord, gameplayWords, gameMode]); */
 
   const restart = () => {
     if (gameResult) {
       setGameResult(false);
     }
+    setActiveWord(null);
+    setActiveWordParams(null);
     setGameOption(defGameOption);
     setGameMode(false);
   };
@@ -116,7 +129,7 @@ const SpeackIt = () => {
     setGameMode(true);
   };
 
-  const onClickTest = (e) => {
+  const switchStage = (e) => {
     if (e.target.nodeName === 'IMG') {
       const cStep = e.target.getAttribute('data-step');
       const newGameOption = {
@@ -147,7 +160,6 @@ const SpeackIt = () => {
       <ProgressBar
         percent={(gameOption.curStage * 100) / gameOption.maxStage}
         filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"
-        onClick={onClickTest}
       >
         {stepEls}
       </ProgressBar>
@@ -156,7 +168,6 @@ const SpeackIt = () => {
 
   const onClickSetWord = (e) => {
     const item = e.currentTarget;
-    /* item.classList.add('active'); */
     const word = item.querySelector('.item-content');
     setActiveWord(word.getAttribute('data-value'));
   };
@@ -170,7 +181,6 @@ const SpeackIt = () => {
   };
 
   const getSpeechQuery = (value) => {
-    console.log(value);
     setUserRecWord(value);
   };
 
@@ -195,11 +205,16 @@ const SpeackIt = () => {
     if (Array.isArray(gameOption.stagesOption) && gameOption.stagesOption.length) {
       const curStageWords = gameOption.stagesOption[gameOption.curStage];
       words = curStageWords[`stage${[gameOption.curStage]}`];
-      console.log(words);
     }
     const wordEl = wordSize.map((w) => (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-      <div className={`${isActiveItemClass(words, w)} item`} key={w} onClick={onClickSetWord} role="menuitem" tabIndex={w}>
+      <div
+        className={`${isActiveItemClass(words, w)} item`}
+        key={w}
+        onClick={onClickSetWord}
+        role="button"
+        tabIndex={w}
+      >
         <div className="item-icon">
           <Icon name="assistive listening systems" />
         </div>
@@ -218,8 +233,24 @@ const SpeackIt = () => {
     return <>{wordEl}</>;
   };
 
-  const buildStatisticErrors = (errorEls = true) => {
-    console.log('testEr');
+  const VoiceStatistic = (e) => {
+    const activeEl = e.currentTarget;
+    const wordParams = {
+      value: activeEl.getAttribute('data-value'),
+      translate: activeEl.getAttribute('data-translate'),
+      audio: activeEl.getAttribute('data-audio'),
+    };
+    setActiveWordStatistic(wordParams);
+  };
+
+  useEffect(() => {
+    if (activeWordStatistic !== null) {
+      const audio = document.querySelector('.speakIt-results__audio');
+      audio.play();
+    }
+  }, [activeWordStatistic]);
+
+  const buildStatistic = (errorEls = true) => {
     if (!gameMode) return null;
     const { errors, rights } = gameplayWords;
     const { curStage } = gameOption;
@@ -227,8 +258,18 @@ const SpeackIt = () => {
     if (errorEls && !isEmpty(errors)) {
       const stage = errors[curStage];
       const words = stage[`stage${curStage}`];
-      const wordsErr = words.map((w, index) => (
-        <div className="result-item" key={index}>
+      const wordsErr = words.map((w) => (
+        <div
+          role="button"
+          tabIndex="0"
+          className="result-item"
+          key={w.word}
+          data-value={w.word}
+          data-audio={w.audio}
+          data-translate={w.wordTranslate}
+          onClick={VoiceStatistic}
+          onKeyDown={() => {}}
+        >
           <div className="item-icon">
             <Icon name="assistive listening systems" />
           </div>
@@ -250,8 +291,14 @@ const SpeackIt = () => {
     if (!errorEls && !isEmpty(rights)) {
       const stage = rights[curStage];
       const words = stage[`stage${curStage}`];
-      const wordsErr = words.map((w, index) => (
-        <div className="result-item" key={w.word}>
+      const wordsErr = words.map((w) => (
+        <div
+          className="result-item"
+          key={w.word}
+          data-value={w.word}
+          data-audio={w.audio}
+          data-translate={w.wordTranslate}
+        >
           <div className="item-icon">
             <Icon name="assistive listening systems" />
           </div>
@@ -266,10 +313,10 @@ const SpeackIt = () => {
             <span className="right-num">{words.length}</span>
           </p>
           {wordsErr}
-
         </>
       );
     }
+    return null;
   };
 
   const getImage = () => {
@@ -288,6 +335,7 @@ const SpeackIt = () => {
 
   const backToMain = () => {
     setGameResult(false);
+    setActiveWordStatistic(null);
   };
 
   return (
@@ -300,7 +348,7 @@ const SpeackIt = () => {
           </Header>
         </div>
         <div className="app-speakIt" />
-        <div className="speakIt-progressbar" onClick={onClickTest}>
+        <div className="speakIt-progressbar" onClick={switchStage} role="button" tabIndex="0" onKeyDown={() => {}}>
           {buildProgressStep()}
         </div>
         <div className="speakIt-image__wrapper">
@@ -325,12 +373,16 @@ const SpeackIt = () => {
         )}
       </div>
       <div className={`speakIt-result ${!gameResult ? 'invisible' : 'visible'}`}>
+        <div className="speakIt-progressbar" onClick={switchStage} role="button" tabIndex="0" onKeyDown={() => {}}>
+          {buildProgressStep()}
+        </div>
         <div className="resultpage">
+
           <div className="results-container">
 
-            { buildStatisticErrors() }
+            { buildStatistic() }
 
-            { buildStatisticErrors(false) }
+            { buildStatistic(false) }
 
             <p className="results-right">
               Rights:
@@ -343,6 +395,12 @@ const SpeackIt = () => {
           <Button primary onClick={restart}>Restart</Button>
           <Button primary onClick={backToMain}>Back</Button>
         </div>
+        <audio
+          className="speakIt-results__audio"
+          src={activeWordStatistic ? `${gitDataUrl}/${activeWordStatistic?.audio}` : null}
+        >
+          <track kind="captions" />
+        </audio>
       </div>
     </>
   );
