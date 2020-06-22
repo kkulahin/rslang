@@ -53,6 +53,12 @@
     border: 1px solid #fff;
 }
 
+.results-container .result-item {
+    display: grid; 
+    grid-template-columns: repeat(3, 5rem);
+    border: 1px solid #fff;
+}
+
 .speakIt .item-icon {
     display:flex;
     justify-content: center;
@@ -92,7 +98,23 @@
     background: black;
 }
 
-.speakIt-mic {
-    width: 400px;
+.input-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 80%;
     margin: 20px auto;
+}
+
+.speakIt-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.visible {
+    display: flex;
+}
+
+.invisible {
+    display: none;
 }

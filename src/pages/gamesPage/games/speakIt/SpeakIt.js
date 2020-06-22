@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Header, Icon, Image, Button, Input,
 } from 'semantic-ui-react';
@@ -6,6 +6,7 @@ import {
 import { ProgressBar, Step } from 'react-step-progress-bar';
 import TestImage from '../../../../assets/image/speakIt.png';
 import { getWords } from '../../../../controllers/words/words';
+import Dictaphone from '../../../../components/dictaphone/Dictaphone';
 
 import './speakIt.scss';
 import 'react-step-progress-bar/styles.css';
@@ -20,6 +21,8 @@ const stepPic = [
   'https://orig00.deviantart.net/493a/f/2017/095/5/4/raichu_icon_by_pokemonshuffle_icons-db4ryym.png',
   'https://orig00.deviantart.net/493a/f/2017/095/5/4/raichu_icon_by_pokemonshuffle_icons-db4ryym.png',
 ];
+
+const isEmpty = (obj) => Object.keys(obj).length === 0;
 
 const defaultParams = {
   StepCounter: 6,
@@ -37,6 +40,10 @@ const SpeackIt = () => {
   const [activeWord, setActiveWord] = useState(null);
   const [activeWordParams, setActiveWordParams] = useState(null);
   const [gameMode, setGameMode] = useState(false);
+  const [userRecWord, setUserRecWord] = useState(null);
+  const [gameplayWords, setGamePlayWords] = useState({ errors: {}, rights: {} });
+  const [gameResult, setGameResult] = useState(false);
+  const input = useRef(null);
 
   const getWordsForStage = () => {
     const getWordsPromises = [];
@@ -85,7 +92,22 @@ const SpeackIt = () => {
     }
   }, [activeWordParams, gameMode]);
 
+  useEffect(() => {
+    if (gameMode) {
+      const newGamePlayWords = {
+        errors: gameOption.stagesOption,
+        rights: {},
+      };
+      setGamePlayWords(newGamePlayWords);
+    } else {
+      setGamePlayWords({ errors: {}, rights: {} });
+    }
+  }, [gameMode, gameOption.stagesOption]);
+
   const restart = () => {
+    if (gameResult) {
+      setGameResult(false);
+    }
     setGameOption(defGameOption);
     setGameMode(false);
   };
@@ -147,9 +169,20 @@ const SpeackIt = () => {
     return '';
   };
 
+  const getSpeechQuery = (value) => {
+    console.log(value);
+    setUserRecWord(value);
+  };
+
   const isImageDescription = () => {
     if (gameMode) {
-      return <Input className="speakIt-mic" icon="microphone" iconPosition="left" readOnly />;
+      return (
+        <div className="input-wrapper">
+          <input icon="microphone" readOnly ref={input} />
+          <Dictaphone getSpeechQuery={getSpeechQuery} setInputValue={input} />
+        </div>
+
+      );
     }
     return (
       <p>{activeWordParams?.translate}</p>
@@ -185,44 +218,133 @@ const SpeackIt = () => {
     return <>{wordEl}</>;
   };
 
+  const buildStatisticErrors = (errorEls = true) => {
+    console.log('testEr');
+    if (!gameMode) return null;
+    const { errors, rights } = gameplayWords;
+    const { curStage } = gameOption;
+    if (isEmpty(errors) && isEmpty(rights)) return null;
+    if (errorEls && !isEmpty(errors)) {
+      const stage = errors[curStage];
+      const words = stage[`stage${curStage}`];
+      const wordsErr = words.map((w, index) => (
+        <div className="result-item" key={index}>
+          <div className="item-icon">
+            <Icon name="assistive listening systems" />
+          </div>
+          <p>{w.word }</p>
+          <p>{w.transcription }</p>
+        </div>
+      ));
+      return (
+        <>
+          <p className="results-errors">
+            Errors:
+            <span className="errors-num">{words.length}</span>
+          </p>
+          {wordsErr}
+
+        </>
+      );
+    }
+    if (!errorEls && !isEmpty(rights)) {
+      const stage = rights[curStage];
+      const words = stage[`stage${curStage}`];
+      const wordsErr = words.map((w, index) => (
+        <div className="result-item" key={w.word}>
+          <div className="item-icon">
+            <Icon name="assistive listening systems" />
+          </div>
+          <p>{w.word }</p>
+          <p>{w.transcription }</p>
+        </div>
+      ));
+      return (
+        <>
+          <p className="results-right">
+            Rights:
+            <span className="right-num">{words.length}</span>
+          </p>
+          {wordsErr}
+
+        </>
+      );
+    }
+  };
+
   const getImage = () => {
     if (activeWordParams === null) return TestImage;
     return `${gitDataUrl}${activeWordParams.image}`;
   };
 
+  const resultPage = () => {
+    const mic = document.querySelector('.input-wrapper .icon');
+    if (!mic.classList.contains('slash')) {
+      mic.click();
+    }
+
+    setGameResult(true);
+  };
+
+  const backToMain = () => {
+    setGameResult(false);
+  };
+
   return (
-    <div className="speakIt">
-      <div className="speakIt-header">
-        <Header as="h2" className="games-header">
-          <Icon name="game" />
-          <Header.Content>SpeakIt</Header.Content>
-        </Header>
+    <>
+      <div className={`speakIt ${gameResult ? 'invisible' : 'visible'}`}>
+        <div className="speakIt-header">
+          <Header as="h2" className="games-header">
+            <Icon name="game" />
+            <Header.Content>SpeakIt</Header.Content>
+          </Header>
+        </div>
+        <div className="app-speakIt" />
+        <div className="speakIt-progressbar" onClick={onClickTest}>
+          {buildProgressStep()}
+        </div>
+        <div className="speakIt-image__wrapper">
+          <Image src={getImage()} size="medium" bordered alt="" />
+          {isImageDescription()}
+        </div>
+        <div className="speakIt-items">
+          {buildWordEl()}
+        </div>
+        <div className="speakIt-panel">
+          <Button primary onClick={restart}>Restart</Button>
+          <Button primary onClick={start}>Speak</Button>
+          {gameMode ? <Button primary onClick={resultPage}>Results</Button> : null}
+        </div>
+        {gameMode ? null : (
+          <audio
+            className="speakIt-audio"
+            src={activeWordParams ? `${gitDataUrl}/${activeWordParams?.audio}` : null}
+          >
+            <track kind="captions" />
+          </audio>
+        )}
       </div>
-      <div className="app-speakIt" />
-      <div className="speakIt-progressbar" onClick={onClickTest}>
-        {buildProgressStep()}
+      <div className={`speakIt-result ${!gameResult ? 'invisible' : 'visible'}`}>
+        <div className="resultpage">
+          <div className="results-container">
+
+            { buildStatisticErrors() }
+
+            { buildStatisticErrors(false) }
+
+            <p className="results-right">
+              Rights:
+              <span className="right-num">0</span>
+            </p>
+            <div className="right-item" />
+          </div>
+        </div>
+        <div className="result-button__wrapper">
+          <Button primary onClick={restart}>Restart</Button>
+          <Button primary onClick={backToMain}>Back</Button>
+        </div>
       </div>
-      <div className="speakIt-image__wrapper">
-        <Image src={getImage()} size="medium" bordered alt="" />
-        {isImageDescription()}
-      </div>
-      <div className="speakIt-items">
-        {buildWordEl()}
-      </div>
-      <div className="speakIt-panel">
-        <Button primary onClick={restart}>Restart</Button>
-        <Button primary onClick={start}>Speak</Button>
-        <Button primary>Results</Button>
-      </div>
-      {gameMode ? null : (
-        <audio
-          className="speakIt-audio"
-          src={activeWordParams ? `${gitDataUrl}/${activeWordParams?.audio}` : null}
-        >
-          <track kind="captions" />
-        </audio>
-      )}
-    </div>
+    </>
   );
 };
 
