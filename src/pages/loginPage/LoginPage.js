@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Form, Grid, Image, Checkbox,
 } from 'semantic-ui-react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import responseFromServer from '../../utils/responseFromServer';
 import VectorMan from '../../assets/image/vector_man.png';
 import { SchoolURL, coockieLifeCyrcle } from '../../default';
@@ -166,7 +166,7 @@ const LoginForm = () => {
           </Button>
           <div className="field">
             <span className="login-signup">New here?</span>
-            <a href="/signup" className="login-signup"> Sign up</a>
+            <Link to="/signup" className="login-signup"> Sign up</Link>
           </div>
         </Form>
       </Grid.Column>

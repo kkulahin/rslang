@@ -1,0 +1,27 @@
+.games-header {
+    display: flex;
+justify-content: center;
+align-items: center;
+height: 20vh;
+color: #fff !important;
+}
+
+.games-cards .container-with-shadow {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 10px !important;
+}
+
+.games-cards .container-with-shadow img {
+    width: 90%;
+    border-radius: 20px;
+}
+
+.games-card__header {
+    color: #fff !important;
+}
+
+.games-wrapper {
+    width: 100%;
+}

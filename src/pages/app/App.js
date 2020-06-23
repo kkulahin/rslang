@@ -3,7 +3,6 @@ import React from 'react';
 import {
   BrowserRouter as Router, Route, Switch,
 } from 'react-router-dom';
-
 import History from '../../utils/history';
 import Home from '../Home';
 import NotFound from '../NotFound';
@@ -15,7 +14,7 @@ import Statistic from '../Statistic';
 import Promo from '../promoPage/Promo';
 import About from '../About';
 import Settings from '../Settings';
-
+import GamesPage from '../gamesPage/GamesPage';
 import Header from '../../components/header/Header';
 import GreetingWrapper from '../../components/greetingWrapper/GreetingWrapper';
 
@@ -37,6 +36,7 @@ const App = () => (
           <Route path="/settings" component={Settings} />
           <Route path="/promo" component={Promo} />
           <Route path="/about" component={About} />
+          <Route path="/games" component={GamesPage} />
           <Route component={NotFound} />
         </Switch>
       </div>
