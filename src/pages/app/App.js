@@ -3,6 +3,7 @@ import React from 'react';
 import {
   BrowserRouter as Router, Route, Switch,
 } from 'react-router-dom';
+
 import History from '../../utils/history';
 import Home from '../Home';
 import NotFound from '../NotFound';
@@ -11,7 +12,7 @@ import Logout from '../logoutPage/Logout';
 import SignupPage from '../signupPage/SignupPage';
 import Dictionary from '../Dictionary';
 import Statistic from '../Statistic';
-import Promo from '../Promo';
+import Promo from '../promoPage/Promo';
 import About from '../About';
 import Settings from '../Settings';
 
