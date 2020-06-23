@@ -3,6 +3,7 @@ import React from 'react';
 import {
   BrowserRouter as Router, Route, Switch,
 } from 'react-router-dom';
+
 import History from '../../utils/history';
 import Home from '../Home';
 import NotFound from '../NotFound';
@@ -11,11 +12,12 @@ import Logout from '../logoutPage/Logout';
 import SignupPage from '../signupPage/SignupPage';
 import Dictionary from '../Dictionary';
 import Statistic from '../statistics/Statistic';
-import Promo from '../Promo';
+import Promo from '../promoPage/Promo';
 import About from '../About';
 import Settings from '../Settings';
 
 import Header from '../../components/header/Header';
+import GreetingWrapper from '../../components/greetingWrapper/GreetingWrapper';
 
 import './App.scss';
 
@@ -24,6 +26,7 @@ const App = () => (
     <div className="app-wrapper">
       <Header />
       <div className="app-main">
+        <GreetingWrapper />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/signin" component={LoginPage} />

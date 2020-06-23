@@ -7,3 +7,4 @@
 | Create continue training block | 19.06.2020 | 19.06.2020 | 3 h |
 | Create number-picker component | 19.06.2020 | 20.06.2020 | 4 h |
 | Refactor app styles | 21.06.2020 | 22.06.2020 | 8 h |
+| Create greeting wrapper component | 22.06.2020 | 22.06.2020 | 1 h |
