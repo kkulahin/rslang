@@ -14,7 +14,6 @@ const phaseNames = {
 };
 const difficultyNames = {
   new: 'new',
-  evaluation: 'evaluation',
   easy: 'easy',
   normal: 'normal',
   hard: 'hard',
