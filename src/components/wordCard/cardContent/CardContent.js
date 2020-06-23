@@ -9,13 +9,15 @@ import Button from '../../button/Button';
 const CardContent = (props) => {
 	const {
 		settings: { isShowAnswerBtn, isDeleteBtn, isHardBtn },
-		helpSettings, isPrevWord, word, isWordInput, onShowBtnClick, onDeleteBtnClick, onHardBtnClick, isAudioPlayBtn, onAudioPlayBtnClick
+		helpSettings, isPrevWord, word, isWordInput, onShowBtnClick,
+		onDeleteBtnClick, onHardBtnClick, onAudioPlayBtnClick,
 	} = props;
 
 	const ShowAnswerBtn = (
 		<Button
 			name='check'
 			label='Show the answer'
+			isDisabled={isWordInput || isPrevWord}
 			clickHandler={() => onShowBtnClick()}
 		/>
 	);
@@ -24,6 +26,7 @@ const CardContent = (props) => {
 		<Button
 			name='check'
 			label='Delete'
+			isDisabled={isWordInput || isPrevWord}
 			clickHandler={() => onDeleteBtnClick()}
 		/>
 	);
@@ -32,6 +35,7 @@ const CardContent = (props) => {
 		<Button
 			name='check'
 			label='Hard'
+			isDisabled={isWordInput || isPrevWord}
 			clickHandler={() => onHardBtnClick()}
 		/>
 	);
@@ -44,20 +48,31 @@ const CardContent = (props) => {
 		/>
 	);
 
+	const learnContentClasses = isPrevWord
+		? 'learn-content learn-content--prev'
+		: 'learn-content';
+
 	return (
 		<div className='card-content'>
 			<div className='help-content'>
-				<HelpImage helpSettings={helpSettings} word={word} />
-				<HelpText helpSettings={helpSettings} word={word} isWordInput={isWordInput || isPrevWord} />
+				<HelpImage
+					helpSettings={helpSettings}
+					word={word}
+				/>
+				<HelpText
+					helpSettings={helpSettings}
+					word={word}
+					isWordInput={isWordInput || isPrevWord}
+				/>
 			</div>
 			<div className='card-controls'>
 				{isHardBtn && HardBtn}
 				{isDeleteBtn && DeleteBtn}
-				{isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
-				{isAudioPlayBtn && isPrevWord && AudioPlayBtn}
+				{isShowAnswerBtn && ShowAnswerBtn}
 			</div>
-			<div className='learn-content'>
+			<div className={learnContentClasses}>
 				<WordInput {...props} />
+				{isPrevWord && AudioPlayBtn}
 			</div>
 		</div>
 	);
@@ -69,9 +84,14 @@ CardContent.propTypes = {
 	isWordInput: PropTypes.bool.isRequired,
 	isPrevWord: PropTypes.bool.isRequired,
 	onShowBtnClick: PropTypes.func.isRequired,
+	onDeleteBtnClick: PropTypes.func.isRequired,
+	onHardBtnClick: PropTypes.func.isRequired,
+	onAudioPlayBtnClick: PropTypes.func.isRequired,
 	helpSettings: PropTypes.object.isRequired,
 	word: PropTypes.object.isRequired,
 	settings: PropTypes.shape({
 		isShowAnswerBtn: PropTypes.bool.isRequired,
+		isDeleteBtn: PropTypes.bool.isRequired,
+		isHardBtn: PropTypes.bool.isRequired,
 	}),
 };

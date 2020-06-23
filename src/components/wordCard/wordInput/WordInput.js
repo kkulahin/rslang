@@ -6,7 +6,6 @@ const WordInput = ({
 	helpSettings: { isTranslateShow },
 	onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect, isPrevWord,
 }) => {
-
 	let classesTranslate = 'text-item--translate text-item--hidden';
 	if (isWordInput || isPrevWord) {
 		classesTranslate = 'text-item--translate';
@@ -40,9 +39,7 @@ const WordInput = ({
 		</div>
 	);
 
-	return (
-		element
-	);
+	return element;
 }
 
 export default WordInput;

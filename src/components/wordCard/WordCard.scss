@@ -42,6 +42,7 @@ $word-bg-color: #25CEDE;
 }
 
 .card__container {
+  max-width: 800px;
 
   @include flex($align-items: stretch, $justify-content: space-between);
 }
@@ -61,7 +62,7 @@ $word-bg-color: #25CEDE;
 .help-content {
   padding-bottom: 20px;
 
-  @include flex($align-items: stretch, $justify-content: space-between);
+  @include flex($align-items: center, $justify-content: space-between);
 
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 
@@ -139,18 +140,12 @@ $word-bg-color: #25CEDE;
 
   border: none;
   border-radius: $element-border-radius;
-
-  transition: color $transition-duration;
 }
 
 .text--hidden {
   color: transparent;
   pointer-events: none;
   user-select: none;
-}
-
-.learn-content {
-  margin-top: 20px;
 }
 
 .card-controls {
@@ -160,6 +155,17 @@ $word-bg-color: #25CEDE;
   background-color: transparent;
 
   @include flex($justify-content: space-between);
+}
+
+.learn-content {
+  margin-top: 20px;
+
+  @include flex();
+
+  &--prev {
+    justify-content: space-between;
+    align-items: flex-start;
+  }
 }
 
 .word__container {
@@ -236,7 +242,16 @@ $word-bg-color: #25CEDE;
 }
 
 .button {
+  justify-content: center;
+
+  width: 180px;
+
   font-size: $font-size-small;
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.25;
+  }
 }
 
 .button + .button {

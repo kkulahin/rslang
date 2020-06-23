@@ -1,42 +1,11 @@
 import React, { useState, useRef } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import ContainerWithShadow from '../containerWithShadow/ContainerWithShadow';
 import NavigateBtn from './navigateBtn/NavigateBtn';
 import CardContent from './cardContent/CardContent';
 
 import './WordCard.scss';
-
-// const helpSettings = {
-// 	isImageShow: true,
-// 	isTranscriptionShow: true,
-// 	isWordTranslateShow: true,
-// 	isTextExampleShow: true,
-// 	isTextMeaningShow: true,
-// 	isTranslateShow: true,
-// };
-
-// const settings = {
-// 	isShowAnswerBtn: true,
-// 	isDeleteBtn: true,
-// 	isHardBtn: true,
-// 	isAudioAuto: true,
-// };
-
-// const wordJSON = {
-// 	"word": "agree",
-// 	"image": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001.jpg",
-// 	"audio": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001.mp3",
-// 	"audioMeaning": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001_meaning.mp3",
-// 	"audioExample": "https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/files/01_0001_example.mp3",
-// 	"textMeaning": "To <i>agree</i> is to have the same opinion or belief as another person",
-// 	"textExample": "The students <b>agree</b> they have too much homework",
-// 	"transcription": "[əgríː]",
-// 	"wordTranslate": "согласна",
-// 	"textMeaningTranslate": "Согласиться - значит иметь то же мнение или убеждение, что и другой человек",
-// 	"textExampleTranslate": "Студенты согласны, что у них слишком много домашней работы",
-// 	"id": 1,
-// };
 
 const checkCorrect = ({ value, word }) => {
 	return value.toLowerCase() === word.toLowerCase();
@@ -45,27 +14,27 @@ const checkCorrect = ({ value, word }) => {
 const WordCard = ({
 	helpSettings,
 	settings,
-	wordJSON,
+	words,
 	onErrorAnswer,
-	onPrevBtnClick,
 	onNextBtnClick,
 	onHardBtnClick,
 	onDeleteBtnClick,
-	isFirstWord,
-	isPrevWord,
 }) => {
-
-	const { word, audio, audioExample, audioMeaning } = wordJSON;
-	const { isTextExampleShow, isTextMeaningShow } = helpSettings;
-	const { isAudioAuto } = settings;
-
 	const [isWordInput, setIsWordInput] = useState(false);
 	const [isCorrect, setIsCorrect] = useState(null);
 	const [value, setValue] = useState('');
-	const [isAudioPlay, setIsAudioPlay] = useState(false);
+	const [isPrevWord, setIsPrevWord] = useState(false);
+
+	const { isTextExampleShow, isTextMeaningShow } = helpSettings;
+	const { isAudioAuto } = settings;
 
 	const inputRef = useRef();
 	const audioRef = useRef();
+
+	const currentWord = isPrevWord
+		? words[0]
+		: words[words.length - 1];
+	const { word, audio, audioExample, audioMeaning } = currentWord;
 
 	let currentTruck = 0;
 	const tracks = [audio];
@@ -76,11 +45,31 @@ const WordCard = ({
 		tracks.push(audioMeaning);
 	}
 
+	const handleAnswer = (isCorrectAnswer) => {
+		if (isAudioAuto) {
+			audioPlay();
+		}
+		setValue('');
+		setIsWordInput(true);
+		inputRef.current.blur();
+
+		isCorrectAnswer
+			? setIsCorrect(true)
+			: onErrorAnswer();
+	}
+
+	const getNextWord = () => {
+		setIsWordInput(false);
+		setIsCorrect(null);
+		setValue('');
+
+		onNextBtnClick();
+	}
+
 	const audioPlay = () => {
 		currentTruck = 0;
 		audioRef.current.src = tracks[currentTruck];
 		audioRef.current.play();
-		setIsAudioPlay(true);
 	}
 
 	const onAudioEnded = () => {
@@ -88,8 +77,11 @@ const WordCard = ({
 			currentTruck += 1;
 			audioRef.current.src = tracks[currentTruck];
 			audioRef.current.play();
-		} else {
-			setIsAudioPlay(false);
+			return;
+		}
+
+		if (isCorrect) {
+			getNextWord();
 		}
 	}
 
@@ -99,31 +91,29 @@ const WordCard = ({
 
 	const handleNavigateClick = ({ id }) => {
 		if (id === 'next') {
-			setValue('');
-			setIsWordInput(true);
-			setIsCorrect(checkCorrect({ value, word }));
-			inputRef.current.blur();
+			if (isPrevWord) {
+				setIsPrevWord(false);
+				return;
+			}
 
-			onNextBtnClick();
+			if (isCorrect) {
+				getNextWord();
+				return;
+			}
+
+			handleAnswer(checkCorrect({ value, word }));
 		}
 
 		if (id === 'prev') {
 			setIsWordInput(false);
-			onPrevBtnClick();
+			setIsPrevWord(true);
 		}
 	}
 
 	const handleInputEnter = (evt) => {
-		const { value } = evt.target;
-
 		if (evt.key === 'Enter') {
-			if (isAudioAuto) {
-				audioPlay();
-			}
-			setValue('');
-			setIsWordInput(true);
-			setIsCorrect(checkCorrect({ value, word }));
-			inputRef.current.blur();
+			const { value } = evt.target;
+			handleAnswer(checkCorrect({ value, word }));
 		}
 	}
 
@@ -135,9 +125,7 @@ const WordCard = ({
 	}
 
 	const handleShowBtnClick = () => {
-		setValue('');
-		setIsWordInput(true);
-		onErrorAnswer();
+		handleAnswer(false);
 	}
 
 	const handleAudioPlayBtnClick = () => {
@@ -147,7 +135,7 @@ const WordCard = ({
 	const cardContentProps = {
 		helpSettings: helpSettings,
 		settings: settings,
-		word: wordJSON,
+		word: currentWord,
 		onInputEnter: handleInputEnter,
 		onInputFocus: handleInputFocus,
 		onInputChange: handleInputChange,
@@ -157,17 +145,23 @@ const WordCard = ({
 		onAudioPlayBtnClick: handleAudioPlayBtnClick,
 		inputRef: inputRef,
 		value: value,
-		isAudioPlayBtn: true,
 		isWordInput: isWordInput,
 		isCorrect: isCorrect,
 		isPrevWord: isPrevWord,
 	};
 
+	const isPrevBtnInvisible = (words.length === 1) || isPrevWord;
 	return (
 		<div className='card-unit'>
 			<div className='card__container'>
-				{<NavigateBtn classes='prev' id='prev' onClick={handleNavigateClick} isInvisible={isFirstWord || isPrevWord}/>}
-				<ContainerWithShadow>
+				{<NavigateBtn
+					classes='prev'
+					id='prev'
+					onClick={handleNavigateClick}
+					isInvisible={isPrevBtnInvisible}
+					isDisabled={isCorrect}
+				/>}
+				<ContainerWithShadow padding='20px'>
 					<CardContent
 						{...cardContentProps}
 					/>
@@ -182,7 +176,16 @@ const WordCard = ({
 export default WordCard;
 
 WordCard.propTypes = {
-	// word: PropTypes.object.isRequired,
-	// helpSettings: PropTypes.object.isRequired,
-	// settings: PropTypes.object.isRequired,
+	words: PropTypes.array.isRequired,
+	settings: PropTypes.shape({
+		isAudioAuto: PropTypes.bool.isRequired,
+	}),
+	helpSettings: PropTypes.shape({
+		isTextExampleShow: PropTypes.bool.isRequired,
+		isTextMeaningShow: PropTypes.bool.isRequired,
+	}),
+	onErrorAnswer: PropTypes.func.isRequired,
+	onNextBtnClick: PropTypes.func.isRequired,
+	onHardBtnClick: PropTypes.func.isRequired,
+	onDeleteBtnClick: PropTypes.func.isRequired,
 };

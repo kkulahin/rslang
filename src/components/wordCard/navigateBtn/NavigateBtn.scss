@@ -36,11 +36,14 @@ $transition-duration: 0.5s;
     outline: none;
   }
 
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.25;
+  }
+
   &--invisible {
     visibility: hidden;
     pointer-events: none;
-    cursor: none;
-    user-select: none;
   }
 }
 
