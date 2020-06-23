@@ -95,8 +95,9 @@ const SpeackIt = () => {
 
   useEffect(() => {
     if (gameMode) {
+      console.log('hp');
       const newGamePlayWords = {
-        errors: gameOption.stagesOption,
+        errors: gameOption.stagesOption.slice(),
         rights: {},
       };
       setGamePlayWords(newGamePlayWords);
@@ -106,27 +107,61 @@ const SpeackIt = () => {
     }
   }, [gameMode, gameOption.stagesOption]);
 
-  /* useEffect(() => {
-    const { errors, rights } = gameplayWords;
+  useEffect(() => {
+    const { errors } = gameplayWords;
+    let { rights } = gameplayWords;
+    const { curStage } = gameOption;
     if (!gameMode || userRecWord === null) {
       return undefined;
-		}
+    }
 
-    console.log(errors);
-  }, [userRecWord, gameplayWords, gameMode]); */
+    const words = errors[curStage][`stage${curStage}`];
+    const wordIndex = words.findIndex((el) => el.word === userRecWord);
+    if (wordIndex > 0) {
+      if (isEmpty(rights)) {
+        const newRights = Array.from({ length: defaultParams.StepCounter }, (v, k) => k).map((el) => {
+          const obj = {};
+          obj[`stage${el}`] = [];
+          return obj;
+        });
+        rights = newRights;
+      }
+
+      rights[curStage][`stage${curStage}`].push(words[wordIndex]);
+      const newErrorsWord = [...words.slice(0, wordIndex), ...words.slice(wordIndex + 1)];
+      errors[curStage][`stage${curStage}`] = newErrorsWord;
+      setGamePlayWords({
+        errors,
+        rights,
+      });
+    }
+
+    console.log(gameOption.curStage);
+  }, [userRecWord, gameplayWords, gameMode, gameOption.curStage]);
+
+  useEffect(() => {
+    isMicOff(gameMode);
+  }, [gameMode]);
+
+  const isMicOff = (isPlay = false) => {
+    const mic = document.querySelector('.input-wrapper .icon');
+    if (mic !== null && isPlay) {
+      mic.click();
+    }
+  };
 
   const restart = () => {
     if (gameResult) {
       setGameResult(false);
     }
+    setGameMode(false);
     setActiveWord(null);
     setActiveWordParams(null);
     setGameOption(defGameOption);
-    setGameMode(false);
   };
 
   const start = () => {
-    setGameMode(true);
+    setGameMode(!gameMode);
   };
 
   const switchStage = (e) => {
@@ -325,11 +360,6 @@ const SpeackIt = () => {
   };
 
   const resultPage = () => {
-    const mic = document.querySelector('.input-wrapper .icon');
-    if (!mic.classList.contains('slash')) {
-      mic.click();
-    }
-
     setGameResult(true);
   };
 
@@ -360,7 +390,7 @@ const SpeackIt = () => {
         </div>
         <div className="speakIt-panel">
           <Button primary onClick={restart}>Restart</Button>
-          <Button primary onClick={start}>Speak</Button>
+          <Button primary onClick={start}>{gameMode ? 'Learn' : 'Speak'}</Button>
           {gameMode ? <Button primary onClick={resultPage}>Results</Button> : null}
         </div>
         {gameMode ? null : (
