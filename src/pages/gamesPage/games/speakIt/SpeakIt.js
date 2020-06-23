@@ -36,6 +36,10 @@ const defGameOption = {
   stagesOption: [],
 };
 
+const MaxItem = 10;
+
+const shuffleArray = (arr) => arr.map((a) => [Math.random(), a]).sort((a, b) => a[0] - b[0]).map((a) => a[1]);
+
 const SpeackIt = () => {
   const [gameOption, setGameOption] = useState(defGameOption);
   const [activeWord, setActiveWord] = useState(null);
@@ -58,7 +62,8 @@ const SpeackIt = () => {
         resps.forEach((resp, index) => {
           const words = resp.data;
           const stagesOption = {};
-          stagesOption[`stage${index}`] = words;
+          const items = shuffleArray(words).slice(MaxItem);
+          stagesOption[`stage${index}`] = items;
           newGameOption.stagesOption = newGameOption.stagesOption || gameOption.stagesOption;
           newGameOption = {
             ...gameOption,
