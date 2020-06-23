@@ -8,7 +8,7 @@
     "build": "webpack --env production",
     "stylelint": "npx stylelint ./src/*.scss",
     "stylefix": "npx stylelint --fix *.scss",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest test/"
   },
   "keywords": [],
   "author": "",
