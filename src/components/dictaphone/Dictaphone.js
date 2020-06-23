@@ -45,14 +45,7 @@ const Dictaphone = ({
 }) => {
   const [icon, setIcon] = useState(micIcon.on);
   const [, setSpeechVal] = useState(transcript);
-  if (!browserSupportsSpeechRecognition) {
-    return null;
-  }
 
-  // eslint-disable-next-line no-param-reassign
-  recognition.lang = 'En-en';
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (icon === micIcon.on) {
       return startListening();
@@ -60,7 +53,6 @@ const Dictaphone = ({
     return stopListening();
   }, [icon, startListening, stopListening]);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (!listening) {
       if (transcript.trim() !== '') {
@@ -70,21 +62,27 @@ const Dictaphone = ({
     }
   }, [listening, getSpeechQuery, resetTranscript, transcript]);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (finalTranscript.trim() !== '') {
       setSpeechVal(finalTranscript);
       abortListening();
-      // eslint-disable-next-line no-param-reassign
-      setInputValue.current.value = finalTranscript;
+      const fTranscript = finalTranscript;
+      const { current } = setInputValue;
+      current.value = fTranscript;
     }
   }, [finalTranscript, abortListening, setInputValue]);
+
+  if (!browserSupportsSpeechRecognition) {
+    return null;
+  }
+
+  // eslint-disable-next-line no-param-reassign
+  recognition.lang = 'En-en';
 
   const onClick = () => (icon === micIcon.off ? setIcon(micIcon.on) : setIcon(micIcon.off));
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <i className={`${icon} icon`} onClick={onClick} onKeyUp={() => {}} />
+    <i className={`${icon} icon`} onClick={onClick} role="presentation" />
   );
 };
 
