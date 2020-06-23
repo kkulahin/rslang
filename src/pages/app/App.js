@@ -10,7 +10,7 @@ import LoginPage from '../loginPage/LoginPage';
 import Logout from '../logoutPage/Logout';
 import SignupPage from '../signupPage/SignupPage';
 import Dictionary from '../Dictionary';
-import Statistic from '../Statistic';
+import Statistic from '../statistics/Statistic';
 import Promo from '../promoPage/Promo';
 import About from '../About';
 import Settings from '../Settings';

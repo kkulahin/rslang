@@ -1,0 +1,19 @@
+@import '../../styles/variables.scss';
+
+.statistic {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__left-arrow,
+  &__right-arrow {
+    cursor: pointer;
+
+    &:hover {
+      color: $hover-color;
+    }
+  }
+}
