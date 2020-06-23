@@ -43,7 +43,7 @@ export default class Word {
   setMistake = () => {
     this.lastMistake = new Date().getTime();
     this.totalMistakes += 1;
-    this.changeDifficulty();
+    this.upgradeDifficulty();
   }
 
   upgradePhase = () => {
@@ -90,9 +90,9 @@ export default class Word {
   /**
    * @return {number} when this word will be repeated in days
    */
-  getNextRepetition() {
-    return this.wordController.queue.any((qWord) => qWord.word === this.word);
-  }
+  // getNextRepetition() {
+  //   return this.wordController.queue.some((qWord) => qWord.word === this.word);
+  // }
 
   getNextEducationTime = () => {
     if (this.time === 0) {

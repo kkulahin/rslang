@@ -1,5 +1,12 @@
 import Word from '../../src/utils/spacedRepetition/Word';
 import parameters from '../../src/utils/spacedRepetition/parameters';
+import WordController from '../../src/utils/spacedRepetition/WordController';
+
+jest.mock('../../src/utils/spacedRepetition/WordController');
+
+beforeEach(() => {
+  WordController.mockClear();
+});
 
 describe('change difficulty', () => {
   parameters.difficulty.forEach((element, id) => {
@@ -10,7 +17,6 @@ describe('change difficulty', () => {
           const today = new Date();
           today.setDate(today.getDate() - element.maxDays);
           word.lastMistake = today.getTime();
-          expect(word.getWhenWasLastMistake()).toBe(element.maxDays);
           expect(word.getWhenWasLastMistake()).toBe(element.maxDays);
         });
       }
@@ -36,4 +42,72 @@ describe('change difficulty', () => {
     word.upgradeDifficulty();
     expect(word.difficulty).toBe(1);
   });
+
+  test('mistake should be update', () => {
+    const word = new Word(null, null, {});
+    const today = new Date().getTime();
+    word.totalMistakes = 0;
+    word.setMistake();
+    expect(word.totalMistakes).toBe(1);
+    expect(word.lastMistake).toBe(today);
+  });
 });
+
+describe('upgrade phase:', () => {
+  test('should upgrade phase', () => {
+    const word = new Word(null, null, {});
+    word.repetitionPhase = 0;
+    word.upgradePhase();
+    expect(word.repetitionPhase).toBe(1);
+  });
+  test('shouldnt upgrade phase', () => {
+    const word = new Word(null, null, {});
+    const lastPhase = parameters.phase.length - 1;
+    word.repetitionPhase = lastPhase;
+    word.upgradePhase();
+    expect(word.repetitionPhase).toBe(lastPhase);
+  });
+});
+
+describe('get next phase:', () => {
+  test('should get next phase', () => {
+    const word = new Word(null, null, {});
+    word.repetitionPhase = 0;
+    expect(word.getNextPhase()).toBe(parameters.phase[word.repetitionPhase + 1]);
+  });
+  test('shouldnt get next phase', () => {
+    const word = new Word(null, null, {});
+    const lastPhase = parameters.phase.length - 1;
+    word.repetitionPhase = lastPhase;
+    expect(word.getNextPhase()).toBe(parameters.phase[word.repetitionPhase]);
+  });
+});
+
+describe('get new phases:', () => {
+  test('should return 4 phases for new word', () => {
+    const word = new Word(null, null, {});
+    expect(word.getNewPhases()).toHaveLength(4);
+  });
+});
+
+describe('set difficulty:', () => {
+  test('should set difficulty', () => {
+    const word = new Word(null, null, {});
+    const difficulty = 1;
+    word.setDifficulty(difficulty);
+    expect(word.difficulty).toBe(1);
+  });
+});
+
+// describe('get next repetition', () => {
+//   test('should get next repetition', () => {
+//     WordController.mockImplementationOnce(() => (
+//       {
+//         queue: [1, 2, 3],
+//       }
+//     ));
+//     const wordController = new WordController([], [], 1, 0);
+//     const word1 = new Word(wordController, null, {});
+//     console.log(word1.getNextRepetition());
+//   });
+// });

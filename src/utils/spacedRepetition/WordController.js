@@ -2,17 +2,14 @@ import Word from './Word';
 import WordDefinition from './WordDefinition';
 
 export default class WordController {
-  constructor() {
+  constructor({ settings }) {
     /** @type {[Word]} */
     this.words = [];
     this.queue = [];
     this.repeatCount = 0;
     this.queueLength = 0;
+    this.settings = settings;
   }
-
-  static MAX_NEW_WORDS = 20;
-
-  static MAX_WORDS = 40;
 
   static queueSort = (queueWord1, queueWord2) => queueWord1.nextTime - queueWord2.nextTime;
 
@@ -22,6 +19,9 @@ export default class WordController {
    * @param {[{}]} userWords array of flat words (if not specified words will be treted as today words)
    */
   makeQueue = (newWords, userWords) => {
+    if (newWords.length > this.settings.MAX_NEW_WORDS) {
+      newWords.length = this.settings.MAX_NEW_WORDS;
+    }
     newWords.forEach((word) => this.words.push(new Word(new WordDefinition(word), {})));
     const pontentialWords = [];
     const potentialQueue = [];
@@ -29,6 +29,7 @@ export default class WordController {
     WordController.fillQueue(pontentialWords, potentialQueue);
     WordController.fillQueue(this.words, this.queue);
     this.filterUserWordsByCount(potentialQueue);
+    this.queueLength = this.queue.length;
   }
 
   /**
@@ -42,7 +43,7 @@ export default class WordController {
     this.words = words;
     this.queueLength = queueSettings.length;
     queueSettings.queue.forEach((qWord) => {
-      const { queueWord } = words.filter((word) => qWord.id === word.wordId);
+      const [queueWord] = words.filter((word) => qWord.id === word.wordId);
       this.queue.push({ word: new Word(new WordDefinition(queueWord), queueWord), isEducation: qWord.isEd });
     });
   };
@@ -52,7 +53,7 @@ export default class WordController {
   }
 
   filterUserWordsByCount = (potentialQueue) => {
-    const maxCount = WordController.MAX_WORDS - WordController.MAX_NEW_WORDS;
+    const maxCount = this.settings.MAX_WORDS - this.settings.MAX_NEW_WORDS;
     const userWords = [];
     potentialQueue.sort(WordController.queueSort);
     potentialQueue.forEach((queueWord) => {
@@ -71,9 +72,10 @@ export default class WordController {
 
   setWordMistaken = () => {
     const qWord = this.queue[0];
-    qWord.word.isAgain = true;
+    this.queue.push(qWord);
     qWord.word.setMistake();
     this.changeWord();
+    this.queueLength += 1;
   }
 
   setWordAnswered = () => this.changeWord();
@@ -84,8 +86,8 @@ export default class WordController {
   }
 
   static addToQueueIfNeeded = (word, queue) => {
-    const educationTimes = word.getNextEducationTimes();
-    const repetitionTime = word.getRepetitionTime();
+    const educationTimes = word.getNextEducationTime();
+    const repetitionTime = word.getNextRepetitionTime();
     if (repetitionTime) {
       queue.push({ word, isEducation: false, nextTime: repetitionTime });
     }
@@ -94,9 +96,9 @@ export default class WordController {
 
   getTodayWords = () => this.words.map((word) => word.definition.wordId);
 
-  getLength= () => this.queueLength;
+  getLength = () => this.queueLength;
 
-  getCurrentLength = () => this.queue.getCurrentLength();
+  getCurrentLength = () => this.queue.length;
 
   getQueueToSave= () => ({
     queue: this.queue.map((qWord) => ({ id: qWord.word.definition.wordId, isEd: qWord.isEducation })),
