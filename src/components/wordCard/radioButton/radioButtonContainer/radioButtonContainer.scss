@@ -1,0 +1,19 @@
+@import '../../../../styles/variables.scss';
+
+.card-radio-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 5px 5px;
+  background-color: $background-color;
+  border-radius: 125px;
+  box-shadow: $container-box-shadow;
+
+  user-select: none;
+
+  &--disabled {
+    pointer-events: none;
+    opacity: 0.25;
+  }
+}

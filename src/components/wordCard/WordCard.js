@@ -17,11 +17,11 @@ const WordCard = ({
 	words,
 	onErrorAnswer,
 	onNextBtnClick,
-	onHardBtnClick,
-	onDeleteBtnClick,
 }) => {
 	const [isWordInput, setIsWordInput] = useState(false);
-	const [isCorrect, setIsCorrect] = useState(null);
+	const [isCorrect, setIsCorrect] = useState(false);
+	const [isHardBtnClick, setIsHardBtnClick] = useState(false);
+	// const [wordComplexity, setWordComplexity] = useState(false);
 	const [value, setValue] = useState('');
 	const [isPrevWord, setIsPrevWord] = useState(false);
 
@@ -30,6 +30,12 @@ const WordCard = ({
 
 	const inputRef = useRef();
 	const audioRef = useRef();
+
+	const wordAnswer = {
+		errors: 0,
+		complexity: null,
+		status: null,
+	}
 
 	const currentWord = isPrevWord
 		? words[0]
@@ -60,7 +66,7 @@ const WordCard = ({
 
 	const getNextWord = () => {
 		setIsWordInput(false);
-		setIsCorrect(null);
+		setIsCorrect(false);
 		setValue('');
 
 		onNextBtnClick();
@@ -126,11 +132,37 @@ const WordCard = ({
 	}
 
 	const handleShowBtnClick = () => {
+		console.log('--- show ---- todo: to next word');
 		handleAnswer(false);
 	}
 
 	const handleAudioPlayBtnClick = () => {
 		audioPlay();
+	}
+
+	const handleWordComplexityBtnClick = (id) => {
+		console.log(id);
+	}
+
+	const handleHardBtnClick = () => {
+		setIsHardBtnClick(!isHardBtnClick);
+	}
+
+	const handleDeleteBtnClick = () => {
+		console.log('----- delete --------');
+	}
+
+	const handleCardBtnClick = (id) => {
+		console.log(id);
+
+		const handlers = {
+			deleteWord: handleDeleteBtnClick,
+			hardWord: handleHardBtnClick,
+			speakWord: handleAudioPlayBtnClick,
+			showWord: handleShowBtnClick,
+		}
+
+		handlers[id]();
 	}
 
 	const cardContentProps = {
@@ -140,10 +172,8 @@ const WordCard = ({
 		onInputEnter: handleInputEnter,
 		onInputFocus: handleInputFocus,
 		onInputChange: handleInputChange,
-		onShowBtnClick: handleShowBtnClick,
-		onDeleteBtnClick: onDeleteBtnClick,
-		onHardBtnClick: onHardBtnClick,
-		onAudioPlayBtnClick: handleAudioPlayBtnClick,
+		onCardBtnClick: handleCardBtnClick,
+		onWordComplexityBtnClick: handleWordComplexityBtnClick,
 		inputRef: inputRef,
 		value: value,
 		isWordInput: isWordInput,
@@ -151,7 +181,6 @@ const WordCard = ({
 		isPrevWord: isPrevWord,
 	};
 
-	const isPrevBtnInvisible = (words.length === 1) || isPrevWord;
 	return (
 		<div className='card-unit'>
 			<div className='card__container'>
@@ -159,7 +188,7 @@ const WordCard = ({
 					classes='prev'
 					id='prev'
 					onClick={handleNavigateClick}
-					isInvisible={isPrevBtnInvisible}
+					isInvisible={(words.length === 1) || isPrevWord}
 					isDisabled={isCorrect}
 				/>}
 				<ContainerWithShadow padding='20px'>
@@ -187,6 +216,4 @@ WordCard.propTypes = {
 	}),
 	onErrorAnswer: PropTypes.func.isRequired,
 	onNextBtnClick: PropTypes.func.isRequired,
-	onHardBtnClick: PropTypes.func.isRequired,
-	onDeleteBtnClick: PropTypes.func.isRequired,
 };
