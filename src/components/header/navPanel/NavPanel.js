@@ -103,6 +103,16 @@ const NavPanel = () => {
             <Icon name="caret square right outline" />
             {isMenuFullSize() ? <p>Promo</p> : null}
           </Link>
+          <Link
+            className={activeItem.link === 'games' ? 'item active' : 'item'}
+            name="games"
+            to="/games"
+            onClick={handleItemClick}
+          >
+            <Icon name="game" />
+            {isMenuFullSize() ? <p>Games</p> : null}
+          </Link>
+
         </div>
 
         <div className="app-menu__resize">

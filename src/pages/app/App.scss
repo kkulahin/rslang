@@ -3,12 +3,13 @@
 @import '../../styles/mixin.scss';
 
 .app-wrapper {
-    display: flex;
+  display: flex;
 }
 
 .app-main {
-    flex: 1 90%;
-    background-color: $background-color;
+  flex: 1 90%;
+  padding: 20px 10px;
+  background-color: $background-color;
 
-    @include flex(column, stretch, stretch);
+  @include flex(column, stretch, stretch);
 }

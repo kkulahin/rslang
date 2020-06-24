@@ -10,12 +10,13 @@ import LoginPage from '../loginPage/LoginPage';
 import Logout from '../logoutPage/Logout';
 import SignupPage from '../signupPage/SignupPage';
 import Dictionary from '../Dictionary';
-import Statistic from '../Statistic';
-import Promo from '../Promo';
+import Statistic from '../statistics/Statistic';
+import Promo from '../promoPage/Promo';
 import About from '../About';
 import Settings from '../Settings';
-
+import GamesPage from '../gamesPage/GamesPage';
 import Header from '../../components/header/Header';
+import GreetingWrapper from '../../components/greetingWrapper/GreetingWrapper';
 
 import './App.scss';
 
@@ -24,6 +25,7 @@ const App = () => (
     <div className="app-wrapper">
       <Header />
       <div className="app-main">
+        <GreetingWrapper />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/signin" component={LoginPage} />
@@ -34,6 +36,7 @@ const App = () => (
           <Route path="/settings" component={Settings} />
           <Route path="/promo" component={Promo} />
           <Route path="/about" component={About} />
+          <Route path="/games" component={GamesPage} />
           <Route component={NotFound} />
         </Switch>
       </div>
