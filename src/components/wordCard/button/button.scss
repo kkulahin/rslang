@@ -1,0 +1,44 @@
+@import '../../../styles/mixin.scss';
+
+@import '../../../styles/variables.scss';
+
+.card-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  padding: 5px 10px;
+  font-family: inherit;
+  color: $main-color;
+
+  background-color: $background-color;
+
+  border: none;
+  border-radius: 110px;
+
+  box-shadow: 5px 5px 15px $box-shadow-first-color, 
+              -5px -5px 15px $box-shadow-second-color;
+  outline: none;
+
+  transition: 0.3s linear;
+  cursor: pointer;
+  font-weight: bold;
+
+  user-select: none;
+
+  &:active,
+  &--active {
+    background-color: $background-color;
+    box-shadow: $container-box-shadow-inset;
+  }
+
+  &:hover {
+    color: $hover-color;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.25;
+  }
+}

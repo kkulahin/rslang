@@ -162,11 +162,6 @@ $word-bg-color: rgba(#25CEDE, 0.5);
   margin-top: 20px;
 
   @include flex();
-
-  &--prev {
-    justify-content: space-between;
-    align-items: flex-start;
-  }
 }
 
 .word__container {
@@ -278,19 +273,10 @@ $word-bg-color: rgba(#25CEDE, 0.5);
   }
 }
 
-.button {
-  justify-content: center;
-
-  width: 180px;
-
+.card-button {
   font-size: $font-size-small;
-
-  &:disabled {
-    pointer-events: none;
-    opacity: 0.25;
-  }
 }
 
-.button + .button {
+.card-button + .card-button {
   margin-left: 10px;
 }
