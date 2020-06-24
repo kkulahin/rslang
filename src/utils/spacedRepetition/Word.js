@@ -90,30 +90,60 @@ export default class Word {
   /**
    * @return {number} when this word will be repeated in days
    */
-  // getNextRepetition() {
-  //   return this.wordController.queue.some((qWord) => qWord.word === this.word);
-  // }
+  getNextRepetitionInDays() {
+    if (this.wordController.queue.some((qWord) => qWord.word === this.word)) {
+      return 0;
+    }
+    const nextDate = this.getNextRepetition();
+    const today = new Date();
+    const diff = Math.ceil((today - nextDate) / 1000 / 60 / 60 / 24);
+    return diff <= 0 ? 1 : diff;
+  }
+
+  /**
+   * @return {Date} when this word will be repeated in days
+   */
+  getNextRepetition() {
+    const allTimes = [];
+    allTimes.push(this.getNextEducationTimeFull());
+    const repTime = this.getNextRepetitionTimeFull();
+    if (repTime) {
+      allTimes.push(repTime);
+    }
+    allTimes.sort((a, b) => a - b);
+    return allTimes[0];
+  }
+
+  getNextEducationTimeFull = () => {
+    const nextDate = new Date(this.getNextPhase().time * 1000 + this.time);
+    nextDate.setHours(0, 0, 0, 0);
+    return nextDate;
+  }
 
   getNextEducationTime = () => {
     if (this.time === 0) {
       return this.getNewPhases().map((phase) => this.time + (phase.time + Math.random(10)) * 1000);
     }
-    const nextTime = new Date(this.getNextPhase().time + this.time * 1000);
+    const nextTime = this.getNextEducationTimeFull();
     const today = new Date();
-    if (nextTime.getDate() === today.getDate()
-      && nextTime.getMonth() === today.getMonth()
-      && nextTime.getFullYear() === today.getFullYear()) {
+    today.setHours(0, 0, 0, 0);
+    if (nextTime - today <= 0) {
       return [nextTime];
     }
     return [];
   }
 
+  getNextRepetitionTimeFull = () => {
+    const nextDate = new Date(this.time);
+    nextDate.setHours(0, 0, 0, 0);
+    nextDate.setDate(nextDate.getDate() + parameters.difficulty[this.difficulty].period);
+    return nextDate;
+  }
+
   getNextRepetitionTime = () => {
     const currentDate = new Date();
-    const nextDate = new Date(this.time);
-    nextDate.setSeconds(nextDate.getSeconds() + this.getNextPhase().time);
-    const dayToday = currentDate.getDate();
-    const dayNext = nextDate.getDate();
-    return dayToday === dayNext ? dayToday : undefined;
+    currentDate.setHours(0, 0, 0, 0);
+    const nextDate = this.getNextRepetitionTimeFull();
+    return nextDate - currentDate <= 0;
   }
 }
