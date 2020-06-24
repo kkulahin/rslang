@@ -5,6 +5,7 @@ $font-size-small: 16px;
 $font-color: #fff;
 $font-color-correct: #0f0;
 $font-color-error: #f00;
+$font-color-error-add: #f0f;
 
 // navigate
 $navigate-width: 40px;
@@ -15,7 +16,7 @@ $transition-duration: 0.5s;
 $element-border-radius: 3px;
 // word input
 $word-input-padding: 7px;
-$word-bg-color: #25CEDE;
+$word-bg-color: rgba(#25CEDE, 0.5);
 
 @mixin font ($size, $height, $weight, $style: normal) {
   font-style: $style;
@@ -106,9 +107,7 @@ $word-bg-color: #25CEDE;
   margin: 0;
   padding: 0;
 
-  font-size: inherit;
-  line-height: inherit;
-
+  line-height: 1.2;
   text-align: justify;
 
   &--translate {
@@ -134,6 +133,8 @@ $word-bg-color: #25CEDE;
 }
 
 .text--marked {
+  display: inline-block;
+  height: auto;
   padding: 0 $word-input-padding;
 
   background-color: $word-bg-color;
@@ -196,10 +197,11 @@ $word-bg-color: #25CEDE;
 
   padding: 0 $word-input-padding;
 
+  background: transparent;
   opacity: 0;
 
-  transition: opacity $transition-duration;
   pointer-events: none;
+  user-select: none;
   cursor: none;
 
   &--correct {
@@ -208,10 +210,45 @@ $word-bg-color: #25CEDE;
     opacity: 1;
   }
 
-  &--error {
+  &--errorMax {
     visibility: visible;
     color: $font-color-error;
+  }
+
+  &--errorMidl {
+    visibility: visible;
+    color: $font-color-error-add;
+  }
+
+  &--visible {
+    visibility: visible;
+    opacity: 0.5;
+    animation: error 2s linear;
+  }
+}
+
+.word__size > span {
+  display: inline-block;
+}
+
+@keyframes error {
+
+  0% {
     opacity: 1;
+  }
+
+  5% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  20% {
+    opacity: 1;
+    transform: none;
+  }
+
+  100% {
+    opacity: 0.5
   }
 }
 

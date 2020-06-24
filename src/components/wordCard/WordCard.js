@@ -67,6 +67,7 @@ const WordCard = ({
 	}
 
 	const audioPlay = () => {
+		audioRef.current.pause();
 		currentTruck = 0;
 		audioRef.current.src = tracks[currentTruck];
 		audioRef.current.play();

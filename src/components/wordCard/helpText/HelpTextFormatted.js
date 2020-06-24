@@ -11,11 +11,11 @@ const HelpTextFormatted = ({ text, word, isWordInput }) => {
 	const splitted = text.split(regexp);
 
 	return (
-		<span>
+		<React.Fragment>
 			{splitted[0]}
 			<span className={classes}>{splitted[2]}</span>
 			{splitted[4]}
-		</span>
+		</React.Fragment>
 	);
 }
 
