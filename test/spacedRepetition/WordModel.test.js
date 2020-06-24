@@ -33,7 +33,7 @@ describe('test sync methods', () => {
   test('make GET request with params', () => {
     const wModel = new WordModel(testUser, testSettings);
     const params = { a: '1 1%$', b: 2 };
-    const { url, options } = wModel.makeRequest('GET', 'user', null, params);
+    const { url } = wModel.makeRequest('GET', 'user', null, params);
     expect(url.toString().includes('?a=1+1%25%24&b=2')).toBeTruthy();
   });
 });
@@ -49,7 +49,6 @@ describe('test async methods', () => {
     const wModel = new WordModel(testUser, testSettings);
     await wModel.getStatistics();
     expect(wModel.statistics).toBeTruthy();
-    console.log('statistics after update', wModel.statistics);
   });
   test('get new words', async () => {
     const wModel = new WordModel(testUser, testSettings);
@@ -79,10 +78,11 @@ describe('test async methods', () => {
       wordTranslate: 'согласна',
       wordsPerExampleSentence: 8,
     };
-    const wordDef = new WordDefinition({ word });
+    const wordDef = new WordDefinition(rawWord);
     const word = new Word(null, wordDef, {});
     const wModel = new WordModel(testUser, testSettings);
     const data = await wModel.updateWord(word);
-    console.log(data);
+    // eslint-disable-next-line no-underscore-dangle
+    expect(data.wordId).toBe(rawWord._id);
   });
 });

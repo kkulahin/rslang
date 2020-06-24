@@ -45,11 +45,14 @@ describe('change difficulty', () => {
 
   test('mistake should be update', () => {
     const word = new Word(null, null, {});
-    const today = new Date().getTime();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     word.totalMistakes = 0;
     word.setMistake();
     expect(word.totalMistakes).toBe(1);
-    expect(word.lastMistake).toBe(today);
+    const testDate = new Date(word.lastMistake);
+    testDate.setHours(0, 0, 0, 0);
+    expect(testDate.getTime()).toBe(today.getTime());
   });
 });
 
@@ -73,7 +76,9 @@ describe('get next phase:', () => {
   test('should get next phase', () => {
     const word = new Word(null, null, {});
     word.repetitionPhase = 0;
-    expect(word.getNextPhase()).toBe(parameters.phase[word.repetitionPhase + 1]);
+    expect(word.getNextPhase()).toBe(
+      parameters.phase[word.repetitionPhase + 1],
+    );
   });
   test('shouldnt get next phase', () => {
     const word = new Word(null, null, {});

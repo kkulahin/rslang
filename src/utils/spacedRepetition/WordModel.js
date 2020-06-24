@@ -15,18 +15,19 @@ export default class WordModel {
     this.settings = settings;
   }
 
-    init = async () => {
-      await this.getStatistics();
-      if (true /* there is no queue for today */) {
-        const userWords = await this.queryUserWords();
-        const newWords = await this.queryNewWords();
-        this.wordQueueController = new WordController(this.settings);
-        this.wordQueueController.makeQueue(newWords, userWords);
-      } else {
-        this.wordQueueController = new WordController(this.settings);
-        this.wordQueueController.usePredefinedQueue(/* saved queue */);
-      }
+  init = async () => {
+    await this.getStatistics();
+    if (true /* there is no queue for today */) {
+      const userWords = await this.queryUserWords();
+      const newWords = await this.queryNewWords();
+      this.wordQueueController = new WordController(this.settings);
+      this.wordQueueController.makeQueue(newWords, userWords);
+    } else {
+      this.wordQueueController = new WordController(this.settings);
+      this.wordQueueController.usePredefinedQueue(/* saved queue */);
+      //save queue
     }
+  }
 
 makeRequest = (method, table, body, params = {}) => {
   const url = new URL(`https://afternoon-falls-25894.herokuapp.com/users/${this.user.id}/${table}`);
@@ -99,7 +100,7 @@ makeRequest = (method, table, body, params = {}) => {
    */
   updateWord = async (word) => {
     let method = 'PUT';
-    if (word.repetitionPhase === parameters.phase[word.repetitionPhase]) {
+    if (parameters.phase[word.repetitionPhase].name === parameters.phaseNames.new) {
       method = 'POST';
     }
     // TODO: change phase & difficulty if needed

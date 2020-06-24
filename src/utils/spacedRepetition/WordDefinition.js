@@ -3,7 +3,7 @@ export default class WordDefinition {
    * @param {*} param word definition
    */
   constructor({
-    word, translation, example, exampleTranslation, image, sound, transcription, wordId,
+    word, translation, example, exampleTranslation, image, sound, transcription, _id,
   }) {
     this.word = word;
     this.translation = translation;
@@ -12,6 +12,6 @@ export default class WordDefinition {
     this.image = image;
     this.sound = sound;
     this.transcription = transcription;
-    this.wordId = wordId;
+    this.wordId = _id;
   }
 }
