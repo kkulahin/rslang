@@ -1,12 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Button from '../button/Button';
 
 const Person = ({ personInfo }) => {
   const {
     avatar, aboutPerson, linkGitHub, contribution, name: { first, sur, nick },
   } = personInfo;
-
-  const linkBtn = linkGitHub !== undefined ? <Button iconName="github" name="gitHubButton" label="" /> : '';
 
   return (
     <div className="cards_person">
@@ -35,15 +34,29 @@ const Person = ({ personInfo }) => {
           </p>
         </div>
         <div className="link_github">
+          { linkGitHub && (
           <a href={linkGitHub}>
-            {linkBtn}
+            <Button iconName="github" name="gitHubButton" label="" />
           </a>
+          ) }
         </div>
       </div>
     </div>
   );
 };
 
-Person.propTypes = {}.isRequired;
+Person.propTypes = {
+  personInfo: PropTypes.shape({
+    avatar: PropTypes.string.isRequired,
+    linkGitHub: PropTypes.string.isRequired,
+    aboutPerson: PropTypes.string.isRequired,
+    contribution: PropTypes.string.isRequired,
+    name: PropTypes.shape({
+      first: PropTypes.string.isRequired,
+      sur: PropTypes.string.isRequired,
+      nick: PropTypes.string.isRequired,
+    }),
+  }),
+}.isRequired;
 
 export default Person;
