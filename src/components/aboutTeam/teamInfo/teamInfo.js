@@ -1,4 +1,4 @@
-const teamInfo = [{
+const teamInfo = [Object.freeze({
   name: {
     first: 'Sergey',
     sur: ' ',
@@ -18,7 +18,7 @@ const teamInfo = [{
   or randomised words which don't look even slightly believable. 
   If you are going to use a passage of Lorem Ipsum, 
   you need to be sure there isn't anything embarrassing hidden in the middle of text. `,
-}, {
+}), Object.freeze({
   name: {
     first: 'Kanstantsin',
     sur: ' Kulahin',
@@ -38,7 +38,7 @@ const teamInfo = [{
   or randomised words which don't look even slightly believable. 
   If you are going to use a passage of Lorem Ipsum, 
   you need to be sure there isn't anything embarrassing hidden in the middle of text. `,
-}, {
+}), Object.freeze({
   name: {
     first: 'Vitaly',
     sur: ' Raicheu',
@@ -58,7 +58,7 @@ const teamInfo = [{
   or randomised words which don't look even slightly believable. 
   If you are going to use a passage of Lorem Ipsum, 
   you need to be sure there isn't anything embarrassing hidden in the middle of text. `,
-}, {
+}), Object.freeze({
   name: {
     first: 'Kaxaru',
     sur: ' ',
@@ -78,7 +78,7 @@ const teamInfo = [{
   or randomised words which don't look even slightly believable. 
   If you are going to use a passage of Lorem Ipsum, 
   you need to be sure there isn't anything embarrassing hidden in the middle of text. `,
-}, {
+}), Object.freeze({
   name: {
     first: 'Ali',
     sur: ' ',
@@ -98,7 +98,7 @@ const teamInfo = [{
   or randomised words which don't look even slightly believable. 
   If you are going to use a passage of Lorem Ipsum, 
   you need to be sure there isn't anything embarrassing hidden in the middle of text. `,
-}, {
+}), {
   name: {
     first: 'Vitaliy',
     sur: ' Tomashevich',
@@ -118,7 +118,7 @@ const teamInfo = [{
   or randomised words which don't look even slightly believable. 
   If you are going to use a passage of Lorem Ipsum, 
   you need to be sure there isn't anything embarrassing hidden in the middle of text. `,
-}, {
+}, Object.freeze({
   name: {
     first: 'julia',
     sur: ' ',
@@ -137,6 +137,6 @@ const teamInfo = [{
   or randomised words which don't look even slightly believable. 
   If you are going to use a passage of Lorem Ipsum, 
   you need to be sure there isn't anything embarrassing hidden in the middle of text. `,
-}];
+})];
 
 export default teamInfo;
