@@ -1,9 +1,12 @@
 import React from 'react';
+import Button from '../button/Button';
 
 const Person = ({ personInfo }) => {
   const {
-    avatar, aboutPerson, hrefGitHub, contribution, name: { first, sur, nick },
+    avatar, aboutPerson, linkGitHub, contribution, name: { first, sur, nick },
   } = personInfo;
+
+  const linkBtn = linkGitHub !== undefined ? <Button iconName="github" name="gitHubButton" label="" /> : '';
 
   return (
     <div className="cards_person">
@@ -31,12 +34,10 @@ const Person = ({ personInfo }) => {
             {contribution}
           </p>
         </div>
-        <div>
-          <p className="link_github">
-            <a href={hrefGitHub}>
-              GitHub
-            </a>
-          </p>
+        <div className="link_github">
+          <a href={linkGitHub}>
+            {linkBtn}
+          </a>
         </div>
       </div>
     </div>
