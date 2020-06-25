@@ -1,11 +1,11 @@
 import Word from '../../src/utils/spacedRepetition/Word';
 import parameters from '../../src/utils/spacedRepetition/parameters';
-import WordController from '../../src/utils/spacedRepetition/WordController';
+import WordQueue from '../../src/utils/spacedRepetition/WordQueue';
 
-jest.mock('../../src/utils/spacedRepetition/WordController');
+jest.mock('../../src/utils/spacedRepetition/WordQueue');
 
 beforeEach(() => {
-  WordController.mockClear();
+  WordQueue.mockClear();
 });
 
 describe('change difficulty', () => {
@@ -106,13 +106,13 @@ describe('set difficulty:', () => {
 
 // describe('get next repetition', () => {
 //   test('should get next repetition', () => {
-//     WordController.mockImplementationOnce(() => (
+//     WordQueue.mockImplementationOnce(() => (
 //       {
 //         queue: [1, 2, 3],
 //       }
 //     ));
-//     const wordController = new WordController([], [], 1, 0);
-//     const word1 = new Word(wordController, null, {});
+//     const WordQueue = new WordQueue([], [], 1, 0);
+//     const word1 = new Word(WordQueue, null, {});
 //     console.log(word1.getNextRepetition());
 //   });
 // });

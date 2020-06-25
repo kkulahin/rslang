@@ -1,7 +1,7 @@
 import Word from './Word';
 import WordDefinition from './WordDefinition';
 
-export default class WordController {
+export default class WordQueue {
   constructor({ settings }) {
     /** @type {[Word]} */
     this.words = [];
@@ -20,15 +20,19 @@ export default class WordController {
    */
   makeQueue = (newWords, userWords) => {
     if (newWords.length > this.settings.MAX_NEW_WORDS) {
-      newWords.length = this.settings.MAX_NEW_WORDS;
+      newWords.splice(this.settings.MAX_NEW_WORDS, newWords.length - this.settings.MAX_NEW_WORDS);
     }
     newWords.forEach((word) => this.words.push(new Word(new WordDefinition(word), {})));
     const pontentialWords = [];
     const potentialQueue = [];
-    userWords.forEach((word) => pontentialWords.push(new Word(new WordDefinition(word), word)));
-    WordController.fillQueue(pontentialWords, potentialQueue);
-    WordController.fillQueue(this.words, this.queue);
+    userWords.forEach((word) => {
+      const wordConfigs = word.userWord && word.userWord.optional ? word.userWord.optional : {};
+      pontentialWords.push(new Word(new WordDefinition(word), wordConfigs));
+    });
+    WordQueue.fillQueue(pontentialWords, potentialQueue);
+    WordQueue.fillQueue(this.words, this.queue);
     this.filterUserWordsByCount(potentialQueue);
+    this.words.forEach((w) => w.shiftMistakes());
     this.queueLength = this.queue.length;
   }
 
@@ -43,19 +47,28 @@ export default class WordController {
     this.words = words;
     this.queueLength = queueSettings.length;
     queueSettings.queue.forEach((qWord) => {
-      const [queueWord] = words.filter((word) => qWord.id === word.wordId);
-      this.queue.push({ word: new Word(new WordDefinition(queueWord), queueWord), isEducation: qWord.isEd });
+      const [queueWord] = words.filter((word) => qWord.w === word.word);
+      const wordConfigs = queueWord.userWord && queueWord.userWord.optional ? queueWord.userWord.optional : {};
+      this.queue.push({ word: new Word(new WordDefinition(queueWord), wordConfigs), isEducation: qWord.isEd });
     });
   };
 
+  endQueue = () => {
+    this.words.forEach((word) => {
+      word.upgradeDifficulty();
+      word.downgradeDifficulty();
+      word.upgradePhase();
+    });
+  }
+
   static fillQueue = (words, queue) => {
-    words.forEach((word) => WordController.addToQueueIfNeeded(word, queue));
+    words.forEach((word) => WordQueue.addToQueueIfNeeded(word, queue));
   }
 
   filterUserWordsByCount = (potentialQueue) => {
     const maxCount = this.settings.MAX_WORDS - this.settings.MAX_NEW_WORDS;
     const userWords = [];
-    potentialQueue.sort(WordController.queueSort);
+    potentialQueue.sort(WordQueue.queueSort);
     potentialQueue.forEach((queueWord) => {
       if (!userWords.includes(queueWord.word)) {
         userWords.push(queueWord.word);
@@ -65,10 +78,10 @@ export default class WordController {
     const queueToAdd = potentialQueue.filter((queueWord) => userWords.includes(queueWord.word));
     this.queue.push(...queueToAdd);
     this.words.push(...userWords);
-    this.queue.sort(WordController.queueSort);
+    this.queue.sort(WordQueue.queueSort);
   }
 
-  getNextWord = () => this.queue[0];
+  getCurrentWord = () => this.queue[0];
 
   setWordMistaken = () => {
     const qWord = this.queue[0];
@@ -83,6 +96,7 @@ export default class WordController {
   changeWord = () => {
     this.queue[0].word.setTime();
     this.queue.shift();
+    return this.queue[0];
   }
 
   static addToQueueIfNeeded = (word, queue) => {
@@ -100,10 +114,18 @@ export default class WordController {
 
   getCurrentLength = () => this.queue.length;
 
-  getQueueToSave= () => ({
-    queue: this.queue.map((qWord) => ({ id: qWord.word.definition.wordId, isEd: qWord.isEducation })),
-    length: this.queueLength,
-  });
+  /**
+   * @returns {{queue:[{w:string,isEd:boolean}],length:number,date:number}} queue
+   */
+  getQueueToSave= () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return {
+      queue: this.queue.map((qWord) => ({ w: qWord.word.definition.word, isEd: qWord.isEducation })),
+      length: this.queueLength,
+      date: Math.ceil(today.getTime() / 1000),
+    };
+  };
 
   getWordsToSave= () => this.words;
 }

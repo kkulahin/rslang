@@ -1,4 +1,4 @@
-import WordController from '../../src/utils/spacedRepetition/WordController';
+import WordQueue from '../../src/utils/spacedRepetition/WordQueue';
 import Word from '../../src/utils/spacedRepetition/Word';
 
 jest.mock('../../src/utils/spacedRepetition/Word');
@@ -15,7 +15,7 @@ describe('static methods', () => {
     }));
     const word = new Word(null, null, {});
     const queue = [];
-    WordController.addToQueueIfNeeded(word, queue);
+    WordQueue.addToQueueIfNeeded(word, queue);
     expect(queue.length).toBe(1);
   });
   test('should add to the queue 4 times', () => {
@@ -25,7 +25,7 @@ describe('static methods', () => {
     }));
     const word = new Word(null, null, {});
     const queue = [];
-    WordController.addToQueueIfNeeded(word, queue);
+    WordQueue.addToQueueIfNeeded(word, queue);
     expect(queue.length).toBe(4);
   });
   test('should add to the queue 5 times', () => {
@@ -35,7 +35,7 @@ describe('static methods', () => {
     }));
     const word = new Word(null, null, {});
     const queue = [];
-    WordController.addToQueueIfNeeded(word, queue);
+    WordQueue.addToQueueIfNeeded(word, queue);
     expect(queue.length).toBe(5);
     expect(queue.filter((qWord) => qWord.isEducation === true).length).toBe(
       4,
@@ -51,7 +51,7 @@ describe('static methods', () => {
     }));
     const word = new Word(null, null, {});
     const queue = [];
-    WordController.addToQueueIfNeeded(word, queue);
+    WordQueue.addToQueueIfNeeded(word, queue);
     expect(queue.length).toBe(0);
   });
   test('should fill queue', () => {
@@ -66,74 +66,74 @@ describe('static methods', () => {
     const word = new Word(null, null, {});
     const word2 = new Word(null, null, {});
     const queue = [];
-    WordController.fillQueue([word, word2], queue);
+    WordQueue.fillQueue([word, word2], queue);
     expect(queue.length).toBe(2);
   });
 });
 describe('methods', () => {
   test('mark word as completed', () => {
-    const wController = new WordController({});
+    const wQueue = new WordQueue({});
     const setTimeSpy = jest.fn(() => undefined);
     Word.mockImplementationOnce(() => ({
       setTime: setTimeSpy,
     }));
-    const word = new Word(wController, null, {});
-    wController.queue.push({ word });
-    wController.changeWord();
+    const word = new Word(wQueue, null, {});
+    wQueue.queue.push({ word });
+    wQueue.changeWord();
     expect(setTimeSpy).toHaveBeenCalledTimes(1);
-    expect(wController.queue.length).toBe(0);
+    expect(wQueue.queue.length).toBe(0);
   });
   test('mark word as mistaken', () => {
-    const wController = new WordController({});
+    const wQueue = new WordQueue({});
     const setTimeSpy = jest.fn(() => undefined);
     const setMistakeSpy = jest.fn(() => undefined);
     Word.mockImplementationOnce(() => ({
       setTime: setTimeSpy,
       setMistake: setMistakeSpy,
     }));
-    const word = new Word(wController, null, {});
-    wController.queue.push({ word });
-    wController.queueLength = 1;
-    wController.setWordMistaken();
+    const word = new Word(wQueue, null, {});
+    wQueue.queue.push({ word });
+    wQueue.queueLength = 1;
+    wQueue.setWordMistaken();
     expect(setMistakeSpy).toHaveBeenCalledTimes(1);
     expect(setTimeSpy).toHaveBeenCalledTimes(1);
-    expect(wController.queue.length).toBe(1);
-    expect(wController.getLength()).toBe(2);
+    expect(wQueue.queue.length).toBe(1);
+    expect(wQueue.getLength()).toBe(2);
   });
   test('next word should be undefined when queue is empty', () => {
-    const wController = new WordController({});
-    expect(wController.getNextWord()).toBe(undefined);
+    const wQueue = new WordQueue({});
+    expect(wQueue.getCurrentWord()).toBe(undefined);
   });
   test('next word should be {word: Word} when queue is not empty', () => {
-    const wController = new WordController({});
-    const word = new Word(wController, null, {});
-    wController.queue.push({ word });
-    expect(wController.getNextWord().word instanceof Word).toBeTruthy();
+    const wQueue = new WordQueue({});
+    const word = new Word(wQueue, null, {});
+    wQueue.queue.push({ word });
+    expect(wQueue.getCurrentWord().word instanceof Word).toBeTruthy();
   });
   test('only top N words should be filtered', () => {
-    const wController = new WordController({ settings: { MAX_WORDS: 10, MAX_NEW_WORDS: 5 } });
+    const wQueue = new WordQueue({ settings: { MAX_WORDS: 10, MAX_NEW_WORDS: 5 } });
     const words = [];
     for (let i = 0; i < 10; i += 1) {
-      words.push(new Word(wController, null, {}));
+      words.push(new Word(wQueue, null, {}));
     }
     const queue = [];
     words.forEach((word, index) => queue.push({ word, nextTime: index * 10 }));
     words.forEach((word, index) => index % 2 === 0 && queue.push({ word, nextTime: index * 5 + 20 }));
-    wController.filterUserWordsByCount(queue);
-    expect(wController.words.length).toBe(5);
-    expect(wController.queue.length).toBe(8);
+    wQueue.filterUserWordsByCount(queue);
+    expect(wQueue.words.length).toBe(5);
+    expect(wQueue.queue.length).toBe(8);
   });
 });
 describe('new queue', () => {
   test('should be empty', () => {
-    const wController = new WordController({});
-    expect(wController.getWordsToSave().length).toBe(0);
-    expect(wController.getQueueToSave().length).toBe(0);
-    expect(wController.getLength()).toBe(0);
-    expect(wController.getCurrentLength()).toBe(0);
+    const wQueue = new WordQueue({});
+    expect(wQueue.getWordsToSave().length).toBe(0);
+    expect(wQueue.getQueueToSave().length).toBe(0);
+    expect(wQueue.getLength()).toBe(0);
+    expect(wQueue.getCurrentLength()).toBe(0);
   });
   test('should be filled', () => {
-    const wController = new WordController({ settings: { MAX_WORDS: 10, MAX_NEW_WORDS: 5 } });
+    const wQueue = new WordQueue({ settings: { MAX_WORDS: 10, MAX_NEW_WORDS: 5 } });
     const newWords = [];
     const userWords = [];
     for (let i = 0; i < 10; i += 1) {
@@ -142,24 +142,26 @@ describe('new queue', () => {
       Word.mockImplementationOnce(() => ({
         getNextEducationTime: () => [],
         getNextRepetitionTime: () => 1,
+        shiftMistakes: () => {},
       }));
     }
     Word.mockImplementation(() => ({
       getNextEducationTime: () => [0],
       getNextRepetitionTime: () => undefined,
+      shiftMistakes: () => {},
     }));
-    wController.makeQueue(newWords, userWords);
-    expect(wController.queue.length).toBe(10);
-    expect(wController.words.length).toBe(10);
-    expect(wController.queue.filter((qWord) => qWord.nextTime === 0).length).toBe(5);
-    expect(wController.getLength()).toBe(10);
-    expect(wController.getCurrentLength()).toBe(10);
+    wQueue.makeQueue(newWords, userWords);
+    expect(wQueue.queue.length).toBe(10);
+    expect(wQueue.words.length).toBe(10);
+    expect(wQueue.queue.filter((qWord) => qWord.nextTime === 0).length).toBe(5);
+    expect(wQueue.getLength()).toBe(10);
+    expect(wQueue.getCurrentLength()).toBe(10);
   });
 });
 
 describe('use predefined queue', () => {
   test('queue should be filled', () => {
-    const wController = new WordController({ settings: { MAX_WORDS: 10, MAX_NEW_WORDS: 5 } });
+    const wQueue = new WordQueue({ settings: { MAX_WORDS: 10, MAX_NEW_WORDS: 5 } });
     const words = [];
     const queue = [];
     for (let i = 0; i < 10; i += 1) {
@@ -167,9 +169,9 @@ describe('use predefined queue', () => {
       queue.push({ id: i, isEd: false });
       queue.unshift({ id: i, isEd: false });
     }
-    wController.usePredefinedQueue({ queue, length: 30 }, words);
-    expect(wController.getLength()).toBe(30);
-    expect(wController.getCurrentLength()).toBe(20);
-    expect(wController.words.length).toBe(10);
+    wQueue.usePredefinedQueue({ queue, length: 30 }, words);
+    expect(wQueue.getLength()).toBe(30);
+    expect(wQueue.getCurrentLength()).toBe(20);
+    expect(wQueue.words.length).toBe(10);
   });
 });

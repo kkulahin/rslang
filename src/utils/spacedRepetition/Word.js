@@ -3,7 +3,7 @@ import parameters from './parameters';
 export default class Word {
   /**
    * Constructor to create a word
-   * @param {WordController} wordController if this word should be repeated
+   * @param {WordQueue} wordQueue if this word should be repeated
    * @param {WordDefinition} definition word definition
    * @param {Object} param param
    * @param {number} param.difficultyId from new to completed
@@ -14,7 +14,7 @@ export default class Word {
    * @param {number} param.totalRepetition total mistakes in this word
    */
   constructor(
-    wordController,
+    wordQueue,
     definition,
     {
       difficultyId = 0,
@@ -22,6 +22,7 @@ export default class Word {
       repetitionPhaseId = 0,
       lastMistake = 0,
       totalMistakes = 0,
+      mistakes = '0000000',
       totalRepetition = 0,
     },
   ) {
@@ -30,9 +31,10 @@ export default class Word {
     this.time = time;
     this.repetitionPhase = repetitionPhaseId;
     this.lastMistake = lastMistake;
+    this.mistakes = mistakes;
     this.totalMistakes = totalMistakes;
     this.totalRepetition = totalRepetition;
-    this.wordController = wordController;
+    this.wordQueue = wordQueue;
   }
 
   setTime = () => {
@@ -43,11 +45,26 @@ export default class Word {
   setMistake = () => {
     this.lastMistake = new Date().getTime();
     this.totalMistakes += 1;
+    this.mistakes = `${this.mistakes.substring(0, this.mistakes.length - 1)}0`;
     this.upgradeDifficulty();
   }
 
+  shiftMistakes = () => {
+    this.mistakes.substring(1);
+    this.mistakes += '0';
+  }
+
+  getWhenWasLastMistake = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const lastMistakeDate = new Date(this.lastMistake);
+    return Math.ceil((today - lastMistakeDate) / 1000 / 60 / 60 / 24);
+  }
+
   upgradePhase = () => {
-    if (this.repetitionPhase < parameters.phase.length - 1) {
+    if (this.repetitionPhase === 0) {
+      this.repetitionPhase = 3;
+    } else if (this.repetitionPhase < parameters.phase.length - 1) {
       this.repetitionPhase += 1;
     }
   }
@@ -61,15 +78,24 @@ export default class Word {
 
   getNewPhases = () => parameters.phase.filter((e, i) => i < 4);
 
-  setDifficulty = (difficulty) => {
-    this.difficulty = difficulty;
+  getDifficulty = () => {
+    return parameters.difficulty[this.difficulty].name;
   }
 
-  getWhenWasLastMistake = () => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const lastMistakeDate = new Date(this.lastMistake);
-    return Math.ceil((today - lastMistakeDate) / 1000 / 60 / 60 / 24);
+  /**
+   * set difficulty to predefined value
+   * @param {number|string} difficulty difficulty - can be index or name
+   */
+  setDifficulty = (difficulty) => {
+    if (typeof difficulty === 'number') {
+      this.difficulty = difficulty;
+    } else if (typeof difficulty === 'string') {
+      parameters.difficulty.forEach((dif, i) => {
+        if (dif.name === difficulty) {
+          this.difficulty = i;
+        }
+      });
+    }
   }
 
   upgradeDifficulty = () => {
@@ -81,17 +107,33 @@ export default class Word {
   }
 
   downgradeDifficulty = () => {
-  }
-
-  prepareStatistics = () => {
-    // TODO
+    const dif = this.getDifficulty();
+    if (dif === parameters.difficultyNames.normal) {
+      const mistakesCount = this.mistakes.split('').reduce((count, day) => {
+        if (day === '1') {
+          return count + 1;
+        }
+        return count;
+      }, 0);
+      if (mistakesCount > 3) {
+        this.setDifficulty(parameters.difficultyNames.hard);
+      }
+    } else if (dif === parameters.difficultyNames.easy) {
+      if (this.mistakes[this.mistakes.length - 1] === '1') {
+        this.setDifficulty(parameters.difficultyNames.normal);
+      }
+    } else if (dif === parameters.difficultyNames.completed) {
+      if (this.mistakes[this.mistakes.length - 1] === '1') {
+        this.setDifficulty(parameters.difficultyNames.easy);
+      }
+    }
   }
 
   /**
    * @return {number} when this word will be repeated in days
    */
   getNextRepetitionInDays() {
-    if (this.wordController.queue.some((qWord) => qWord.word === this.word)) {
+    if (this.wordQueue.queue.some((qWord) => qWord.word === this.word)) {
       return 0;
     }
     const nextDate = this.getNextRepetition();
