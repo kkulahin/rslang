@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const HelpTextFormatted = ({ text, word, isWordInput }) => {
+const HelpTextFormatted = ({ text, word, isFullState }) => {
 	let classes = 'text--marked';
-	if (!isWordInput) {
+	if (!isFullState) {
 		classes += ' text--hidden';
 	}
 
@@ -24,5 +24,5 @@ export default HelpTextFormatted;
 HelpTextFormatted.propTypes = {
 	text: PropTypes.string.isRequired,
 	word: PropTypes.string.isRequired,
-	isWordInput: PropTypes.bool.isRequired,
+	isFullState: PropTypes.bool.isRequired,
 };

@@ -20,9 +20,8 @@ const HelpText = ({
 		textMeaning,
 		textMeaningTranslate,
 	},
-	isWordInput,
+	isFullState,
 }) => {
-
 	const transcriptionElem = (isTranscriptionShow)
 		? transcription
 		: null
@@ -31,25 +30,26 @@ const HelpText = ({
 		? wordTranslate
 		: null
 
-	const helpElement = (
+		let classes = 'text-item--translate text-item--hidden';
+		if (isFullState) {
+			classes = 'text-item--translate';
+		}
+
+		const helpElement = (
 		<li className='help-content-text__item'>
 			<p className='text-item'>
-				<span><b>{wordTranslateElem}</b></span>
-				{' '}
 				<span>{transcriptionElem}</span>
+				{' '}
+				<span><b>{wordTranslateElem}</b></span>
+				{!wordTranslateElem && isTranslateShow && <span className={classes}>{wordTranslate}</span>}
 			</p>
 		</li>
 	);
 
-	let classes = 'text-item--translate text-item--hidden';
-	if (isWordInput) {
-		classes = 'text-item--translate';
-	}
-
 	const textExampleElement = (
 		<li className='help-content-text__item'>
 			<p className='text-item'>
-				<HelpTextFormatted text={textExample} word={word} isWordInput={isWordInput} />
+				<HelpTextFormatted text={textExample} word={word} isFullState={isFullState} />
 			</p>
 			{isTranslateShow && <p className={classes}>{textExampleTranslate}</p>}
 		</li>
@@ -58,7 +58,7 @@ const HelpText = ({
 	const textMeaningElement = (
 		<li className='help-content-text__item'>
 			<p className='text-item'>
-				<HelpTextFormatted text={textMeaning} word={word} isWordInput={isWordInput} />
+				<HelpTextFormatted text={textMeaning} word={word} isFullState={isFullState} />
 			</p>
 			{isTranslateShow && <p className={classes}>{textMeaningTranslate}</p>}
 		</li>
@@ -92,5 +92,5 @@ HelpText.propTypes = {
 		textMeaning: PropTypes.string.isRequired,
 		textMeaningTranslate: PropTypes.string.isRequired,
 	}),
-	isWordInput: PropTypes.bool.isRequired,
+	isFullState: PropTypes.bool.isRequired,
 };

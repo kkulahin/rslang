@@ -4,17 +4,27 @@ import PropTypes from 'prop-types';
 import './radioButtonContainer.scss';
 import RadioButton from '../radioButton/RadioButton';
 
-const RadioButtonContainer = ({ items, checkedItem, onChange, isDisabled }) => {
-	const className = isDisabled
-		? 'card-radio-button-container card-radio-button-container--disabled'
-		: 'card-radio-button-container';
+const RadioButtonContainer = ({ items, checkedItem, onChange, isDisabled, isAttention }) => {
+	let className = 'card-radio-button-container';
+	if (isAttention) {
+		className += ' card-radio-button-container--attention';
+	}
+	if (isDisabled) {
+		className = 'card-radio-button-container card-radio-button-container--disabled';
+	}
 
-	const radioButtons = items.map((item) => (
+	const handleChangeRadio = (id) => {
+		if (id !== checkedItem) {
+			onChange(id);
+		}
+	}
+
+		const radioButtons = items.map((item) => (
     <RadioButton
 			label={item.label}
 			id={item.id}
       checked={checkedItem === item.id}
-      onClickRadioButton={onChange}
+      onClickRadioButton={handleChangeRadio}
       key={item.id}
     />
   ));
@@ -22,11 +32,17 @@ const RadioButtonContainer = ({ items, checkedItem, onChange, isDisabled }) => {
   return <div className={className}>{radioButtons}</div>;
 };
 
+RadioButtonContainer.defaultProps = {
+	isDisabled: false,
+	isAttention: false,
+};
+
 RadioButtonContainer.propTypes = {
   items: PropTypes.instanceOf(Array).isRequired,
   onChange: PropTypes.func.isRequired,
   checkedItem: PropTypes.string.isRequired,
-  isDisabled: PropTypes.bool.isRequired,
+  isDisabled: PropTypes.bool,
+  isAttention: PropTypes.bool,
 };
 
 export default RadioButtonContainer;
