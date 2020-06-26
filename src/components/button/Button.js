@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
-import './Button.scss';
+import './button.scss';
 
 const Button = ({
   id,
@@ -53,6 +53,7 @@ Button.defaultProps = {
   isActive: false,
   iconName: '',
   label: null,
+  clickHandler: () => {},
 };
 
 Button.propTypes = {
@@ -61,7 +62,7 @@ Button.propTypes = {
   isActive: PropTypes.bool,
   id: PropTypes.string.isRequired,
   label: PropTypes.string,
-  clickHandler: PropTypes.func.isRequired,
+  clickHandler: PropTypes.func,
   iconName: PropTypes.string,
 };
 
