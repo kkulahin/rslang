@@ -1,0 +1,71 @@
+@-webkit-keyframes card-animation {
+  10% { transform: translateX(100px); }
+  20% { transform: translateX(0); }
+  30% { transform: translateX(-50px); }
+  40% { transform: translateX(-75px); opacity: 1;}
+  60% { transform: translateX(-100px); opacity: 0.5;}
+  80% { transform: translateX(-125px); opacity: 0;}
+  95% { transform: translateX(200px); opacity: 0;}
+  100% { transform: translateX(0);opacity: 1;}
+}
+
+@-moz-keyframes card-animation {
+  10% { transform: translateX(100px); }
+  20% { transform: translateX(0); }
+  30% { transform: translateX(-50px); }
+  40% { transform: translateX(-75px); opacity: 1;}
+  60% { transform: translateX(-100px); opacity: 0.5;}
+  80% { transform: translateX(-125px); opacity: 0;}
+  95% { transform: translateX(200px); opacity: 0;}
+  100% { transform: translateX(0);opacity: 1;}
+}
+
+@keyframes card-animation {
+  10% { transform: translateX(100px); }
+  20% { transform: translateX(0); }
+  30% { transform: translateX(-50px); }
+  40% { transform: translateX(-75px); opacity: 1;}
+  60% { transform: translateX(-100px); opacity: 0.5;}
+  80% { transform: translateX(-125px); opacity: 0;}
+  95% { transform: translateX(200px); opacity: 0;}
+  100% { transform: translateX(0);opacity: 1;}
+}
+
+.audiocall {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &__card--animated {
+    animation: card-animation 1s linear;
+  }
+
+  &__image ,
+  &__voice {
+    width: 100%;
+    margin: 30px 0 60px;
+  }
+
+  &__text {
+    display: flex;
+    justify-content: center;
+
+    font: inherit;
+    font-size: 22px;
+    line-height: 30px;
+
+    &-word,
+    &-transcription {
+      margin-left: 5px;
+    }
+  }
+
+  &__button {
+    width: 100%;
+    
+    & .button {
+      margin: 20px auto;
+      padding: 15px 60px;
+    }
+  }
+}

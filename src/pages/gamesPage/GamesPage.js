@@ -9,9 +9,11 @@ import BlockWithShadow from '../../components/containerWithShadow/ContainerWithS
 import './GamesPage.scss';
 
 import SpeakItPic from '../../assets/image/speakIt.png';
+import AudioCallPic from '../../assets/image/audiocall.png';
 
 import SpeakIt from './games/speakIt/SpeakIt';
 import Sprint from './games/sprint/Sprint';
+import AudioCall from './games/audiocall/Audiocall';
 
 const Games = () => {
   const { path, url } = useRouteMatch();
@@ -33,6 +35,10 @@ const Games = () => {
     sprink: {
       link: 'sprint',
       pic: SpeakItPic,
+    },
+    audiocall: {
+      link: 'audiocall',
+      pic: AudioCallPic,
     },
   };
 
@@ -80,6 +86,9 @@ const Games = () => {
         </Route>
         <Route path={`${path}/sprint`}>
           <Sprint />
+        </Route>
+        <Route path={`${path}/audiocall`}>
+          <AudioCall />
         </Route>
       </Switch>
     </div>

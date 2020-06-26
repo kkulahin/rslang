@@ -1,0 +1,8 @@
+.version-list {
+  display: flex;
+  justify-content: center;
+
+  & .button {
+    margin: 10px 20px;
+  }
+}
