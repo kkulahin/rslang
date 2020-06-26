@@ -29,18 +29,12 @@ const getFormattedWordOnError = (errorWord, word) => {
 }
 
 const WordInput = ({
-	word: { word, wordTranslate },
-	helpSettings: { isTranslateShow },
+	word: { word },
 	onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect, isPrevWord,
 }) => {
 	const currentValue = isWordInput
 		? inputRef.current.value
 		: '';
-
-	let classesTranslate = 'text-item--translate text-item--hidden';
-	if (isWordInput || isPrevWord) {
-		classesTranslate = 'text-item--translate';
-	}
 
 	let classes = 'word__size';
 	if ((isWordInput && isCorrect) || isPrevWord) {
@@ -66,7 +60,6 @@ const WordInput = ({
 					ref={inputRef}
 				/>
 			</span>
-			{isTranslateShow && <p className={classesTranslate}>{wordTranslate}</p>}
 		</div>
 	);
 
@@ -85,5 +78,9 @@ WordInput.propTypes = {
 	]).isRequired,
 	onInputFocus: PropTypes.func.isRequired,
 	onInputEnter: PropTypes.func.isRequired,
+	onInputChange: PropTypes.func.isRequired,
 	isWordInput: PropTypes.bool.isRequired,
+	isCorrect: PropTypes.bool.isRequired,
+	isPrevWord: PropTypes.bool.isRequired,
+	value: PropTypes.string.isRequired,
 };

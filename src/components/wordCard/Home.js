@@ -14,6 +14,7 @@ const initSettings = {
 	isShowAnswerBtn: true,
 	isDeleteBtn: true,
 	isHardBtn: true,
+	isComplexityBtn: true,
 	isAudioAuto: true,
 };
 
@@ -33,7 +34,8 @@ const initWords = [
     "textExampleTranslate": "Человек не должен водить машину после того, как он выпил алкоголь",
     "textMeaningTranslate": "Алкоголь - это тип напитка, который может сделать людей пьяными",
     "wordTranslate": "алкоголь",
-    "wordsPerExampleSentence": 15,
+		"wordsPerExampleSentence": 15,
+		'complexity': 'снова',
 	},
 	{
 		"id": '2',
@@ -50,7 +52,8 @@ const initWords = [
     "textExampleTranslate": "На озере есть маленькая лодка",
     "textMeaningTranslate": "Лодка - это транспортное средство, которое движется по воде",
     "wordTranslate": "лодка",
-    "wordsPerExampleSentence": 8,
+		"wordsPerExampleSentence": 8,
+		'complexity': 'трудно',
 	},
 	{
 		"id": '3',
@@ -67,7 +70,8 @@ const initWords = [
     "textExampleTranslate": "Студенты согласны, что у них слишком много домашней работы",
     "textMeaningTranslate": "Согласиться - значит иметь то же мнение или убеждение, что и другой человек",
     "wordTranslate": "согласна",
-    "wordsPerExampleSentence": 8,
+		"wordsPerExampleSentence": 8,
+		'complexity': 'хорошо',
 	},
 ];
 
@@ -75,6 +79,7 @@ const Home = () => {
 	const [words, setWords] = useState([initWords[0]]);
 
 	const handleNextBtnClick = () => {
+
 		if (words[words.length - 1].id === '1') {
 			setWords([initWords[0], initWords[1]]);
 		} else if (words[words.length - 1].id === '2') {
@@ -91,8 +96,6 @@ const Home = () => {
 				settings={initSettings}
 				words={words}
 				onErrorAnswer={() => console.log('------ error answer ------')}
-				onHardBtnClick={() => console.log('------ hard button click ------')}
-				onDeleteBtnClick={() => console.log('------ delete button click ------')}
 				onNextBtnClick={handleNextBtnClick}
 			/>
 		</div>

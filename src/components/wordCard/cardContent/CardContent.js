@@ -10,16 +10,17 @@ import Button from '../button/Button';
 
 const CardContent = (props) => {
 	const {
-		settings: { isShowAnswerBtn, isDeleteBtn, isHardBtn },
-		helpSettings, isPrevWord, word, isWordInput, isCorrect,
+		settings: { isShowAnswerBtn, isDeleteBtn, isHardBtn, isComplexityBtn },
+		helpSettings, isPrevWord, word, isWordInput, isCorrect, isShowBtnClick,
 		onCardBtnClick, onWordComplexityBtnClick,
 	} = props;
+	const { complexity, isHard } = word;
 
 	const ShowAnswerBtn = (
 		<Button
 			id='showWord'
 			label='Answer'
-			isDisabled={isWordInput || isPrevWord}
+			isDisabled={isCorrect || isShowBtnClick}
 			clickHandler={(id) => onCardBtnClick(id)}
 		/>
 	);
@@ -28,26 +29,25 @@ const CardContent = (props) => {
 		<Button
 			id='deleteWord'
 			label='Delete'
-			isDisabled={isWordInput || isPrevWord}
 			clickHandler={(id) => onCardBtnClick(id)}
 		/>
 	);
 
 	const HardBtn = (
 		<Button
-			isActive={true}
+			isActive={isHard}
 			id='hardWord'
 			label='Hard'
-			isDisabled={isCorrect || isPrevWord}
 			clickHandler={(id) => onCardBtnClick(id)}
 		/>
 	);
 
+	const AudioPlayBtnEnabled = isPrevWord || ((isCorrect || isShowBtnClick) && isComplexityBtn);
 	const AudioPlayBtn = (
 		<Button
 			id='speakWord'
 			label='Speak'
-			isDisabled={!isPrevWord}
+			isDisabled={!AudioPlayBtnEnabled}
 			clickHandler={(id) => onCardBtnClick(id)}
 		/>
 	);
@@ -59,6 +59,15 @@ const CardContent = (props) => {
 		{ label: 'M', id: 'легко' },
 	];
 
+	const complexityBtn = (
+		<RadioButtonContainer
+			items={radioButtons}
+			onChange={onWordComplexityBtnClick}
+			checkedItem={complexity}
+			isAttention={isCorrect || isShowBtnClick}
+		/>
+	);
+
 		return (
 		<div className='card-content'>
 			<div className='help-content'>
@@ -69,20 +78,17 @@ const CardContent = (props) => {
 				<HelpText
 					helpSettings={helpSettings}
 					word={word}
-					isWordInput={isWordInput || isPrevWord}
+					isFullState={isWordInput || isPrevWord}
 				/>
 			</div>
 			<div className='card-controls'>
-				<RadioButtonContainer
-					items={radioButtons}
-					onChange={onWordComplexityBtnClick}
-					checkedItem='снова'
-					isDisabled={isWordInput || isPrevWord}
-				/>
-				{isHardBtn && HardBtn}
-				{isDeleteBtn && DeleteBtn}
-				{isShowAnswerBtn && ShowAnswerBtn}
-				{AudioPlayBtn}
+				{isComplexityBtn && !isPrevWord && complexityBtn}
+				<div className='card-controls__buttons'>
+					{isHardBtn && !isPrevWord && HardBtn}
+					{isDeleteBtn && !isPrevWord && DeleteBtn}
+					{isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
+					{AudioPlayBtn}
+				</div>
 			</div>
 			<div className='learn-content'>
 				<WordInput {...props} />
@@ -100,6 +106,10 @@ CardContent.propTypes = {
 	onCardBtnClick: PropTypes.func.isRequired,
 	helpSettings: PropTypes.object.isRequired,
 	word: PropTypes.object.isRequired,
+	word: PropTypes.shape({
+		complexity: PropTypes.string.isRequired,
+		isHard: PropTypes.bool.isRequired,
+	}),
 	settings: PropTypes.shape({
 		isShowAnswerBtn: PropTypes.bool.isRequired,
 		isDeleteBtn: PropTypes.bool.isRequired,

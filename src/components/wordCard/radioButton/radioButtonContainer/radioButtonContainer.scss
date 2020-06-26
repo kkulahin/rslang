@@ -1,19 +1,62 @@
 @import '../../../../styles/variables.scss';
 
-.card-radio-button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding: 5px 5px;
-  background-color: $background-color;
-  border-radius: 125px;
-  box-shadow: $container-box-shadow;
+.card-unit {
 
-  user-select: none;
+  .card-radio-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-right: auto;
+    padding: 5px 5px;
+    background-color: $background-color;
+    border-radius: 125px;
+    box-shadow: $container-box-shadow;
+  
+    user-select: none;
+  
+    &--disabled {
+      pointer-events: none;
+      opacity: 0.25;
+    }
 
-  &--disabled {
-    pointer-events: none;
-    opacity: 0.25;
+    &--attention {
+      -moz-animation: cycle 2s linear;
+      -webkit-animation: cycle 2s linear;
+              animation: cycle 2s linear;
+    }
+  }
+
+  @-moz-keyframes cycle {
+    35% {transform: rotate(0) translate(0, 0);}
+    40% {transform: rotate(5deg) translate(0, -2px);}
+    45% {transform: rotate(-3deg) translate(0, -2px);}
+    50% {transform: rotate(5deg) translate(0, -2px);}
+    55% {transform: rotate(-3deg) translate(0, -2px);}
+    60% {transform: rotate(5deg) translate(0, -2px);}
+    65% {transform: rotate(-3deg) translate(0, -2px);}
+    70% {transform: rotate(0) translate(0, 0);}
+  }
+  
+  @-webkit-keyframes cycle {
+    35% {transform: rotate(0) translate(0, 0);}
+    40% {transform: rotate(5deg) translate(0, -2px);}
+    45% {transform: rotate(-3deg) translate(0, -2px);}
+    50% {transform: rotate(5deg) translate(0, -2px);}
+    55% {transform: rotate(-3deg) translate(0, -2px);}
+    60% {transform: rotate(5deg) translate(0, -2px);}
+    65% {transform: rotate(-3deg) translate(0, -2px);}
+    70% {transform: rotate(0) translate(0, 0);}
+  }
+  
+  @keyframes cycle {
+    35% {transform: rotate(0) translate(0, 0);}
+    40% {transform: rotate(5deg) translate(0, -2px);}
+    45% {transform: rotate(-3deg) translate(0, -2px);}
+    50% {transform: rotate(5deg) translate(0, -2px);}
+    55% {transform: rotate(-3deg) translate(0, -2px);}
+    60% {transform: rotate(5deg) translate(0, -2px);}
+    65% {transform: rotate(-3deg) translate(0, -2px);}
+    70% {transform: rotate(0) translate(0, 0);}
   }
 }

@@ -42,241 +42,259 @@ $word-bg-color: rgba(#25CEDE, 0.5);
   @include font ($size: #{$font-size-main}, $height: 1, $weight: 500);
 }
 
-.card__container {
-  max-width: 800px;
+.card-unit {
 
-  @include flex($align-items: stretch, $justify-content: space-between);
-}
+  .card__container {
+    max-width: 800px;
+  
+    @include flex($align-items: stretch, $justify-content: space-between);
+  
+    .container-with-shadow {
+      display: block;
+    
+      min-width: 600px;
+      // min-height: 500px;
+    
+      margin: 0 15px;
+    }
+  }
 
-.container-with-shadow {
-  display: block;
-
-  min-width: 600px;
-
-  margin: 0 15px;
-}
-
-.card-content {
-  background-color: transparent;
-}
-
-.help-content {
-  padding-bottom: 20px;
-
-  @include flex($align-items: center, $justify-content: space-between);
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-
-  user-select: none;
-}
-
-.help-content__image {
-  width: 40%;
-  min-width: 280px;
-
-  line-height: 0;
-
-  overflow: hidden;
-
-  border: none;
-  border-radius: 5px;
-}
-
-.help-content__image img {
-  width: 100%;
-  height: auto;
-}
-
-.help-content__text {
-  flex-grow: 1;
-
-  margin: 0 0 0 20px;
-  padding: 0;
-
-  font-size: $font-size-main;
-  line-height: 1.2;
-
-  list-style: none;
-}
-
-.help-content-text__item + .help-content-text__item {
-  margin-top: 20px;
-}
-
-.text-item {
-  margin: 0;
-  padding: 0;
-
-  line-height: 1.2;
-  text-align: justify;
-
-  &--translate {
-    max-height: 200px;
-    margin-top: 5px;
-
-    font-size: $font-size-small;
-    text-align: justify;
-
-    opacity: 0.5;
-
-    transition: opacity $transition-duration ease-in-out, max-height 0.2s ease-in-out;
+  .card-content {
+    height: 100%;
+  
+    @include flex($flex-direction: column, $align-items: center, $justify-content: space-between);
+    background-color: transparent;
+  }
+  
+  .help-content {
+    flex-grow: 1;
+    padding-bottom: 20px;
+  
+    @include flex($align-items: center, $justify-content: space-between);
+  
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  
     user-select: none;
   }
+  
+  .help-content__image {
+    width: 40%;
+    min-width: 280px;
+  
+    line-height: 0;
+  
+    overflow: hidden;
+  
+    border: none;
+    border-radius: 5px;
+  }
 
-  &--hidden {
-    visibility: hidden;
-    max-height: 0;
-    margin-top: 0;
+  .help-content__image img {
+    width: 100%;
+    height: auto;
+  }
+
+  .help-content__text {
+    flex-grow: 1;
+  
+    margin: 0 0 0 20px;
+    padding: 0;
+  
+    font-size: $font-size-main;
+    line-height: 1.2;
+
+    list-style: none;
+  }
+
+  .help-content-text__item + .help-content-text__item {
+    margin-top: 20px;
+  }
+  
+  .text-item {
+    margin: 0;
+    padding: 0;
+  
+    line-height: 1.2;
+    text-align: justify;
+  
+    &--translate {
+      max-height: 200px;
+      margin-top: 5px;
+  
+      font-size: $font-size-small;
+      text-align: justify;
+  
+      opacity: 0.5;
+  
+      transition: opacity $transition-duration ease-in-out, max-height 0.2s ease-in-out;
+      user-select: none;
+    }
+
+    &--hidden {
+      visibility: hidden;
+      max-height: 0;
+      margin-top: 0;
+      pointer-events: none;
+      opacity: 0;
+    }
+  }
+
+  .text--marked {
+    display: inline-block;
+    height: auto;
+    padding: 0 $word-input-padding;
+  
+    background-color: $word-bg-color;
+  
+    border: none;
+    border-radius: $element-border-radius;
+  }
+
+  .text--hidden {
+    color: transparent;
     pointer-events: none;
+    user-select: none;
+  }
+  
+  .card-controls {
+    width: 100%;
+    height: 40px;
+    margin: 10px 0;
+  
+    background-color: transparent;
+  
+    @include flex($justify-content: flex-end);
+  }
+
+  .card-controls__buttons {
+    height: 100%;
+
+    @include flex($justify-content: flex-end);
+  }
+
+  .learn-content {
+    width: 100%;
+    padding-top: 20px;
+  
+    @include flex();
+
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  
+  .word__container {
+  
+    @include flex($flex-direction: column, $align-items: center, $justify-content: flex-start);
+  }
+  
+  .word__wrapper {
+    position: relative;
+  
+    display: inline-block;
+  
+    padding: $element-border-radius 0;
+  
+    font-size: $font-size-big;
+    line-height: 1.2;
+  
+    background-color: $word-bg-color;
+  
+    border: none;
+    border-radius: $element-border-radius;
+  }
+  
+  .word__size {
+    display: inline-block;
+  
+    visibility: hidden;
+  
+    padding: 0 $word-input-padding;
+  
+    background: transparent;
     opacity: 0;
+  
+    pointer-events: none;
+    user-select: none;
+    cursor: none;
+  
+    &--correct {
+      visibility: visible;
+      color: $font-color-correct;
+      opacity: 1;
+    }
+  
+    &--errorMax {
+      visibility: visible;
+      color: $font-color-error;
+    }
+  
+    &--errorMidl {
+      visibility: visible;
+      color: $font-color-error-add;
+    }
+  
+    &--visible {
+      visibility: visible;
+      opacity: 0.5;
+      animation: error 2s linear;
+    }
   }
-}
-
-.text--marked {
-  display: inline-block;
-  height: auto;
-  padding: 0 $word-input-padding;
-
-  background-color: $word-bg-color;
-
-  border: none;
-  border-radius: $element-border-radius;
-}
-
-.text--hidden {
-  color: transparent;
-  pointer-events: none;
-  user-select: none;
-}
-
-.card-controls {
-  height: 50px;
-  margin-top: 20px;
-
-  background-color: transparent;
-
-  @include flex($justify-content: space-between);
-}
-
-.learn-content {
-  margin-top: 20px;
-
-  @include flex();
-}
-
-.word__container {
-
-  @include flex($flex-direction: column, $align-items: center, $justify-content: flex-start);
-}
-
-.word__wrapper {
-  position: relative;
-
-  display: inline-block;
-
-  padding: $element-border-radius 0;
-
-  font-size: $font-size-big;
-  line-height: 1.2;
-
-  background-color: $word-bg-color;
-
-  border: none;
-  border-radius: $element-border-radius;
-}
-
-.word__size {
-  display: inline-block;
-
-  visibility: hidden;
-
-  padding: 0 $word-input-padding;
-
-  background: transparent;
-  opacity: 0;
-
-  pointer-events: none;
-  user-select: none;
-  cursor: none;
-
-  &--correct {
-    visibility: visible;
-    color: $font-color-correct;
-    opacity: 1;
+  
+  .word__size > span {
+    display: inline-block;
   }
-
-  &--errorMax {
-    visibility: visible;
-    color: $font-color-error;
+  
+  @keyframes error {
+  
+    0% {
+      opacity: 1;
+    }
+  
+    5% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  
+    20% {
+      opacity: 1;
+      transform: none;
+    }
+  
+    100% {
+      opacity: 0.5
+    }
   }
-
-  &--errorMidl {
-    visibility: visible;
-    color: $font-color-error-add;
+  
+  .word__input {
+    position: absolute;
+    bottom: $element-border-radius;
+    left: 0;
+    z-index: 1;
+  
+    display: inline-block;
+  
+    width: 100%;
+    height: calc(100% - 2 * #{$element-border-radius});
+    padding: 0 $word-input-padding;
+  
+    font: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+  
+    background-color: transparent;
+    border: none;
+    border-radius: inherit;
+  
+    &:focus {
+      outline: none;
+    }
   }
-
-  &--visible {
-    visibility: visible;
-    opacity: 0.5;
-    animation: error 2s linear;
+  
+  .card-button {
+    font-size: $font-size-small;
   }
-}
-
-.word__size > span {
-  display: inline-block;
-}
-
-@keyframes error {
-
-  0% {
-    opacity: 1;
+  
+  .card-button + .card-button {
+    margin-left: 10px;
   }
-
-  5% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-
-  20% {
-    opacity: 1;
-    transform: none;
-  }
-
-  100% {
-    opacity: 0.5
-  }
-}
-
-.word__input {
-  position: absolute;
-  bottom: $element-border-radius;
-  left: 0;
-  z-index: 1;
-
-  display: inline-block;
-
-  width: 100%;
-  height: calc(100% - 2 * #{$element-border-radius});
-  padding: 0 $word-input-padding;
-
-  font: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  color: inherit;
-
-  background-color: transparent;
-  border: none;
-  border-radius: inherit;
-
-  &:focus {
-    outline: none;
-  }
-}
-
-.card-button {
-  font-size: $font-size-small;
-}
-
-.card-button + .card-button {
-  margin-left: 10px;
 }

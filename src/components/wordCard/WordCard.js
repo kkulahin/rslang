@@ -7,35 +7,35 @@ import CardContent from './cardContent/CardContent';
 
 import './WordCard.scss';
 
-const checkCorrect = ({ value, word }) => {
-	return value.toLowerCase() === word.toLowerCase();
-}
+const checkCorrect = ({ value, word }) => value.toLowerCase() === word.toLowerCase();
 
 const WordCard = ({
 	helpSettings,
 	settings,
 	words,
 	onErrorAnswer,
+	onHardBtnClick,
+	onComplexityBtnClick,
+	onDeleteBtnClick,
 	onNextBtnClick,
 }) => {
 	const [isWordInput, setIsWordInput] = useState(false);
 	const [isCorrect, setIsCorrect] = useState(false);
-	const [isHardBtnClick, setIsHardBtnClick] = useState(false);
-	// const [wordComplexity, setWordComplexity] = useState(false);
+	const [isShowBtnClick, setIsShowBtnClick] = useState(false);
 	const [value, setValue] = useState('');
 	const [isPrevWord, setIsPrevWord] = useState(false);
 
 	const { isTextExampleShow, isTextMeaningShow } = helpSettings;
-	const { isAudioAuto } = settings;
+	const { isAudioAuto, isComplexityBtn } = settings;
 
 	const inputRef = useRef();
 	const audioRef = useRef();
 
-	const wordAnswer = {
-		errors: 0,
-		complexity: null,
-		status: null,
-	}
+	// const wordAnswer = {
+	// 	errors: 0,
+	// 	complexity: null,
+	// 	status: null,
+	// }
 
 	const currentWord = isPrevWord
 		? words[0]
@@ -65,15 +65,18 @@ const WordCard = ({
 	}
 
 	const getNextWord = () => {
+		console.log('----- get next word ----');
+
 		setIsWordInput(false);
 		setIsCorrect(false);
+		setIsShowBtnClick(false);
 		setValue('');
 
 		onNextBtnClick();
 	}
 
 	const audioPlay = () => {
-		audioRef.current.pause();
+		audioRef.current.pause(); //error
 		currentTruck = 0;
 		audioRef.current.src = tracks[currentTruck];
 		audioRef.current.play();
@@ -87,7 +90,7 @@ const WordCard = ({
 			return;
 		}
 
-		if (isCorrect) {
+		if ((isCorrect || isShowBtnClick) && !isComplexityBtn) {
 			getNextWord();
 		}
 	}
@@ -103,7 +106,7 @@ const WordCard = ({
 				return;
 			}
 
-			if (isCorrect) {
+			if (isCorrect || isShowBtnClick) {
 				getNextWord();
 				return;
 			}
@@ -132,7 +135,8 @@ const WordCard = ({
 	}
 
 	const handleShowBtnClick = () => {
-		console.log('--- show ---- todo: to next word');
+		setIsShowBtnClick(true);
+		setIsCorrect(true);
 		handleAnswer(false);
 	}
 
@@ -141,23 +145,13 @@ const WordCard = ({
 	}
 
 	const handleWordComplexityBtnClick = (id) => {
-		console.log(id);
-	}
-
-	const handleHardBtnClick = () => {
-		setIsHardBtnClick(!isHardBtnClick);
-	}
-
-	const handleDeleteBtnClick = () => {
-		console.log('----- delete --------');
+		onComplexityBtnClick(id);
 	}
 
 	const handleCardBtnClick = (id) => {
-		console.log(id);
-
 		const handlers = {
-			deleteWord: handleDeleteBtnClick,
-			hardWord: handleHardBtnClick,
+			deleteWord: onDeleteBtnClick,
+			hardWord: onHardBtnClick,
 			speakWord: handleAudioPlayBtnClick,
 			showWord: handleShowBtnClick,
 		}
@@ -176,6 +170,7 @@ const WordCard = ({
 		onWordComplexityBtnClick: handleWordComplexityBtnClick,
 		inputRef: inputRef,
 		value: value,
+		isShowBtnClick: isShowBtnClick,
 		isWordInput: isWordInput,
 		isCorrect: isCorrect,
 		isPrevWord: isPrevWord,
@@ -189,7 +184,7 @@ const WordCard = ({
 					id='prev'
 					onClick={handleNavigateClick}
 					isInvisible={(words.length === 1) || isPrevWord}
-					isDisabled={isCorrect}
+					isDisabled={isCorrect || isShowBtnClick}
 				/>}
 				<ContainerWithShadow padding='20px'>
 					<CardContent
