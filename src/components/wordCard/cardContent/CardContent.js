@@ -53,10 +53,10 @@ const CardContent = (props) => {
 	);
 
 	const radioButtons = [
-		{ label: 'XL', id: 'снова' },
-		{ label: 'L', id: 'трудно' },
-		{ label: 'S', id: 'хорошо' },
-		{ label: 'M', id: 'легко' },
+		{ label: 'again', id: 'снова' },
+		{ label: 'diff', id: 'трудно' },
+		{ label: 'good', id: 'хорошо' },
+		{ label: 'easy', id: 'легко' },
 	];
 
 	const complexityBtn = (

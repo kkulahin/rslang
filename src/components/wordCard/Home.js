@@ -36,6 +36,7 @@ const initWords = [
     "wordTranslate": "алкоголь",
 		"wordsPerExampleSentence": 15,
 		'complexity': 'снова',
+		'isHard': true,
 	},
 	{
 		"id": '2',
@@ -54,6 +55,7 @@ const initWords = [
     "wordTranslate": "лодка",
 		"wordsPerExampleSentence": 8,
 		'complexity': 'трудно',
+		'isHard': false,
 	},
 	{
 		"id": '3',
@@ -72,6 +74,7 @@ const initWords = [
     "wordTranslate": "согласна",
 		"wordsPerExampleSentence": 8,
 		'complexity': 'хорошо',
+		'isHard': true,
 	},
 ];
 
@@ -79,7 +82,6 @@ const Home = () => {
 	const [words, setWords] = useState([initWords[0]]);
 
 	const handleNextBtnClick = () => {
-
 		if (words[words.length - 1].id === '1') {
 			setWords([initWords[0], initWords[1]]);
 		} else if (words[words.length - 1].id === '2') {
@@ -96,6 +98,9 @@ const Home = () => {
 				settings={initSettings}
 				words={words}
 				onErrorAnswer={() => console.log('------ error answer ------')}
+				onHardBtnClick={() => console.log('------ hard btn click ------')}
+				onComplexityBtnClick={(id) => console.log(`------ complexity btn click ${id} ------`)}
+				onDeleteBtnClick={() => console.log(`------ delete btn click ------`)}
 				onNextBtnClick={handleNextBtnClick}
 			/>
 		</div>
