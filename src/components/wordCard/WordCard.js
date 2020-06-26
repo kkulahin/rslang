@@ -31,17 +31,12 @@ const WordCard = ({
 	const inputRef = useRef();
 	const audioRef = useRef();
 
-	// const wordAnswer = {
-	// 	errors: 0,
-	// 	complexity: null,
-	// 	status: null,
-	// }
-
 	const currentWord = isPrevWord
 		? words[0]
 		: words[words.length - 1];
 	const { word, audio, audioExample, audioMeaning } = currentWord;
 
+	let isAudioSrcLoading = false;
 	let currentTruck = 0;
 	const tracks = [audio];
 	if (isTextExampleShow) {
@@ -76,9 +71,11 @@ const WordCard = ({
 	}
 
 	const audioPlay = () => {
-		audioRef.current.pause(); //error
-		currentTruck = 0;
-		audioRef.current.src = tracks[currentTruck];
+		if (currentTruck !== 0) {
+			audioRef.current.pause();
+			currentTruck = 0;
+			audioRef.current.src = tracks[currentTruck];
+		}
 		audioRef.current.play();
 	}
 
@@ -93,6 +90,14 @@ const WordCard = ({
 		if ((isCorrect || isShowBtnClick) && !isComplexityBtn) {
 			getNextWord();
 		}
+	}
+
+	const onAudioLoadStart = () => {
+		isAudioSrcLoading = true;
+	}
+
+	const onCanPlayThrough = () => {
+		isAudioSrcLoading = false;
 	}
 
 	const handleInputChange = (evt) => {
@@ -141,7 +146,9 @@ const WordCard = ({
 	}
 
 	const handleAudioPlayBtnClick = () => {
-		audioPlay();
+		if (!isAudioSrcLoading) {
+			audioPlay();
+		}
 	}
 
 	const handleWordComplexityBtnClick = (id) => {
@@ -192,7 +199,13 @@ const WordCard = ({
 					/>
 				</ContainerWithShadow>
 				<NavigateBtn classes='next' id='next' onClick={handleNavigateClick}/>
-				<audio ref={audioRef} src={tracks[0]} preload='auto' onEnded={onAudioEnded} />
+				<audio
+					ref={audioRef}
+					src={tracks[0]}
+					onEnded={onAudioEnded}
+					onLoadStart={onAudioLoadStart}
+					onCanPlayThrough={onCanPlayThrough}
+				/>
 			</div>
 		</div>
 	);
