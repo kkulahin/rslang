@@ -41,6 +41,11 @@ const MaxItem = 10;
 const shuffleArray = (arr) => arr.map((a) => [Math.random(), a]).sort((a, b) => a[0] - b[0]).map((a) => a[1]);
 
 const SpeackIt = () => {
+  const [gameScreen, setGameScreen] = useState({
+    startScreen: true,
+    game: false,
+    statistic: false,
+  });
   const [gameOption, setGameOption] = useState(defGameOption);
   const [activeWord, setActiveWord] = useState(null);
   const [activeWordParams, setActiveWordParams] = useState(null);
@@ -48,7 +53,7 @@ const SpeackIt = () => {
   const [gameMode, setGameMode] = useState(false);
   const [userRecWord, setUserRecWord] = useState(null);
   const [gameplayWords, setGamePlayWords] = useState({ errors: {}, rights: {} });
-  const [gameResult, setGameResult] = useState(false);
+  const [isStatusMic, setStatusMic] = useState(false);
   const input = useRef(null);
 
   useEffect(() => {
@@ -126,7 +131,7 @@ const SpeackIt = () => {
 
     const words = errors[curStage][`stage${curStage}`];
     const wordIndex = words.findIndex((el) => el.word === userRecWord);
-    if (wordIndex > 0) {
+    if (wordIndex >= 0) {
       if (isEmpty(rights)) {
         const newRights = Array.from({ length: defaultParams.StepCounter }, (v, k) => k).map((el) => {
           const obj = {};
@@ -150,7 +155,19 @@ const SpeackIt = () => {
     return undefined;
   }, [userRecWord, gameplayWords, gameMode, gameOption]);
 
+  const isMicOff = (isPlay) => {
+    const micIcon = document.querySelector('.input-wrapper .microphone');
+    if (micIcon !== null && !isPlay) {
+      micIcon.click();
+      return false;
+    }
+    return true;
+  };
+
   useEffect(() => {
+    if (gameMode) {
+      setStatusMic(gameMode);
+    }
     isMicOff(gameMode);
   }, [gameMode]);
 
@@ -173,13 +190,6 @@ const SpeackIt = () => {
     }
   }, [gameplayWords, gameOption]);
 
-  const isMicOff = (isPlay = false) => {
-    const mic = document.querySelector('.input-wrapper .icon');
-    if (mic !== null && isPlay) {
-      mic.click();
-    }
-  };
-
   const removeGameModeClass = () => {
     const els = [...document.querySelectorAll('.speakIt-items .item.success')];
     if (els.length > 0) {
@@ -190,8 +200,13 @@ const SpeackIt = () => {
   };
 
   const restart = () => {
-    if (gameResult) {
-      setGameResult(false);
+    if (gameScreen.statistic) {
+      const screen = {
+        startScreen: true,
+        game: false,
+        statistic: false,
+      };
+      setGameScreen(screen);
     }
     setGameMode(false);
     removeGameModeClass();
@@ -201,7 +216,10 @@ const SpeackIt = () => {
   };
 
   const start = () => {
-    if (gameMode) removeGameModeClass();
+    if (gameMode) {
+      removeGameModeClass();
+      // isMicOff();
+    }
     setGameMode(!gameMode);
   };
 
@@ -257,21 +275,23 @@ const SpeackIt = () => {
   };
 
   const getSpeechQuery = (value) => {
+    console.log(value)
     setUserRecWord(value.toLocaleLowerCase());
   };
 
-  const isImageDescription = () => {
-    if (gameMode) {
-      return (
-        <div className="input-wrapper">
-          <input icon="microphone" readOnly ref={input} />
-          <Dictaphone getSpeechQuery={getSpeechQuery} setInputValue={input} />
-        </div>
+  const getStatusMic = (status) => status === 'microphone' ? setStatusMic(true) : setStatusMic(false);
 
+  const isImageDescription = () => {
+    if (!isStatusMic && !gameMode) {
+      return (
+        <p>{activeWordParams?.translate}</p>
       );
     }
     return (
-      <p>{activeWordParams?.translate}</p>
+      <div className="input-wrapper">
+        <input icon="microphone" readOnly ref={input} />
+        <Dictaphone getSpeechQuery={getSpeechQuery} setInputValue={input} getStatusMic={getStatusMic} />
+      </div>
     );
   };
 
@@ -393,17 +413,46 @@ const SpeackIt = () => {
   };
 
   const resultPage = () => {
-    setGameResult(true);
+    const screen = {
+      startScreen: false,
+      game: false,
+      statistic: true,
+    };
+    setGameScreen(screen);
+    if (isStatusMic) {
+      isMicOff(false)
+    }
   };
 
   const backToMain = () => {
-    setGameResult(false);
+    const screen = {
+      startScreen: false,
+      game: true,
+      statistic: false,
+    };
+    setGameScreen(screen);
+    if(!isStatusMic)  {
+      isMicOff(false)
+    }
+
     setActiveWordStatistic(null);
+  };
+
+  const redirectToGame = () => {
+    const screen = {
+      startScreen: false,
+      game: true,
+      statistic: false,
+    };
+    setGameScreen(screen);
   };
 
   return (
     <>
-      <div className={`speakIt ${gameResult ? 'invisible' : 'visible'}`}>
+      <div className={`speakIt startScreen ${gameScreen.startScreen ? 'visible' : 'invisible'}`}>
+        <Button primary type="button" onClick={redirectToGame}> Start game </Button>
+      </div>
+      <div className={`speakIt ${gameScreen.game ? 'visible' : 'invisible'}`}>
         <div className="speakIt-header">
           <Header as="h2" className="games-header">
             <Icon name="game" />
@@ -435,8 +484,8 @@ const SpeackIt = () => {
           </audio>
         )}
       </div>
-      <div className={`speakIt-result ${!gameResult ? 'invisible' : 'visible'}`}>
-        <div className="speakIt-progressbar" onClick={switchStage} role="button" tabIndex="0" onKeyDown={() => {}}>
+      <div className={`speakIt-result ${gameScreen.statistic ? 'visible' : 'invisible'}`}>
+        <div className="speakIt-progressbar" onClick={switchStage} role="presentation" >
           {buildProgressStep()}
         </div>
         <div className="resultpage">
@@ -455,7 +504,7 @@ const SpeackIt = () => {
           </div>
         </div>
         <div className="result-button__wrapper">
-          <Button primary onClick={restart}>Restart</Button>
+          <Button primary onClick={restart}>Start play again?</Button>
           <Button primary onClick={backToMain}>Back</Button>
         </div>
         <audio
