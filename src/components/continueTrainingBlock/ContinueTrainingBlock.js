@@ -7,37 +7,34 @@ import Button from '../button/Button';
 
 import './ContinueTrainingBlock.scss';
 
-const ContinueTrainingBlock = ({ completedWordsCount, cardsCount, isFullState }) => {
-  const button = isFullState && (
-  <Button
-    label="Continue"
-    name="light"
-  />
-  );
-
-  return (
-    <ContainerWithShadow
-      width="42%"
-      height="160px"
-      padding="0"
-    >
-      <div className="continue-training-block">
-        <div className="continue-training-block__item">
-          <h3>{`${completedWordsCount} out of ${cardsCount} words`}</h3>
-          <p>you have learned today</p>
+const ContinueTrainingBlock = ({ completedWordsCount, cardsCount, isFullState }) => (
+  <ContainerWithShadow
+    width="42%"
+    height="160px"
+    padding="0"
+  >
+    <div className="continue-training-block">
+      <div className="continue-training-block__item">
+        <h3>{`${completedWordsCount} out of ${cardsCount} words`}</h3>
+        <p>you have learned today</p>
+        {isFullState && (
           <Link to="/">
-            {button}
+            <Button
+              label="Continue"
+              name="light"
+              id="continue-training-btn"
+              clickHandler={() => {}}
+            />
           </Link>
-        </div>
-        <RoundProgressBar
-          value={completedWordsCount}
-          maxValue={cardsCount}
-        />
+        )}
       </div>
-    </ContainerWithShadow>
-
-  );
-};
+      <RoundProgressBar
+        value={completedWordsCount}
+        maxValue={cardsCount}
+      />
+    </div>
+  </ContainerWithShadow>
+);
 
 ContinueTrainingBlock.propTypes = {
   isFullState: PropTypes.bool,
