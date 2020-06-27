@@ -69,20 +69,22 @@ const SpeackIt = () => {
         getWordsPromises.push(getWords(gameOption.curStage, stage, true));
       }
       let newGameOption = {};
-      Promise.all(getWordsPromises).then((resps) => {
-        resps.forEach((resp, index) => {
-          const words = resp.data;
-          const stagesOption = {};
-          const items = shuffleArray(words).slice(words.length - gameOption.Words);
-          stagesOption[`stage${index}`] = items;
-          newGameOption.stagesOption = newGameOption.stagesOption || gameOption.stagesOption;
-          newGameOption = {
-            ...gameOption,
-            stagesOption: [...newGameOption.stagesOption, stagesOption],
-          };
+      Promise
+        .all(getWordsPromises)
+        .then((resps) => {
+          resps.forEach((resp, index) => {
+            const words = resp.data;
+            const stagesOption = {};
+            const items = shuffleArray(words).slice(words.length - gameOption.Words);
+            stagesOption[`stage${index}`] = items;
+            newGameOption.stagesOption = newGameOption.stagesOption || gameOption.stagesOption;
+            newGameOption = {
+              ...gameOption,
+              stagesOption: [...newGameOption.stagesOption, stagesOption],
+            };
+          });
+          setGameOption(newGameOption);
         });
-        setGameOption(newGameOption);
-      });
     };
 
     if (level !== null && Array.isArray(gameOption?.stagesOption) && !gameOption?.stagesOption.length) {
@@ -474,17 +476,19 @@ const SpeackIt = () => {
     <>
       <div className={`speakIt startScreen ${gameScreen.startScreen ? 'visible' : 'invisible'}`}>
         <ShadowContainer>
-          <div
-            className="speakIt-gamelevel"
-          >
+          <div className="speakIt-gamelevel">
             <RadioButton
               className="speakIt-level level-default"
               items={['easy', 'normal', 'hard']}
               onChange={setLevelType}
             />
           </div>
-
-          <Button label="Start game" clickHandler={redirectToGame} isDisabled={level === null}> </Button>
+          <Button
+            label="Start game"
+            id="speakit-start-btn"
+            clickHandler={redirectToGame}
+            isDisabled={level === null}
+          />
         </ShadowContainer>
       </div>
       <div className={`speakIt ${gameScreen.game ? 'visible' : 'invisible'}`}>
@@ -495,20 +499,43 @@ const SpeackIt = () => {
           </Header>
         </div>
         <div className="app-speakIt" />
-        <div className="speakIt-progressbar" onClick={switchStage} role="presentation">
+        <div
+          className="speakIt-progressbar"
+          onClick={switchStage}
+          role="presentation"
+        >
           {buildProgressStep()}
         </div>
         <div className="speakIt-image__wrapper">
-          <Image src={getImage()} size="medium" bordered alt="" />
+          <Image
+            src={getImage()}
+            size="medium"
+            bordered
+            alt=""
+          />
           {isImageDescription()}
         </div>
         <div className="speakIt-items">
           {buildWordEl()}
         </div>
         <div className="speakIt-panel">
-          <Button label="Restart" clickHandler={restart} />
-          <Button label={gameMode ? 'Learn' : 'Speak'} clickHandler={start} />
-          {gameMode ? <Button label="Results" clickHandler={resultPage} /> : null}
+          <Button
+            label="Restart"
+            id="speakit-restart-btn"
+            clickHandler={restart}
+          />
+          <Button
+            label={gameMode ? 'Learn' : 'Speak'}
+            id="speakit-gamemode-btn"
+            clickHandler={start}
+          />
+          {gameMode ? (
+            <Button
+              label="Results"
+              id="speakit-results-btn"
+              clickHandler={resultPage}
+            />
+          ) : null}
         </div>
         {gameMode ? null : (
           <audio
@@ -524,13 +551,9 @@ const SpeackIt = () => {
           {buildProgressStep()}
         </div>
         <div className="resultpage">
-
           <div className="results-container">
-
             { buildStatistic() }
-
             { buildStatistic(false) }
-
             <p className="results-right">
               Rights:
               <span className="right-num">0</span>
@@ -539,8 +562,16 @@ const SpeackIt = () => {
           </div>
         </div>
         <div className="result-button__wrapper">
-          <Button label="Start play again?" clickHandler={restart} />
-          <Button label="Back" clickHandler={backToMain} />
+          <Button
+            label="Start play again?"
+            id="speakit-again-btn"
+            clickHandler={restart}
+          />
+          <Button
+            label="Back"
+            id="speakit-back-btn"
+            clickHandler={backToMain}
+          />
         </div>
         <audio
           className="speakIt-results__audio"

@@ -1,0 +1,11 @@
+@import '../../../../styles/mixin.scss';
+
+@import '../../../../styles/variables.scss';
+
+.game-sprint {
+  width: 90%;
+  margin: auto;
+  padding: 30px 10px;
+
+  @include flex(row);
+}

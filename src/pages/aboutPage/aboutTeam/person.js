@@ -36,7 +36,12 @@ const Person = ({ personInfo }) => {
         <div className="link_github">
           { linkGitHub && (
           <a href={linkGitHub}>
-            <Button iconName="github" name="gitHubButton" label="" />
+            <Button
+              id={first}
+              iconName="github"
+              name="gitHubButton"
+              label=""
+            />
           </a>
           ) }
         </div>

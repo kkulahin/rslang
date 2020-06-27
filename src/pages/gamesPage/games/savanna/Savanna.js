@@ -122,6 +122,7 @@ const Savanna = () => {
     const gameplayWords = elements.map((e, index) => (
       <Button
         key={e}
+        id={`${e}-savanna-btn`}
         buttonClassName="word"
         clickHandler={checkAnswer}
         data-translate={isEmptyArr(cKitStage) ? null : cKitStage[index].wordTranslate}
@@ -308,6 +309,7 @@ timer ? null : (
     { timer ? null : (
       <Button
         label="start"
+        id="savanna-start-btn"
         name="check"
         buttonClassName="savanna-start"
         clickHandler={startPreloadTimer}
@@ -362,6 +364,7 @@ timer ? null : (
 
         <Button
           clickHandler={redirectToStart}
+          id="savanna-again-btn"
           label="Try again?"
           name="check"
         />
