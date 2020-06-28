@@ -2,39 +2,53 @@ import fetch from 'node-fetch';
 // import Word from './Word';
 import parameters from './parameters';
 import WordQueue from './WordQueue';
+import { getCookie } from '../../utils/cookie';
 
 export default class WordModel {
   /**
   * Model to work with a queue of words
-  * @param {Object} user
-  * @param {string} user.id
-  * @param {string} user.token
+  * @param {Object} settings
   */
-  constructor(user, settings) {
-    this.user = user;
+  constructor(settings) {
     this.settings = settings;
+    this.user = JSON.parse(getCookie('auth'));
+    console.log(this.user);
+    console.log(this.settings);
   }
 
   init = async () => {
     await this.getStatistics();
     if (!this.hasQueueForToday()) {
+      console.log("build queue");
       const userWords = await this.queryUserWords();
       const newWords = await this.queryNewWords();
       this.wordQueue = new WordQueue(this.settings);
       this.wordQueue.makeQueue(newWords, userWords);
+      this.updateStatistics();
     } else {
       this.wordQueue = new WordQueue(this.settings);
       const words = await this.getWordsFromSavedQueue();
-      this.wordQueue.usePredefinedQueue(this.statistics.todayQueue, words);
+      this.wordQueue.usePredefinedQueue(this.statistics.optional.todayQueue, words);
     }
+    // test
+    const words = this.wordQueue.queue.map((queueW) => ({
+      word: queueW.word.definition.word,
+      phase: queueW.word.repetitionPhase,
+      isEducation: queueW.isEducation,
+      nextTime: queueW.nextTime,
+    }));
+    console.log(words);
   }
 
   hasQueueForToday = () => {
-    const { todayQueue } = this.statistics;
+    const { todayQueue } = this.statistics.optional;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todaySeconds = Math.ceil(today.getTime() / 1000);
     if (todayQueue) {
+      if (todayQueue.queue.length === 0) {
+        return false;
+      }
       if (todayQueue.date === todaySeconds) {
         return true;
       }
@@ -47,7 +61,7 @@ export default class WordModel {
   }
 
   makeRequest = (method, table, body, params = {}) => {
-    const url = new URL(`https://afternoon-falls-25894.herokuapp.com/users/${this.user.id}/${table}`);
+    const url = new URL(`https://afternoon-falls-25894.herokuapp.com/users/${this.user.userId}/${table}`);
     Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
     const request = {
       url,
@@ -93,12 +107,17 @@ export default class WordModel {
     } else {
       const data = await response.json();
       this.statistics = data;
+      delete this.statistics.id;
     }
   };
 
   updateStatistics = async () => {
     const statistics = { ...this.statistics };
-    this.statistics.todayQueue = this.wordQueue.getQueueToSave();
+    if (!this.statistics.optional) {
+      this.statistics.optional = {};
+    }
+    this.statistics.optional.todayQueue = this.wordQueue.getQueueToSave();
+    console.log(JSON.stringify(this.statistics, null, 2));
     const { url, options } = this.makeRequest(
       'PUT',
       'statistics',
@@ -107,7 +126,7 @@ export default class WordModel {
     const response = await fetch(url, options);
     if (!response.ok) {
       throw new Error(
-        `PUT Statisctics failed with ${response.status} ${response.statusText}`,
+        `PUT Statistics failed with ${response.status} ${response.statusText}`,
       );
     }
     const data = await response.json();
@@ -165,7 +184,7 @@ export default class WordModel {
     return this.queryWords(params);
   }
 
-  gueryNewWords = async () => {
+  queryNewWords = async () => {
     const params = {
       wordsPerPage: this.settings.MAX_NEW_WORDS,
       filter: JSON.stringify({ $or: [{ userWord: null }] }),
@@ -174,7 +193,7 @@ export default class WordModel {
   }
 
   getWordsFromSavedQueue = async () => {
-    const words = this.settings.todayQueue.queue.map((qWord) => ({ word: qWord.w }));
+    const words = this.statistics.optional.todayQueue.queue.map((qWord) => ({ word: qWord.w }));
     const filter = {
       $or: words,
     };

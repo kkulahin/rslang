@@ -2,22 +2,14 @@ import WordModel from './WordModel';
 
 export default class WordController {
   constructor() {
-    this.model = new WordModel({});
+    this.model = new WordModel({MAX_WORDS: 10, MAX_NEW_WORDS: 3});
   }
 
-  init = async () => {
-    return this.model.init();
-  }
+  init = async () => this.model.init();
 
-  updateStatistics = async () => {
-    return this.model.updateStatistics();
-  }
+  updateStatistics = async () => this.model.updateStatistics();
 
-  updateWord = async (word) => {
-    return this.model.updateWord(word);
-  }
+  updateWord = async (word) => this.model.updateWord(word);
 
-  endQueue = async () => {
-    return this.endQueue();
-  }
+  endQueue = async () => this.endQueue();
 }

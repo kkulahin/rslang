@@ -35,6 +35,7 @@ export default class Word {
     this.totalMistakes = totalMistakes;
     this.totalRepetition = totalRepetition;
     this.wordQueue = wordQueue;
+    this.userTimezoneOffset = (new Date()).getTimezoneOffset() * 60000;
   }
 
   setTime = () => {
@@ -170,7 +171,7 @@ export default class Word {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (nextTime - today <= 0) {
-      return [nextTime];
+      return [nextTime.getTime()];
     }
     return [];
   }
@@ -186,6 +187,6 @@ export default class Word {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     const nextDate = this.getNextRepetitionTimeFull();
-    return nextDate - currentDate <= 0;
+    return nextDate - currentDate <= 0 ? nextDate.getTime() : null;
   }
 }

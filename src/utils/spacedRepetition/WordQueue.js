@@ -2,7 +2,7 @@ import Word from './Word';
 import WordDefinition from './WordDefinition';
 
 export default class WordQueue {
-  constructor({ settings }) {
+  constructor(settings) {
     /** @type {[Word]} */
     this.words = [];
     this.queue = [];
@@ -22,16 +22,17 @@ export default class WordQueue {
     if (newWords.length > this.settings.MAX_NEW_WORDS) {
       newWords.splice(this.settings.MAX_NEW_WORDS, newWords.length - this.settings.MAX_NEW_WORDS);
     }
-    newWords.forEach((word) => this.words.push(new Word(new WordDefinition(word), {})));
+    newWords.forEach((word) => this.words.push(new Word(this, new WordDefinition(word), {})));
     const pontentialWords = [];
     const potentialQueue = [];
     userWords.forEach((word) => {
       const wordConfigs = word.userWord && word.userWord.optional ? word.userWord.optional : {};
-      pontentialWords.push(new Word(new WordDefinition(word), wordConfigs));
+      pontentialWords.push(new Word(this, new WordDefinition(word), wordConfigs));
     });
     WordQueue.fillQueue(pontentialWords, potentialQueue);
     WordQueue.fillQueue(this.words, this.queue);
     this.filterUserWordsByCount(potentialQueue);
+    console.log(this.words);
     this.words.forEach((w) => w.shiftMistakes());
     this.queueLength = this.queue.length;
   }
@@ -49,7 +50,7 @@ export default class WordQueue {
     queueSettings.queue.forEach((qWord) => {
       const [queueWord] = words.filter((word) => qWord.w === word.word);
       const wordConfigs = queueWord.userWord && queueWord.userWord.optional ? queueWord.userWord.optional : {};
-      this.queue.push({ word: new Word(new WordDefinition(queueWord), wordConfigs), isEducation: qWord.isEd });
+      this.queue.push({ word: new Word(this, new WordDefinition(queueWord), wordConfigs), isEducation: qWord.isEd });
     });
   };
 
@@ -74,7 +75,7 @@ export default class WordQueue {
         userWords.push(queueWord.word);
       }
     });
-    userWords.length = maxCount;
+    userWords.length = userWords.length < maxCount ? userWords.length : maxCount;
     const queueToAdd = potentialQueue.filter((queueWord) => userWords.includes(queueWord.word));
     this.queue.push(...queueToAdd);
     this.words.push(...userWords);
