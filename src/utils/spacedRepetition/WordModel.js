@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 // import Word from './Word';
 import parameters from './parameters';
 import WordQueue from './WordQueue';
-import { getCookie } from '../../utils/cookie';
+import { getCookie } from '../cookie';
 
 export default class WordModel {
   /**
@@ -19,7 +19,7 @@ export default class WordModel {
   init = async () => {
     await this.getStatistics();
     if (!this.hasQueueForToday()) {
-      console.log("build queue");
+      console.log('build queue');
       const userWords = await this.queryUserWords();
       const newWords = await this.queryNewWords();
       this.wordQueue = new WordQueue(this.settings);
