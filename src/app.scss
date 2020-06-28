@@ -4,7 +4,9 @@
 
 .app-main {
     display: flex;
+    flex-direction: column;
     flex: 1 90%;
-    justify-content: center;
     background: #2C2F33
 }
+
+

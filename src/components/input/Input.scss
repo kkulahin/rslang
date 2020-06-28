@@ -1,68 +1,51 @@
-$opacity-inactive: 0.25;
-$opacity-active: 1;
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
 
 // input
 $element-height: 70px;
 $element-width: 100%;
-$element-padding: 20px 20px 20px 60px;
-$element-border-radius: 24px;
 
-$element-font-size: 22px;
+$element-border-radius: $container-border-radius;
 
-$element-color-text: #687891;
-$element-color-background: #EEEEEE;
+$element-color-text: rgb(104, 120, 145);
 
 $shadow-first-setup: inset 6px 6px 18px;
-$shadow-first-color: rgba(136, 160, 183, 0.25);
 $shadow-second-setup: inset -6px -6px 18px;
+
+$shadow-first-color: rgba(136, 160, 183, 0.25);
 $shadow-second-color: rgba(255, 255, 255, 0.5);
 $shadow-valid-color: rgb(82, 247, 6);
 $shadow-invalid-color: rgb(247, 6, 6);
 
-$element-hover-color: rgba(#EEEEEE, 0.5);
-$transition-duration: 0.5s;
-
-// label
-$label-margin: 0 0 10px 25px;
-$label-font-size: 0.8em;
+$opacity-inactive: 0.25;
 
 // icon
-$icon-height: 25px;
 $icon-width: 25px;
-$icon-position-left: 25px;
-
-@mixin font ($size, $height, $weight, $style: normal) {
-  font-size: $size;
-  line-height: $height;
-  font-weight: $weight;
-  font-style: $style;
-}
+$icon-position-left: $icon-width;
 
 .input__container {
   position: relative;
-
-  display: flex;
-  flex-direction: column;
-
   font: inherit;
   color: $element-color-text;
 
-  @include font ($size: #{$element-font-size}, $height: 1, $weight: 500);
+  @include flex(column);
+
+  @include font (2.2rem, 1, 500);
 }
 
 .input {
-  order: 2;
-
-  width: $element-width;
-  height: $element-height;
-  padding: $element-padding;
-
+  padding: 20px 20px 20px 60px;
+  font-family: inherit;
+  background-color: $main-color;
   border: none;
   border-radius: $element-border-radius;
   box-shadow: $shadow-first-setup $shadow-first-color, $shadow-second-setup $shadow-second-color;
-  background-color: $element-color-background;
 
-  transition: background-color $transition-duration;
+  transition: background-color 0.5s;
+  order: 2;
+
+  @include size($element-width, $element-height);
 
   &::-ms-input-placeholder {
     color: $element-color-text;
@@ -75,7 +58,7 @@ $icon-position-left: 25px;
   }
 
   &:hover {
-    background-color: $element-hover-color;
+    background-color: rgba(rgb(238, 238, 238), 0.5);
   }
 
   &:focus {
@@ -94,8 +77,8 @@ $icon-position-left: 25px;
 .input__label {
   order: 1;
 
-  margin: $label-margin;
-  font-size: $label-font-size;
+  margin: 0 0 10px 25px;
+  font-size: 0.8em;
 
   color: inherit;
 
@@ -107,27 +90,27 @@ $icon-position-left: 25px;
 }
 
 .input__icon {
-  order: 3;
 
   position: absolute;
+  bottom: calc(#{$element-height} * 0.5 - #{$icon-width} * 0.5);
   left: $icon-position-left;
-  bottom: calc(#{$element-height} * 0.5 - #{$icon-height} * 0.5);
 
   display: block;
-  width: $icon-width;
-  height: $icon-height;
+
+  opacity: $opacity-inactive;
+  order: 3;
 
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
 
-  opacity: $opacity-inactive;
-
   user-select: none;
   pointer-events: none;
+
+  @include size($icon-width);
 }
 
 .input:focus ~ .input__icon,
 .input:focus ~ .input__label {
-  opacity: $opacity-active;
+  opacity: 1;
 }

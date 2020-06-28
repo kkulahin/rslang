@@ -3,22 +3,23 @@ import React from 'react';
 import {
   BrowserRouter as Router, Route, Switch,
 } from 'react-router-dom';
-import History from './utils/history';
-import Home from './pages/Home';
-import NotFound from './pages/NotFound';
-import LoginPage from './pages/loginPage/LoginPage';
-import Logout from './pages/logoutPage/Logout';
-import SignupPage from './pages/signupPage/SignupPage';
-import Dictionary from './pages/Dictionary';
-import Statistic from './pages/Statistic';
-import Promo from './pages/Promo';
-import About from './pages/About';
-import Settings from './pages/Settings';
+import History from '../../utils/history';
+import Home from '../Home';
+import NotFound from '../NotFound';
+import LoginPage from '../loginPage/LoginPage';
+import Logout from '../logoutPage/Logout';
+import SignupPage from '../signupPage/SignupPage';
+import Dictionary from '../Dictionary';
+import Statistic from '../statistics/Statistic';
+import Promo from '../promoPage/Promo';
+import About from '../About';
+import Settings from '../Settings';
+import GamesPage from '../gamesPage/GamesPage';
+import Header from '../../components/header/Header';
+import GreetingWrapper from '../../components/greetingWrapper/GreetingWrapper';
+import WordController from '../../utils/spacedRepetition/WordConrtoller';
 
-import Header from './components/header/Header';
-
-import './app.scss';
-import WordController from './utils/spacedRepetition/WordConrtoller';
+import './App.scss';
 
 const App = () => {
   const wordController = new WordController();
@@ -28,6 +29,7 @@ const App = () => {
       <div className="app-wrapper">
         <Header />
         <div className="app-main">
+          <GreetingWrapper />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/signin" component={LoginPage} />
@@ -38,6 +40,7 @@ const App = () => {
             <Route path="/settings" component={Settings} />
             <Route path="/promo" component={Promo} />
             <Route path="/about" component={About} />
+            <Route path="/games" component={GamesPage} />
             <Route component={NotFound} />
           </Switch>
         </div>

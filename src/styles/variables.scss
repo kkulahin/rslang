@@ -1,0 +1,14 @@
+$main-color: rgb(255, 255, 255);
+$hover-color: rgba(37, 206, 222, 0.5);
+$enabled-color: rgb(37, 206, 222);
+$box-shadow-first-color: rgb(0, 0, 0);
+$box-shadow-second-color:rgb(59, 68, 81);
+$background-color: rgb(44, 47, 51);
+
+$container-box-shadow: 6px 6px 18px $box-shadow-first-color, 
+                       -6px -6px 18px $box-shadow-second-color;
+$container-box-shadow-inset: inset 6px 6px 18px $box-shadow-first-color, 
+                             inset -6px -6px 18px $box-shadow-second-color;
+
+$container-border-radius: 25px;
+

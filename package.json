@@ -8,7 +8,8 @@
     "build": "webpack --env production",
     "stylelint": "npx stylelint ./src/*.scss",
     "stylefix": "npx stylelint --fix *.scss",
-    "test": "jest test/"
+    "test": "jest test/",
+    "eslint": "npx eslint ./src/**.*js --fix"
   },
   "keywords": [],
   "author": "",
@@ -55,11 +56,16 @@
     "node-fetch": "^2.6.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
+    "react-addons-update": "^15.6.2",
     "react-dom": "^16.13.1",
+    "react-lorem-ipsum": "^1.4.4",
     "react-router-dom": "^5.2.0",
+    "react-speech-recognition": "^2.0.4",
+    "react-step-progress-bar": "^1.0.3",
     "sass": "^1.26.8",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2"
+    "semantic-ui-react": "^0.88.2",
+    "start": "^5.1.0"
   },
   "husky": {
     "hooks": {

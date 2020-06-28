@@ -1,47 +1,48 @@
-$background-color: #2C2F33;
-$background-color-light: #25CEDE;
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
 
 .button {
   display: flex;
   align-items: center;
   padding: 10px 20px;
+  font-family: inherit;
+  color: $main-color;
 
   background-color: $background-color;
-  color: #ffffff;
-  font-weight: bold;
-
-  box-shadow: 5px 5px 15px #000000, 
-            -5px -5px 15px #3B4451;
-  border-radius: 111.005px;
 
   border: none;
+  border-radius: 110px;
+
+  box-shadow: 5px 5px 15px $box-shadow-first-color, 
+              -5px -5px 15px $box-shadow-second-color;
   outline: none;
-  cursor: pointer;
 
   transition: 0.3s linear;
+  cursor: pointer;
+  font-weight: bold;
 
-  &-light {
-    background-color: $background-color-light;
+  &--light {
+    background-color: $enabled-color;
+
+    &:hover {
+      color: $main-color !important;
+    }
   }
-  
 
-  &-check {
-    color: $background-color-light;
+  &--check {
+    color: $enabled-color;
   }
 
-  &-press {
+  &--press {
+    background-color: $background-color;
+    border-radius: 125px;
+    box-shadow: $container-box-shadow-inset;
     transition: 0.5s linear;
-    background: #2C2F33;
-    box-shadow: inset 6.22302px 6.22302px 18.6691px #000000, inset -6.22302px -6.22302px 18.6691px #3B4451;
-    border-radius: 124.46px;
   }
 
   &:hover {
-    color: rgba(37, 206, 222, 0.5);
-  }
-
-  &-light:hover {
-    color: #ffffff !important;
+    color: $hover-color;
   }
 
   &:active {

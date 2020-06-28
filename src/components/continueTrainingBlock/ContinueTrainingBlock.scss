@@ -1,36 +1,19 @@
-$element-size: 30px;
-$background-color: #2C2F33;
-$border-radius: 25px;
-$text-color: #FFFFFF;
-$main-font-size: 16px;
-
-@mixin flex($flex-direction, $align-item: center, $justify-content: center) {
-  display: flex;
-  justify-content: $justify-content;
-  align-items: $align-item;
-}
-
-@mixin size($width, $height: $width) {
-  width: $width;
-  height: $height;
-}
+@import '../../styles/mixin.scss';
 
 .continue-training-block {
-
-  @include flex(row, center, space-around);
   width: 100%;
-  cursor: default;
   user-select: none;
 
-  .continue-training-block__item {
+  @include flex(row, center, space-around);
+
+  &__item {
     width: 240px;
-    font-size: 13px;
+    font-size: 1.5rem;
     line-height: 1.15em;
     text-align: center;
 
     h3 {
-      margin: 0;
-      font-size: ($main-font-size * 1.5);
+      font-size: 2.4rem;
       line-height: 1.6em;
     }
 
@@ -39,9 +22,9 @@ $main-font-size: 16px;
     }
 
     .button {
+      width: 100%;
 
       @include flex(row, center, center);
-      width: 100%;
     }
   }
 }
