@@ -95,7 +95,7 @@ const LoginForm = () => {
           msg: 'User get successfully',
           status: true,
         };
-        const response = await responseFromServer(`${SchoolURL}/signin`, getUserNotification, 'POST', data);
+        const response = await responseFromServer(`${SchoolURL}/signin`, null, getUserNotification, 'POST', data);
         setUserNotification(response.notification);
         if (response.notification.status) {
           setCookie('auth', JSON.stringify(response.data), coockieLifeCyrcle);
@@ -107,6 +107,7 @@ const LoginForm = () => {
           msg: 'Incorrect e-mail or password',
           status: false,
         };
+        console.log(error);
         setUserNotification(userAuthMsg);
         throw new Error('invalid request');
       }

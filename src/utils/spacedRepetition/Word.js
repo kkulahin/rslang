@@ -79,7 +79,7 @@ export default class Word {
 
   getNewPhases = () => parameters.phase.filter((e, i) => i < 4);
 
-  getDifficulty = () => parameters.difficulty[this.difficulty].name
+  getDifficulty = () => parameters.difficulty[this.difficulty].name;
 
   /**
    * set difficulty to predefined value

@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import parameters from './parameters';
 import WordQueue from './WordQueue';
 import { getCookie } from '../cookie';
+import wordQueueSubject from '../observers/WordQueueSubject';
 
 export default class WordModel {
   /**
@@ -30,6 +31,9 @@ export default class WordModel {
       const words = await this.getWordsFromSavedQueue();
       this.wordQueue.usePredefinedQueue(this.statistics.optional.todayQueue, words);
     }
+
+    wordQueueSubject.notify(this.wordQueue);
+
     // test
     const words = this.wordQueue.queue.map((queueW) => ({
       word: queueW.word.definition.word,

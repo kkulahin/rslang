@@ -31,7 +31,7 @@ const App = () => {
         <div className="app-main">
           <GreetingWrapper />
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" render={() => <Home wordController={wordController} />} />
             <Route path="/signin" component={LoginPage} />
             <Route path="/signup" component={SignupPage} />
             <Route path="/logout" component={Logout} />

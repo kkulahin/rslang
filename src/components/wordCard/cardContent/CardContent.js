@@ -7,6 +7,7 @@ import HelpImage from '../helpImage/HelpImage';
 import HelpText from '../helpText/HelpText';
 import WordInput from '../wordInput/WordInput';
 import Button from '../button/Button';
+import Word from '../../../utils/spacedRepetition/Word';
 
 const CardContent = (props) => {
 	const {
@@ -14,7 +15,8 @@ const CardContent = (props) => {
 		helpSettings, isPrevWord, word, isWordInput, isCorrect, isShowBtnClick,
 		onCardBtnClick, onWordComplexityBtnClick,
 	} = props;
-	const { complexity, isHard } = word;
+	const complexity = word.getDifficulty();
+	const isHard = false;
 
 	const ShowAnswerBtn = (
 		<Button
@@ -73,11 +75,11 @@ const CardContent = (props) => {
 			<div className='help-content'>
 				<HelpImage
 					helpSettings={helpSettings}
-					word={word}
+					word={word.definition}
 				/>
 				<HelpText
 					helpSettings={helpSettings}
-					word={word}
+					word={word.definition}
 					isFullState={isWordInput || isPrevWord}
 				/>
 			</div>
@@ -105,11 +107,7 @@ CardContent.propTypes = {
 	isPrevWord: PropTypes.bool.isRequired,
 	onCardBtnClick: PropTypes.func.isRequired,
 	helpSettings: PropTypes.object.isRequired,
-	word: PropTypes.object.isRequired,
-	word: PropTypes.shape({
-		complexity: PropTypes.string.isRequired,
-		isHard: PropTypes.bool.isRequired,
-	}),
+	word: PropTypes.instanceOf(Word).isRequired,
 	settings: PropTypes.shape({
 		isShowAnswerBtn: PropTypes.bool.isRequired,
 		isDeleteBtn: PropTypes.bool.isRequired,

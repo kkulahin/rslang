@@ -11,5 +11,7 @@ export default class WordController {
 
   updateWord = async (word) => this.model.updateWord(word);
 
+  getQueue = () => this.model.wordQueue;
+
   endQueue = async () => this.endQueue();
 }

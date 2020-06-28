@@ -30,6 +30,7 @@ const responseFromServer = async (url,
       ...params,
       body: JSON.stringify(userData),
     };
+    console.log(params);
   }
   const response = await fetch(url, params);
 
