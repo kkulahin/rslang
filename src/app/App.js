@@ -18,6 +18,7 @@ import Settings from '../pages/settingsPage/Settings';
 
 import Header from '../components/header/Header';
 import GreetingWrapper from '../components/greetingWrapper/GreetingWrapper';
+import WordController from '../utils/spacedRepetition/WordConrtoller';
 
 import appDefaultSettings from '../config/defaultSettings';
 
@@ -26,6 +27,8 @@ import './App.scss';
 const appSettings = JSON.parse(localStorage.getItem('userSettings')) || appDefaultSettings;
 
 const App = () => {
+  const wordController = new WordController();
+  wordController.init();
   const [settings, setSettings] = useState(appSettings);
 
   useEffect(() => localStorage.setItem('userSettings', JSON.stringify(settings)));
@@ -42,7 +45,7 @@ const App = () => {
             cardsCount={cardsCount.value}
           />
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" render={() => <Home wordController={wordController} />} />
             <Route path="/signin" component={LoginPage} />
             <Route path="/signup" component={SignupPage} />
             <Route path="/logout" component={Logout} />
