@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../button/Button';
+import Button from '../../../components/button/Button';
 
 const Person = ({ personInfo }) => {
   const {
