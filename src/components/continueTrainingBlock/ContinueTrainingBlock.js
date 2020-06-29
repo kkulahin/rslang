@@ -23,7 +23,6 @@ const ContinueTrainingBlock = ({ completedWordsCount, cardsCount, isFullState })
               label="Continue"
               name="light"
               id="continue-training-btn"
-              clickHandler={() => {}}
             />
           </Link>
         )}
