@@ -99,24 +99,35 @@ const Home = ({ wordController }) => {
   });
 
   const handleNextBtnClick = () => {
-    wordQueue.changeWord();
-    setWord(wordQueue.getCurrentWord());
+    setWord(wordQueue.changeWord());
+  };
+
+  const handlePrevBtnClick = () => {
+    setWord(wordQueue.getPreviousWord());
   };
 
   if (!word) {
-    return (<div>Loading</div>);
+    return (<div>Loading...</div>);
   }
   return (
     <div>
       <WordCard
+        currentWord={word.word}
+        wordQueue={wordQueue}
         helpSettings={initHelpSettings}
         settings={initSettings}
-        currentWord={word.word}
+        onAgainBtnClick={wordQueue.setAgain}
         onErrorAnswer={() => console.log('------ error answer ------')}
         onHardBtnClick={() => console.log('------ hard btn click ------')}
         onComplexityBtnClick={(id) => console.log(`------ complexity btn click ${id} ------`)}
         onDeleteBtnClick={() => console.log('------ delete btn click ------')}
         onNextBtnClick={handleNextBtnClick}
+        onPrevBtnClick={handlePrevBtnClick}
+        isEducation={word.isEducation}
+        isAnswered={wordQueue.isCurrentWordAnswered()}
+        onWordAnswered={wordQueue.setWordAnswered}
+        onWordMistaken={wordQueue.setWordMistaken}
+        hasPrevious={wordQueue.hasPreviousWord()}
       />
     </div>
   );

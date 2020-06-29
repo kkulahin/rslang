@@ -7,19 +7,33 @@ import CardContent from './cardContent/CardContent';
 
 import './WordCard.scss';
 import Word from '../../utils/spacedRepetition/Word';
+import WordQueue from '../../utils/spacedRepetition/WordQueue';
 import { urlToAssets } from '../../constants/urls';
 
 const checkCorrect = ({ value, word }) => value.toLowerCase() === word.toLowerCase();
 
+/**
+ *
+ * @param {Object} params
+ * @param {WordQueue} params.wordQueue
+ */
 const WordCard = ({
+  wordQueue,
   helpSettings,
   settings,
   currentWord,
   onErrorAnswer,
+  onAgainBtnClick,
   onHardBtnClick,
   onComplexityBtnClick,
   onDeleteBtnClick,
   onNextBtnClick,
+  onPrevBtnClick,
+  isAnswered,
+  isEducation,
+  onWordAnswered,
+  onWordMistaken,
+  hasPrevious,
 }) => {
   const [isWordInput, setIsWordInput] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -64,19 +78,23 @@ const WordCard = ({
     setIsWordInput(true);
     inputRef.current.blur();
 
-    isCorrectAnswer
-      ? setIsCorrect(true)
-      : onErrorAnswer();
+    if (isCorrectAnswer) {
+      setIsCorrect(true);
+    } else {
+      onErrorAnswer();
+    }
   };
 
-  const getNextWord = () => {
-    console.log('----- get next word ----');
-
+  const resetWord = () => {
     setIsWordInput(false);
     setIsCorrect(false);
     setIsShowBtnClick(false);
     setValue('');
+  };
 
+  const getNextWord = () => {
+    console.log('----- get next word ----');
+    resetWord();
     onNextBtnClick();
   };
 
@@ -105,31 +123,24 @@ const WordCard = ({
     setValue(evt.target.value);
   };
 
-  const handleNavigateClick = ({ id }) => {
-    if (id === 'next') {
-      if (isPrevWord) {
-        setIsPrevWord(false);
-        return;
-      }
+  const handleNavigatePrevClick = () => {
+    resetWord();
+    onPrevBtnClick();
+  };
 
-      if (isCorrect || isShowBtnClick) {
-        getNextWord();
-        return;
-      }
-
-      handleAnswer(checkCorrect({ value, word }));
+  const handleNavigateNextClick = () => {
+    if (isCorrect || isShowBtnClick || isAnswered) {
+      getNextWord();
+      return;
     }
 
-    if (id === 'prev') {
-      setIsWordInput(false);
-      setIsPrevWord(true);
-    }
+    handleAnswer(checkCorrect({ value, word }));
   };
 
   const handleInputEnter = (evt) => {
     if (evt.key === 'Enter') {
-      const { value } = evt.target;
-      handleAnswer(checkCorrect({ value, word }));
+      const { value: val } = evt.target;
+      handleAnswer(checkCorrect({ value: val, word }));
     }
   };
 
@@ -183,23 +194,35 @@ const WordCard = ({
     isCorrect,
     isPrevWord,
   };
-
   return (
     <div className="card-unit">
       <div className="card__container">
         <NavigateBtn
           classes="prev"
           id="prev"
-          onClick={handleNavigateClick}
-          isInvisible
+          onClick={handleNavigatePrevClick}
+          isInvisible={!hasPrevious}
           isDisabled={isCorrect || isShowBtnClick}
         />
         <ContainerWithShadow padding="20px">
           <CardContent
-            {...cardContentProps}
+            helpSettings={helpSettings}
+            settings={settings}
+            word={currentWord}
+            onInputEnter={handleInputEnter}
+            onInputFocus={handleInputFocus}
+            onInputChange={handleInputChange}
+            onCardBtnClick={handleCardBtnClick}
+            onWordComplexityBtnClick={handleWordComplexityBtnClick}
+            inputRef={inputRef}
+            value={value}
+            isShowBtnClick={isShowBtnClick}
+            isWordInput={isWordInput}
+            isCorrect={isCorrect}
+            isPrevWord={isAnswered}
           />
         </ContainerWithShadow>
-        <NavigateBtn classes="next" id="next" onClick={handleNavigateClick} />
+        <NavigateBtn classes="next" id="next" onClick={handleNavigateNextClick} />
         <audio
           ref={audioRef}
           src={tracks[0]}
@@ -215,6 +238,7 @@ const WordCard = ({
 export default WordCard;
 
 WordCard.propTypes = {
+  wordQueue: PropTypes.instanceOf(WordQueue).isRequired,
   currentWord: PropTypes.instanceOf(Word).isRequired,
   settings: PropTypes.shape({
     isAudioAuto: PropTypes.bool.isRequired,
@@ -224,5 +248,14 @@ WordCard.propTypes = {
     isTextMeaningShow: PropTypes.bool.isRequired,
   }).isRequired,
   onErrorAnswer: PropTypes.func.isRequired,
+  onAgainBtnClick: PropTypes.func.isRequired,
+  onComplexityBtnClick: PropTypes.func.isRequired,
+  onDeleteBtnClick: PropTypes.func.isRequired,
   onNextBtnClick: PropTypes.func.isRequired,
+  onPrevBtnClick: PropTypes.func.isRequired,
+  isEducation: PropTypes.bool.isRequired,
+  isAnswered: PropTypes.bool.isRequired,
+  onWordAnswered: PropTypes.func.isRequired,
+  onWordMistaken: PropTypes.func.isRequired,
+  hasPrevious: PropTypes.bool.isRequired,
 };

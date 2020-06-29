@@ -210,7 +210,7 @@ export default class WordModel {
 
   endQueue = async () => {
     this.wordQueue.endQueue();
-    await Promise.all(this.wordQueue.getWordsToSave().forEach((word) => this.updateWord(word)));
+    await Promise.all(this.wordQueue.getWords().forEach((word) => this.updateWord(word)));
     await this.updateStatistics();
   }
 }

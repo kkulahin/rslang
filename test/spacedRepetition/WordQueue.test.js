@@ -127,7 +127,7 @@ describe('methods', () => {
 describe('new queue', () => {
   test('should be empty', () => {
     const wQueue = new WordQueue({});
-    expect(wQueue.getWordsToSave().length).toBe(0);
+    expect(wQueue.getWords().length).toBe(0);
     expect(wQueue.getQueueToSave().length).toBe(0);
     expect(wQueue.getLength()).toBe(0);
     expect(wQueue.getCurrentLength()).toBe(0);
