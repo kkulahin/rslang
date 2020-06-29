@@ -7,6 +7,7 @@ import CardContent from './cardContent/CardContent';
 
 import './WordCard.scss';
 import Word from '../../utils/spacedRepetition/Word';
+import { urlToAssets } from '../../constants/urls';
 
 const checkCorrect = ({ value, word }) => value.toLowerCase() === word.toLowerCase();
 
@@ -34,17 +35,26 @@ const WordCard = ({
 
   const {
     word, audio, audioExample, audioMeaning,
-  } = currentWord;
+  } = currentWord.definition;
 
   let isAudioSrcLoading = false;
   let currentTruck = 0;
-  const tracks = [audio];
+  const tracks = [urlToAssets + audio];
   if (isTextExampleShow) {
-    tracks.push(audioExample);
+    tracks.push(urlToAssets + audioExample);
   }
   if (isTextMeaningShow) {
-    tracks.push(audioMeaning);
+    tracks.push(urlToAssets + audioMeaning);
   }
+
+  const audioPlay = () => {
+    if (currentTruck !== 0) {
+      audioRef.current.pause();
+      currentTruck = 0;
+      audioRef.current.src = tracks[currentTruck];
+    }
+    audioRef.current.play();
+  };
 
   const handleAnswer = (isCorrectAnswer) => {
     if (isAudioAuto) {
@@ -68,15 +78,6 @@ const WordCard = ({
     setValue('');
 
     onNextBtnClick();
-  };
-
-  const audioPlay = () => {
-    if (currentTruck !== 0) {
-      audioRef.current.pause();
-      currentTruck = 0;
-      audioRef.current.src = tracks[currentTruck];
-    }
-    audioRef.current.play();
   };
 
   const onAudioEnded = () => {
@@ -190,7 +191,7 @@ const WordCard = ({
           classes="prev"
           id="prev"
           onClick={handleNavigateClick}
-          isInvisible={true}
+          isInvisible
           isDisabled={isCorrect || isShowBtnClick}
         />
         <ContainerWithShadow padding="20px">

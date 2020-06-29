@@ -30,7 +30,7 @@ const getFormattedWordOnError = (errorWord, word) => {
 };
 
 const WordInput = ({
-  word: { word },
+  word: { definition: { word } },
   onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect, isPrevWord,
 }) => {
   const currentValue = isWordInput
