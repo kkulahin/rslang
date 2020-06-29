@@ -73,31 +73,23 @@ describe('static methods', () => {
 describe('methods', () => {
   test('mark word as completed', () => {
     const wQueue = new WordQueue({});
-    const setTimeSpy = jest.fn(() => undefined);
-    Word.mockImplementationOnce(() => ({
-      setTime: setTimeSpy,
-    }));
     const word = new Word(wQueue, null, {});
     wQueue.queue.push({ word });
     wQueue.changeWord();
-    expect(setTimeSpy).toHaveBeenCalledTimes(1);
-    expect(wQueue.queue.length).toBe(0);
+    expect(wQueue.getCurrentLength()).toBe(0);
   });
   test('mark word as mistaken', () => {
     const wQueue = new WordQueue({});
-    const setTimeSpy = jest.fn(() => undefined);
     const setMistakeSpy = jest.fn(() => undefined);
     Word.mockImplementationOnce(() => ({
-      setTime: setTimeSpy,
       setMistake: setMistakeSpy,
     }));
     const word = new Word(wQueue, null, {});
     wQueue.queue.push({ word });
-    wQueue.queueLength = 1;
     wQueue.setWordMistaken();
+    wQueue.changeWord();
     expect(setMistakeSpy).toHaveBeenCalledTimes(1);
-    expect(setTimeSpy).toHaveBeenCalledTimes(1);
-    expect(wQueue.queue.length).toBe(1);
+    expect(wQueue.getCurrentLength()).toBe(1);
     expect(wQueue.getLength()).toBe(2);
   });
   test('next word should be undefined when queue is empty', () => {
@@ -111,7 +103,7 @@ describe('methods', () => {
     expect(wQueue.getCurrentWord().word instanceof Word).toBeTruthy();
   });
   test('only top N words should be filtered', () => {
-    const wQueue = new WordQueue({ settings: { MAX_WORDS: 10, MAX_NEW_WORDS: 5 } });
+    const wQueue = new WordQueue({ MAX_WORDS: 10, MAX_NEW_WORDS: 5 });
     const words = [];
     for (let i = 0; i < 10; i += 1) {
       words.push(new Word(wQueue, null, {}));
@@ -128,12 +120,12 @@ describe('new queue', () => {
   test('should be empty', () => {
     const wQueue = new WordQueue({});
     expect(wQueue.getWords().length).toBe(0);
-    expect(wQueue.getQueueToSave().length).toBe(0);
+    expect(wQueue.getQueueToSave().queue.length).toBe(0);
     expect(wQueue.getLength()).toBe(0);
     expect(wQueue.getCurrentLength()).toBe(0);
   });
   test('should be filled', () => {
-    const wQueue = new WordQueue({ settings: { MAX_WORDS: 10, MAX_NEW_WORDS: 5 } });
+    const wQueue = new WordQueue({ MAX_WORDS: 10, MAX_NEW_WORDS: 5 });
     const newWords = [];
     const userWords = [];
     for (let i = 0; i < 10; i += 1) {
@@ -161,15 +153,16 @@ describe('new queue', () => {
 
 describe('use predefined queue', () => {
   test('queue should be filled', () => {
-    const wQueue = new WordQueue({ settings: { MAX_WORDS: 10, MAX_NEW_WORDS: 5 } });
+    const wQueue = new WordQueue({ MAX_WORDS: 10, MAX_NEW_WORDS: 5 });
     const words = [];
     const queue = [];
     for (let i = 0; i < 10; i += 1) {
       words.push({ wordId: i });
       queue.push({ id: i, isEd: false });
       queue.unshift({ id: i, isEd: false });
+      queue.unshift({ id: i, isEd: false });
     }
-    wQueue.usePredefinedQueue({ queue, length: 30 }, words);
+    wQueue.usePredefinedQueue({ queue, pointer: 10 }, words);
     expect(wQueue.getLength()).toBe(30);
     expect(wQueue.getCurrentLength()).toBe(20);
     expect(wQueue.words.length).toBe(10);

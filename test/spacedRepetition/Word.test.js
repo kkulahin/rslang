@@ -61,7 +61,7 @@ describe('upgrade phase:', () => {
     const word = new Word(null, null, {});
     word.repetitionPhase = 0;
     word.upgradePhase();
-    expect(word.repetitionPhase).toBe(1);
+    expect(word.repetitionPhase).toBe(3);
   });
   test('shouldnt upgrade phase', () => {
     const word = new Word(null, null, {});

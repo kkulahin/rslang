@@ -4,6 +4,7 @@ import Word from '../../src/utils/spacedRepetition/Word';
 
 const testUser = {
   id: '5ef2f7af6ab47000177e3cf1',
+  userId: '5ef2f7af6ab47000177e3cf1',
   email: 'test_group51@gmail.com',
   password: 'Qpalsk5&1',
   token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZjJmN2FmNmFiNDcwMDAxNzdlM2NmMSIsImlhdC'
@@ -17,21 +18,24 @@ const testSettings = {
 
 describe('test sync methods', () => {
   test('make simple get request', () => {
-    const wModel = new WordModel(testUser, testSettings);
+    const wModel = new WordModel(testSettings);
+    wModel.user = testUser;
     const { url, options } = wModel.makeRequest('GET', 'user');
     expect(url.toString().includes(testUser.id)).toBeTruthy();
     expect(options.headers.Authorization).toEqual(`Bearer ${testUser.token}`);
     expect(options.method).toEqual('GET');
   });
   test('make POST request with body', () => {
-    const wModel = new WordModel(testUser, testSettings);
+    const wModel = new WordModel(testSettings);
+    wModel.user = testUser;
     const body = { message: 'some text' };
     const { url, options } = wModel.makeRequest('POST', 'user', body);
     expect(url.toString().includes('?')).toBeFalsy();
     expect(options.body === JSON.stringify(body));
   });
   test('make GET request with params', () => {
-    const wModel = new WordModel(testUser, testSettings);
+    const wModel = new WordModel(testSettings);
+    wModel.user = testUser;
     const params = { a: '1 1%$', b: 2 };
     const { url } = wModel.makeRequest('GET', 'user', null, params);
     expect(url.toString().includes('?a=1+1%25%24&b=2')).toBeTruthy();
@@ -43,23 +47,27 @@ const TEST_WITH_TOKEN = false;
 if (TEST_WITH_TOKEN) {
   describe('test async methods', () => {
     test('update statistics', async () => {
-      const wModel = new WordModel(testUser, testSettings);
+      const wModel = new WordModel(testSettings);
+      wModel.user = testUser;
       wModel.statistics = { learnedWords: 0, optional: {} };
       const data = await wModel.updateStatistics();
       expect(data.learnedWords).toBe(wModel.statistics.learnedWords);
     });
     test('get statistics', async () => {
-      const wModel = new WordModel(testUser, testSettings);
+      const wModel = new WordModel(testSettings);
+      wModel.user = testUser;
       await wModel.getStatistics();
       expect(wModel.statistics).toBeTruthy();
     });
     test('get new words', async () => {
-      const wModel = new WordModel(testUser, testSettings);
+      const wModel = new WordModel(testSettings);
+      wModel.user = testUser;
       const data = await wModel.gueryNewWords();
       expect(data.length).toBe(3);
     });
     test('get new words', async () => {
-      const wModel = new WordModel(testUser, testSettings);
+      const wModel = new WordModel(testSettings);
+      wModel.user = testUser;
       const data = await wModel.queryUserWords();
       expect(data.length < 8).toBeTruthy();
     });
