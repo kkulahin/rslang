@@ -1,34 +1,50 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-import './radioButtonContainer.scss';
+import './RadioButtonContainer.scss';
 import RadioButton from '../radioButton/RadioButton';
 
-const RadioButtonContainer = ({ items, onChange }) => {
-  const [checkedItem, setCheckedItem] = useState(null);
+const RadioButtonContainer = ({
+  items, checkedItem, onChange, isDisabled, isAttention,
+}) => {
+  let className = 'card-radio-button-container';
+  if (isAttention) {
+    className += ' card-radio-button-container--attention';
+  }
+  if (isDisabled) {
+    className = 'card-radio-button-container card-radio-button-container--disabled';
+  }
 
-  const radioButtons = items.map((item, idx) => (
+  const handleChangeRadio = (id) => {
+    if (id !== checkedItem) {
+      onChange(id);
+    }
+  };
+
+  const radioButtons = items.map((item) => (
     <RadioButton
-      label={item}
-      checked={checkedItem === idx}
-      onClickRadioButton={() => {
-        setCheckedItem(idx);
-        onChange(items[idx].toLowerCase());
-      }}
-      key={items[idx].toLowerCase()}
+      label={item.label}
+      id={item.id}
+      checked={checkedItem === item.id}
+      onClickRadioButton={handleChangeRadio}
+      key={item.id}
     />
   ));
 
-  return <div className="radio-button-container">{radioButtons}</div>;
+  return <div className={`radio-button-container ${className}`}>{radioButtons}</div>;
 };
 
 RadioButtonContainer.defaultProps = {
-  onChange: () => {},
+  isDisabled: false,
+  isAttention: false,
 };
 
 RadioButtonContainer.propTypes = {
   items: PropTypes.instanceOf(Array).isRequired,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  checkedItem: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool,
+  isAttention: PropTypes.bool,
 };
 
 export default RadioButtonContainer;
