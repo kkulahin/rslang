@@ -1,32 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
 import './button.scss';
 
-const Button = (props) => {
-  const [active, setActive] = useState(false);
-
-  const {
-    name,
-    isDisabled,
-    label,
-    clickHandler,
-    iconName,
-  } = props;
-
-  let icon = null;
+const Button = ({
+  id,
+  name,
+  isDisabled,
+  isActive,
+  label,
+  clickHandler,
+  iconName,
+}) => {
+  const icon = iconName ? <Icon name={iconName} /> : null;
   let className = 'button';
 
-  if (iconName) {
-    icon = <Icon name={iconName} />;
-  }
-
-  if (name === 'check' && active) {
+  if (name === 'check' && isActive) {
     className += ` button--${name}`;
   }
 
-  if (name === 'press' && active) {
+  if (name === 'press' && isActive) {
     className += ` button--${name}`;
   }
 
@@ -34,35 +28,40 @@ const Button = (props) => {
     className += ` button--${name}`;
   }
 
+  const cardClassName = (isActive)
+    ? 'card-button card-button--active'
+    : 'card-button';
+
   return (
     <button
       type="button"
+      id={id}
       disabled={isDisabled}
-      className={className}
-      onClick={
-            () => {
-              setActive((s) => !s);
-              clickHandler();
-            }
-        }
+      className={`${className} ${cardClassName}`}
+      onClick={(evt) => clickHandler(evt.target.id)}
     >
       {icon}
-      {' '}
+      {(label && icon) && ' '}
       {label}
     </button>
   );
 };
 
 Button.defaultProps = {
+  name: 'check',
   isDisabled: false,
-  clickHandler: () => { },
+  isActive: false,
   iconName: '',
+  label: null,
+  clickHandler: () => {},
 };
 
 Button.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   isDisabled: PropTypes.bool,
-  label: PropTypes.string.isRequired,
+  isActive: PropTypes.bool,
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string,
   clickHandler: PropTypes.func,
   iconName: PropTypes.string,
 };
