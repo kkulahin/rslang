@@ -7,7 +7,7 @@ import {
 import { Redirect, Link } from 'react-router-dom';
 import responseFromServer from '../../utils/responseFromServer';
 import VectorMan from '../../assets/image/vector_man.png';
-import { SchoolURL, coockieLifeCyrcle } from '../../default';
+import { SchoolURL, coockieLifeCyrcle } from '../../config/default';
 import { setCookie } from '../../utils/cookie';
 
 import './LoginPage.scss';
