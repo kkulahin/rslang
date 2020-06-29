@@ -275,11 +275,10 @@ const SpeackIt = () => {
   };
 
   const getSpeechQuery = (value) => {
-    console.log(value)
     setUserRecWord(value.toLocaleLowerCase());
   };
 
-  const getStatusMic = (status) => status === 'microphone' ? setStatusMic(true) : setStatusMic(false);
+  const getStatusMic = (status) => (status === 'microphone' ? setStatusMic(true) : setStatusMic(false));
 
   const isImageDescription = () => {
     if (!isStatusMic && !gameMode) {
@@ -420,7 +419,7 @@ const SpeackIt = () => {
     };
     setGameScreen(screen);
     if (isStatusMic) {
-      isMicOff(false)
+      isMicOff(false);
     }
   };
 
@@ -431,8 +430,8 @@ const SpeackIt = () => {
       statistic: false,
     };
     setGameScreen(screen);
-    if(!isStatusMic)  {
-      isMicOff(false)
+    if (!isStatusMic) {
+      isMicOff(false);
     }
 
     setActiveWordStatistic(null);
@@ -485,7 +484,7 @@ const SpeackIt = () => {
         )}
       </div>
       <div className={`speakIt-result ${gameScreen.statistic ? 'visible' : 'invisible'}`}>
-        <div className="speakIt-progressbar" onClick={switchStage} role="presentation" >
+        <div className="speakIt-progressbar" onClick={switchStage} role="presentation">
           {buildProgressStep()}
         </div>
         <div className="resultpage">
