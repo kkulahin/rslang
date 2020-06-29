@@ -6,27 +6,26 @@ import './button.scss';
 
 const Button = (props) => {
   const {
-		id,
-		isDisabled,
-		isActive,
+    id,
+    isDisabled,
+    isActive,
     label,
     clickHandler,
     iconName,
   } = props;
 
+  const icon = (iconName)
+    ? icon = <Icon name={iconName} />
+    : null;
 
-	const icon = (iconName)
-		? icon = <Icon name={iconName} />
-		: null;
-	
-	const className = (isActive)
-		? 'card-button card-button--active'
-		: 'card-button';
+  const className = (isActive)
+    ? 'card-button card-button--active'
+    : 'card-button';
 
   return (
     <button
-			type='button'
-			id={id}
+      type="button"
+      id={id}
       disabled={isDisabled}
       className={className}
       onClick={(evt) => clickHandler(evt.target.id)}
@@ -41,8 +40,8 @@ const Button = (props) => {
 Button.defaultProps = {
   isDisabled: false,
   isActive: false,
-	iconName: '',
-	label: null,
+  iconName: '',
+  label: null,
 };
 
 Button.propTypes = {
