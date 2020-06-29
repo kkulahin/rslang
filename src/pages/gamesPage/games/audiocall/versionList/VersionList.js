@@ -15,10 +15,10 @@ const VersionList = ({ items, onVersionClick, correctAnswer }) => {
     setCorrect(false);
   }, [items]);
 
-  const buttons = items.map((item) => {
+  const buttons = items.map((item, idx) => {
     let iconName = '';
     let isActive = false;
-    if (checkedItem === item.id) {
+    if (checkedItem === item) {
       if (correct) {
         iconName = 'check';
         isActive = true;
@@ -29,23 +29,23 @@ const VersionList = ({ items, onVersionClick, correctAnswer }) => {
     }
     return (
       <Button
-        id={item.id}
+        id={`${idx}`}
         name="check"
         isActive={isActive}
         isDisabled={checked}
-        label={item.word}
+        label={item}
         iconName={iconName}
-        clickHandler={(id) => {
+        clickHandler={() => {
           let isCorrect = false;
+          setCheckedItem(item);
           setChecked(true);
-          setCheckedItem(id);
-          if (id === correctAnswer.id) {
+          if (item === correctAnswer) {
             setCorrect(true);
             isCorrect = true;
           }
           onVersionClick(isCorrect);
         }}
-        key={item.id}
+        key={`button-${idx + 1}`}
       />
     );
   });
@@ -60,7 +60,7 @@ const VersionList = ({ items, onVersionClick, correctAnswer }) => {
 VersionList.propTypes = {
   items: PropTypes.instanceOf(Array).isRequired,
   onVersionClick: PropTypes.func.isRequired,
-  correctAnswer: PropTypes.instanceOf(Object).isRequired,
+  correctAnswer: PropTypes.string.isRequired,
 };
 
 export default VersionList;

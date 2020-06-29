@@ -10,6 +10,7 @@ const AudioCall = () => {
     statistic: false,
   });
   const [result, setResult] = useState(null);
+  const [degree, setDegree] = useState(0);
 
   return (
     <div className="audiocall">
@@ -17,6 +18,7 @@ const AudioCall = () => {
         showWindows.main && (
           <MainWindow
             baseUrl={baseUrl}
+            degree={degree}
             onEndOfGame={
               (resultInner) => {
                 setResult(resultInner);
@@ -39,6 +41,12 @@ const AudioCall = () => {
                 setShowWindows({
                   main: true,
                   statistic: false,
+                });
+                setDegree((s) => {
+                  if (s >= 180) {
+                    return s;
+                  }
+                  return s + 1;
                 });
               }
             }

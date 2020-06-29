@@ -3,10 +3,8 @@
   20% { transform: translateX(0); }
   30% { transform: translateX(-50px); }
   40% { transform: translateX(-75px); opacity: 1;}
-  60% { transform: translateX(-100px); opacity: 0.5;}
-  80% { transform: translateX(-125px); opacity: 0;}
-  95% { transform: translateX(200px); opacity: 0;}
-  100% { transform: translateX(0);opacity: 1;}
+  70% { transform: translateX(-100px); opacity: 0.5;}
+  100% { transform: translateX(-125px); opacity: 0;}
 }
 
 @-moz-keyframes card-animation {
@@ -14,10 +12,8 @@
   20% { transform: translateX(0); }
   30% { transform: translateX(-50px); }
   40% { transform: translateX(-75px); opacity: 1;}
-  60% { transform: translateX(-100px); opacity: 0.5;}
-  80% { transform: translateX(-125px); opacity: 0;}
-  95% { transform: translateX(200px); opacity: 0;}
-  100% { transform: translateX(0);opacity: 1;}
+  70% { transform: translateX(-100px); opacity: 0.5;}
+  100% { transform: translateX(-125px); opacity: 0;}
 }
 
 @keyframes card-animation {
@@ -25,10 +21,8 @@
   20% { transform: translateX(0); }
   30% { transform: translateX(-50px); }
   40% { transform: translateX(-75px); opacity: 1;}
-  60% { transform: translateX(-100px); opacity: 0.5;}
-  80% { transform: translateX(-125px); opacity: 0;}
-  95% { transform: translateX(200px); opacity: 0;}
-  100% { transform: translateX(0);opacity: 1;}
+  70% { transform: translateX(-100px); opacity: 0.5;}
+  100% { transform: translateX(-125px); opacity: 0;}
 }
 
 .audiocall {
@@ -36,8 +30,37 @@
   flex-wrap: wrap;
   justify-content: center;
 
-  &__card--animated {
-    animation: card-animation 1s linear;
+  &__main {
+    &-header {
+      display: flex;
+      justify-content: center;
+    }
+
+    &-progress {
+      display: flex;
+      align-items: center;
+
+      font: inherit;
+      font-size: 18px;
+    }
+
+    &-progress:last-child {
+      margin-left: 30px;
+    }
+  }
+
+  &__card {
+    &--animated {
+      animation: card-animation 1s linear;
+    }
+
+    &-loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 380px;
+      margin: 0 auto;
+    }
   }
 
   &__image ,

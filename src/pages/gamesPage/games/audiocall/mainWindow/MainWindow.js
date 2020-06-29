@@ -7,31 +7,15 @@ import Voice from '../voice/Voice';
 import Button from '../../../../../components/button/Button';
 import { getWords } from '../../../../../controllers/words/words';
 import LinearProgressBar from '../../../../../components/linearProgressBar/LinearProgressBar';
+import getWordVersions from './MainWindowFunctions';
 
-const getRenderData = (arr) => {
-  const currentWordNumber = Math.floor(Math.random() * 4) + 1;
-  if (currentWordNumber === 0) { return [currentWordNumber, arr]; }
-  const words = [];
-  for (let i = 1, j = 0; j < arr.length; j += 1) {
-    if (currentWordNumber === j) {
-      words.push(arr[0]);
-    } else {
-      words.push(arr[i]);
-      i += 1;
-    }
-  }
-
-  return {
-    currentWordNumber, words,
-  };
-};
-
-const MainWindow = ({ baseUrl, onEndOfGame }) => {
+const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
   const [datas, setDatas] = useState(null);
   const cardRef = useRef(null);
   const mainRef = useRef(null);
   const [showImage, setShowImage] = useState(false);
   const [showLoading, setShowLoading] = useState(true);
+  const [showCardLoading, setShowCardLoading] = useState(true);
   const [nextButtonAvailable, setNextButtonAvailable] = useState(false);
   const [answers, setAnswers] = useState({
     correct: 0,
@@ -42,80 +26,115 @@ const MainWindow = ({ baseUrl, onEndOfGame }) => {
   const [gameWords, setGameWords] = useState([]);
   let currentWordNumber = null;
   let words = null;
+  let versions = null;
   if (stepData) {
     currentWordNumber = stepData.currentWordNumber;
     words = stepData.words;
+    versions = stepData.versions;
   }
 
   useEffect(() => {
     if (datas) {
-      setStepData({
-        ...getRenderData(datas.slice(level, level + 5)),
+      getWordVersions(datas[level]).then((d) => {
+        setStepData({
+          ...d,
+          versions: d.words.map((element, idx) => {
+            if (d.currentWordNumber === idx) {
+              return element.wordTranslate;
+            }
+            return element.translation.text;
+          }),
+        });
+        setShowCardLoading(false);
       });
     }
   }, [level, datas]);
 
   useEffect(() => {
-    getWords(0, 1).then(({ data }) => {
+    getWords(Math.floor(degree / 30), degree % 30).then(({ data }) => {
       setDatas(data);
       setShowLoading(false);
     }).catch();
-  }, []);
-  const content = stepData && (
-    <>
-      <LinearProgressBar value={level + 1} size={10} />
-      <div className="audiocall__card" ref={cardRef}>
-        {
-          showImage
-            ? (
-              <div
-                className="audiocall__image"
-              >
-                <Image
-                  src={`${baseUrl}${words[currentWordNumber].image}`}
-                />
-                <p className="audiocall__text">
-                  <Icon name="volume up" className="audiocall__text-icon" />
-                  <span className="audiocall__text-word">{words[currentWordNumber].word}</span>
-                  <span className="audiocall__text-word">{words[currentWordNumber].transcription}</span>
-                </p>
-              </div>
-            ) : (
-              <div className="audiocall__voice">
-                <Voice
-                  src={`${baseUrl}${words[currentWordNumber].audio}`}
-                  type="audio/mpeg"
-                />
-              </div>
-            )
-        }
-        <VersionList
-          items={words}
-          onVersionClick={(answerIn) => {
-            setGameWords((s) => [...s, [words[currentWordNumber], answerIn]]);
-            setShowImage(true);
-            setNextButtonAvailable(true);
-            if (answerIn) {
-              setAnswers((s) => {
-                const result = {
-                  correct: s.correct + 1,
-                  error: s.error,
-                };
-                return result;
-              });
-            } else {
-              setAnswers((s) => {
-                const result = {
-                  correct: s.correct,
-                  error: s.error + 1,
-                };
-                return result;
-              });
-            }
-          }}
-          correctAnswer={words[currentWordNumber]}
+  }, [degree]);
+
+  const card = showCardLoading
+    ? (
+      <div className="audiocall__card-loading">
+        <Icon
+          name="spinner"
+          loading
+          color="teal"
+          size="massive"
         />
       </div>
+    ) : (
+      <>
+        <div className="audiocall__card" ref={cardRef}>
+          {
+            showImage
+              ? (
+                <div
+                  className="audiocall__image"
+                >
+                  <Image
+                    src={`${baseUrl}${words[currentWordNumber].image}`}
+                  />
+                  <p className="audiocall__text">
+                    <Icon name="volume up" className="audiocall__text-icon" />
+                    <span className="audiocall__text-word">{words[currentWordNumber].word}</span>
+                  </p>
+                </div>
+              ) : (
+                <div className="audiocall__voice">
+                  <Voice
+                    src={`${baseUrl}${words[currentWordNumber].audio}`}
+                    type="audio/mpeg"
+                  />
+                </div>
+              )
+          }
+          <VersionList
+            items={versions}
+            onVersionClick={(answerIn) => {
+              setGameWords((s) => [...s, [words[currentWordNumber], answerIn]]);
+              setShowImage(true);
+              setNextButtonAvailable(true);
+              if (answerIn) {
+                setAnswers((s) => {
+                  const result = {
+                    correct: s.correct + 1,
+                    error: s.error,
+                  };
+                  return result;
+                });
+              } else {
+                setAnswers((s) => {
+                  const result = {
+                    correct: s.correct,
+                    error: s.error + 1,
+                  };
+                  return result;
+                });
+              }
+            }}
+            correctAnswer={versions[currentWordNumber]}
+          />
+        </div>
+      </>
+    );
+
+  const content = stepData && (
+    <>
+      <div className="audiocall__main-header">
+        <div className="audiocall__main-progress">
+          { 'Step: ' }
+          <LinearProgressBar value={level + 1} size={10} />
+        </div>
+        <div className="audiocall__main-progress">
+          { `Level :  ${degree + 1} / 180` }
+        </div>
+      </div>
+      { card }
       <div className="audiocall__button">
         <Button
           id="1"
@@ -132,6 +151,7 @@ const MainWindow = ({ baseUrl, onEndOfGame }) => {
 
               setTimeout(() => {
                 setLevel(level + 1);
+                setShowCardLoading(true);
                 setNextButtonAvailable(false);
                 setShowImage(false);
               }, 950);
@@ -170,6 +190,7 @@ const MainWindow = ({ baseUrl, onEndOfGame }) => {
 
 MainWindow.propTypes = {
   baseUrl: PropTypes.string.isRequired,
+  degree: PropTypes.number.isRequired,
   onEndOfGame: PropTypes.func.isRequired,
 };
 

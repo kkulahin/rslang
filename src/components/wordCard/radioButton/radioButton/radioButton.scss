@@ -1,0 +1,23 @@
+@import '../../../../styles/variables.scss';
+
+.card-unit {
+
+  .card-radio-button {
+    width: 70px;
+    height: 100%;
+    padding: 5px 10px;
+    font-size: 2rem;
+    line-height: 1;
+    font-family: inherit;
+    text-align: center;
+    color: $enabled-color;
+    background: $background-color;
+    border: none;
+    border-radius: 125px;
+    outline: none;
+  
+    &--checked {
+      box-shadow: $container-box-shadow-inset;
+    }
+  }
+}

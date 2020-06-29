@@ -48,7 +48,6 @@ const Button = ({
 };
 
 Button.defaultProps = {
-  id: '',
   name: 'check',
   isDisabled: false,
   isActive: false,
@@ -61,7 +60,7 @@ Button.propTypes = {
   name: PropTypes.string,
   isDisabled: PropTypes.bool,
   isActive: PropTypes.bool,
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
   label: PropTypes.string,
   clickHandler: PropTypes.func,
   iconName: PropTypes.string,
