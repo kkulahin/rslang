@@ -10,6 +10,7 @@ const NumberPicker = ({ standardInputValue, inputId, handleChange }) => (
     <Button
       name="check"
       label="&lt;"
+      id="do-less"
       clickHandler={() => handleChange(Number(standardInputValue) - 1, inputId)}
     />
     <Input
@@ -21,6 +22,7 @@ const NumberPicker = ({ standardInputValue, inputId, handleChange }) => (
     <Button
       name="check"
       label="&gt;"
+      id="do-more"
       clickHandler={() => handleChange(Number(standardInputValue) + 1, inputId)}
     />
   </div>

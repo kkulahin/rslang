@@ -9,7 +9,7 @@ const Setting = ({
   settingInfo, settingSectionName, handleChange,
 }) => {
   const {
-    id, name, value, isChecked, isRequired,
+    name, value, isChecked, isRequired,
   } = settingInfo;
 
   const classNameModifier = name.replace(/\s/g, '-').toLowerCase();
@@ -25,7 +25,7 @@ const Setting = ({
     : (
       <Switcher
         parrentClassName="settings__section__item"
-        switcherId={id}
+        switcherId={classNameModifier}
         isChecked={isChecked}
         isRequired={isRequired}
         onChange={handleChange.handleSwitcherToggle}
@@ -42,7 +42,6 @@ const Setting = ({
 
 Setting.propTypes = {
   settingInfo: PropTypes.shape({
-    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     value: PropTypes.number,
     isChecked: PropTypes.bool,
