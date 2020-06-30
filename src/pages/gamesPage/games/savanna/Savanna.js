@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  Button, Icon,
+  Button, Icon, Transition,
 } from 'semantic-ui-react';
+import {
+  TimelineLite, Linear,
+} from 'gsap/all';
 
 import './savanna.scss';
+import ReactCountDown from 'react-countdown-clock';
 import { getWords } from '../../../../controllers/words/words';
 
 const gameScreenDef = {
   start: true,
-  game: true,
+  game: false,
   result: false,
 };
 
@@ -16,6 +20,7 @@ const optionDef = {
   curLife: 5,
   maxLife: 5,
   maxWords: 25,
+  timer: 10,
 };
 
 const shuffleArray = (arr) => arr.map((a) => [Math.random(), a]).sort((a, b) => a[0] - b[0]).map((a) => a[1]);
@@ -27,21 +32,35 @@ const isEmptyArr = (arr) => {
   return false;
 };
 
+const transtionWordDef = {
+  animation: 'slide down',
+  duration: 100,
+  visible: true,
+};
+
 const Savanna = () => {
   const [screen, setScreen] = useState(gameScreenDef);
+  const [timer, setTimer] = useState(false);
   const [option, setOption] = useState(optionDef);
   const [kit, setKit] = useState([]);
   const [wordsForPlay, setGameWords] = useState([]);
+  const [transitionWord] = useState(transtionWordDef);
   const [cKitStage, setCurKitStage] = useState([]);
   const [answer, setAnswer] = useState(null);
+  const [gameWordAnimation, setGameWordAnimation] = useState(null);
+  const [nextWordCb, setNextWordCb] = useState(false);
+
+  const curGameWord = useRef(null);
+  const gameWindow = useRef(null);
 
   const redirectToGame = () => {
     const gameScreen = {
-      start: false,
+      start: true,
       game: true,
       result: false,
     };
     setScreen(gameScreen);
+    setTimer(false);
   };
 
   const redirectToStart = () => {
@@ -55,6 +74,7 @@ const Savanna = () => {
     setGameWords([]);
     setCurKitStage([]);
     setAnswer(null);
+    /* setGameWordAnimation(null); */
     setScreen(gameScreen);
   };
 
@@ -100,6 +120,7 @@ const Savanna = () => {
     return <div className="savanna-wordpanel">{gameplayWords}</div>;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const getWordsForGame = () => {
       const wordsPromise = [];
@@ -119,10 +140,18 @@ const Savanna = () => {
     if (Array.isArray(kit) && !kit.length) {
       getWordsForGame();
     }
+    if (gameWordAnimation === null) {
+      const timeLine = new TimelineLite({
+        paused: true,
+        default: { ease: Linear },
+      }).from(gameWindow.current, { y: 0 });
+      setGameWordAnimation(timeLine);
+    }
   });
 
   useEffect(() => {
     if (option.curLife === 0) {
+      gameWordAnimation.pause();
       const gameScreen = {
         start: false,
         game: false,
@@ -130,7 +159,7 @@ const Savanna = () => {
       };
       setScreen(gameScreen);
     }
-  }, [option]);
+  }, [option, gameWordAnimation]);
 
   useEffect(() => {
     const newGameWords = shuffleArray(kit).slice(0, optionDef.maxWords);
@@ -143,6 +172,7 @@ const Savanna = () => {
       setAnswer(cWord);
     }
     if (!wordsForPlay.length && answer !== null) {
+      gameWordAnimation.pause();
       const gameScreen = {
         start: false,
         game: false,
@@ -150,7 +180,7 @@ const Savanna = () => {
       };
       setScreen(gameScreen);
     }
-  }, [wordsForPlay, answer]);
+  }, [wordsForPlay, answer, gameWordAnimation]);
 
   useEffect(() => {
     if (answer !== null) {
@@ -161,6 +191,31 @@ const Savanna = () => {
       setCurKitStage(gameplayWords);
     }
   }, [answer, kit]);
+
+  useEffect(() => {
+    if (nextWordCb && screen.game) {
+      setNextWordCb(false);
+      setGameWords(shuffleArray(wordsForPlay));
+      const newOption = { ...option, curLife: option.curLife - 1 };
+      setOption(newOption);
+    }
+    if (!screen.game && gameWordAnimation !== null) {
+      gameWordAnimation.pause();
+    }
+  }, [nextWordCb, option, wordsForPlay, screen, gameWordAnimation]);
+
+  useEffect(() => {
+    const nextWordByTimeOut = () => {
+      setNextWordCb(true);
+    };
+
+    if (answer !== null && gameWordAnimation !== null && screen.game) {
+      gameWordAnimation.to(curGameWord.current,
+        option.timer,
+        { y: gameWindow.current.offsetHeight, onComplete: nextWordByTimeOut });
+      gameWordAnimation.restart();
+    }
+  }, [answer, gameWordAnimation, option.timer, screen.game, option, wordsForPlay]);
 
   const getGameWord = () => {
     if (answer !== null) {
@@ -174,10 +229,25 @@ const Savanna = () => {
     return Math.round(persent);
   };
 
+  const startPreloadTimer = () => {
+    setTimer(true);
+  };
+
   return (
     <>
       <div className={`savanna-startpage ${screen?.start ? 'visible' : 'invisible'}`}>
-        <Button primary onClick={redirectToGame}> Start</Button>
+        { timer ? null : (<Button primary onClick={startPreloadTimer}> Start</Button>) }
+        { !timer ? null : (
+          <ReactCountDown
+            color="#25cede"
+            alpha={0.9}
+            seconds={7}
+            weight={40}
+            showMilliseconds={false}
+            size={300}
+            onComplete={redirectToGame}
+          />
+        )}
       </div>
       <div className={`savanna-gamepage ${screen?.game ? 'visible' : 'invisible'}`}>
         <div className="savanna-gamepanel">
@@ -186,8 +256,10 @@ const Savanna = () => {
           </div>
           <Icon className="reply" onClick={redirectToStart} />
         </div>
-        <div className="savanna-main">
-          <div className="savanna-gameword">{ getGameWord() }</div>
+        <div ref={gameWindow} className="savanna-main">
+          <Transition.Group animation={transitionWord.animation} duration={transitionWord.duration}>
+            <div ref={curGameWord} className="savanna-gameword">{ getGameWord()}</div>
+          </Transition.Group>
           { buildGameplayWords() }
         </div>
       </div>

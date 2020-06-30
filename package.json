@@ -50,10 +50,13 @@
   },
   "dependencies": {
     "editorconfig": "^0.15.3",
+    "gsap": "^3.3.4",
     "history": "^5.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-addons-update": "^15.6.2",
+    "react-animations": "^1.0.0",
+    "react-countdown-clock": "^2.7.0",
     "react-dom": "^16.13.1",
     "react-lorem-ipsum": "^1.4.4",
     "react-router-dom": "^5.2.0",
