@@ -1,0 +1,51 @@
+@import '../../../styles/variables.scss';
+.statistic-long {
+  width: 100%;
+  max-width: 1020px;
+  padding: 10px 30px;
+
+  &__title {
+    font: inherit;
+    font-weight: normal;
+    font-size: 2.4rem;
+    line-height: 1.6em;
+
+    color: $main-color;
+    text-align: center;
+  }
+
+  &__period {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 70px;
+    margin: 20px 0;
+
+    font: inherit;
+    font-weight: normal;
+    font-size: 1.6rem;
+    line-height: 1.6em;
+
+    color: $main-color;
+
+    & .dropdown {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+
+      z-index: 10;
+
+      &__title {
+        background-color: $main-color;
+        color: #000000;
+        font: inherit;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}

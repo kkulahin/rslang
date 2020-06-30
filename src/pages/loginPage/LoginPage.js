@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Form, Grid, Image, Checkbox,
 } from 'semantic-ui-react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import responseFromServer from '../../utils/responseFromServer';
 import VectorMan from '../../assets/image/vector_man.png';
-import { SchoolURL, coockieLifeCyrcle } from '../../default';
+import { SchoolURL, coockieLifeCyrcle } from '../../config/default';
 import { setCookie } from '../../utils/cookie';
 
 import './LoginPage.scss';
@@ -95,7 +95,7 @@ const LoginForm = () => {
           msg: 'User get successfully',
           status: true,
         };
-        const response = await responseFromServer(`${SchoolURL}/signin`, getUserNotification, 'POST', data);
+        const response = await responseFromServer(`${SchoolURL}/signin`, null, getUserNotification, 'POST', data);
         setUserNotification(response.notification);
         if (response.notification.status) {
           setCookie('auth', JSON.stringify(response.data), coockieLifeCyrcle);
@@ -107,6 +107,7 @@ const LoginForm = () => {
           msg: 'Incorrect e-mail or password',
           status: false,
         };
+        console.log(error);
         setUserNotification(userAuthMsg);
         throw new Error('invalid request');
       }
@@ -166,7 +167,7 @@ const LoginForm = () => {
           </Button>
           <div className="field">
             <span className="login-signup">New here?</span>
-            <a href="/signup" className="login-signup"> Sign up</a>
+            <Link to="/signup" className="login-signup"> Sign up</Link>
           </div>
         </Form>
       </Grid.Column>
