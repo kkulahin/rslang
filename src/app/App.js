@@ -1,7 +1,7 @@
 // eslint-disable-next-line linebreak-style
 import React, { useState, useEffect } from 'react';
 import {
-  BrowserRouter as Router, Route, Switch,
+  BrowserRouter as Router, Switch, Route,
 } from 'react-router-dom';
 import History from '../utils/history';
 import Home from '../pages/Home';
@@ -18,17 +18,15 @@ import Settings from '../pages/settingsPage/Settings';
 
 import Header from '../components/header/Header';
 import GreetingWrapper from '../components/greetingWrapper/GreetingWrapper';
-import WordController from '../utils/spacedRepetition/WordConrtoller';
 
 import appDefaultSettings from '../config/defaultSettings';
 
 import './App.scss';
+import PrivateRoute from '../components/route/PrivateRoute';
 
 const appSettings = JSON.parse(localStorage.getItem('userSettings')) || appDefaultSettings;
 
 const App = () => {
-  const wordController = new WordController();
-  wordController.init();
   const [settings, setSettings] = useState(appSettings);
 
   useEffect(() => localStorage.setItem('userSettings', JSON.stringify(settings)));
@@ -45,22 +43,22 @@ const App = () => {
             cardsCount={cardsCount.value}
           />
           <Switch>
-            <Route exact path="/" render={() => <Home wordController={wordController} />} />
+            <PrivateRoute exact path="/" component={Home} />
             <Route path="/signin" component={LoginPage} />
             <Route path="/signup" component={SignupPage} />
             <Route path="/logout" component={Logout} />
-            <Route path="/dictionary" component={Dictionary} />
-            <Route path="/statistic" component={Statistic} />
-            <Route path="/settings">
+            <PrivateRoute path="/dictionary" component={Dictionary} />
+            <PrivateRoute path="/statistic" component={Statistic} />
+            <PrivateRoute path="/settings">
               <Settings
                 settings={settings}
                 handleAppChange={(newSettings) => setSettings(newSettings)}
               />
-            </Route>
-            <Route path="/promo" component={Promo} />
-            <Route path="/about" component={About} />
-            <Route path="/games" component={GamesPage} />
-            <Route component={NotFound} />
+            </PrivateRoute>
+            <PrivateRoute path="/promo" component={Promo} />
+            <PrivateRoute path="/about" component={About} />
+            <PrivateRoute path="/games" component={GamesPage} />
+            <PrivateRoute component={NotFound} />
           </Switch>
         </div>
       </div>

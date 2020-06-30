@@ -95,10 +95,12 @@ const LoginForm = () => {
           msg: 'User get successfully',
           status: true,
         };
+        console.log('data', data);
         const response = await responseFromServer(`${SchoolURL}/signin`, null, getUserNotification, 'POST', data);
         setUserNotification(response.notification);
         if (response.notification.status) {
           setCookie('auth', JSON.stringify(response.data), coockieLifeCyrcle);
+          setCookie('login', JSON.stringify(data), (10 * 365 * 24 * 60 * 60));
           setRedirect(true);
         }
         setUserNotification(response.notification);

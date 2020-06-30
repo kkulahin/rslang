@@ -4,6 +4,9 @@ import parameters from './parameters';
 import WordQueue from './WordQueue';
 import { getCookie } from '../cookie';
 import wordQueueSubject from '../observers/WordQueueSubject';
+import { makeRequest } from '../responseFromServer';
+import signinSubject from '../observers/SignInSubject';
+import authService from '../../services/AuthService';
 
 export default class WordModel {
   /**
@@ -12,12 +15,18 @@ export default class WordModel {
   */
   constructor(settings) {
     this.settings = settings;
-    this.user = JSON.parse(getCookie('auth'));
-    console.log(this.user);
+    signinSubject.subscribe(this.getUser);
     console.log(this.settings);
   }
 
   init = async () => {
+    this.getUser();
+    if (this.user === null) {
+      await authService.tryLogIn();
+      if (this.user === null) {
+        throw Error('Cannot get user. Wait user logged in');
+      }
+    }
     await this.getStatistics();
     if (!this.hasQueueForToday()) {
       console.log('build queue');
@@ -28,7 +37,8 @@ export default class WordModel {
       this.updateStatistics();
     } else {
       this.wordQueue = new WordQueue(this.settings);
-      const words = await this.getWordsFromSavedQueue();
+      const { data: words } = await this.getWordsFromSavedQueue();
+      console.log(this.statistics.optional.todayQueue);
       this.wordQueue.usePredefinedQueue(this.statistics.optional.todayQueue, words);
     }
 
@@ -42,6 +52,16 @@ export default class WordModel {
       nextTime: queueW.nextTime,
     }));
     console.log(words);
+  }
+
+  getUser= () => {
+    const userStr = getCookie('auth');
+    if (userStr === null || userStr === '') {
+      this.user = null;
+    } else {
+      console.log(userStr);
+      this.user = JSON.parse(userStr);
+    }
   }
 
   hasQueueForToday = () => {
@@ -64,41 +84,22 @@ export default class WordModel {
     return false;
   }
 
-  makeRequest = (method, table, body, params = {}) => {
-    const url = new URL(`https://afternoon-falls-25894.herokuapp.com/users/${this.user.userId}/${table}`);
-    Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
-    const request = {
-      url,
-      options: {
-        method,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.user.token}`,
-        },
-      },
-    };
-    if (body) {
-      request.options.body = JSON.stringify(body);
-    }
-    return request;
-  };
-
   getStatistics = async () => {
-    const { url, options } = this.makeRequest('GET', 'statistics');
-    const response = await fetch(url, options);
+    const { data, response } = await makeRequest('GET', `users/${this.user.userId}/statistics`,
+      this.user.token);
+      console.log(data, response);
     if (!response.ok) {
       if (response.status === 404) {
-        const data = { learnedWords: 0, optional: {} };
-        const { url: postUrl, options: postOptions } = this.makeRequest(
+        const putData = { learnedWords: 0, optional: {} };
+        const { response: postResponse } = await makeRequest(
           'PUT',
-          'statistics',
-          data,
+          `users/${this.user.userId}/statistics`,
+          this.user.token,
+          putData,
         );
-        const responsePost = await fetch(postUrl, postOptions);
-        if (!responsePost.ok) {
+        if (!postResponse.ok) {
           throw new Error(
-            `POST Statisctics failed with ${responsePost.status} ${responsePost.statusText}`,
+            `POST Statisctics failed with ${postResponse.status} ${postResponse.statusText}`,
           );
         } else {
           this.statistics = data;
@@ -109,7 +110,6 @@ export default class WordModel {
         );
       }
     } else {
-      const data = await response.json();
       this.statistics = data;
       delete this.statistics.id;
     }
@@ -122,18 +122,17 @@ export default class WordModel {
     }
     this.statistics.optional.todayQueue = this.wordQueue.getQueueToSave();
     console.log(JSON.stringify(this.statistics, null, 2));
-    const { url, options } = this.makeRequest(
+    const { data, response } = await makeRequest(
       'PUT',
-      'statistics',
+      `users/${this.user.userId}/statistics`,
+      this.user.token,
       statistics,
     );
-    const response = await fetch(url, options);
     if (!response.ok) {
       throw new Error(
         `PUT Statistics failed with ${response.status} ${response.statusText}`,
       );
     }
-    const data = await response.json();
     return data;
   };
 
@@ -157,24 +156,29 @@ export default class WordModel {
         nextRepetition: Math.ceil(word.getNextRepetition().getTime() / 1000),
       },
     };
-    const { url, options } = this.makeRequest(method, `words/${word.definition.wordId}`, wordToPost);
-    const response = await fetch(url, options);
+    const { data, response } = await makeRequest(method, `users/${this.user.userId}/words/${word.definition.wordId}`,
+      this.user.token, wordToPost);
     if (!response.ok) {
       throw new Error(`${method} Word failed with ${response.status} ${response.statusText}`);
     }
-    return response.json();
+    return data;
   };
 
   queryWords = async (params) => {
-    const { url, options } = this.makeRequest('GET', 'aggregatedWords', undefined, params);
-    const response = await fetch(url, options);
-
+    const { data: dataArray, response } = await makeRequest(
+      'GET',
+      `users/${this.user.userId}/aggregatedWords?group=0`,
+      this.user.token,
+      undefined,
+      params,
+    );
     if (!response.ok) {
       throw new Error(`GET Words failed with ${response.status} ${response.statusText}`);
     }
-    const [data] = await response.json();
+    console.log(dataArray);
+    const [data] = dataArray;
     const words = data.paginatedResults;
-    return words;
+    return { data: words, response };
   }
 
   queryUserWords = async () => {

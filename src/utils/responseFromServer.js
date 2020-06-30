@@ -1,3 +1,9 @@
+import {SchoolURL} from '../config/default';
+import authService from '../services/AuthService';
+import history from './history';
+import signinSubject from './observers/SignInSubject';
+import { deleteCookie } from './cookie';
+
 const responseFromServer = async (url,
   token = null,
   notification = { msg: '', status: null },
@@ -40,6 +46,67 @@ const responseFromServer = async (url,
 
   const data = await response.json();
   return { data, notification: setNotification };
+};
+
+const retryMakeRequest = async (method, path, token, body, params = {}) => {
+  const url = new URL(`${SchoolURL}/${path}`);
+  Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
+  const request = {
+    url,
+    options: {
+      method,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  };
+  if (body) {
+    request.options.body = JSON.stringify(body);
+  }
+  console.log(request);
+  const response = await fetch(request.url, request.options);
+  if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error('Retry');
+    }
+  }
+  const data = await response.json();
+  return { data, response };
+};
+
+export const makeRequest = async (method, path, token, body, params = {}) => {
+  console.log('make request');
+  const tryTimes = 2;
+  let index = 0;
+  let isAuthError = false;
+  let response = {};
+  while (index < tryTimes) {
+    try {
+      console.log('try # '+index);
+      if (isAuthError) {
+        isAuthError = false;
+        const isLoggedIn = await authService.tryLogIn();
+        if (!isLoggedIn) {
+          deleteCookie('login');
+          signinSubject.notify(false);
+          return { response: { ok: false, statusText: 'Unauthorized', status: 401 } };
+        }
+      }
+      console.log('try # '+index, method, path, token, body, params);
+      response = await retryMakeRequest(method, path, token, body, params);
+      console.log(response);
+      return response;
+    } catch (e) {
+      console.log(e);
+      if (e.message === 'Retry') {
+        isAuthError = true;
+      }
+      index += 1;
+    }
+  }
+  return response;
 };
 
 export default responseFromServer;
