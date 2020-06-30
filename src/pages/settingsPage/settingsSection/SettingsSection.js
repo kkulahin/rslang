@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Setting from './settingItem/SettingItem';
 
+import { defaultInputRatio, numberPickerMinValue } from '../../../config/default';
+
 import './SettingsSection.scss';
 
 const SettingsSection = ({ sectionInfo, handleChange }) => {
@@ -9,7 +11,8 @@ const SettingsSection = ({ sectionInfo, handleChange }) => {
 
   const handleEvents = {
     handleSwitcherToggle(switcherId) {
-      const isDisablingRequiredSetting = (settingsInfo[switcherId - 1].isChecked && settingsInfo[switcherId - 1].isRequired);
+      const switcher = settingsInfo.find((setting) => setting.name.replace(/\s/g, '-').toLowerCase() === switcherId);
+      const isDisablingRequiredSetting = (switcher.isChecked && switcher.isRequired);
 
       if (isDisablingRequiredSetting) {
         const isLastCheckedRequiredSetting = settingsInfo
@@ -25,9 +28,17 @@ const SettingsSection = ({ sectionInfo, handleChange }) => {
     },
 
     handleInputChange(newInputValue, inputId) {
-      const inputSectionName = 'education';
-      if (Number(newInputValue) >= 1) {
-        handleChange(inputId, inputSectionName, newInputValue);
+      if (Number(newInputValue) >= numberPickerMinValue) {
+        const currentInputRatio = settingsInfo.reduce((acc, setting) => {
+          const settingId = setting.name.replace(/\s/g, '-').toLowerCase();
+          const value = (inputId === settingId) ? newInputValue : setting.value;
+
+          return Math.abs(acc - value);
+        }, 0);
+
+        if (currentInputRatio >= defaultInputRatio) {
+          handleChange(inputId, sectionName, newInputValue);
+        }
       }
     },
   };
@@ -41,7 +52,7 @@ const SettingsSection = ({ sectionInfo, handleChange }) => {
         <Setting
           settingInfo={settingInfo}
           settingSectionName={sectionName}
-          key={settingInfo.id}
+          key={settingInfo.name}
           handleChange={handleEvents}
         />
       ))}

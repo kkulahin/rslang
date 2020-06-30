@@ -9,12 +9,12 @@ const Settings = ({ settings, handleAppChange }) => {
     const { sectionName, settingsArr } = section;
 
     if (sectionName === elementSectionName) {
-      if (newElementValue) {
-        const inputId = settingsArr.findIndex((setting) => setting.name.replace(/\s/g, '-').toLowerCase() === elementId);
+      const itemId = settingsArr.findIndex((setting) => setting.name.replace(/\s/g, '-').toLowerCase() === elementId);
 
-        settingsArr[inputId].value = Number(newElementValue);
+      if (newElementValue) {
+        settingsArr[itemId].value = Number(newElementValue);
       } else {
-        settingsArr[elementId - 1].isChecked = !settingsArr[elementId - 1].isChecked;
+        settingsArr[itemId].isChecked = !settingsArr[itemId].isChecked;
       }
     }
 
