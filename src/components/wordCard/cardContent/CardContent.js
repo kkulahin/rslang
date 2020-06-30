@@ -12,13 +12,12 @@ import Word from '../../../utils/spacedRepetition/Word';
 const CardContent = (props) => {
   const {
     settings: {
-      isShowAnswerBtn, isDeleteBtn, isHardBtn, isComplexityBtn,
+      isShowAnswerBtn, isDeleteBtn, isComplexityBtn,
     },
     helpSettings, isPrevWord, word, isWordInput, isCorrect, isShowBtnClick,
     onCardBtnClick, onWordComplexityBtnClick,
   } = props;
   const complexity = word.getDifficulty();
-  const isHard = false;
 
   const ShowAnswerBtn = (
     <Button
@@ -37,11 +36,11 @@ const CardContent = (props) => {
     />
   );
 
-  const HardBtn = (
+  const AgainBtn = (
     <Button
-      isActive={isHard}
-      id="hardWord"
-      label="Hard"
+      isDisabled={isCorrect || isShowBtnClick}
+      id="againWord"
+      label="Again"
       clickHandler={(id) => onCardBtnClick(id)}
     />
   );
@@ -57,10 +56,9 @@ const CardContent = (props) => {
   );
 
   const radioButtons = [
-    { label: 'again', id: 'снова' },
-    { label: 'diff', id: 'трудно' },
-    { label: 'good', id: 'хорошо' },
-    { label: 'easy', id: 'легко' },
+    { label: 'hard', id: 'hard' },
+    { label: 'normal', id: 'normal' },
+    { label: 'easy', id: 'easy' },
   ];
 
   const complexityBtn = (
@@ -86,9 +84,9 @@ const CardContent = (props) => {
         />
       </div>
       <div className="card-controls">
+        {isComplexityBtn && !isPrevWord && AgainBtn}
         {isComplexityBtn && !isPrevWord && complexityBtn}
         <div className="card-controls__buttons">
-          {isHardBtn && !isPrevWord && HardBtn}
           {isDeleteBtn && !isPrevWord && DeleteBtn}
           {isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
           {AudioPlayBtn}
@@ -113,6 +111,6 @@ CardContent.propTypes = {
   settings: PropTypes.shape({
     isShowAnswerBtn: PropTypes.bool.isRequired,
     isDeleteBtn: PropTypes.bool.isRequired,
-    isHardBtn: PropTypes.bool.isRequired,
+    // isHardBtn: PropTypes.bool.isRequired,
   }),
 };

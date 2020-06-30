@@ -49,7 +49,7 @@ const HelpText = ({
   const textExampleElement = (
     <li className="help-content-text__item">
       <p className="text-item">
-        <HelpTextFormatted text={textExample} word={word} isFullState={isFullState} />
+        <HelpTextFormatted text={textExample} isFullState={isFullState} />
       </p>
       {isTranslateShow && <p className={classes}>{textExampleTranslate}</p>}
     </li>
@@ -58,7 +58,7 @@ const HelpText = ({
   const textMeaningElement = (
     <li className="help-content-text__item">
       <p className="text-item">
-        <HelpTextFormatted text={textMeaning} word={word} isFullState={isFullState} />
+        <HelpTextFormatted text={textMeaning} isFullState={isFullState} />
       </p>
       {isTranslateShow && <p className={classes}>{textMeaningTranslate}</p>}
     </li>

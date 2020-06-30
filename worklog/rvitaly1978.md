@@ -6,3 +6,4 @@
 | create round progress bar | 18.06.2020 | 19.06.2020 | 4 h |
 | add container with shadow | 19.06.2020 | 19.06.2020 | 1 h |
 | create word card | 20.06.2020 | 26.06.2020 | 40 h |
+| fix word card | 30.06.2020 | 30.06.2020 | 2 h |

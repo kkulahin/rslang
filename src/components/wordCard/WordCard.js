@@ -24,7 +24,7 @@ const WordCard = ({
   currentWord,
   onErrorAnswer,
   onAgainBtnClick,
-  onHardBtnClick,
+  // onHardBtnClick,
   onComplexityBtnClick,
   onDeleteBtnClick,
   onNextBtnClick,
@@ -170,7 +170,7 @@ const WordCard = ({
   const handleCardBtnClick = (id) => {
     const handlers = {
       deleteWord: onDeleteBtnClick,
-      hardWord: onHardBtnClick,
+      againWord: onAgainBtnClick,
       speakWord: handleAudioPlayBtnClick,
       showWord: handleShowBtnClick,
     };
@@ -178,22 +178,23 @@ const WordCard = ({
     handlers[id]();
   };
 
-  const cardContentProps = {
-    helpSettings,
-    settings,
-    word: currentWord,
-    onInputEnter: handleInputEnter,
-    onInputFocus: handleInputFocus,
-    onInputChange: handleInputChange,
-    onCardBtnClick: handleCardBtnClick,
-    onWordComplexityBtnClick: handleWordComplexityBtnClick,
-    inputRef,
-    value,
-    isShowBtnClick,
-    isWordInput,
-    isCorrect,
-    isPrevWord,
-  };
+  // const cardContentProps = {
+  //   helpSettings,
+  //   settings,
+  //   word: currentWord,
+  //   onInputEnter: handleInputEnter,
+  //   onInputFocus: handleInputFocus,
+  //   onInputChange: handleInputChange,
+  //   onCardBtnClick: handleCardBtnClick,
+  //   onWordComplexityBtnClick: handleWordComplexityBtnClick,
+  //   inputRef,
+  //   value,
+  //   isShowBtnClick,
+  //   isWordInput,
+  //   isCorrect,
+  //   isPrevWord,
+  // };
+
   return (
     <div className="card-unit">
       <div className="card__container">
