@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../components/button/Button';
+import avatarDefault from '../../../assets/image/avatar/woman.png';
 
 const Person = ({ personInfo }) => {
   const {
     avatar, aboutPerson, linkGitHub, contribution, name: { first, sur, nick },
   } = personInfo;
-
   return (
     <div className="cards_person">
       <div className="avatar_and_name">
         <div className="avatar">
-          <img src={avatar} alt="avatar" className="img_avatar" />
+          <img src={avatar === '' ? avatarDefault : avatar} alt="avatar" className="img_avatar" />
         </div>
         <div className="full_name">
           <p>
