@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Button, Icon, Transition,
+  Icon, Transition,
 } from 'semantic-ui-react';
 import {
   TimelineLite, Linear,
 } from 'gsap/all';
+import ReactCountDown from 'react-countdown-clock';
+import ShadowContainer from '../../../../components/containerWithShadow/ContainerWithShadow';
 
 import './savanna.scss';
-import ReactCountDown from 'react-countdown-clock';
 import { getWords } from '../../../../controllers/words/words';
+
+import RadioButton from '../../../../components/radioButton/radioButtonContainer/RadioButtonContainer';
+import Button from '../../../../components/button/Button';
+import gameOption from './gameOption';
 
 const gameScreenDef = {
   start: true,
@@ -22,6 +27,8 @@ const optionDef = {
   maxWords: 25,
   timer: 10,
 };
+
+const requestWordsPerPage = 20;
 
 const shuffleArray = (arr) => arr.map((a) => [Math.random(), a]).sort((a, b) => a[0] - b[0]).map((a) => a[1]);
 
@@ -41,21 +48,24 @@ const transtionWordDef = {
 const Savanna = () => {
   const [screen, setScreen] = useState(gameScreenDef);
   const [timer, setTimer] = useState(false);
-  const [option, setOption] = useState(optionDef);
+  const [option, setOption] = useState(null);
   const [kit, setKit] = useState([]);
+  const [setupKitSingleton, setKitSingleton] = useState(false);
   const [wordsForPlay, setGameWords] = useState([]);
   const [transitionWord] = useState(transtionWordDef);
   const [cKitStage, setCurKitStage] = useState([]);
   const [answer, setAnswer] = useState(null);
   const [gameWordAnimation, setGameWordAnimation] = useState(null);
   const [nextWordCb, setNextWordCb] = useState(false);
+  const [level, setLevel] = useState(null);
 
   const curGameWord = useRef(null);
   const gameWindow = useRef(null);
+  let gameLevel = useRef(null);
 
   const redirectToGame = () => {
     const gameScreen = {
-      start: true,
+      start: false,
       game: true,
       result: false,
     };
@@ -69,6 +79,8 @@ const Savanna = () => {
       game: false,
       result: false,
     };
+    setLevel(null);
+    gameLevel = null;
     setOption(optionDef);
     setKit([]);
     setGameWords([]);
@@ -79,6 +91,7 @@ const Savanna = () => {
   };
 
   const buildLifeElement = () => {
+    if (option === null) return null;
     const { curLife, maxLife } = option;
     const life = Array.from({ length: curLife }, () => 'heart');
     const damage = Array.from({ length: maxLife - curLife }, () => 'heart outline');
@@ -106,7 +119,15 @@ const Savanna = () => {
   const buildGameplayWords = () => {
     const elements = Array.from({ length: 4 }, (v, k) => k); // depends from difficult
     const gameplayWords = elements.map((e, index) => (
-      <div
+      <Button
+        key={e}
+        buttonClassName="word"
+        clickHandler={checkAnswer}
+        data-translate={isEmptyArr(cKitStage) ? null : cKitStage[index].wordTranslate}
+        label={`${index + 1}: ${isEmptyArr(cKitStage) ? null : cKitStage[index].wordTranslate}`}
+        name="check"
+      />
+      /* <div
         key={e}
         className="word"
         data-translate={isEmptyArr(cKitStage) ? null : cKitStage[index].wordTranslate}
@@ -115,19 +136,21 @@ const Savanna = () => {
       >
         {' '}
         {`${index + 1}: ${isEmptyArr(cKitStage) ? null : cKitStage[index].wordTranslate}`}
-      </div>
+      </div> */
     ));
     return <div className="savanna-wordpanel">{gameplayWords}</div>;
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const getWordsForGame = () => {
+      if (option === null) {
+        return null;
+      }
       const wordsPromise = [];
-      // words for game * 4 = total words
-      // total words / 20 = request pages
-      for (let stage = 0; stage <= 4; stage += 1) {
-        wordsPromise.push(getWords(0, 0, true));
+      const totalWordsNumber = option.maxWords * 4;
+      const stageMax = totalWordsNumber / requestWordsPerPage;
+      for (let stage = 0; stage <= stageMax; stage += 1) {
+        wordsPromise.push(getWords(0, 0, true, true));
       }
       let totalWords = [];
       Promise.all(wordsPromise).then((resps) => {
@@ -147,10 +170,11 @@ const Savanna = () => {
       }).from(gameWindow.current, { y: 0 });
       setGameWordAnimation(timeLine);
     }
-  });
+    return undefined;
+  }, [kit, gameWordAnimation, option]);
 
   useEffect(() => {
-    if (option.curLife === 0) {
+    if (option?.curLife === 0) {
       gameWordAnimation.pause();
       const gameScreen = {
         start: false,
@@ -162,9 +186,12 @@ const Savanna = () => {
   }, [option, gameWordAnimation]);
 
   useEffect(() => {
-    const newGameWords = shuffleArray(kit).slice(0, optionDef.maxWords);
-    setGameWords(newGameWords);
-  }, [kit]);
+    if (option !== null && !isEmptyArr(kit) && !setupKitSingleton) {
+      const newGameWords = shuffleArray(kit).slice(0, option.maxWords);
+      setGameWords(newGameWords);
+      setKitSingleton(true);
+    }
+  }, [kit, option, setupKitSingleton]);
 
   useEffect(() => {
     if (Array.isArray(wordsForPlay) && wordsForPlay.length) {
@@ -211,11 +238,11 @@ const Savanna = () => {
 
     if (answer !== null && gameWordAnimation !== null && screen.game) {
       gameWordAnimation.to(curGameWord.current,
-        option.timer,
+        option.gameTimer,
         { y: gameWindow.current.offsetHeight, onComplete: nextWordByTimeOut });
       gameWordAnimation.restart();
     }
-  }, [answer, gameWordAnimation, option.timer, screen.game, option, wordsForPlay]);
+  }, [answer, gameWordAnimation, option?.timer, screen.game, option, wordsForPlay]);
 
   const getGameWord = () => {
     if (answer !== null) {
@@ -225,18 +252,75 @@ const Savanna = () => {
   };
 
   const getSuccessRate = () => {
-    const persent = ((option.maxWords - wordsForPlay.length) / option.maxWords) * 100;
-    return Math.round(persent);
+    const errors = option?.maxLife - option?.curLife;
+    const persent = ((option?.maxWords - wordsForPlay.length) / option?.maxWords) * 100;
+    return Math.round(persent / errors);
   };
 
   const startPreloadTimer = () => {
+    const changeGameSettings = () => {
+      const optionDeff = gameOption[level];
+      const curLife = gameOption[level].maxLife;
+      const newOptionDef = {
+        ...optionDeff,
+        curLife,
+      };
+      setOption(newOptionDef);
+    };
+    changeGameSettings();
     setTimer(true);
   };
 
+  const setLevelType = (e, type) => {
+    if (gameLevel.current !== e.currentTarget.parentElement) {
+      if (gameLevel.current !== null) {
+        const el = gameLevel.current.querySelector('.radio-button--checked');
+        if (el !== null) {
+          el.click();
+        }
+      }
+      gameLevel.current = e.currentTarget.parentElement;
+    }
+
+    if (level !== type) {
+      setLevel(type);
+    }
+
+    if (level === type) {
+      setLevel(null);
+    }
+  };
   return (
     <>
+
       <div className={`savanna-startpage ${screen?.start ? 'visible' : 'invisible'}`}>
-        { timer ? null : (<Button primary onClick={startPreloadTimer}> Start</Button>) }
+        {
+     timer ? null : (
+       <div
+         className="savanna-gamelevel"
+       >
+         <RadioButton
+           className="savanna-level level-default"
+           items={['easy', 'normal', 'hard']}
+           onChange={setLevelType}
+         />
+         <RadioButton
+           className="savanna-level level-hardmode"
+           items={['YOLO']}
+           onChange={setLevelType}
+         />
+       </div>
+     )
+   }
+        { timer ? null : (
+          <Button
+            label="start"
+            name="check"
+            buttonClassName="savanna-start"
+            clickHandler={startPreloadTimer}
+            isDisabled={level === null}
+          />
+        ) }
         { !timer ? null : (
           <ReactCountDown
             color="#25cede"
@@ -264,19 +348,26 @@ const Savanna = () => {
         </div>
       </div>
       <div className={`savanna-resultpage ${screen?.result ? 'visible' : 'invisible'}`}>
-        <div className="user-result">
-          <div>
-            {' '}
-            Errors:
-            {option.maxLife - option.curLife}
+        <ShadowContainer>
+          <div className="user-result">
+            <div>
+              {' '}
+              Errors:
+              {option?.maxLife - option?.curLife}
+            </div>
+            <div>
+              {' '}
+              Success rate %:
+              {getSuccessRate()}
+            </div>
           </div>
-          <div>
-            {' '}
-            Success rate %:
-            {getSuccessRate()}
-          </div>
-        </div>
-        <Button primary onClick={redirectToStart}> Try again?</Button>
+        </ShadowContainer>
+
+        <Button
+          clickHandler={redirectToStart}
+          label="Try again?"
+          name="check"
+        />
       </div>
     </>
   );

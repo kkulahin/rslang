@@ -22,7 +22,33 @@
     display: flex;
     height: 50vh;
     font-size: 24px;
-    /*overflow: hidden;*/
+    overflow: hidden;
+}
+
+.savanna-startpage {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 50vh;
+}
+
+.savanna-gamelevel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.savanna-start {
+    display: flex !important;
+    justify-content: center;
+    width: 275px;
+    margin-top: 40px;
+    padding: 35px !important;
+}
+
+.savanna-level {
+    margin: 40px;
 }
 
 .savanna-gameword {
@@ -52,5 +78,10 @@
     justify-content: space-evenly;
     align-items: center;
      width: 100%;
-     height: 20vh;
+     height: 50vh;
 }
+
+.user-result:first-child div {
+    margin-bottom: 20px;
+}
+

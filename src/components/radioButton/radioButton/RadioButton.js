@@ -13,8 +13,8 @@ const RadioButton = ({ label, checked, onClickRadioButton }) => {
     <button
       type="button"
       className={className}
-      onClick={() => {
-        onClickRadioButton();
+      onClick={(e) => {
+        onClickRadioButton(e);
       }}
     >
       {label}
