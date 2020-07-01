@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router, Route, Switch,
 } from 'react-router-dom';
+
 import History from '../utils/history';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
@@ -21,17 +22,30 @@ import GreetingWrapper from '../components/greetingWrapper/GreetingWrapper';
 import WordController from '../utils/spacedRepetition/WordConrtoller';
 
 import appDefaultSettings from '../config/defaultSettings';
+import { getConfig, saveConfig } from '../controllers/appConfig/appConfig';
+import settingQueueSubject from '../utils/observers/SettingQueueSubject';
 
 import './App.scss';
-
-const appSettings = JSON.parse(localStorage.getItem('userSettings')) || appDefaultSettings;
 
 const App = () => {
   const wordController = new WordController();
   wordController.init();
-  const [settings, setSettings] = useState(appSettings);
 
-  useEffect(() => localStorage.setItem('userSettings', JSON.stringify(settings)));
+  const [settings, setSettings] = useState(appDefaultSettings);
+
+  useEffect(() => {
+    settingQueueSubject.subscribe(setSettings);
+
+    getConfig();
+
+    return () => settingQueueSubject.unsubscribe(setSettings);
+  }, []);
+
+  useEffect(() => {
+    if (settings !== appDefaultSettings) {
+      saveConfig(settings);
+    }
+  }, [settings]);
 
   const [cardSettings, educationSettings, buttonSettings] = settings;
   const [wordsCount, cardsCount] = educationSettings.settingsArr;
