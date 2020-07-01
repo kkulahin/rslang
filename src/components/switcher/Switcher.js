@@ -24,7 +24,7 @@ const Switcher = ({
 
 Switcher.propTypes = {
   parrentClassName: PropTypes.string,
-  switcherId: PropTypes.number.isRequired,
+  switcherId: PropTypes.string.isRequired,
   isChecked: PropTypes.bool.isRequired,
   isRequired: PropTypes.bool,
   onChange: PropTypes.func.isRequired,

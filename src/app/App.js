@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router, Switch, Route,
 } from 'react-router-dom';
+
 import History from '../utils/history';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
@@ -20,16 +21,28 @@ import Header from '../components/header/Header';
 import GreetingWrapper from '../components/greetingWrapper/GreetingWrapper';
 
 import appDefaultSettings from '../config/defaultSettings';
+import { getConfig, saveConfig } from '../controllers/appConfig/appConfig';
+import settingQueueSubject from '../utils/observers/SettingQueueSubject';
 
 import './App.scss';
 import PrivateRoute from '../components/route/PrivateRoute';
 
-const appSettings = JSON.parse(localStorage.getItem('userSettings')) || appDefaultSettings;
-
 const App = () => {
-  const [settings, setSettings] = useState(appSettings);
+  const [settings, setSettings] = useState(appDefaultSettings);
 
-  useEffect(() => localStorage.setItem('userSettings', JSON.stringify(settings)));
+  useEffect(() => {
+    settingQueueSubject.subscribe(setSettings);
+
+    getConfig();
+
+    return () => settingQueueSubject.unsubscribe(setSettings);
+  }, []);
+
+  useEffect(() => {
+    if (settings !== appDefaultSettings) {
+      saveConfig(settings);
+    }
+  }, [settings]);
 
   const [cardSettings, educationSettings, buttonSettings] = settings;
   const [wordsCount, cardsCount] = educationSettings.settingsArr;
