@@ -7,12 +7,10 @@ class AuthService {
   isLoggedIn = () => {
     const login = getCookie('login');
     const auth = getCookie('auth');
-    console.log(auth, login);
     return { auth: auth !== null && auth !== '', login: login !== null && login !== '' };
   }
 
   tryLogIn = async () => {
-    console.log('try log in');
     const authStr = getCookie('auth');
     if (authStr === null && authStr !== '') {
       const userLogged = await this.tryToUseLocalStorage();

@@ -16,7 +16,6 @@ export default class WordModel {
   constructor(settings) {
     this.settings = settings;
     signinSubject.subscribe(this.getUser);
-    console.log(this.settings);
   }
 
   init = async () => {
@@ -29,7 +28,6 @@ export default class WordModel {
     }
     await this.getStatistics();
     if (!this.hasQueueForToday()) {
-      console.log('build queue');
       const userWords = await this.queryUserWords();
       const newWords = await this.queryNewWords();
       this.wordQueue = new WordQueue(this.settings);
@@ -38,7 +36,6 @@ export default class WordModel {
     } else {
       this.wordQueue = new WordQueue(this.settings);
       const { data: words } = await this.getWordsFromSavedQueue();
-      console.log(this.statistics.optional.todayQueue);
       this.wordQueue.usePredefinedQueue(this.statistics.optional.todayQueue, words);
     }
 
@@ -51,7 +48,6 @@ export default class WordModel {
       isEducation: queueW.isEducation,
       nextTime: queueW.nextTime,
     }));
-    console.log(words);
   }
 
   getUser= () => {
@@ -59,7 +55,6 @@ export default class WordModel {
     if (userStr === null || userStr === '') {
       this.user = null;
     } else {
-      console.log(userStr);
       this.user = JSON.parse(userStr);
     }
   }
@@ -87,7 +82,6 @@ export default class WordModel {
   getStatistics = async () => {
     const { data, response } = await makeRequest('GET', `users/${this.user.userId}/statistics`,
       this.user.token);
-      console.log(data, response);
     if (!response.ok) {
       if (response.status === 404) {
         const putData = { learnedWords: 0, optional: {} };
@@ -121,7 +115,6 @@ export default class WordModel {
       this.statistics.optional = {};
     }
     this.statistics.optional.todayQueue = this.wordQueue.getQueueToSave();
-    console.log(JSON.stringify(this.statistics, null, 2));
     const { data, response } = await makeRequest(
       'PUT',
       `users/${this.user.userId}/statistics`,
@@ -175,7 +168,6 @@ export default class WordModel {
     if (!response.ok) {
       throw new Error(`GET Words failed with ${response.status} ${response.statusText}`);
     }
-    console.log(dataArray);
     const [data] = dataArray;
     const words = data.paginatedResults;
     return { data: words, response };

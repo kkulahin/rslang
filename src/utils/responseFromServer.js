@@ -1,4 +1,4 @@
-import {SchoolURL} from '../config/default';
+import { SchoolURL } from '../config/default';
 import authService from '../services/AuthService';
 import history from './history';
 import signinSubject from './observers/SignInSubject';
@@ -36,7 +36,6 @@ const responseFromServer = async (url,
       ...params,
       body: JSON.stringify(userData),
     };
-    console.log(params);
   }
   const response = await fetch(url, params);
 
@@ -65,7 +64,6 @@ const retryMakeRequest = async (method, path, token, body, params = {}) => {
   if (body) {
     request.options.body = JSON.stringify(body);
   }
-  console.log(request);
   const response = await fetch(request.url, request.options);
   if (!response.ok) {
     if (response.status === 401) {
@@ -77,14 +75,12 @@ const retryMakeRequest = async (method, path, token, body, params = {}) => {
 };
 
 export const makeRequest = async (method, path, token, body, params = {}) => {
-  console.log('make request');
   const tryTimes = 2;
   let index = 0;
   let isAuthError = false;
   let response = {};
   while (index < tryTimes) {
     try {
-      console.log('try # '+index);
       if (isAuthError) {
         isAuthError = false;
         const isLoggedIn = await authService.tryLogIn();
@@ -94,12 +90,9 @@ export const makeRequest = async (method, path, token, body, params = {}) => {
           return { response: { ok: false, statusText: 'Unauthorized', status: 401 } };
         }
       }
-      console.log('try # '+index, method, path, token, body, params);
       response = await retryMakeRequest(method, path, token, body, params);
-      console.log(response);
       return response;
     } catch (e) {
-      console.log(e);
       if (e.message === 'Retry') {
         isAuthError = true;
       }

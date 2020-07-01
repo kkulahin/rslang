@@ -95,7 +95,6 @@ const LoginForm = () => {
           msg: 'User get successfully',
           status: true,
         };
-        console.log('data', data);
         const response = await responseFromServer(`${SchoolURL}/signin`, null, getUserNotification, 'POST', data);
         setUserNotification(response.notification);
         if (response.notification.status) {

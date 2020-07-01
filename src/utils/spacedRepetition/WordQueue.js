@@ -33,7 +33,6 @@ export default class WordQueue {
     WordQueue.fillQueue(pontentialWords, potentialQueue);
     WordQueue.fillQueue(this.words, this.queue);
     this.filterUserWordsByCount(potentialQueue);
-    console.log(this.words);
     this.words.forEach((w) => w.shiftMistakes());
   }
 
