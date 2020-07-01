@@ -18,6 +18,8 @@ $element-border-radius: 3px;
 $word-input-padding: 7px;
 $word-bg-color: rgba(#25CEDE, 0.5);
 
+$image-width: 280px;
+
 @mixin font ($size, $height, $weight, $style: normal) {
   font-style: $style;
   font-size: $size;
@@ -78,8 +80,14 @@ $word-bg-color: rgba(#25CEDE, 0.5);
   }
   
   .help-content__image {
-    width: 40%;
-    min-width: 280px;
+    position: relative;
+
+    flex-shrink: 0;
+
+    @include flex();
+
+    width: $image-width;
+    height: calc(#{$image-width} * 2 / 3);
   
     line-height: 0;
   
@@ -89,9 +97,17 @@ $word-bg-color: rgba(#25CEDE, 0.5);
     border-radius: 5px;
   }
 
+  .help-content__image p {
+    line-height: 1;
+    text-align: center;
+  }
+
   .help-content__image img {
     width: 100%;
     height: auto;
+
+    object-fit: fill;
+    object-position: center;
   }
 
   .help-content__text {
@@ -170,6 +186,10 @@ $word-bg-color: rgba(#25CEDE, 0.5);
     height: 100%;
 
     @include flex($justify-content: flex-end);
+  }
+
+  .card-controls__buttons + .card-controls__buttons {
+    margin-left: auto;
   }
 
   .learn-content {

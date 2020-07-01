@@ -11,10 +11,11 @@ import Word from '../../../utils/spacedRepetition/Word';
 
 const CardContent = (props) => {
   const {
+		helpSettings: { isImageShow },
     settings: {
       isShowAnswerBtn, isDeleteBtn, isComplexityBtn,
     },
-    helpSettings, isPrevWord, word, isWordInput, isCorrect, isShowBtnClick,
+    isPrevWord, word, isCorrect, isShowBtnClick, isAgainBtnClick,
     onCardBtnClick, onWordComplexityBtnClick,
   } = props;
   const complexity = word.getDifficulty();
@@ -38,7 +39,7 @@ const CardContent = (props) => {
 
   const AgainBtn = (
     <Button
-      isDisabled={isCorrect || isShowBtnClick}
+      isDisabled={isAgainBtnClick}
       id="againWord"
       label="Again"
       clickHandler={(id) => onCardBtnClick(id)}
@@ -61,31 +62,26 @@ const CardContent = (props) => {
     { label: 'easy', id: 'easy' },
   ];
 
-  const complexityBtn = (
-    <RadioButtonContainer
-      items={radioButtons}
-      onChange={onWordComplexityBtnClick}
-      checkedItem={complexity}
-      isAttention={isCorrect || isShowBtnClick}
-    />
+  const complexityButtons = (
+		<div className="card-controls__buttons">
+			{AgainBtn}
+			<RadioButtonContainer
+				items={radioButtons}
+				onChange={onWordComplexityBtnClick}
+				checkedItem={complexity}
+				isAttention={isCorrect || isShowBtnClick}
+			/>
+		</div>
   );
 
   return (
     <div className="card-content">
       <div className="help-content">
-        <HelpImage
-          helpSettings={helpSettings}
-          word={word.definition}
-        />
-        <HelpText
-          helpSettings={helpSettings}
-          word={word.definition}
-          isFullState={isWordInput || isPrevWord}
-        />
+				{isImageShow && <HelpImage {...props} />}
+        <HelpText {...props} />
       </div>
       <div className="card-controls">
-        {isComplexityBtn && !isPrevWord && AgainBtn}
-        {isComplexityBtn && !isPrevWord && complexityBtn}
+				{isComplexityBtn && !isPrevWord && isCorrect && complexityButtons}
         <div className="card-controls__buttons">
           {isDeleteBtn && !isPrevWord && DeleteBtn}
           {isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
@@ -112,5 +108,8 @@ CardContent.propTypes = {
     isShowAnswerBtn: PropTypes.bool.isRequired,
     isDeleteBtn: PropTypes.bool.isRequired,
     // isHardBtn: PropTypes.bool.isRequired,
-  }),
+  }).isRequired,
+  helpSettings: PropTypes.shape({
+    isImageShow: PropTypes.bool.isRequired,
+  }).isRequired,
 };

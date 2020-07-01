@@ -1,0 +1,36 @@
+$color-loader: #25CEDE;
+
+.spinner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: transparent;
+  border-radius: inherit;
+
+  pointer-events: none;
+}
+
+.donut {
+  width: 3.2rem;
+  height: 3.2rem;
+
+  border: 0.5rem solid rgba($color-loader, 0.1);
+  border-radius: 50%;
+  border-top-color: $color-loader;
+
+  animation: spin 1.5s infinite linear;
+}
+
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+}

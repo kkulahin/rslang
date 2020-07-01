@@ -22,9 +22,7 @@ const WordCard = ({
   helpSettings,
   settings,
   currentWord,
-  onErrorAnswer,
   onAgainBtnClick,
-  // onHardBtnClick,
   onComplexityBtnClick,
   onDeleteBtnClick,
   onNextBtnClick,
@@ -38,8 +36,8 @@ const WordCard = ({
   const [isWordInput, setIsWordInput] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isShowBtnClick, setIsShowBtnClick] = useState(false);
+  const [isAgainBtnClick, setIsAgainBtnClick] = useState(false);
   const [value, setValue] = useState('');
-  const [isPrevWord, setIsPrevWord] = useState(false);
 
   const { isTextExampleShow, isTextMeaningShow } = helpSettings;
   const { isAudioAuto, isComplexityBtn } = settings;
@@ -49,7 +47,7 @@ const WordCard = ({
 
   const {
     word, audio, audioExample, audioMeaning,
-  } = currentWord.definition;
+	} = currentWord.definition;
 
   let isAudioSrcLoading = false;
   let currentTruck = 0;
@@ -71,29 +69,31 @@ const WordCard = ({
   };
 
   const handleAnswer = (isCorrectAnswer) => {
-    if (isAudioAuto) {
-      audioPlay();
-    }
     setValue('');
     setIsWordInput(true);
     inputRef.current.blur();
 
     if (isCorrectAnswer) {
-      setIsCorrect(true);
+			setIsCorrect(true);
+			onWordAnswered();
     } else {
-      onErrorAnswer();
+      onWordMistaken();
+		}
+		
+		if (isAudioAuto) {
+      audioPlay();
     }
   };
 
   const resetWord = () => {
     setIsWordInput(false);
     setIsCorrect(false);
-    setIsShowBtnClick(false);
+		setIsShowBtnClick(false);
+		setIsAgainBtnClick(false);
     setValue('');
   };
 
   const getNextWord = () => {
-    console.log('----- get next word ----');
     resetWord();
     onNextBtnClick();
   };
@@ -139,8 +139,8 @@ const WordCard = ({
 
   const handleInputEnter = (evt) => {
     if (evt.key === 'Enter') {
-      const { value: val } = evt.target;
-      handleAnswer(checkCorrect({ value: val, word }));
+      const { value } = evt.target;
+      handleAnswer(checkCorrect({ value, word }));
     }
   };
 
@@ -153,8 +153,9 @@ const WordCard = ({
 
   const handleShowBtnClick = () => {
     setIsShowBtnClick(true);
+		handleAnswer(false);
+		onWordAnswered();
     setIsCorrect(true);
-    handleAnswer(false);
   };
 
   const handleAudioPlayBtnClick = () => {
@@ -165,35 +166,23 @@ const WordCard = ({
 
   const handleWordComplexityBtnClick = (id) => {
     onComplexityBtnClick(id);
+	};
+
+  const handleAgainBtnClick = () => {
+		setIsAgainBtnClick(true);
+    onAgainBtnClick();
   };
 
   const handleCardBtnClick = (id) => {
     const handlers = {
       deleteWord: onDeleteBtnClick,
-      againWord: onAgainBtnClick,
+      againWord: handleAgainBtnClick,
       speakWord: handleAudioPlayBtnClick,
       showWord: handleShowBtnClick,
     };
 
     handlers[id]();
   };
-
-  // const cardContentProps = {
-  //   helpSettings,
-  //   settings,
-  //   word: currentWord,
-  //   onInputEnter: handleInputEnter,
-  //   onInputFocus: handleInputFocus,
-  //   onInputChange: handleInputChange,
-  //   onCardBtnClick: handleCardBtnClick,
-  //   onWordComplexityBtnClick: handleWordComplexityBtnClick,
-  //   inputRef,
-  //   value,
-  //   isShowBtnClick,
-  //   isWordInput,
-  //   isCorrect,
-  //   isPrevWord,
-  // };
 
   return (
     <div className="card-unit">
@@ -203,7 +192,7 @@ const WordCard = ({
           id="prev"
           onClick={handleNavigatePrevClick}
           isInvisible={!hasPrevious}
-          isDisabled={isCorrect || isShowBtnClick}
+          isDisabled={isCorrect || isShowBtnClick || isAnswered}
         />
         <ContainerWithShadow padding="20px">
           <CardContent
@@ -218,12 +207,17 @@ const WordCard = ({
             inputRef={inputRef}
             value={value}
             isShowBtnClick={isShowBtnClick}
+            isAgainBtnClick={isAgainBtnClick}
             isWordInput={isWordInput}
             isCorrect={isCorrect}
             isPrevWord={isAnswered}
           />
         </ContainerWithShadow>
-        <NavigateBtn classes="next" id="next" onClick={handleNavigateNextClick} />
+        <NavigateBtn
+					classes="next"
+					id="next"
+					onClick={handleNavigateNextClick}
+				/>
         <audio
           ref={audioRef}
           src={tracks[0]}
