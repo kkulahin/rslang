@@ -15,7 +15,7 @@ const Button = (props) => {
   } = props;
 
   const icon = (iconName)
-    ? icon = <Icon name={iconName} />
+    ? <Icon name={iconName} />
     : null;
 
   const className = (isActive)

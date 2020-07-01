@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import ContainerWithShadow from '../containerWithShadow/ContainerWithShadow';
 import NavigateBtn from './navigateBtn/NavigateBtn';
 import CardContent from './cardContent/CardContent';
 
 import './WordCard.scss';
-import Word from '../../utils/spacedRepetition/Word';
+// import Word from '../../utils/spacedRepetition/Word';
 import WordQueue from '../../utils/spacedRepetition/WordQueue';
 // import { urlToAssets } from '../../constants/urls';
 
@@ -45,30 +45,30 @@ const WordCard = ({
 
   const inputRef = useRef();
 
+  const resetWord = () => {
+    setIsWordInput(false);
+    setIsCorrect(false);
+    setIsShowBtnClick(false);
+    setIsAgainBtnClick(false);
+    setIsAudioOn({ audioOn: false });
+    setValue('');
+  };
+
   const handleAnswer = (isCorrectAnswer) => {
     setValue('');
     setIsWordInput(true);
     inputRef.current.blur();
 
     if (isCorrectAnswer) {
-			setIsCorrect(true);
-			onWordAnswered();
+      setIsCorrect(true);
+      onWordAnswered();
     } else {
       onWordMistaken();
-		}
-		
-		if (isAudioAuto) {
-			setIsAudioOn({ audioOn: true });
     }
-  };
 
-  const resetWord = () => {
-    setIsWordInput(false);
-    setIsCorrect(false);
-		setIsShowBtnClick(false);
-		setIsAgainBtnClick(false);
-		setIsAudioOn({ audioOn: false });
-    setValue('');
+    if (isAudioAuto) {
+      setIsAudioOn({ audioOn: true });
+    }
   };
 
   const getNextWord = () => {
@@ -76,11 +76,11 @@ const WordCard = ({
     onNextBtnClick();
   };
 
-  // const onAudioEnded = () => {
-  //   if ((isCorrect || isShowBtnClick) && !isComplexityBtn) {
-  //     getNextWord();
-  //   }
-  // };
+  const handleAudioEnd = () => {
+    if ((isCorrect || isShowBtnClick) && !isComplexityBtn) {
+      getNextWord();
+    }
+  };
 
   const handleInputChange = (evt) => {
     setValue(evt.target.value);
@@ -110,23 +110,23 @@ const WordCard = ({
   const handleInputFocus = () => {
     if (isWordInput) {
       setIsWordInput(false);
-			setIsAudioOn({ audioOn: false });
+      setIsAudioOn({ audioOn: false });
     }
   };
 
   const handleShowBtnClick = () => {
     setIsShowBtnClick(true);
-		handleAnswer(false);
-		onWordAnswered();
+    handleAnswer(false);
+    onWordAnswered();
     setIsCorrect(true);
   };
 
   const handleWordComplexityBtnClick = (id) => {
     onComplexityBtnClick(id);
-	};
+  };
 
   const handleAgainBtnClick = () => {
-		setIsAgainBtnClick(true);
+    setIsAgainBtnClick(true);
     onAgainBtnClick();
   };
 
@@ -160,21 +160,22 @@ const WordCard = ({
             onInputChange={handleInputChange}
             onCardBtnClick={handleCardBtnClick}
             onWordComplexityBtnClick={handleWordComplexityBtnClick}
+            onAudioEnd={handleAudioEnd}
             inputRef={inputRef}
             value={value}
             isShowBtnClick={isShowBtnClick}
             isAgainBtnClick={isAgainBtnClick}
             isWordInput={isWordInput}
             isCorrect={isCorrect}
-						isPrevWord={isAnswered}
-						isAudioOn={isAudioOn}
+            isPrevWord={isAnswered}
+            isAudioOn={isAudioOn}
           />
         </ContainerWithShadow>
         <NavigateBtn
-					classes="next"
-					id="next"
-					onClick={handleNavigateNextClick}
-				/>
+          classes="next"
+          id="next"
+          onClick={handleNavigateNextClick}
+        />
       </div>
     </div>
   );
@@ -182,25 +183,25 @@ const WordCard = ({
 
 export default WordCard;
 
-WordCard.propTypes = {
-  wordQueue: PropTypes.instanceOf(WordQueue).isRequired,
-  currentWord: PropTypes.instanceOf(Word).isRequired,
-  settings: PropTypes.shape({
-    isAudioAuto: PropTypes.bool.isRequired,
-  }).isRequired,
-  helpSettings: PropTypes.shape({
-    isTextExampleShow: PropTypes.bool.isRequired,
-    isTextMeaningShow: PropTypes.bool.isRequired,
-  }).isRequired,
-  onErrorAnswer: PropTypes.func.isRequired,
-  onAgainBtnClick: PropTypes.func.isRequired,
-  onComplexityBtnClick: PropTypes.func.isRequired,
-  onDeleteBtnClick: PropTypes.func.isRequired,
-  onNextBtnClick: PropTypes.func.isRequired,
-  onPrevBtnClick: PropTypes.func.isRequired,
-  isEducation: PropTypes.bool.isRequired,
-  isAnswered: PropTypes.bool.isRequired,
-  onWordAnswered: PropTypes.func.isRequired,
-  onWordMistaken: PropTypes.func.isRequired,
-  hasPrevious: PropTypes.bool.isRequired,
-};
+// WordCard.propTypes = {
+//   wordQueue: PropTypes.instanceOf(WordQueue).isRequired,
+//   currentWord: PropTypes.instanceOf(Word).isRequired,
+//   settings: PropTypes.shape({
+//     isAudioAuto: PropTypes.bool.isRequired,
+//   }).isRequired,
+//   helpSettings: PropTypes.shape({
+//     isTextExampleShow: PropTypes.bool.isRequired,
+//     isTextMeaningShow: PropTypes.bool.isRequired,
+//   }).isRequired,
+//   onErrorAnswer: PropTypes.func.isRequired,
+//   onAgainBtnClick: PropTypes.func.isRequired,
+//   onComplexityBtnClick: PropTypes.func.isRequired,
+//   onDeleteBtnClick: PropTypes.func.isRequired,
+//   onNextBtnClick: PropTypes.func.isRequired,
+//   onPrevBtnClick: PropTypes.func.isRequired,
+//   isEducation: PropTypes.bool.isRequired,
+//   isAnswered: PropTypes.bool.isRequired,
+//   onWordAnswered: PropTypes.func.isRequired,
+//   onWordMistaken: PropTypes.func.isRequired,
+//   hasPrevious: PropTypes.bool.isRequired,
+// };

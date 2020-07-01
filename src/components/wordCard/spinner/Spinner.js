@@ -4,8 +4,8 @@ import './Spinner.scss';
 
 function Spinner() {
   return (
-    <div className='spinner'>
-      <div className='donut' />
+    <div className="spinner">
+      <div className="donut" />
     </div>
   );
 }

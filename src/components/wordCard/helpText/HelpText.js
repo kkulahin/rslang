@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import WordDefinition from '../../../utils/spacedRepetition/WordDefinition';
 import HelpTextFormatted from './HelpTextFormatted';
 
 const HelpText = ({
@@ -12,19 +11,19 @@ const HelpText = ({
     isTranslateShow,
   },
   word: {
-		definition: {
+    definition: {
       transcription,
       wordTranslate,
       textExample,
       textExampleTranslate,
       textMeaning,
       textMeaningTranslate,
-		},
-	},
-	isWordInput,
-	isPrevWord,
+    },
+  },
+  isWordInput,
+  isPrevWord,
 }) => {
-	const isFullState = isWordInput || isPrevWord;
+  const isFullState = isWordInput || isPrevWord;
 
   const transcriptionElem = (isTranscriptionShow)
     ? transcription
@@ -86,17 +85,16 @@ HelpText.propTypes = {
     isTextExampleShow: PropTypes.bool.isRequired,
     isTextMeaningShow: PropTypes.bool.isRequired,
     isTranslateShow: PropTypes.bool.isRequired,
-	}).isRequired,
-	word: PropTypes.shape({
-		definition: PropTypes.instanceOf(WordDefinition),
-		definition: PropTypes.shape({
-			transcription: PropTypes.string.isRequired,
-			wordTranslate: PropTypes.string.isRequired,
-			textExample: PropTypes.string.isRequired,
-			textExampleTranslate: PropTypes.string.isRequired,
-			textMeaning: PropTypes.string.isRequired,
-			textMeaningTranslate: PropTypes.string.isRequired,
-		}).isRequired,
+  }).isRequired,
+  word: PropTypes.shape({
+    definition: PropTypes.shape({
+      transcription: PropTypes.string.isRequired,
+      wordTranslate: PropTypes.string.isRequired,
+      textExample: PropTypes.string.isRequired,
+      textExampleTranslate: PropTypes.string.isRequired,
+      textMeaning: PropTypes.string.isRequired,
+      textMeaningTranslate: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   isWordInput: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,

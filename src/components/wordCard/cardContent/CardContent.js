@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import RadioButtonContainer from '../radioButton/radioButtonContainer/RadioButtonContainer';
-
 import HelpImage from '../helpImage/HelpImage';
 import HelpText from '../helpText/HelpText';
 import WordInput from '../wordInput/WordInput';
@@ -12,7 +11,7 @@ import Word from '../../../utils/spacedRepetition/Word';
 
 const CardContent = (props) => {
   const {
-		helpSettings: { isImageShow },
+    helpSettings: { isImageShow },
     settings: {
       isShowAnswerBtn, isDeleteBtn, isComplexityBtn,
     },
@@ -47,16 +46,6 @@ const CardContent = (props) => {
     />
   );
 
-  // const AudioPlayBtnEnabled = isPrevWord || ((isCorrect || isShowBtnClick) && isComplexityBtn);
-  // const AudioPlayBtn = (
-  //   <Button
-  //     id="speakWord"
-  //     label="Speak"
-  //     isDisabled={!AudioPlayBtnEnabled}
-  //     clickHandler={(id) => onCardBtnClick(id)}
-  //   />
-  // );
-
   const radioButtons = [
     { label: 'hard', id: 'hard' },
     { label: 'normal', id: 'normal' },
@@ -64,30 +53,29 @@ const CardContent = (props) => {
   ];
 
   const complexityButtons = (
-		<div className="card-controls__buttons">
-			{AgainBtn}
-			<RadioButtonContainer
-				items={radioButtons}
-				onChange={onWordComplexityBtnClick}
-				checkedItem={complexity}
-				isAttention={isCorrect || isShowBtnClick}
-			/>
-		</div>
+    <div className="card-controls__buttons">
+      {AgainBtn}
+      <RadioButtonContainer
+        items={radioButtons}
+        onChange={onWordComplexityBtnClick}
+        checkedItem={complexity}
+        isAttention={isCorrect || isShowBtnClick}
+      />
+    </div>
   );
 
   return (
     <div className="card-content">
       <div className="help-content">
-				{isImageShow && <HelpImage {...props} />}
+        {isImageShow && <HelpImage {...props} />}
         <HelpText {...props} />
       </div>
       <div className="card-controls">
-				{isComplexityBtn && !isPrevWord && isCorrect && complexityButtons}
+        {isComplexityBtn && !isPrevWord && isCorrect && complexityButtons}
         <div className="card-controls__buttons">
           {isDeleteBtn && !isPrevWord && DeleteBtn}
           {isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
-          {/* {AudioPlayBtn} */}
-					<AudioComponent {...props} />
+          <AudioComponent {...props} />
         </div>
       </div>
       <div className="learn-content">
@@ -104,12 +92,10 @@ CardContent.propTypes = {
   isCorrect: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
   onCardBtnClick: PropTypes.func.isRequired,
-  helpSettings: PropTypes.object.isRequired,
   word: PropTypes.instanceOf(Word).isRequired,
   settings: PropTypes.shape({
     isShowAnswerBtn: PropTypes.bool.isRequired,
     isDeleteBtn: PropTypes.bool.isRequired,
-    // isHardBtn: PropTypes.bool.isRequired,
   }).isRequired,
   helpSettings: PropTypes.shape({
     isImageShow: PropTypes.bool.isRequired,
