@@ -7,6 +7,7 @@ import HelpImage from '../helpImage/HelpImage';
 import HelpText from '../helpText/HelpText';
 import WordInput from '../wordInput/WordInput';
 import Button from '../button/Button';
+import AudioComponent from '../audioComponent/AudioComponent';
 import Word from '../../../utils/spacedRepetition/Word';
 
 const CardContent = (props) => {
@@ -46,15 +47,15 @@ const CardContent = (props) => {
     />
   );
 
-  const AudioPlayBtnEnabled = isPrevWord || ((isCorrect || isShowBtnClick) && isComplexityBtn);
-  const AudioPlayBtn = (
-    <Button
-      id="speakWord"
-      label="Speak"
-      isDisabled={!AudioPlayBtnEnabled}
-      clickHandler={(id) => onCardBtnClick(id)}
-    />
-  );
+  // const AudioPlayBtnEnabled = isPrevWord || ((isCorrect || isShowBtnClick) && isComplexityBtn);
+  // const AudioPlayBtn = (
+  //   <Button
+  //     id="speakWord"
+  //     label="Speak"
+  //     isDisabled={!AudioPlayBtnEnabled}
+  //     clickHandler={(id) => onCardBtnClick(id)}
+  //   />
+  // );
 
   const radioButtons = [
     { label: 'hard', id: 'hard' },
@@ -85,7 +86,8 @@ const CardContent = (props) => {
         <div className="card-controls__buttons">
           {isDeleteBtn && !isPrevWord && DeleteBtn}
           {isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
-          {AudioPlayBtn}
+          {/* {AudioPlayBtn} */}
+					<AudioComponent {...props} />
         </div>
       </div>
       <div className="learn-content">

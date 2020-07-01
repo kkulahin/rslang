@@ -95,6 +95,19 @@ $image-width: 280px;
   
     border: none;
     border-radius: 5px;
+
+    animation: fadeIn 1s linear;
+  }
+
+  @keyframes fadeIn {
+  
+    0% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1
+    }
   }
 
   .help-content__image p {
@@ -190,6 +203,14 @@ $image-width: 280px;
 
   .card-controls__buttons + .card-controls__buttons {
     margin-left: auto;
+  }
+
+  .card-controls__audio-btn {
+    position: relative;
+
+    height: 100%;
+
+    @include flex();
   }
 
   .learn-content {

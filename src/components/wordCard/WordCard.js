@@ -8,7 +8,7 @@ import CardContent from './cardContent/CardContent';
 import './WordCard.scss';
 import Word from '../../utils/spacedRepetition/Word';
 import WordQueue from '../../utils/spacedRepetition/WordQueue';
-import { urlToAssets } from '../../constants/urls';
+// import { urlToAssets } from '../../constants/urls';
 
 const checkCorrect = ({ value, word }) => value.toLowerCase() === word.toLowerCase();
 
@@ -37,36 +37,13 @@ const WordCard = ({
   const [isCorrect, setIsCorrect] = useState(false);
   const [isShowBtnClick, setIsShowBtnClick] = useState(false);
   const [isAgainBtnClick, setIsAgainBtnClick] = useState(false);
+  const [isAudioOn, setIsAudioOn] = useState({ audioOn: false });
   const [value, setValue] = useState('');
 
-  const { isTextExampleShow, isTextMeaningShow } = helpSettings;
-  const { isAudioAuto, isComplexityBtn } = settings;
+  const { isAudioAuto } = settings;
+  const { definition: { word } } = currentWord;
 
   const inputRef = useRef();
-  const audioRef = useRef();
-
-  const {
-    word, audio, audioExample, audioMeaning,
-	} = currentWord.definition;
-
-  let isAudioSrcLoading = false;
-  let currentTruck = 0;
-  const tracks = [urlToAssets + audio];
-  if (isTextExampleShow) {
-    tracks.push(urlToAssets + audioExample);
-  }
-  if (isTextMeaningShow) {
-    tracks.push(urlToAssets + audioMeaning);
-  }
-
-  const audioPlay = () => {
-    if (currentTruck !== 0) {
-      audioRef.current.pause();
-      currentTruck = 0;
-      audioRef.current.src = tracks[currentTruck];
-    }
-    audioRef.current.play();
-  };
 
   const handleAnswer = (isCorrectAnswer) => {
     setValue('');
@@ -81,7 +58,7 @@ const WordCard = ({
 		}
 		
 		if (isAudioAuto) {
-      audioPlay();
+			setIsAudioOn({ audioOn: true });
     }
   };
 
@@ -90,6 +67,7 @@ const WordCard = ({
     setIsCorrect(false);
 		setIsShowBtnClick(false);
 		setIsAgainBtnClick(false);
+		setIsAudioOn({ audioOn: false });
     setValue('');
   };
 
@@ -98,26 +76,11 @@ const WordCard = ({
     onNextBtnClick();
   };
 
-  const onAudioEnded = () => {
-    if (currentTruck < tracks.length - 1) {
-      currentTruck += 1;
-      audioRef.current.src = tracks[currentTruck];
-      audioRef.current.play();
-      return;
-    }
-
-    if ((isCorrect || isShowBtnClick) && !isComplexityBtn) {
-      getNextWord();
-    }
-  };
-
-  const onAudioLoadStart = () => {
-    isAudioSrcLoading = true;
-  };
-
-  const onCanPlayThrough = () => {
-    isAudioSrcLoading = false;
-  };
+  // const onAudioEnded = () => {
+  //   if ((isCorrect || isShowBtnClick) && !isComplexityBtn) {
+  //     getNextWord();
+  //   }
+  // };
 
   const handleInputChange = (evt) => {
     setValue(evt.target.value);
@@ -147,7 +110,7 @@ const WordCard = ({
   const handleInputFocus = () => {
     if (isWordInput) {
       setIsWordInput(false);
-      audioRef.current.pause();
+			setIsAudioOn({ audioOn: false });
     }
   };
 
@@ -156,12 +119,6 @@ const WordCard = ({
 		handleAnswer(false);
 		onWordAnswered();
     setIsCorrect(true);
-  };
-
-  const handleAudioPlayBtnClick = () => {
-    if (!isAudioSrcLoading) {
-      audioPlay();
-    }
   };
 
   const handleWordComplexityBtnClick = (id) => {
@@ -177,7 +134,6 @@ const WordCard = ({
     const handlers = {
       deleteWord: onDeleteBtnClick,
       againWord: handleAgainBtnClick,
-      speakWord: handleAudioPlayBtnClick,
       showWord: handleShowBtnClick,
     };
 
@@ -210,7 +166,8 @@ const WordCard = ({
             isAgainBtnClick={isAgainBtnClick}
             isWordInput={isWordInput}
             isCorrect={isCorrect}
-            isPrevWord={isAnswered}
+						isPrevWord={isAnswered}
+						isAudioOn={isAudioOn}
           />
         </ContainerWithShadow>
         <NavigateBtn
@@ -218,13 +175,6 @@ const WordCard = ({
 					id="next"
 					onClick={handleNavigateNextClick}
 				/>
-        <audio
-          ref={audioRef}
-          src={tracks[0]}
-          onEnded={onAudioEnded}
-          onLoadStart={onAudioLoadStart}
-          onCanPlayThrough={onCanPlayThrough}
-        />
       </div>
     </div>
   );
