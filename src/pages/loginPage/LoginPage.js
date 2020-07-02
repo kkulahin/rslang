@@ -99,6 +99,7 @@ const LoginForm = () => {
         setUserNotification(response.notification);
         if (response.notification.status) {
           setCookie('auth', JSON.stringify(response.data), coockieLifeCyrcle);
+          setCookie('login', JSON.stringify(data), (10 * 365 * 24 * 60 * 60));
           setRedirect(true);
         }
         setUserNotification(response.notification);
