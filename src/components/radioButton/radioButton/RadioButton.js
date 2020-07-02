@@ -8,9 +8,8 @@ const RadioButton = ({
 }) => {
   let className = 'radio-button';
   if (checked) {
-    className += ' radio-button--checked';
+    className = `${className} radio-button--checked`;
   }
-
   const cardClassName = checked
     ? 'card-radio-button card-radio-button--checked'
     : 'card-radio-button';

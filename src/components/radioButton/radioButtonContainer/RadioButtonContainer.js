@@ -16,19 +16,20 @@ const RadioButtonContainer = ({
   if (isDisabled) {
     classNameRbn = 'card-radio-button-container card-radio-button-container--disabled';
   }
-
+  console.log('sdfsdf');
   const radioButtons = items.map((item) => (
+
     <RadioButton
-      label={item.label}
-      id={item.id}
-      checked={checkedItemLocal === item.id}
+      label={item}
+      id={item}
+      checked={checkedItemLocal === item}
       onClickRadioButton={(e) => {
         const { id } = e.target;
-        const newIdx = id === checkedItemLocal ? null : item.id;
+        const newIdx = id === checkedItemLocal ? null : id;
         setCheckedItem(newIdx);
         onChange(e, newIdx);
       }}
-      key={item.id}
+      key={item}
 
     />
   ));
@@ -39,7 +40,7 @@ const RadioButtonContainer = ({
 RadioButtonContainer.propTypes = {
   items: PropTypes.instanceOf(Array).isRequired,
   onChange: PropTypes.func.isRequired,
-  checkedItem: PropTypes.string.isRequired,
+  checkedItem: PropTypes.string,
   isDisabled: PropTypes.bool,
   isAttention: PropTypes.bool,
   className: PropTypes.string,
@@ -49,6 +50,7 @@ RadioButtonContainer.defaultProps = {
   className: '',
   isDisabled: false,
   isAttention: false,
+  checkedItem: '',
 };
 
 export default RadioButtonContainer;
