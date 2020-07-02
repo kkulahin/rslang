@@ -1,4 +1,5 @@
 @import '../../../styles/variables.scss';
+
 .statistic-long {
   width: 100%;
   max-width: 1020px;
@@ -6,12 +7,12 @@
 
   &__title {
     font: inherit;
-    font-weight: normal;
     font-size: 2.4rem;
     line-height: 1.6em;
+    text-align: center;
 
     color: $main-color;
-    text-align: center;
+    font-weight: normal;
   }
 
   &__period {
@@ -29,18 +30,18 @@
 
     color: $main-color;
 
-    & .dropdown {
+    .dropdown {
       position: absolute;
       top: 0;
       right: 0;
-      margin: 0;
 
       z-index: 10;
+      margin: 0;
 
       &__title {
-        background-color: $main-color;
-        color: #000000;
         font: inherit;
+        color: #000000;
+        background-color: $main-color;
       }
     }
   }

@@ -16,7 +16,7 @@ const RadioButtonContainer = ({
   if (isDisabled) {
     classNameRbn = 'card-radio-button-container card-radio-button-container--disabled';
   }
-  console.log('sdfsdf');
+
   const radioButtons = items.map((item) => (
 
     <RadioButton

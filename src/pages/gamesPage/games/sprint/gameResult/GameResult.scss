@@ -1,0 +1,17 @@
+@import '../../../../../styles/mixin.scss';
+
+@import '../../../../../styles/variables.scss';
+
+.game-sprint {
+
+  .container-with-shadow {
+    margin: 0 auto;
+    user-select: none;
+
+    @include flex(column, flex-start);
+
+    a {
+      margin: 10px auto 0;
+    }
+  }
+}

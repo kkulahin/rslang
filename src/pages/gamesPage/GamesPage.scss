@@ -1,16 +1,18 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
 .games-header {
-    display: flex;
-justify-content: center;
-align-items: center;
-height: 20vh;
-color: #fff !important;
+  height: 20vh;
+  color: $main-color !important;
+
+  @include flex(row);
 }
 
 .games-cards .container-with-shadow {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    padding: 10px !important;
+  padding: 10px !important;
+
+  @include flex(column, stretch, space-evenly);
 }
 
 .games-cards .container-with-shadow img {
@@ -19,7 +21,7 @@ color: #fff !important;
 }
 
 .games-card__header {
-    color: #fff !important;
+    color: $main-color !important;
 }
 
 .games-wrapper {
