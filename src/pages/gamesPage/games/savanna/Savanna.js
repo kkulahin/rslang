@@ -86,6 +86,7 @@ const Savanna = () => {
     setGameWords([]);
     setCurKitStage([]);
     setAnswer(null);
+    setKitSingleton(false);
     /* setGameWordAnimation(null); */
     setScreen(gameScreen);
   };
@@ -127,16 +128,6 @@ const Savanna = () => {
         label={`${index + 1}: ${isEmptyArr(cKitStage) ? null : cKitStage[index].wordTranslate}`}
         name="check"
       />
-      /* <div
-        key={e}
-        className="word"
-        data-translate={isEmptyArr(cKitStage) ? null : cKitStage[index].wordTranslate}
-        onClick={checkAnswer}
-        role="presentation"
-      >
-        {' '}
-        {`${index + 1}: ${isEmptyArr(cKitStage) ? null : cKitStage[index].wordTranslate}`}
-      </div> */
     ));
     return <div className="savanna-wordpanel">{gameplayWords}</div>;
   };
@@ -159,6 +150,7 @@ const Savanna = () => {
         });
         setKit(totalWords);
       });
+      return null;
     };
     if (Array.isArray(kit) && !kit.length) {
       getWordsForGame();
@@ -254,7 +246,7 @@ const Savanna = () => {
   const getSuccessRate = () => {
     const errors = option?.maxLife - option?.curLife;
     const persent = ((option?.maxWords - wordsForPlay.length) / option?.maxWords) * 100;
-    return Math.round(persent / errors);
+    return Math.round(persent / (errors === 0 ? 1 : 0));
   };
 
   const startPreloadTimer = () => {
@@ -295,32 +287,37 @@ const Savanna = () => {
 
       <div className={`savanna-startpage ${screen?.start ? 'visible' : 'invisible'}`}>
         {
-     timer ? null : (
-       <div
-         className="savanna-gamelevel"
-       >
-         <RadioButton
-           className="savanna-level level-default"
-           items={['easy', 'normal', 'hard']}
-           onChange={setLevelType}
-         />
-         <RadioButton
-           className="savanna-level level-hardmode"
-           items={['YOLO']}
-           onChange={setLevelType}
-         />
-       </div>
-     )
-   }
-        { timer ? null : (
-          <Button
-            label="start"
-            name="check"
-            buttonClassName="savanna-start"
-            clickHandler={startPreloadTimer}
-            isDisabled={level === null}
-          />
-        ) }
+timer ? null : (
+  <ShadowContainer>
+
+    <div
+      className="savanna-gamelevel"
+    >
+      <RadioButton
+        className="savanna-level level-default"
+        items={['easy', 'normal', 'hard']}
+        onChange={setLevelType}
+      />
+      <RadioButton
+        className="savanna-level level-hardmode"
+        items={['YOLO']}
+        onChange={setLevelType}
+      />
+    </div>
+
+    { timer ? null : (
+      <Button
+        label="start"
+        name="check"
+        buttonClassName="savanna-start"
+        clickHandler={startPreloadTimer}
+        isDisabled={level === null}
+      />
+    ) }
+  </ShadowContainer>
+)
+}
+
         { !timer ? null : (
           <ReactCountDown
             color="#25cede"

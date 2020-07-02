@@ -27,10 +27,14 @@
 
 .savanna-startpage {
     display: flex;
-    flex-direction: column;
+    flex-direction: column !important;
     justify-content: space-evenly;
     align-items: center;
     height: 50vh;
+}
+
+.savanna-startpage .container-with-shadow {
+    flex-direction: column !important;
 }
 
 .savanna-gamelevel {

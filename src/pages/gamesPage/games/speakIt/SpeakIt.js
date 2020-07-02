@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Header, Icon, Image, Button,
+  Header, Icon, Image,
 } from 'semantic-ui-react';
 import update from 'react-addons-update';
 
 import { ProgressBar, Step } from 'react-step-progress-bar';
+import ShadowContainer from '../../../../components/containerWithShadow/ContainerWithShadow';
+import RadioButton from '../../../../components/radioButton/radioButtonContainer/RadioButtonContainer';
+import Button from '../../../../components/button/Button';
+
 import TestImage from '../../../../assets/image/speakIt.png';
 import { getWords } from '../../../../controllers/words/words';
 import Dictaphone from '../../../../components/dictaphone/Dictaphone';
+
+import option from './gameOption';
 
 import './speakIt.scss';
 import 'react-step-progress-bar/styles.css';
@@ -25,18 +31,17 @@ const stepPic = [
 
 const isEmpty = (obj) => Object.keys(obj).length === 0;
 
-const defaultParams = {
+/* const defaultParams = {
   StepCounter: 6,
-  Words: 10,
+  Words: 5,
 };
+*/
 
-const defGameOption = {
+/* const defGameOption = {
   curStage: 0,
-  maxStage: defaultParams.StepCounter - 1,
+  maxStage: option.StepCounter - 1,
   stagesOption: [],
-};
-
-const MaxItem = 10;
+}; */
 
 const shuffleArray = (arr) => arr.map((a) => [Math.random(), a]).sort((a, b) => a[0] - b[0]).map((a) => a[1]);
 
@@ -46,7 +51,7 @@ const SpeackIt = () => {
     game: false,
     statistic: false,
   });
-  const [gameOption, setGameOption] = useState(defGameOption);
+  const [gameOption, setGameOption] = useState(null);
   const [activeWord, setActiveWord] = useState(null);
   const [activeWordParams, setActiveWordParams] = useState(null);
   const [activeWordStatistic, setActiveWordStatistic] = useState(null);
@@ -54,12 +59,13 @@ const SpeackIt = () => {
   const [userRecWord, setUserRecWord] = useState(null);
   const [gameplayWords, setGamePlayWords] = useState({ errors: {}, rights: {} });
   const [isStatusMic, setStatusMic] = useState(false);
+  const [level, setLevel] = useState(null);
   const input = useRef(null);
 
   useEffect(() => {
     const getWordsForStage = () => {
       const getWordsPromises = [];
-      for (let stage = 0; stage <= defGameOption.maxStage; stage += 1) {
+      for (let stage = 0; stage <= gameOption.StepCounter - 1; stage += 1) {
         getWordsPromises.push(getWords(gameOption.curStage, stage, true));
       }
       let newGameOption = {};
@@ -67,7 +73,7 @@ const SpeackIt = () => {
         resps.forEach((resp, index) => {
           const words = resp.data;
           const stagesOption = {};
-          const items = shuffleArray(words).slice(MaxItem);
+          const items = shuffleArray(words).slice(words.length - gameOption.Words);
           stagesOption[`stage${index}`] = items;
           newGameOption.stagesOption = newGameOption.stagesOption || gameOption.stagesOption;
           newGameOption = {
@@ -79,7 +85,7 @@ const SpeackIt = () => {
       });
     };
 
-    if (Array.isArray(gameOption.stagesOption) && !gameOption.stagesOption.length) {
+    if (level !== null && Array.isArray(gameOption?.stagesOption) && !gameOption?.stagesOption.length) {
       getWordsForStage();
     }
   });
@@ -107,7 +113,7 @@ const SpeackIt = () => {
   useEffect(() => {
     if (gameMode) {
       const newGamePlayWords = {
-        errors: update({}, { $merge: gameOption.stagesOption }),
+        errors: update({}, { $merge: gameOption?.stagesOption }),
         rights: {},
       };
       setGamePlayWords(newGamePlayWords);
@@ -115,9 +121,10 @@ const SpeackIt = () => {
       setGamePlayWords({ errors: {}, rights: {} });
       setActiveWordStatistic(null);
     }
-  }, [gameMode, gameOption.stagesOption]);
+  }, [gameMode, gameOption?.stagesOption]);
 
   useEffect(() => {
+    if (gameOption === null) return undefined;
     const { errors } = gameplayWords;
     let { rights } = gameplayWords;
     const { curStage } = gameOption;
@@ -133,7 +140,7 @@ const SpeackIt = () => {
     const wordIndex = words.findIndex((el) => el.word === userRecWord);
     if (wordIndex >= 0) {
       if (isEmpty(rights)) {
-        const newRights = Array.from({ length: defaultParams.StepCounter }, (v, k) => k).map((el) => {
+        const newRights = Array.from({ length: option.StepCounter }, (v, k) => k).map((el) => {
           const obj = {};
           obj[`stage${el}`] = [];
           return obj;
@@ -179,6 +186,7 @@ const SpeackIt = () => {
   }, [activeWordStatistic]);
 
   useEffect(() => {
+    if (gameOption === null) return undefined;
     const { rights } = gameplayWords;
     const { curStage } = gameOption;
     if (!isEmpty(rights)) {
@@ -188,6 +196,7 @@ const SpeackIt = () => {
         el.classList.add('success');
       });
     }
+    return undefined;
   }, [gameplayWords, gameOption]);
 
   const removeGameModeClass = () => {
@@ -207,18 +216,18 @@ const SpeackIt = () => {
         statistic: false,
       };
       setGameScreen(screen);
+      setGameOption(null);
+      setLevel(null);
     }
     setGameMode(false);
     removeGameModeClass();
     setActiveWord(null);
     setActiveWordParams(null);
-    setGameOption(defGameOption);
   };
 
   const start = () => {
     if (gameMode) {
       removeGameModeClass();
-      // isMicOff();
     }
     setGameMode(!gameMode);
   };
@@ -236,7 +245,10 @@ const SpeackIt = () => {
   };
 
   const buildProgressStep = () => {
-    const stepSize = Array.from({ length: defaultParams.StepCounter }, (v, k) => k);
+    if (gameOption === null) {
+      return null;
+    }
+    const stepSize = Array.from({ length: gameOption.StepCounter }, (v, k) => k);
     const stepEls = stepSize.map((s, index) => (
       <Step transition="scale" key={s}>
         {({ accomplished }) => (
@@ -252,7 +264,7 @@ const SpeackIt = () => {
     ));
     return (
       <ProgressBar
-        percent={(gameOption.curStage * 100) / gameOption.maxStage}
+        percent={(gameOption.curStage * 100) / (gameOption.StepCounter - 1)}
         filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"
       >
         {stepEls}
@@ -268,7 +280,7 @@ const SpeackIt = () => {
 
   const isActiveItemClass = (cWord, index) => {
     if (cWord === null) return '';
-    if (!gameMode && cWord[index].word === activeWord) {
+    if (!gameMode && cWord[index]?.word === activeWord) {
       return 'active';
     }
     return '';
@@ -295,7 +307,10 @@ const SpeackIt = () => {
   };
 
   const buildWordEl = () => {
-    const wordSize = Array.from({ length: defaultParams.Words }, (v, k) => k);
+    if (gameOption === null) {
+      return null;
+    }
+    const wordSize = Array.from({ length: gameOption.Words }, (v, k) => k);
     let words = null;
     if (Array.isArray(gameOption.stagesOption) && gameOption.stagesOption.length) {
       const curStageWords = gameOption.stagesOption[gameOption.curStage];
@@ -443,13 +458,34 @@ const SpeackIt = () => {
       game: true,
       statistic: false,
     };
+    setGameOption(option[level]);
     setGameScreen(screen);
+  };
+
+  const setLevelType = (e, type) => {
+    if (type === level) {
+      setLevel(null);
+    } else {
+      setLevel(type);
+    }
   };
 
   return (
     <>
       <div className={`speakIt startScreen ${gameScreen.startScreen ? 'visible' : 'invisible'}`}>
-        <Button primary type="button" onClick={redirectToGame}> Start game </Button>
+        <ShadowContainer>
+          <div
+            className="speakIt-gamelevel"
+          >
+            <RadioButton
+              className="speakIt-level level-default"
+              items={['easy', 'normal', 'hard']}
+              onChange={setLevelType}
+            />
+          </div>
+
+          <Button label="Start game" clickHandler={redirectToGame} isDisabled={level === null}> </Button>
+        </ShadowContainer>
       </div>
       <div className={`speakIt ${gameScreen.game ? 'visible' : 'invisible'}`}>
         <div className="speakIt-header">
@@ -470,9 +506,9 @@ const SpeackIt = () => {
           {buildWordEl()}
         </div>
         <div className="speakIt-panel">
-          <Button primary onClick={restart}>Restart</Button>
-          <Button primary onClick={start}>{gameMode ? 'Learn' : 'Speak'}</Button>
-          {gameMode ? <Button primary onClick={resultPage}>Results</Button> : null}
+          <Button label="Restart" clickHandler={restart} />
+          <Button label={gameMode ? 'Learn' : 'Speak'} clickHandler={start} />
+          {gameMode ? <Button label="Results" clickHandler={resultPage} /> : null}
         </div>
         {gameMode ? null : (
           <audio
@@ -503,8 +539,8 @@ const SpeackIt = () => {
           </div>
         </div>
         <div className="result-button__wrapper">
-          <Button primary onClick={restart}>Start play again?</Button>
-          <Button primary onClick={backToMain}>Back</Button>
+          <Button label="Start play again?" clickHandler={restart} />
+          <Button label="Back" clickHandler={backToMain} />
         </div>
         <audio
           className="speakIt-results__audio"

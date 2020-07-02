@@ -9,3 +9,8 @@
 | speak it  | 20.06.2020 | 20.06.2020 | 5 h |
 | speak it  | 21.06.2020 | 21.06.2020 | 6 h |
 | speak it  | 22.06.2020 | 22.06.2020 | 5 h |
+| fix micro in speakIt   | 28.06.2020 | 28.06.2020 | 2 h |
+| savanna mini-game  | 29.06.2020 | 30.06.2020 | 9 h |
+| game levels savanna  | 01.07.2020 | 01.07.2020 | 4 h |
+| game levels speakIt  | 02.07.2020 | 02.07.2020 | 3 h |
+
