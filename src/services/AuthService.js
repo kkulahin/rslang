@@ -1,4 +1,4 @@
-import { SchoolURL, coockieLifeCyrcle } from '../config/default';
+import { SchoolURL, cookieLifeCyrcle } from '../config/default';
 import responseFromServer from '../utils/responseFromServer';
 import { getCookie, setCookie, deleteCookie } from '../utils/cookie';
 import signinSubject from '../utils/observers/SignInSubject';
@@ -49,7 +49,7 @@ class AuthService {
     try {
       const response = await responseFromServer(`${SchoolURL}/signin`, null, getUserNotification, 'POST', userData);
       if (response.notification.status) {
-        setCookie('auth', JSON.stringify(response.data), coockieLifeCyrcle);
+        setCookie('auth', JSON.stringify(response.data), cookieLifeCyrcle);
       }
       return response.data;
     } catch (e) {

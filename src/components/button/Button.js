@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
@@ -12,9 +12,22 @@ const Button = ({
   label,
   clickHandler,
   iconName,
+  buttonClassName,
+  ...rest
 }) => {
+  const button = useRef(null);
   const icon = iconName ? <Icon name={iconName} /> : null;
-  let className = 'button';
+  let className = `button ${buttonClassName}`;
+
+  useEffect(() => {
+    if (button.current !== null && Object.keys(rest).length > 0) {
+      Object.keys(rest).forEach((atr) => {
+        if (rest[atr] !== null) {
+          button.current.setAttribute(atr, rest[atr]);
+        }
+      });
+    }
+  }, [rest]);
 
   if (name === 'check' && isActive) {
     className += ` button--${name}`;
@@ -33,17 +46,20 @@ const Button = ({
     : 'card-button';
 
   return (
-    <button
-      type="button"
-      id={id}
-      disabled={isDisabled}
-      className={`${className} ${cardClassName}`}
-      onClick={(evt) => clickHandler(evt.target.id)}
-    >
-      {icon}
-      {(label && icon) && ' '}
-      {label}
-    </button>
+    <>
+      <button
+        ref={button}
+        id={id}
+        type="button"
+        disabled={isDisabled}
+        className={`${className} ${cardClassName}`}
+        onClick={(e) => clickHandler(e, e.target.id)}
+      >
+        {icon}
+        {(label && icon) && ' '}
+        {label}
+      </button>
+    </>
   );
 };
 
@@ -54,6 +70,7 @@ Button.defaultProps = {
   iconName: '',
   label: null,
   clickHandler: () => {},
+  buttonClassName: '',
 };
 
 Button.propTypes = {
@@ -64,6 +81,7 @@ Button.propTypes = {
   label: PropTypes.string,
   clickHandler: PropTypes.func,
   iconName: PropTypes.string,
+  buttonClassName: PropTypes.string,
 };
 
 export default Button;

@@ -83,6 +83,7 @@ export const makeRequest = async (method, path, token, body, params = {}) => {
     try {
       if (isAuthError) {
         isAuthError = false;
+        // eslint-disable-next-line no-await-in-loop
         const isLoggedIn = await authService.tryLogIn();
         if (!isLoggedIn) {
           deleteCookie('login');
@@ -90,6 +91,7 @@ export const makeRequest = async (method, path, token, body, params = {}) => {
           return { response: { ok: false, statusText: 'Unauthorized', status: 401 } };
         }
       }
+      // eslint-disable-next-line no-await-in-loop
       response = await retryMakeRequest(method, path, token, body, params);
       return response;
     } catch (e) {

@@ -7,7 +7,9 @@ import {
 import { Redirect, Link } from 'react-router-dom';
 import responseFromServer from '../../utils/responseFromServer';
 import VectorMan from '../../assets/image/vector_man.png';
-import { SchoolURL, coockieLifeCyrcle } from '../../config/default';
+
+import { SchoolURL, cookieLifeCyrcle } from '../../config/default';
+
 import { setCookie } from '../../utils/cookie';
 
 import './LoginPage.scss';
@@ -42,7 +44,6 @@ const defaultUserData = () => (localStorage.getItem('userData') !== null
   ? JSON.parse(localStorage.getItem('userData')) : userData);
 
 const LoginForm = () => {
-  const [isValid] = useState(errorState);
   const [isDisabled, setButtonBehaviour] = useState(true);
   const [data, setUserData] = useState(defaultUserData);
   const [userNotification, setUserNotification] = useState(notification);
@@ -98,7 +99,7 @@ const LoginForm = () => {
         const response = await responseFromServer(`${SchoolURL}/signin`, null, getUserNotification, 'POST', data);
         setUserNotification(response.notification);
         if (response.notification.status) {
-          setCookie('auth', JSON.stringify(response.data), coockieLifeCyrcle);
+          setCookie('auth', JSON.stringify(response.data), cookieLifeCyrcle);
           setCookie('login', JSON.stringify(data), (10 * 365 * 24 * 60 * 60));
           setRedirect(true);
         }
