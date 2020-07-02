@@ -6,6 +6,7 @@ const Logout = () => {
   const [isRedirectToHome, setRedirect] = useState(false);
   const removeUser = () => {
     deleteCookie('auth');
+    deleteCookie('login');
     setRedirect(true);
   };
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './RadioButton.scss';
+import './radioButton.scss';
 
 const RadioButton = ({
   label, id, checked, onClickRadioButton,
@@ -21,7 +21,7 @@ const RadioButton = ({
       id={id}
       className={`${className} ${cardClassName}`}
       onClick={(evt) => {
-        onClickRadioButton(evt.target.id);
+        onClickRadioButton(evt);
       }}
     >
       {label}
