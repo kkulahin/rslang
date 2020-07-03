@@ -1,0 +1,17 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+.settings {
+  z-index: 1;
+  flex-wrap: wrap;
+  color: rgba(255, 255, 255, 0.8);
+
+  background-color: $background-color;
+  
+  @include size(100%);
+
+  @include flex(row, flex-start, space-around);
+
+  @include font(1.8rem, 1.2em, 400);
+}

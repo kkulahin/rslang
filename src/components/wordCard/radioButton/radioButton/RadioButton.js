@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 
 import './radioButton.scss';
 
-const RadioButton = ({ label, id, checked, onClickRadioButton }) => {
-	const className = checked
-		? 'card-radio-button card-radio-button--checked'
-		: 'card-radio-button';
+const RadioButton = ({
+  label, id, checked, onClickRadioButton,
+}) => {
+  const className = checked
+    ? 'card-radio-button card-radio-button--checked'
+    : 'card-radio-button';
 
   return (
     <button
-			type="button"
-			id={id}
+      type="button"
+      id={id}
       className={className}
       onClick={(evt) => onClickRadioButton(evt.target.id)}
     >

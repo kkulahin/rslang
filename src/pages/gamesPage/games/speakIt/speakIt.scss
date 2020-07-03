@@ -5,6 +5,13 @@
     width: 100%;
 }
 
+.startScreen .container-with-shadow {
+	display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 50vh !important;
+}
+
 .speakIt-progressbar {
     width: 50%;
 }
@@ -82,6 +89,10 @@
     margin: 20px auto;
 }
 
+.speakIt-panel button {
+	justify-content: center;
+}
+
 .speakIt button:first-child {
     flex: 1 25%
 }
@@ -91,7 +102,7 @@
 }
 
 .speakIt button:last-child {
-    flex: 3 25%
+   /* flex: 3 25%*/
 }
 
 .speakIt .active.item {
@@ -121,7 +132,7 @@
 }
 
 .invisible {
-    display: none;
+    display: none !important;
 }
 
 .item.success {

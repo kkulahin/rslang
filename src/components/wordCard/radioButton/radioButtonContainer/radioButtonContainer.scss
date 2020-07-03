@@ -28,35 +28,59 @@
   }
 
   @-moz-keyframes cycle {
+
     35% {transform: rotate(0) translate(0, 0);}
+
     40% {transform: rotate(5deg) translate(0, -2px);}
+
     45% {transform: rotate(-3deg) translate(0, -2px);}
+
     50% {transform: rotate(5deg) translate(0, -2px);}
+
     55% {transform: rotate(-3deg) translate(0, -2px);}
+
     60% {transform: rotate(5deg) translate(0, -2px);}
+
     65% {transform: rotate(-3deg) translate(0, -2px);}
+
     70% {transform: rotate(0) translate(0, 0);}
   }
   
   @-webkit-keyframes cycle {
+
     35% {transform: rotate(0) translate(0, 0);}
+
     40% {transform: rotate(5deg) translate(0, -2px);}
+
     45% {transform: rotate(-3deg) translate(0, -2px);}
+
     50% {transform: rotate(5deg) translate(0, -2px);}
+
     55% {transform: rotate(-3deg) translate(0, -2px);}
+
     60% {transform: rotate(5deg) translate(0, -2px);}
+
     65% {transform: rotate(-3deg) translate(0, -2px);}
+
     70% {transform: rotate(0) translate(0, 0);}
   }
   
   @keyframes cycle {
+
     35% {transform: rotate(0) translate(0, 0);}
+
     40% {transform: rotate(5deg) translate(0, -2px);}
+
     45% {transform: rotate(-3deg) translate(0, -2px);}
+
     50% {transform: rotate(5deg) translate(0, -2px);}
+
     55% {transform: rotate(-3deg) translate(0, -2px);}
+
     60% {transform: rotate(5deg) translate(0, -2px);}
+
     65% {transform: rotate(-3deg) translate(0, -2px);}
+
     70% {transform: rotate(0) translate(0, 0);}
   }
 }
