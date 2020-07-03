@@ -33,14 +33,18 @@ const SettingsSection = ({ sectionInfo, handleChange }) => {
       const isValidValue = (minValue <= Number(newInputValue)) && (Number(newInputValue) <= maxValue);
 
       if (isValidValue) {
-        const currentInputRatio = settingsInfo.reduce((acc, setting) => {
+        const newSettingsValue = settingsInfo.map((setting) => {
           const settingId = setting.name.replace(/\s/g, '-').toLowerCase();
-          const value = (inputId === settingId) ? newInputValue : setting.value;
+          const value = (inputId === settingId) ? +newInputValue : setting.value;
 
-          return Math.abs(acc - value);
-        }, 0);
+          return value;
+        });
 
-        if (currentInputRatio >= defaultInputRatio) {
+        const [wordsCount, cardsCount] = newSettingsValue;
+
+        const isValidInputRatio = cardsCount - wordsCount > defaultInputRatio;
+
+        if (isValidInputRatio) {
           handleChange(inputId, sectionName, newInputValue);
         }
       }
