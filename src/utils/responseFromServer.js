@@ -74,11 +74,19 @@ const retryMakeRequest = async (method, path, token, body, params = {}) => {
   return { data, response };
 };
 
-export const makeRequest = async (method, path, token, body, params = {}) => {
+export const makeRequest = async (method, pathTemplate, body, params = {}) => {
   const tryTimes = 2;
   let index = 0;
   let isAuthError = false;
+  let path = pathTemplate;
   let response = {};
+  let user = authService.getUser();
+  if (user === null) {
+    isAuthError = true;
+  } else {
+    path = pathTemplate.replace('%%userId%%', user.userId);
+  }
+
   while (index < tryTimes) {
     try {
       if (isAuthError) {
@@ -90,9 +98,14 @@ export const makeRequest = async (method, path, token, body, params = {}) => {
           signinSubject.notify(false);
           return { response: { ok: false, statusText: 'Unauthorized', status: 401 } };
         }
+        user = authService.getUser();
+        if (user) {
+          path = pathTemplate.replace('%%userId%%', user.userId);
+        }
       }
+
       // eslint-disable-next-line no-await-in-loop
-      response = await retryMakeRequest(method, path, token, body, params);
+      response = await retryMakeRequest(method, path, user.token, body, params);
       return response;
     } catch (e) {
       if (e.message === 'Retry') {

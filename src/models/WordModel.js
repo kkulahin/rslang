@@ -7,6 +7,7 @@ import wordQueueSubject from '../utils/observers/WordQueueSubject';
 import { makeRequest } from '../utils/responseFromServer';
 import signinSubject from '../utils/observers/SignInSubject';
 import authService from '../services/AuthService';
+import statisticsModel from './StatisticsModel';
 
 export default class WordModel {
   /**
@@ -80,53 +81,12 @@ export default class WordModel {
   }
 
   getStatistics = async () => {
-    const { data, response } = await makeRequest('GET', `users/${this.user.userId}/statistics`,
-      this.user.token);
-    if (!response.ok) {
-      if (response.status === 404) {
-        const putData = { learnedWords: 0, optional: {} };
-        const { response: postResponse } = await makeRequest(
-          'PUT',
-          `users/${this.user.userId}/statistics`,
-          this.user.token,
-          putData,
-        );
-        if (!postResponse.ok) {
-          throw new Error(
-            `POST Statisctics failed with ${postResponse.status} ${postResponse.statusText}`,
-          );
-        } else {
-          this.statistics = data;
-        }
-      } else {
-        throw new Error(
-          `Get Statisctics failed with ${response.status} ${response.statusText}`,
-        );
-      }
-    } else {
-      this.statistics = data;
-      delete this.statistics.id;
-    }
+    await statisticsModel.getFromServer();
+    this.statistics = statisticsModel.get();
   };
 
   updateStatistics = async () => {
-    const statistics = { ...this.statistics };
-    if (!this.statistics.optional) {
-      this.statistics.optional = {};
-    }
-    this.statistics.optional.todayQueue = this.wordQueue.getQueueToSave();
-    const { data, response } = await makeRequest(
-      'PUT',
-      `users/${this.user.userId}/statistics`,
-      this.user.token,
-      statistics,
-    );
-    if (!response.ok) {
-      throw new Error(
-        `PUT Statistics failed with ${response.status} ${response.statusText}`,
-      );
-    }
-    return data;
+    this.statistics = await statisticsModel.save({ todayQueue: this.wordQueue.getQueueToSave() });
   };
 
   /**
@@ -149,8 +109,7 @@ export default class WordModel {
         nextRepetition: Math.ceil(word.getNextRepetition().getTime() / 1000),
       },
     };
-    const { data, response } = await makeRequest(method, `users/${this.user.userId}/words/${word.definition.wordId}`,
-      this.user.token, wordToPost);
+    const { data, response } = await makeRequest(method, `users/%%userId%%/words/${word.definition.wordId}`, wordToPost);
     if (!response.ok) {
       throw new Error(`${method} Word failed with ${response.status} ${response.statusText}`);
     }
@@ -160,8 +119,7 @@ export default class WordModel {
   queryWords = async (params) => {
     const { data: dataArray, response } = await makeRequest(
       'GET',
-      `users/${this.user.userId}/aggregatedWords?group=0`,
-      this.user.token,
+      'users/%%userId%%/aggregatedWords?group=0',
       undefined,
       params,
     );
