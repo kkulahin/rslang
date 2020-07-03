@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {
+  useState, useRef, useEffect, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '../button/Button';
@@ -19,6 +21,7 @@ const AudioComponent = (props) => {
   } = props;
 
   const audioRef = useRef();
+  const audioPromiseRef = useRef();
 
   const [currentTruck, setCurrentTruck] = useState(0);
   const [isAudioPlay, setIsAudioPlay] = useState(false);
@@ -28,9 +31,7 @@ const AudioComponent = (props) => {
     error: null,
   });
 
-  let audioPromise;
   const tracks = [];
-
   if (audio) {
     tracks.push(urlToAssets + audio);
   }
@@ -41,24 +42,24 @@ const AudioComponent = (props) => {
     tracks.push(urlToAssets + audioMeaning);
   }
 
+  const handleAudioPlayBtnClick = () => {
+    setCurrentTruck(0);
+    setIsAudioPlay(true);
+  };
+
   const audioPlay = () => {
-    audioPromise = audioRef.current.play();
+    audioPromiseRef.current = audioRef.current.play();
   };
 
   const audioPause = () => {
-    if (audioPromise !== undefined) {
-      audioPromise
+    if (audioPromiseRef.current !== undefined) {
+      audioPromiseRef.current
         .then(() => {
           audioRef.current.pause();
         });
     } else {
       audioRef.current.pause();
     }
-  };
-
-  const handleAudioPlayBtnClick = () => {
-    setCurrentTruck(0);
-    setIsAudioPlay(true);
   };
 
   const onAudioEnded = () => {
@@ -79,6 +80,7 @@ const AudioComponent = (props) => {
     setCurrentTruck(0);
   }, [isAudioOn]);
 
+  const currentSrc = tracks[currentTruck];
   useEffect(() => {
     let cancelled = false;
 
@@ -88,7 +90,7 @@ const AudioComponent = (props) => {
       error: null,
     });
 
-    fetch(tracks[currentTruck])
+    fetch(currentSrc)
       .then((res) => res.blob())
       .then((blob) => {
         if (!cancelled) {
@@ -118,17 +120,20 @@ const AudioComponent = (props) => {
         error: null,
       });
     };
-  }, [tracks[currentTruck]]);
+  }, [currentSrc]);
 
+  const audioPlayCallback = useCallback(() => audioPlay(), []);
+  const audioPauseCallback = useCallback(() => audioPause(), []);
+  const onAudioEndedCallback = useCallback(() => onAudioEnded(), []);
   useEffect(() => {
     if (isAudioPlay && audioData.src) {
-      audioPlay();
+      audioPlayCallback();
     } else if (audioData.error) {
-      onAudioEnded();
+      onAudioEndedCallback();
     } else if (!isAudioPlay && audioRef.current) {
-      audioPause();
+      audioPauseCallback();
     }
-  }, [audioData, isAudioPlay]);
+  }, [audioData, isAudioPlay, audioPlayCallback, audioPauseCallback, onAudioEndedCallback]);
 
   const AudioPlayBtnEnabled = (isPrevWord && !audioData.loading)
     || (isCorrect && isComplexityBtn && !audioData.loading)
