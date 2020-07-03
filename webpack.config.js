@@ -45,7 +45,6 @@ module.exports = (env = {}) => {
               options: {
                 presets: ['@babel/env'],
               },
-
             },
           ],
         },
@@ -84,6 +83,16 @@ module.exports = (env = {}) => {
             { loader: getLoader() },
             { loader: 'css-loader' },
           ],
+        },
+        {
+          test: /\.mp3$/,
+          use: [{
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'audio',
+            },
+          }],
         },
       ],
     },

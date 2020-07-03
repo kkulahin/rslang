@@ -6,6 +6,9 @@ import GameResult from './gameResult/GameResult';
 
 import getRandomInt from '../../../../utils/random';
 
+import trueAnswerSound from '../../../../assets/audio/true.mp3';
+import falseAnswerSound from '../../../../assets/audio/false.mp3';
+
 import './Sprint.scss';
 
 const game = {
@@ -33,8 +36,8 @@ const game = {
   init() {
     this.wordsStorage = [];
 
-    this.gameSounds.trueAnswer.src = '/src/assets/audio/true.mp3';
-    this.gameSounds.falseAnswer.src = '/src/assets/audio/false.mp3';
+    this.gameSounds.trueAnswer.src = trueAnswerSound;
+    this.gameSounds.falseAnswer.src = falseAnswerSound;
 
     this.gameStatistics.rightAnswers = 0;
     this.gameStatistics.errorAnswers = 0;
