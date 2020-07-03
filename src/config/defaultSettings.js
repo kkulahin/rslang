@@ -25,6 +25,7 @@ const appDefaultSettings = [
         name: 'Show image',
         isChecked: true,
       },
+
     ],
   },
   {
