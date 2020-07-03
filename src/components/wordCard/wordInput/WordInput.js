@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Word from '../../../utils/spacedRepetition/Word';
 
@@ -31,8 +31,25 @@ const getFormattedWordOnError = (errorWord, word) => {
 
 const WordInput = ({
   word: { definition: { word } },
-  onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect, isPrevWord,
+  onInputEnter,
+  onInputFocus,
+  onInputChange,
+  isWordInput,
+  value,
+  isCorrect,
+  isPrevWord,
+  isInputInFocus,
 }) => {
+  const inputRef = useRef();
+
+  useEffect(() => {
+    if (isInputInFocus.isFocus) {
+      inputRef.current.focus();
+    } else {
+      inputRef.current.blur();
+    }
+  }, [isInputInFocus]);
+
   const currentValue = isWordInput
     ? inputRef.current.value
     : '';
@@ -55,7 +72,6 @@ const WordInput = ({
           type="text"
           value={value}
           disabled={isCorrect || isPrevWord}
-          autoFocus="on"
           onKeyUp={(evt) => onInputEnter(evt)}
           onFocus={() => onInputFocus()}
           onChange={(evt) => onInputChange(evt)}
@@ -72,15 +88,14 @@ export default WordInput;
 
 WordInput.propTypes = {
   word: PropTypes.instanceOf(Word).isRequired,
-  inputRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]).isRequired,
   onInputFocus: PropTypes.func.isRequired,
   onInputEnter: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
   isWordInput: PropTypes.bool.isRequired,
   isCorrect: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
+  isInputInFocus: PropTypes.shape({
+    isFocus: PropTypes.bool.isRequired,
+  }).isRequired,
   value: PropTypes.string.isRequired,
 };

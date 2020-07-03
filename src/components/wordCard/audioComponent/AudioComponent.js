@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import Button from '../button/Button';
 import Spinner from '../spinner/Spinner';
 import { urlToAssets } from '../../../constants/urls';
-// import Word from '../../../utils/spacedRepetition/Word';
+import Word from '../../../utils/spacedRepetition/Word';
 
 const AudioComponent = (props) => {
   const {
@@ -21,48 +21,72 @@ const AudioComponent = (props) => {
   const audioRef = useRef();
 
   const [currentTruck, setCurrentTruck] = useState(0);
+  const [isAudioPlay, setIsAudioPlay] = useState(false);
   const [audioData, setAudioData] = useState({
     loading: true,
     src: null,
     error: null,
   });
 
-  const tracks = [urlToAssets + audio];
-  if (isTextExampleShow) {
+  let audioPromise;
+  const tracks = [];
+
+  if (audio) {
+    tracks.push(urlToAssets + audio);
+  }
+  if (isTextExampleShow && audioExample) {
     tracks.push(urlToAssets + audioExample);
   }
-  if (isTextMeaningShow) {
+  if (isTextMeaningShow && audioMeaning) {
     tracks.push(urlToAssets + audioMeaning);
   }
 
+  const audioPlay = () => {
+    audioPromise = audioRef.current.play();
+  };
+
+  const audioPause = () => {
+    if (audioPromise !== undefined) {
+      audioPromise
+        .then(() => {
+          audioRef.current.pause();
+        });
+    } else {
+      audioRef.current.pause();
+    }
+  };
+
   const handleAudioPlayBtnClick = () => {
     setCurrentTruck(0);
+    setIsAudioPlay(true);
   };
 
   const onAudioEnded = () => {
     if (currentTruck < tracks.length - 1) {
-      setCurrentTruck((currentTruck) => currentTruck + 1);
-      return;
+      setCurrentTruck((truck) => truck + 1);
+    } else {
+      onAudioEnd();
     }
-
-    onAudioEnd();
   };
 
   useEffect(() => {
     if (isAudioOn.audioOn) {
-      setCurrentTruck(0);
-      setAudioData({
-        loading: true,
-        src: null,
-        error: null,
-      });
+      setIsAudioPlay(true);
     } else {
-      audioRef.current.pause();
+      setIsAudioPlay(false);
     }
+
+    setCurrentTruck(0);
   }, [isAudioOn]);
 
   useEffect(() => {
     let cancelled = false;
+
+    setAudioData({
+      loading: true,
+      src: null,
+      error: null,
+    });
 
     fetch(tracks[currentTruck])
       .then((res) => res.blob())
@@ -73,7 +97,6 @@ const AudioComponent = (props) => {
             src: URL.createObjectURL(blob),
             error: null,
           });
-          audioRef.current.play();
         }
       })
       .catch(() => {
@@ -83,7 +106,6 @@ const AudioComponent = (props) => {
             src: null,
             error: 'Sorry, we couldn\'t upload the audio',
           });
-          onAudioEnded();
         }
       });
 
@@ -96,9 +118,21 @@ const AudioComponent = (props) => {
         error: null,
       });
     };
-  }, [currentTruck]);
+  }, [tracks[currentTruck]]);
 
-  const AudioPlayBtnEnabled = isPrevWord || ((isCorrect || isShowBtnClick) && isComplexityBtn) || !audioData.loading;
+  useEffect(() => {
+    if (isAudioPlay && audioData.src) {
+      audioPlay();
+    } else if (audioData.error) {
+      onAudioEnded();
+    } else if (!isAudioPlay && audioRef.current) {
+      audioPause();
+    }
+  }, [audioData, isAudioPlay]);
+
+  const AudioPlayBtnEnabled = (isPrevWord && !audioData.loading)
+    || (isCorrect && isComplexityBtn && !audioData.loading)
+    || (isShowBtnClick && isComplexityBtn && !audioData.loading);
 
   return (
     <div className="card-controls__audio-btn">
@@ -120,18 +154,20 @@ const AudioComponent = (props) => {
 
 export default AudioComponent;
 
-// AudioComponent.propTypes = {
-//   isWordInput: PropTypes.bool.isRequired,
-//   isCorrect: PropTypes.bool.isRequired,
-//   isPrevWord: PropTypes.bool.isRequired,
-//   onCardBtnClick: PropTypes.func.isRequired,
-//   helpSettings: PropTypes.object.isRequired,
-//   word: PropTypes.instanceOf(Word).isRequired,
-//   settings: PropTypes.shape({
-//     isShowAnswerBtn: PropTypes.bool.isRequired,
-//     isDeleteBtn: PropTypes.bool.isRequired,
-//   }).isRequired,
-//   helpSettings: PropTypes.shape({
-//     isImageShow: PropTypes.bool.isRequired,
-//   }).isRequired,
-// };
+AudioComponent.propTypes = {
+  word: PropTypes.instanceOf(Word).isRequired,
+  settings: PropTypes.shape({
+    isComplexityBtn: PropTypes.bool.isRequired,
+  }).isRequired,
+  helpSettings: PropTypes.shape({
+    isTextExampleShow: PropTypes.bool.isRequired,
+    isTextMeaningShow: PropTypes.bool.isRequired,
+  }).isRequired,
+  isShowBtnClick: PropTypes.bool.isRequired,
+  isCorrect: PropTypes.bool.isRequired,
+  isPrevWord: PropTypes.bool.isRequired,
+  isAudioOn: PropTypes.shape({
+    audioOn: PropTypes.bool.isRequired,
+  }).isRequired,
+  onAudioEnd: PropTypes.func.isRequired,
+};

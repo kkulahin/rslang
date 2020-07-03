@@ -15,9 +15,15 @@ const CardContent = (props) => {
     settings: {
       isShowAnswerBtn, isDeleteBtn, isComplexityBtn,
     },
-    isPrevWord, word, isCorrect, isShowBtnClick, isAgainBtnClick,
-    onCardBtnClick, onWordComplexityBtnClick,
+    isPrevWord,
+    word,
+    isCorrect,
+    isShowBtnClick,
+    isAgainBtnClick,
+    onCardBtnClick,
+    onWordComplexityBtnClick,
   } = props;
+
   const complexity = word.getDifficulty();
 
   const ShowAnswerBtn = (
@@ -88,16 +94,19 @@ const CardContent = (props) => {
 export default CardContent;
 
 CardContent.propTypes = {
-  isWordInput: PropTypes.bool.isRequired,
-  isCorrect: PropTypes.bool.isRequired,
-  isPrevWord: PropTypes.bool.isRequired,
-  onCardBtnClick: PropTypes.func.isRequired,
   word: PropTypes.instanceOf(Word).isRequired,
   settings: PropTypes.shape({
     isShowAnswerBtn: PropTypes.bool.isRequired,
     isDeleteBtn: PropTypes.bool.isRequired,
+    isComplexityBtn: PropTypes.bool.isRequired,
   }).isRequired,
   helpSettings: PropTypes.shape({
     isImageShow: PropTypes.bool.isRequired,
   }).isRequired,
+  isCorrect: PropTypes.bool.isRequired,
+  isPrevWord: PropTypes.bool.isRequired,
+  isShowBtnClick: PropTypes.bool.isRequired,
+  isAgainBtnClick: PropTypes.bool.isRequired,
+  onCardBtnClick: PropTypes.func.isRequired,
+  onWordComplexityBtnClick: PropTypes.func.isRequired,
 };

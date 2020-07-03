@@ -209,6 +209,7 @@ $image-width: 280px;
     position: relative;
 
     height: 100%;
+    margin-left: 10px;
 
     @include flex();
   }

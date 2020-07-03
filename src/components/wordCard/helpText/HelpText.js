@@ -25,12 +25,12 @@ const HelpText = ({
 }) => {
   const isFullState = isWordInput || isPrevWord;
 
-  const transcriptionElem = (isTranscriptionShow)
-    ? transcription
+  const transcriptionElem = (isTranscriptionShow && transcription)
+    ? <span>{transcription}</span>
     : null;
 
-  const wordTranslateElem = (isWordTranslateShow)
-    ? wordTranslate
+  const wordTranslateElem = (isWordTranslateShow && wordTranslate)
+    ? <span><b>{wordTranslate}</b></span>
     : null;
 
   let classes = 'text-item--translate text-item--hidden';
@@ -41,31 +41,38 @@ const HelpText = ({
   const helpElement = (
     <li className="help-content-text__item">
       <p className="text-item">
-        <span>{transcriptionElem}</span>
+        {transcriptionElem}
         {' '}
-        <span><b>{wordTranslateElem}</b></span>
-        {!wordTranslateElem && isTranslateShow && <span className={classes}>{wordTranslate}</span>}
+        {wordTranslateElem}
+        {!wordTranslateElem && isTranslateShow && wordTranslate
+          && <span className={classes}>{wordTranslate}</span>}
       </p>
     </li>
   );
 
-  const textExampleElement = (
-    <li className="help-content-text__item">
-      <p className="text-item">
-        <HelpTextFormatted text={textExample} isFullState={isFullState} />
-      </p>
-      {isTranslateShow && <p className={classes}>{textExampleTranslate}</p>}
-    </li>
-  );
+  const textExampleElement = (textExample)
+    ? (
+      <li className="help-content-text__item">
+        <p className="text-item">
+          <HelpTextFormatted text={textExample} isFullState={isFullState} />
+        </p>
+        {isTranslateShow && textExampleTranslate
+          && <p className={classes}>{textExampleTranslate}</p>}
+      </li>
+    )
+    : null;
 
-  const textMeaningElement = (
-    <li className="help-content-text__item">
-      <p className="text-item">
-        <HelpTextFormatted text={textMeaning} isFullState={isFullState} />
-      </p>
-      {isTranslateShow && <p className={classes}>{textMeaningTranslate}</p>}
-    </li>
-  );
+  const textMeaningElement = (textMeaning)
+    ? (
+      <li className="help-content-text__item">
+        <p className="text-item">
+          {textMeaning && <HelpTextFormatted text={textMeaning} isFullState={isFullState} />}
+        </p>
+        {isTranslateShow && textMeaningTranslate
+          && <p className={classes}>{textMeaningTranslate}</p>}
+      </li>
+    )
+    : null;
 
   return (
     <ul className="help-content__text">
