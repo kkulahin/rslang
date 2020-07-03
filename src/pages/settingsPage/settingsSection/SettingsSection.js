@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Setting from './settingItem/SettingItem';
 
-import { defaultInputRatio, numberPickerMinValue } from '../../../config/default';
+import {
+  defaultInputRatio, numberPickerMinValue as minValue, numberPickerMaxValue as maxValue,
+} from '../../../config/default';
 
 import './SettingsSection.scss';
 
@@ -28,7 +30,9 @@ const SettingsSection = ({ sectionInfo, handleChange }) => {
     },
 
     handleInputChange(newInputValue, inputId) {
-      if (Number(newInputValue) >= numberPickerMinValue) {
+      const isValidValue = (minValue <= Number(newInputValue)) && (Number(newInputValue) <= maxValue);
+
+      if (isValidValue) {
         const currentInputRatio = settingsInfo.reduce((acc, setting) => {
           const settingId = setting.name.replace(/\s/g, '-').toLowerCase();
           const value = (inputId === settingId) ? newInputValue : setting.value;

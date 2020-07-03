@@ -51,7 +51,7 @@ const StartGame = ({ startGame }) => {
           if (selectedLevel !== gameLevel) {
             setGamelevel(selectedLevel);
           } else {
-            setStartBtnDisabled(true);
+            setStartBtnDisabled(!startBtnDisabled);
           }
         }}
       />
