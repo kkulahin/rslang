@@ -1,3 +1,5 @@
+import womanImg from '../../../../assets/image/avatar/woman.png';
+
 const teamInfo = [Object.freeze({
   name: {
     first: 'Sergey',
@@ -124,7 +126,7 @@ const teamInfo = [Object.freeze({
     sur: ' ',
     nick: 'juliamv',
   },
-  avatar: '/src/assets/image/avatar/woman.png',
+  avatar: womanImg,
   aboutPerson: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
   Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
   when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
