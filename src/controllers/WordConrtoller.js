@@ -1,5 +1,5 @@
-import WordModel from './WordModel';
-import signinSubject from '../observers/SignInSubject';
+import WordModel from '../models/WordModel';
+import signinSubject from '../utils/observers/SignInSubject';
 
 class WordController {
   constructor() {

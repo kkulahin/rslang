@@ -1,12 +1,12 @@
 import fetch from 'node-fetch';
 // import Word from './Word';
-import parameters from './parameters';
-import WordQueue from './WordQueue';
-import { getCookie } from '../cookie';
-import wordQueueSubject from '../observers/WordQueueSubject';
-import { makeRequest } from '../responseFromServer';
-import signinSubject from '../observers/SignInSubject';
-import authService from '../../services/AuthService';
+import parameters from '../utils/spacedRepetition/parameters';
+import WordQueue from '../utils/spacedRepetition/WordQueue';
+import { getCookie } from '../utils/cookie';
+import wordQueueSubject from '../utils/observers/WordQueueSubject';
+import { makeRequest } from '../utils/responseFromServer';
+import signinSubject from '../utils/observers/SignInSubject';
+import authService from '../services/AuthService';
 
 export default class WordModel {
   /**

@@ -94,5 +94,6 @@ module.exports = (env = {}) => {
       open: true,
       historyApiFallback: true,
     },
+    devtool: 'source-map',
   };
 };
