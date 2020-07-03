@@ -9,6 +9,7 @@ const HelpText = ({
     isTextExampleShow,
     isTextMeaningShow,
     isTranslateShow,
+    isImageShow,
   },
   word: {
     definition: {
@@ -74,9 +75,20 @@ const HelpText = ({
     )
     : null;
 
+  let containerClasses = 'help-content__text';
+  if (isImageShow) {
+    containerClasses = 'help-content__text help-content__text--max-height';
+  }
+  if (!isImageShow && (!isTextExampleShow || !isTextMeaningShow)) {
+    containerClasses = 'help-content__text help-content__text--min-height';
+  }
+  if (!isImageShow && !isTextExampleShow && !isTextMeaningShow) {
+    containerClasses = 'help-content__text help-content__text--only-height';
+  }
+
   return (
-    <ul className="help-content__text">
-      {(isTranscriptionShow || isWordTranslateShow) ? helpElement : null}
+    <ul className={containerClasses}>
+      {(isTranscriptionShow || isWordTranslateShow || (isFullState && isTranslateShow)) ? helpElement : null}
       {isTextExampleShow ? textExampleElement : null}
       {isTextMeaningShow ? textMeaningElement : null}
     </ul>
@@ -92,6 +104,7 @@ HelpText.propTypes = {
     isTextExampleShow: PropTypes.bool.isRequired,
     isTextMeaningShow: PropTypes.bool.isRequired,
     isTranslateShow: PropTypes.bool.isRequired,
+    isImageShow: PropTypes.bool.isRequired,
   }).isRequired,
   word: PropTypes.shape({
     definition: PropTypes.shape({
