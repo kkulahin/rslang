@@ -25,10 +25,6 @@ const appDefaultSettings = [
         name: 'Show image',
         isChecked: true,
       },
-      {
-        name: 'Sentence translation',
-        isChecked: true,
-      },
     ],
   },
   {
@@ -56,7 +52,7 @@ const appDefaultSettings = [
         isChecked: true,
       },
       {
-        name: 'Hard word category',
+        name: 'Categories of words',
         isChecked: true,
       },
       {
