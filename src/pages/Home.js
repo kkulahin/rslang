@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import WordCard from '../components/wordCard/WordCard';
-import wordController from '../utils/spacedRepetition/WordConrtoller';
+import wordController from '../controllers/WordConrtoller';
 import wordQueueSubject from '../utils/observers/WordQueueSubject';
 
 const initHelpSettings = {

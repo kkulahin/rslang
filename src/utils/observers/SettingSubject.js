@@ -1,11 +1,11 @@
 import Subject from './Subject';
 
-class SettingQueueSubject extends Subject {
+class SettingSubject extends Subject {
   notify = (settings) => {
     this.observers.forEach((observer) => { observer(settings); });
   }
 }
 
-const settingQueueSubject = new SettingQueueSubject();
+const settingSubject = new SettingSubject();
 
-export default settingQueueSubject;
+export default settingSubject;

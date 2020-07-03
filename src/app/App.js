@@ -19,64 +19,31 @@ import Settings from '../pages/settingsPage/Settings';
 
 import Header from '../components/header/Header';
 import GreetingWrapper from '../components/greetingWrapper/GreetingWrapper';
-
-import appDefaultSettings from '../config/defaultSettings';
-import { getConfig, saveConfig } from '../controllers/appConfig/appConfig';
-import settingQueueSubject from '../utils/observers/SettingQueueSubject';
-
 import './App.scss';
 import PrivateRoute from '../components/route/PrivateRoute';
 
-const App = () => {
-  const [settings, setSettings] = useState(appDefaultSettings);
-
-  useEffect(() => {
-    settingQueueSubject.subscribe(setSettings);
-
-    getConfig();
-
-    return () => settingQueueSubject.unsubscribe(setSettings);
-  }, []);
-
-  useEffect(() => {
-    if (settings !== appDefaultSettings) {
-      saveConfig(settings);
-    }
-  }, [settings]);
-
-  const [cardSettings, educationSettings, buttonSettings] = settings;
-  const [wordsCount, cardsCount] = educationSettings.settingsArr;
-
-  return (
-    <Router history={History}>
-      <div className="app-wrapper">
-        <Header />
-        <div className="app-main">
-          <GreetingWrapper
-            cardsCount={cardsCount.value}
-          />
-          <Switch>
-            <PrivateRoute exact path="/" component={Home} />
-            <Route path="/signin" component={LoginPage} />
-            <Route path="/signup" component={SignupPage} />
-            <Route path="/logout" component={Logout} />
-            <PrivateRoute path="/dictionary" component={Dictionary} />
-            <PrivateRoute path="/statistic" component={Statistic} />
-            <PrivateRoute path="/settings">
-              <Settings
-                settings={settings}
-                handleAppChange={(newSettings) => setSettings(newSettings)}
-              />
-            </PrivateRoute>
-            <PrivateRoute path="/promo" component={Promo} />
-            <PrivateRoute path="/about" component={About} />
-            <PrivateRoute path="/games" component={GamesPage} />
-            <PrivateRoute component={NotFound} />
-          </Switch>
-        </div>
+const App = () => (
+  <Router history={History}>
+    <div className="app-wrapper">
+      <Header />
+      <div className="app-main">
+        <GreetingWrapper />
+        <Switch>
+          <PrivateRoute exact path="/" component={Home} />
+          <Route path="/signin" component={LoginPage} />
+          <Route path="/signup" component={SignupPage} />
+          <Route path="/logout" component={Logout} />
+          <PrivateRoute path="/dictionary" component={Dictionary} />
+          <PrivateRoute path="/statistic" component={Statistic} />
+          <PrivateRoute path="/settings" component={Settings} />
+          <PrivateRoute path="/promo" component={Promo} />
+          <PrivateRoute path="/about" component={About} />
+          <PrivateRoute path="/games" component={GamesPage} />
+          <PrivateRoute component={NotFound} />
+        </Switch>
       </div>
-    </Router>
-  );
-};
+    </div>
+  </Router>
+);
 
 export default App;
