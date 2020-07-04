@@ -114,9 +114,9 @@ const WordCard = ({
 
   const handleShowBtnClick = () => {
     setIsShowBtnClick(true);
-    handleAnswer(false);
-    onWordAnswered();
-    setIsCorrect(true);
+    handleAnswer(false); //----------------------------------------------
+    onWordAnswered(); //-------------------------------------------------
+    setIsCorrect(true); //-----------------------------------------------
   };
 
   const handleWordComplexityBtnClick = (id) => {

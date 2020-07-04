@@ -232,10 +232,29 @@ $image-width: 280px;
   .card-controls__audio-btn {
     position: relative;
 
+    width: 4rem;
     height: 100%;
     margin-left: 10px;
+    padding: 0;
 
     @include flex();
+
+    .card-button {
+      background: url("./audioComponent/audio-play-icon.svg");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 3.4rem;
+    }
+
+    .donut {
+      z-index: 1;
+
+      width: 4rem;
+      height: 4rem;
+    
+      border: 0.3rem solid transparent;
+      border-top-color: #25CEDE;
+    }
   }
 
   .learn-content {

@@ -1,6 +1,4 @@
-import React, {
-  useState, useRef, useEffect, useCallback,
-} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '../button/Button';
@@ -21,7 +19,6 @@ const AudioComponent = (props) => {
   } = props;
 
   const audioRef = useRef();
-  const audioPromiseRef = useRef();
 
   const [currentTruck, setCurrentTruck] = useState(0);
   const [isAudioPlay, setIsAudioPlay] = useState(false);
@@ -48,22 +45,12 @@ const AudioComponent = (props) => {
   };
 
   const audioPlay = () => {
-    audioPromiseRef.current = audioRef.current.play();
-  };
-
-  const audioPause = () => {
-    if (audioPromiseRef.current !== undefined) {
-      audioPromiseRef.current
-        .then(() => {
-          audioRef.current.pause();
-        });
-    } else {
-      audioRef.current.pause();
-    }
+    audioRef.current.play();
   };
 
   const onAudioEnded = () => {
     if (currentTruck < tracks.length - 1) {
+      audioRef.current.pause();
       setCurrentTruck((truck) => truck + 1);
     } else {
       onAudioEnd();
@@ -122,18 +109,11 @@ const AudioComponent = (props) => {
     };
   }, [currentSrc]);
 
-  const audioPlayCallback = useCallback(() => audioPlay(), []);
-  const audioPauseCallback = useCallback(() => audioPause(), []);
-  const onAudioEndedCallback = useCallback(() => onAudioEnded(), []);
-  useEffect(() => {
-    if (isAudioPlay && audioData.src) {
-      audioPlayCallback();
-    } else if (audioData.error) {
-      onAudioEndedCallback();
-    } else if (!isAudioPlay && audioRef.current) {
-      audioPauseCallback();
-    }
-  }, [audioData, isAudioPlay, audioPlayCallback, audioPauseCallback, onAudioEndedCallback]);
+  if (isAudioPlay && audioData.src) {
+    audioPlay();
+  } else if (audioData.error) {
+    onAudioEnded();
+  }
 
   const AudioPlayBtnEnabled = (isPrevWord && !audioData.loading)
     || (isCorrect && isComplexityBtn && !audioData.loading)
@@ -143,7 +123,6 @@ const AudioComponent = (props) => {
     <div className="card-controls__audio-btn">
       <Button
         id="speakWord"
-        label="Speak"
         isDisabled={!AudioPlayBtnEnabled}
         clickHandler={handleAudioPlayBtnClick}
       />
