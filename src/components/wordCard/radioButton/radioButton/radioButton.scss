@@ -15,7 +15,8 @@
     border: none;
     border-radius: 125px;
     outline: none;
-  
+    cursor: pointer;
+
     &--checked {
       box-shadow: $container-box-shadow-inset;
     }

@@ -223,6 +223,24 @@ $image-width: 280px;
     height: 100%;
 
     @include flex($justify-content: flex-end);
+
+    #deleteWord {
+      width: 4rem;
+
+      background: url("./delete-icon.svg");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 2.2rem;
+    }
+
+    #againWord {
+      width: 4rem;
+
+      background: url("./repeat-icon.svg");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 3rem;
+    }
   }
 
   .card-controls__buttons + .card-controls__buttons {

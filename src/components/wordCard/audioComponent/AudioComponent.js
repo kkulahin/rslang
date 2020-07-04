@@ -53,6 +53,7 @@ const AudioComponent = (props) => {
       audioRef.current.pause();
       setCurrentTruck((truck) => truck + 1);
     } else {
+      setIsAudioPlay(false);
       onAudioEnd();
     }
   };

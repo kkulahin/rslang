@@ -38,7 +38,6 @@ const CardContent = (props) => {
   const DeleteBtn = (
     <Button
       id="deleteWord"
-      label="Delete"
       clickHandler={(id) => onCardBtnClick(id)}
     />
   );
@@ -47,7 +46,6 @@ const CardContent = (props) => {
     <Button
       isDisabled={isAgainBtnClick}
       id="againWord"
-      label="Again"
       clickHandler={(id) => onCardBtnClick(id)}
     />
   );
