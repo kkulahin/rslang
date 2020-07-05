@@ -7,7 +7,6 @@ import CardContent from './cardContent/CardContent';
 
 import './WordCard.scss';
 import Word from '../../utils/spacedRepetition/Word';
-// import WordQueue from "../../utils/spacedRepetition/WordQueue";
 
 const checkCorrect = ({ value, word }) => value.toLowerCase() === word.toLowerCase();
 
@@ -22,10 +21,10 @@ const initialState = {
 };
 
 const WordCard = ({
-  // wordQueue,
   helpSettings,
   settings,
   currentWord,
+  // onShowAnswerBtnClick,
   onAgainBtnClick,
   onComplexityBtnClick,
   onDeleteBtnClick,
@@ -53,7 +52,7 @@ const WordCard = ({
           isInputInFocus: { isFocus: false },
         };
 
-        if (action.payload.isCorrectAnswer) {
+        if (action.payload.isCorrect) {
           newState.isCorrect = true;
           onWordAnswered();
         } else {
@@ -93,8 +92,17 @@ const WordCard = ({
   };
 
   const handleNavigateNextClick = () => {
-    if (state.isCorrect || state.isShowBtnClick || isAnswered) {
+    if (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation) {
       getNextWord();
+    } else if (state.value === '') {
+      dispatch({
+        type: 'setState',
+        payload: {
+          isWordInput: false,
+          isAudioOn: { audioOn: false },
+          isInputInFocus: { isFocus: true },
+        },
+      });
     } else {
       dispatch({
         type: 'handleAnswer',
@@ -141,7 +149,7 @@ const WordCard = ({
       type: 'handleAnswer',
       payload: { isCorrect: false },
     });
-    // onWordAnswered();
+    // onShowAnswerBtnClick();
   };
 
   const handleWordComplexityBtnClick = (id) => {
@@ -167,26 +175,28 @@ const WordCard = ({
     handlers[id]();
   };
 
-  const createHandleKeydown = (actualState) => (evt) => {
+  const createHandleKeydown = (actualState, actualHasPrevious, actualIsAnswered) => (evt) => {
     const { key } = evt;
 
     if (key === 'ArrowRight') {
       handleNavigateNextClick();
     } else if ((key === 'ArrowLeft')
-        && hasPrevious
-        && (!actualState.isCorrect && !actualState.isShowBtnClick && !isAnswered)) {
+        && actualHasPrevious
+        && !actualState.isCorrect
+        && !actualState.isShowBtnClick
+        && !actualIsAnswered) {
       handleNavigatePrevClick();
     }
   };
 
   useEffect(() => {
-    const handleKeydown = createHandleKeydown(state);
+    const handleKeydown = createHandleKeydown(state, hasPrevious, isAnswered);
     document.addEventListener('keydown', handleKeydown);
 
     return () => {
       document.removeEventListener('keydown', handleKeydown);
     };
-  }, [state]);
+  }, [state, hasPrevious, isAnswered]);
 
   return (
     <div className="card-unit">
@@ -209,7 +219,8 @@ const WordCard = ({
             onCardBtnClick={handleCardBtnClick}
             onWordComplexityBtnClick={handleWordComplexityBtnClick}
             onAudioEnd={handleAudioEnd}
-            isPrevWord={isAnswered} //----------------------------------
+            isEducation={isEducation}
+            isPrevWord={isAnswered}
             {...state}
           />
         </ContainerWithShadow>
@@ -226,13 +237,13 @@ const WordCard = ({
 export default WordCard;
 
 WordCard.propTypes = {
-  // wordQueue: PropTypes.instanceOf(WordQueue).isRequired,
   currentWord: PropTypes.instanceOf(Word).isRequired,
   settings: PropTypes.shape({
     isAudioAuto: PropTypes.bool.isRequired,
     isComplexityBtn: PropTypes.bool.isRequired,
   }).isRequired,
   helpSettings: PropTypes.shape().isRequired,
+  // onShowAnswerBtnClick: PropTypes.func.isRequired,
   onAgainBtnClick: PropTypes.func.isRequired,
   onComplexityBtnClick: PropTypes.func.isRequired,
   onDeleteBtnClick: PropTypes.func.isRequired,

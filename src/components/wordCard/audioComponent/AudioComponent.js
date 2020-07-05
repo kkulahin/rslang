@@ -13,6 +13,7 @@ const AudioComponent = (props) => {
     word: { definition: { audio, audioExample, audioMeaning } },
     onAudioEnd,
     isPrevWord,
+    isEducation,
     isCorrect,
     isShowBtnClick,
     isAudioOn,
@@ -94,7 +95,7 @@ const AudioComponent = (props) => {
           setAudioData({
             loading: false,
             src: null,
-            error: 'Sorry, we couldn\'t upload the audio',
+            error: `Sorry, we couldn't upload the audio`,
           });
         }
       });
@@ -117,6 +118,7 @@ const AudioComponent = (props) => {
   }
 
   const AudioPlayBtnEnabled = (isPrevWord && !audioData.loading)
+    || (isEducation && !audioData.loading)
     || (isCorrect && isComplexityBtn && !audioData.loading)
     || (isShowBtnClick && isComplexityBtn && !audioData.loading);
 
@@ -151,6 +153,7 @@ AudioComponent.propTypes = {
   isShowBtnClick: PropTypes.bool.isRequired,
   isCorrect: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
+  isEducation: PropTypes.bool.isRequired,
   isAudioOn: PropTypes.shape({
     audioOn: PropTypes.bool.isRequired,
   }).isRequired,

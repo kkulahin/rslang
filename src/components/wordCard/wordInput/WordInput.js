@@ -38,6 +38,7 @@ const WordInput = ({
   value,
   isCorrect,
   isPrevWord,
+  isEducation,
   isInputInFocus,
 }) => {
   const inputRef = useRef();
@@ -55,7 +56,7 @@ const WordInput = ({
     : '';
 
   let classes = 'word__size';
-  if ((isWordInput && isCorrect) || isPrevWord) {
+  if ((isWordInput && isCorrect) || isPrevWord || isEducation) {
     classes += ' word__size--correct';
   }
 
@@ -71,7 +72,7 @@ const WordInput = ({
           className="word__input"
           type="text"
           value={value}
-          disabled={isCorrect || isPrevWord}
+          disabled={isCorrect || isPrevWord || isEducation}
           onKeyUp={(evt) => onInputEnter(evt)}
           onFocus={() => onInputFocus()}
           onChange={(evt) => onInputChange(evt)}
@@ -94,6 +95,7 @@ WordInput.propTypes = {
   isWordInput: PropTypes.bool.isRequired,
   isCorrect: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
+  isEducation: PropTypes.bool.isRequired,
   isInputInFocus: PropTypes.shape({
     isFocus: PropTypes.bool.isRequired,
   }).isRequired,

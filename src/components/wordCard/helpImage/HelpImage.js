@@ -25,7 +25,7 @@ const HelpImage = ({
       .catch(() => !cancelled && setImageData({
         loading: false,
         src: null,
-        error: 'Sorry, we couldn\'t upload the image',
+        error: `Sorry, we couldn't upload the image`,
       }));
 
     return () => {

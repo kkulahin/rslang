@@ -23,8 +23,9 @@ const HelpText = ({
   },
   isWordInput,
   isPrevWord,
+  isEducation,
 }) => {
-  const isFullState = isWordInput || isPrevWord;
+  const isFullState = isWordInput || isPrevWord || isEducation;
 
   const transcriptionElem = (isTranscriptionShow && transcription)
     ? <span>{transcription}</span>
@@ -118,4 +119,5 @@ HelpText.propTypes = {
   }).isRequired,
   isWordInput: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
+  isEducation: PropTypes.bool.isRequired,
 };

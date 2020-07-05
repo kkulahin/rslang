@@ -16,6 +16,7 @@ const CardContent = (props) => {
       isShowAnswerBtn, isDeleteBtn, isComplexityBtn,
     },
     isPrevWord,
+    isEducation,
     word,
     isCorrect,
     isShowBtnClick,
@@ -30,7 +31,7 @@ const CardContent = (props) => {
     <Button
       id="showWord"
       label="Answer"
-      isDisabled={isCorrect || isShowBtnClick}
+      isDisabled={isCorrect || isShowBtnClick || isEducation}
       clickHandler={(id) => onCardBtnClick(id)}
     />
   );
@@ -56,6 +57,9 @@ const CardContent = (props) => {
     { label: 'easy', id: 'easy' },
   ];
 
+  const isAvailableComplexityButtons = isComplexityBtn
+    && !isPrevWord
+    && (isCorrect || isEducation);
   const complexityButtons = (
     <div className="card-controls__buttons">
       {AgainBtn}
@@ -63,7 +67,7 @@ const CardContent = (props) => {
         items={radioButtons}
         onChange={onWordComplexityBtnClick}
         checkedItem={complexity}
-        isAttention={isCorrect || isShowBtnClick}
+        // isAttention={isCorrect || isShowBtnClick}
       />
     </div>
   );
@@ -75,7 +79,7 @@ const CardContent = (props) => {
         <HelpText {...props} />
       </div>
       <div className="card-controls">
-        {isComplexityBtn && !isPrevWord && isCorrect && complexityButtons}
+        {isAvailableComplexityButtons && complexityButtons}
         <div className="card-controls__buttons">
           {isDeleteBtn && !isPrevWord && DeleteBtn}
           {isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
@@ -102,6 +106,7 @@ CardContent.propTypes = {
     isImageShow: PropTypes.bool.isRequired,
   }).isRequired,
   isCorrect: PropTypes.bool.isRequired,
+  isEducation: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
   isShowBtnClick: PropTypes.bool.isRequired,
   isAgainBtnClick: PropTypes.bool.isRequired,
