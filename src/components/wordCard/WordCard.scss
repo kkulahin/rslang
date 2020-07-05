@@ -258,7 +258,7 @@ $image-width: 280px;
     @include flex();
 
     .card-button {
-      background: url("./audioComponent/audio-play-icon.svg");
+      background: url("./audio-play-icon.svg");
       background-position: center;
       background-repeat: no-repeat;
       background-size: 3.4rem;
