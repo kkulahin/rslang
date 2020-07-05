@@ -1,4 +1,6 @@
 import parameters from './parameters';
+import wordCanUpgradeSubject from '../observers/WordCanUpgradeSubject';
+import { checkDayDifferenceAbs } from '../time';
 
 export default class Word {
   /**
@@ -7,6 +9,7 @@ export default class Word {
    * @param {WordDefinition} definition word definition
    * @param {Object} param param
    * @param {number} param.difficultyId from new to completed
+   * @param {number} param.userDifficultyId from easy to hard - set by user
    * @param {number} param.time time when word was repeated
    * @param {number} param.repetitionPhaseId current repetition phase
    * @param {number} param.lastMistake dates of mistakes
@@ -18,44 +21,57 @@ export default class Word {
     definition,
     {
       difficultyId = 0,
+      userDifficultyId = null,
       time = 0,
       repetitionPhaseId = 0,
       lastMistake = 0,
       totalMistakes = 0,
-      mistakes = '0000000',
+      mistakes = 'zzzzzzz',
       totalRepetition = 0,
     },
   ) {
     this.definition = definition;
     this.difficulty = difficultyId;
-    this.time = time;
+    this.userDifficulty = userDifficultyId;
+    if (this.userDifficulty !== null && this.userDifficulty !== this.difficulty) {
+      this.difficulty = this.userDifficulty;
+    }
+    this.time = time * 1000;
     this.repetitionPhase = repetitionPhaseId;
-    this.lastMistake = lastMistake;
+    this.lastMistake = lastMistake * 1000;
     this.mistakes = mistakes;
     this.totalMistakes = totalMistakes;
     this.totalRepetition = totalRepetition;
     this.wordQueue = wordQueue;
-    this.userTimezoneOffset = (new Date()).getTimezoneOffset() * 60000;
   }
 
   setTime = () => {
     this.time = new Date().getTime();
     this.totalRepetition += 1;
+    if (this.lastMistake === 0) {
+      this.mistakes = `${this.mistakes.substr(0, this.mistakes.length - 1)}0`;
+    } else if (checkDayDifferenceAbs(new Date(), new Date(this.lastMistake)) > 0) {
+      this.mistakes = `${this.mistakes.substr(1)}0`;
+    }
   }
 
   setMistake = () => {
+    if (this.lastMistake > 0 && checkDayDifferenceAbs(new Date(), new Date(this.lastMistake)) > 0) {
+      this.mistakes = `${this.mistakes.substr(1)}1`;
+    } else {
+      this.mistakes = `${this.mistakes.substr(0, this.mistakes.length - 1)}1`;
+    }
     this.lastMistake = new Date().getTime();
     this.totalMistakes += 1;
-    this.mistakes = `${this.mistakes.substring(0, this.mistakes.length - 1)}0`;
     this.upgradeDifficulty();
   }
 
-  shiftMistakes = () => {
-    this.mistakes.substring(1);
-    this.mistakes += '0';
-  }
+  isNew = () => parameters.difficultyNames.new === this.getAlgDifficulty();
 
   getWhenWasLastMistake = () => {
+    if (this.mistakes.indexOf('z') > -1) {
+      return 0;
+    }
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const lastMistakeDate = new Date(this.lastMistake);
@@ -63,9 +79,7 @@ export default class Word {
   }
 
   upgradePhase = () => {
-    if (this.repetitionPhase === 0) {
-      this.repetitionPhase = 3;
-    } else if (this.repetitionPhase < parameters.phase.length - 1) {
+    if (this.repetitionPhase < parameters.phase.length - 1) {
       this.repetitionPhase += 1;
     }
   }
@@ -79,7 +93,34 @@ export default class Word {
 
   getNewPhases = () => parameters.phase.filter((e, i) => i < 4);
 
-  getDifficulty = () => parameters.difficulty[this.difficulty].name;
+  getDifficulty = () => {
+    const diff = this.hasUserDifficulty() ? this.getUserDifficulty() : this.getAlgDifficulty();
+    if (diff === parameters.difficultyNames.new) {
+      return parameters.difficultyNames.normal;
+    }
+    if (diff === parameters.difficultyNames.completed) {
+      return parameters.difficultyNames.easy;
+    }
+    return diff;
+  }
+
+  getAlgDifficulty = () => parameters.difficulty[this.difficulty].name;
+
+  hasUserDifficulty = () => this.userDifficulty !== null;
+
+  getUserDifficulty = () => parameters.difficulty[this.userDifficulty].name;
+
+  /**
+   * @param {string} difficulty ['easy', 'normal', 'hard']
+   */
+  setUserDifficulty = (difficulty) => {
+    parameters.difficulty.forEach((dif, i) => {
+      if (dif.name === difficulty) {
+        this.userDifficulty = i;
+        this.difficulty = i;
+      }
+    });
+  }
 
   /**
    * set difficulty to predefined value
@@ -98,15 +139,26 @@ export default class Word {
   }
 
   upgradeDifficulty = () => {
-    if (this.getWhenWasLastMistake() >= parameters.difficulty[this.difficulty].maxDays) {
+    const diff = this.hasUserDifficulty() ? this.getUserDifficulty() : this.getAlgDifficulty();
+    if (diff === parameters.difficultyNames.new) {
+      this.difficulty = parameters.difficulty.reduce((newIndex, dif, index) => {
+        if (dif.name === parameters.difficultyNames.normal) {
+          return index;
+        }
+        return newIndex;
+      }, -1);
+    } else if (this.getWhenWasLastMistake() >= parameters.difficulty[this.difficulty].maxDays) {
       if (this.difficulty + 1 < parameters.difficulty.length) {
         this.difficulty += 1;
       }
     }
+    if (this.difficulty !== this.userDifficulty) {
+      wordCanUpgradeSubject.notify(parameters.difficulty[this.difficulty].name);
+    }
   }
 
   downgradeDifficulty = () => {
-    const dif = this.getDifficulty();
+    const dif = this.getAlgDifficulty();
     if (dif === parameters.difficultyNames.normal) {
       const mistakesCount = this.mistakes.split('').reduce((count, day) => {
         if (day === '1') {
@@ -125,6 +177,14 @@ export default class Word {
       if (this.mistakes[this.mistakes.length - 1] === '1') {
         this.setDifficulty(parameters.difficultyNames.easy);
       }
+    }
+  }
+
+  replaceDifficulty = (doReplace) => {
+    if (doReplace) {
+      this.userDifficulty = this.difficulty;
+    } else {
+      this.difficulty = this.userDifficulty;
     }
   }
 

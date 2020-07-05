@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { CanvasJSChart, CanvasJS } from 'canvasjs-react-charts';
 import ContainerWithShadow from '../../../components/containerWithShadow/ContainerWithShadow';
-import CanvasJSReact from '../canvasjs.react';
 import Dropdown from '../../../components/dropdown/Dropdown';
 
 import './StatisticLong.scss';
+import { getDateFromSeconds } from '../../../utils/time';
 
 const StatisticLong = ({ statistics }) => {
   const { optional: { longStatistics } } = statistics;
   const [statisticPeriod, setStatisticPeriod] = useState('Weekly');
   const periods = ['Weekly', 'Monthly'];
-
-  const { CanvasJS, CanvasJSChart } = CanvasJSReact;
 
   CanvasJS.addColorSet('rslang', [
     '#25CEDE',
@@ -47,7 +46,7 @@ const StatisticLong = ({ statistics }) => {
     options.axisX.interval = interval;
     let datesArray = Object.keys(longStatistics).map((daySec) => {
       const seconds = parseInt(daySec, 10);
-      const day = new Date(seconds * 1000);
+      const day = getDateFromSeconds(seconds);
       return { date: day, count: longStatistics[daySec] };
     });
     const today = new Date();

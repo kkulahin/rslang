@@ -1,4 +1,5 @@
 import statisticsModel from '../models/StatisticsModel';
+import { getTodaySeconds } from '../utils/time';
 
 class StatisticsController {
   get = () => {
@@ -8,14 +9,28 @@ class StatisticsController {
     return statisticsModel.get();
   }
 
+  getAsync = async () => {
+    if (statisticsModel.get() === null) {
+      await statisticsModel.getFromServer();
+    }
+    return statisticsModel.get();
+  }
+
+  updateAll = async (isEducation, isAnswered, isNew, isLastOccurence, todayQueue) => {
+    const todayStatistics = this.updateTodayStatistics(isEducation, isAnswered, isNew, isLastOccurence);
+    const seconds = getTodaySeconds();
+    const longStatistics = this.updateLongStatistics(`${seconds}`, isLastOccurence);
+    statisticsModel.save({ todayStatistics, longStatistics, todayQueue });
+  }
+
   updateTodayStatistics = (isEducation, isAnswered, isNew, isLastOccurence) => {
     const { optional: { todayStatistics } } = statisticsModel.get();
     if (!isEducation) {
       if (isAnswered) {
-        todayStatistics.passedCards += 1;
         todayStatistics.correctAnswers += 1;
-        // todo
-        todayStatistics.passedWords += 1;
+        if (isLastOccurence) {
+          todayStatistics.passedWords += 1;
+        }
         todayStatistics.currentStrike += 1;
         if (todayStatistics.currentStrike > todayStatistics.strike) {
           todayStatistics.strike = todayStatistics.currentStrike;
@@ -23,38 +38,27 @@ class StatisticsController {
       } else {
         todayStatistics.incorrectAnswers += 1;
         todayStatistics.currentStrike = 0;
-        todayStatistics.passedCards += 1;
         if (isNew) {
           todayStatistics.newWords += 1;
         }
       }
-    } else {
-      if (isNew) {
-        todayStatistics.newWords += 1;
-      }
-      todayStatistics.passedCards += 1;
+    } else if (isNew) {
+      todayStatistics.newWords += 1;
     }
-
-    statisticsModel.save({ todayStatistics });
+    todayStatistics.passedCards += 1;
+    return todayStatistics;
   }
 
-  updateLongStatistics = (date, queue, queuePosition, word) => {
+  updateLongStatistics = (date, isLast) => {
     const { optional: { longStatistics } } = statisticsModel.get();
-    if (queue.some((element, index) => {
-      if (index > queuePosition) {
-        return false;
-      }
-      if (element === word) {
-        return true;
-      }
-      return false;
-    })) {
+    if (isLast) {
       longStatistics[date] += 1;
     }
+    return longStatistics;
   }
 
-  updateQueue = () => {
-
+  updateQueue = async (todayQueue) => {
+    statisticsModel.save({ todayQueue });
   }
 
   getPassedCount = () => {
@@ -62,6 +66,10 @@ class StatisticsController {
       return 0;
     }
     return statisticsModel.getPassedCount();
+  }
+
+  reset = () => {
+    statisticsModel.reset();
   }
 }
 

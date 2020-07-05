@@ -82,6 +82,7 @@ const WordCard = ({
       setIsCorrect(true);
     } else {
       onErrorAnswer();
+      onWordMistaken();
     }
   };
 
@@ -130,6 +131,7 @@ const WordCard = ({
 
   const handleNavigateNextClick = () => {
     if (isCorrect || isShowBtnClick || isAnswered) {
+      onWordAnswered();
       getNextWord();
       return;
     }

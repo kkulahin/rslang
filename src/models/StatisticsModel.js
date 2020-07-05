@@ -1,5 +1,6 @@
 import { makeRequest } from '../utils/responseFromServer';
 import statisticsSubject from '../utils/observers/StatisticsSubject';
+import { getTodaySeconds } from '../utils/time';
 
 class StatisticsModel {
   constructor() {
@@ -37,9 +38,7 @@ class StatisticsModel {
       if (!this.statistics.optional.longStatistics) {
         this.statistics.optional.longStatistics = {};
       }
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const todaySec = Math.ceil(today.getTime() / 1000);
+      const todaySec = getTodaySeconds();
       if (!this.statistics.optional.longStatistics[`${todaySec}`]) {
         this.statistics.optional.longStatistics[`${todaySec}`] = 0;
       }
@@ -61,7 +60,7 @@ class StatisticsModel {
 
   get = () => (this.statistics ? { ...this.statistics } : null);
 
-  save = async ({ todayQueue, todayStatistics }) => {
+  save = async ({ todayStatistics, longStatistics, todayQueue }) => {
     const statistics = { ...this.statistics };
     if (!statistics.optional) {
       statistics.optional = {};
@@ -91,6 +90,10 @@ class StatisticsModel {
   getPassedCount = () => {
     const { optional: { todayStatistics: { passedWords } } } = this.statistics;
     return passedWords;
+  }
+
+  reset = () => {
+    this.statistics = null;
   }
 }
 
