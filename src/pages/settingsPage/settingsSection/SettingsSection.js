@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Setting from './settingItem/SettingItem';
 
-import { defaultInputRatio, numberPickerMinValue } from '../../../config/default';
+import {
+  defaultInputRatio, numberPickerMinValue as minValue, numberPickerMaxValue as maxValue,
+} from '../../../config/default';
 
 import './SettingsSection.scss';
 
@@ -28,15 +30,21 @@ const SettingsSection = ({ sectionInfo, handleChange }) => {
     },
 
     handleInputChange(newInputValue, inputId) {
-      if (Number(newInputValue) >= numberPickerMinValue) {
-        const currentInputRatio = settingsInfo.reduce((acc, setting) => {
+      const isValidValue = (minValue <= Number(newInputValue)) && (Number(newInputValue) <= maxValue);
+
+      if (isValidValue) {
+        const newSettingsValue = settingsInfo.map((setting) => {
           const settingId = setting.name.replace(/\s/g, '-').toLowerCase();
-          const value = (inputId === settingId) ? newInputValue : setting.value;
+          const value = (inputId === settingId) ? +newInputValue : setting.value;
 
-          return Math.abs(acc - value);
-        }, 0);
+          return value;
+        });
 
-        if (currentInputRatio >= defaultInputRatio) {
+        const [wordsCount, cardsCount] = newSettingsValue;
+
+        const isValidInputRatio = cardsCount - wordsCount > defaultInputRatio;
+
+        if (isValidInputRatio) {
           handleChange(inputId, sectionName, newInputValue);
         }
       }

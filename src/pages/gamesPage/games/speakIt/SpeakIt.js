@@ -31,18 +31,6 @@ const stepPic = [
 
 const isEmpty = (obj) => Object.keys(obj).length === 0;
 
-/* const defaultParams = {
-  StepCounter: 6,
-  Words: 5,
-};
-*/
-
-/* const defGameOption = {
-  curStage: 0,
-  maxStage: option.StepCounter - 1,
-  stagesOption: [],
-}; */
-
 const shuffleArray = (arr) => arr.map((a) => [Math.random(), a]).sort((a, b) => a[0] - b[0]).map((a) => a[1]);
 
 const SpeackIt = () => {
@@ -142,7 +130,7 @@ const SpeackIt = () => {
     const wordIndex = words.findIndex((el) => el.word === userRecWord);
     if (wordIndex >= 0) {
       if (isEmpty(rights)) {
-        const newRights = Array.from({ length: option.StepCounter }, (v, k) => k).map((el) => {
+        const newRights = Array.from({ length: gameOption.StepCounter }, (v, k) => k).map((el) => {
           const obj = {};
           obj[`stage${el}`] = [];
           return obj;
