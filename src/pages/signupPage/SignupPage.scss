@@ -46,6 +46,7 @@
   width: 80%;
   margin-bottom: 20px;
   font-size: 1.4rem;
+  text-align: justify;
   color: rgb(103, 106, 109);
 }
 
@@ -93,4 +94,11 @@
 
 .ui.button {
   font-size: 1.5em !important;
+}
+
+@media (max-width: 767px) {
+
+  .register-header .image {
+    display: none !important;
+  }
 }
