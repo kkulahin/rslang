@@ -25,7 +25,7 @@ const HelpImage = ({
       .catch(() => !cancelled && setImageData({
         loading: false,
         src: null,
-        error: `Sorry, we couldn't upload the image`,
+        error: 'Sorry, we couldn\'t upload the image',
       }));
 
     return () => {
@@ -45,7 +45,7 @@ const HelpImage = ({
   } else if (imageData.src) {
     element = <img src={imageData.src} alt={wordTranslate} />;
   } else {
-    element = <p>{imageData.error}</p>;
+    element = <div className="image--error">{imageData.error}</div>;
   }
 
   return (

@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {
+  useState, useRef, useEffect, useMemo,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '../button/Button';
@@ -69,7 +71,7 @@ const AudioComponent = (props) => {
     setCurrentTruck(0);
   }, [isAudioOn]);
 
-  const currentSrc = tracks[currentTruck];
+  const currentSrc = useMemo(() => tracks[currentTruck], [tracks, currentTruck]);
   useEffect(() => {
     let cancelled = false;
 
@@ -95,7 +97,7 @@ const AudioComponent = (props) => {
           setAudioData({
             loading: false,
             src: null,
-            error: `Sorry, we couldn't upload the audio`,
+            error: 'Sorry, we couldn\'t upload the audio',
           });
         }
       });

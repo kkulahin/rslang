@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import ContainerWithShadow from '../containerWithShadow/ContainerWithShadow';
@@ -42,7 +42,7 @@ const WordCard = ({
   function reducer(state, action) {
     switch (action.type) {
       case 'resetWord':
-        return initialState;
+        return { ...initialState, isAudioOn: { audioOn: false }, isInputInFocus: { isFocus: true } };
       case 'setState':
         return { ...state, ...action.payload };
       case 'handleAnswer':
@@ -87,8 +87,13 @@ const WordCard = ({
   };
 
   const handleNavigatePrevClick = () => {
-    dispatch({ type: 'resetWord' });
-    onPrevBtnClick();
+    if (hasPrevious
+        && !state.isCorrect
+        && !state.isShowBtnClick
+        && !isAnswered) {
+      dispatch({ type: 'resetWord' });
+      onPrevBtnClick();
+    }
   };
 
   const handleNavigateNextClick = () => {
@@ -175,28 +180,66 @@ const WordCard = ({
     handlers[id]();
   };
 
-  const createHandleKeydown = (actualState, actualHasPrevious, actualIsAnswered) => (evt) => {
+  // const createHandleKeydown = (actualState, actualHasPrevious, actualIsAnswered) => (evt) => {
+  //   const { key } = evt;
+
+  //   if (key === 'ArrowRight') {
+  //     handleNavigateNextClick();
+  //   } else if (key === 'ArrowLeft') {
+  //     handleNavigatePrevClick();
+  //   }
+  // };
+
+  const handlePrevClick = useCallback(() => {
+    if (hasPrevious
+      && !state.isCorrect
+      && !state.isShowBtnClick
+      && !isAnswered) {
+      dispatch({ type: 'resetWord' });
+      onPrevBtnClick();
+    }
+  }, [state, hasPrevious, isAnswered]);
+
+  const handleNextClick = useCallback(() => {
+    if (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation) {
+      getNextWord();
+    } else if (state.value === '') {
+      dispatch({
+        type: 'setState',
+        payload: {
+          isWordInput: false,
+          isAudioOn: { audioOn: false },
+          isInputInFocus: { isFocus: true },
+        },
+      });
+    } else {
+      dispatch({
+        type: 'handleAnswer',
+        payload: {
+          isCorrect: checkCorrect({ value: state.value, word }),
+        },
+      });
+    }
+  }, [state, isEducation, isAnswered]);
+
+  const createHandleKeydown = (handlePrevClick, handleNextClick) => (evt) => {
     const { key } = evt;
 
     if (key === 'ArrowRight') {
-      handleNavigateNextClick();
-    } else if ((key === 'ArrowLeft')
-        && actualHasPrevious
-        && !actualState.isCorrect
-        && !actualState.isShowBtnClick
-        && !actualIsAnswered) {
-      handleNavigatePrevClick();
+      handleNextClick();
+    } else if (key === 'ArrowLeft') {
+      handlePrevClick();
     }
   };
 
   useEffect(() => {
-    const handleKeydown = createHandleKeydown(state, hasPrevious, isAnswered);
+    const handleKeydown = createHandleKeydown(handlePrevClick, handleNextClick);
     document.addEventListener('keydown', handleKeydown);
 
     return () => {
       document.removeEventListener('keydown', handleKeydown);
     };
-  }, [state, hasPrevious, isAnswered]);
+  }, [handlePrevClick, handleNextClick]);
 
   return (
     <div className="card-unit">
