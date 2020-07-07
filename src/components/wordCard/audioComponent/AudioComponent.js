@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/media-has-caption */
+/* eslint-disable react/jsx-props-no-spreading */
 import React, {
   useState, useRef, useEffect, useMemo,
 } from 'react';

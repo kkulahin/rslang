@@ -7,7 +7,7 @@ const HelpTextFormatted = ({ text, isFullState }) => {
     classes += ' text--hidden';
   }
 
-  const regexp = new RegExp('(<b>|<i>)(.*)(<\/b>|<\/i>)', 'i');
+  const regexp = new RegExp('(<b>|<i>)(.*)(<[/]b>|<[/]i>)', 'i');
   const splitted = text.split(regexp);
 
   return (

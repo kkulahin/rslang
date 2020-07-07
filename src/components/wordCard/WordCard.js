@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useReducer, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
@@ -24,17 +25,17 @@ const WordCard = ({
   helpSettings,
   settings,
   currentWord,
-  // onShowAnswerBtnClick,
+  onShowAnswerBtnClick,
   onAgainBtnClick,
   onComplexityBtnClick,
   onDeleteBtnClick,
   onNextBtnClick,
   onPrevBtnClick,
-  isAnswered,
-  isEducation,
   onWordAnswered,
   onWordMistaken,
   hasPrevious,
+  isAnswered,
+  isEducation,
 }) => {
   const { isAudioAuto, isComplexityBtn } = settings;
   const { definition: { word } } = currentWord;
@@ -156,7 +157,7 @@ const WordCard = ({
       type: 'handleAnswer',
       payload: { isCorrect: false },
     });
-    // onShowAnswerBtnClick();
+    onShowAnswerBtnClick();
   };
 
   const handleWordComplexityBtnClick = (id) => {
@@ -274,6 +275,10 @@ const WordCard = ({
   );
 };
 
+WordCard.defaultProps = {
+  onShowAnswerBtnClick: () => {},
+};
+
 export default WordCard;
 
 WordCard.propTypes = {
@@ -283,7 +288,7 @@ WordCard.propTypes = {
     isComplexityBtn: PropTypes.bool.isRequired,
   }).isRequired,
   helpSettings: PropTypes.shape().isRequired,
-  // onShowAnswerBtnClick: PropTypes.func.isRequired,
+  onShowAnswerBtnClick: PropTypes.func,
   onAgainBtnClick: PropTypes.func.isRequired,
   onComplexityBtnClick: PropTypes.func.isRequired,
   onDeleteBtnClick: PropTypes.func.isRequired,
