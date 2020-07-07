@@ -132,6 +132,8 @@ const AudioComponent = (props) => {
     <div className="card-controls__audio-btn">
       <Button
         id="speakWord"
+        dataTitle="Listen to the word"
+        dataPlacement="top"
         isDisabled={!AudioPlayBtnEnabled}
         clickHandler={handleAudioPlayBtnClick}
       />

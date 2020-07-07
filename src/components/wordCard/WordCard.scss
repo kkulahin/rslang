@@ -24,6 +24,12 @@ $word-bg-color: rgba(#25CEDE, 0.5);
 
 $image-width: 280px;
 
+// tooltips
+$color-background-tooltip: rgb(25, 25, 25);
+$z-tooltip: 1;
+$font-size-tooltip: 1.4rem;
+$font-color-tooltip: #fff;
+
 @mixin font ($size, $height, $weight, $style: normal) {
   font-style: $style;
   font-size: $size;
@@ -36,6 +42,11 @@ $image-width: 280px;
   flex-direction: $flex-direction;
   justify-content: $justify-content;
   align-items: $align-items;
+}
+
+@mixin media-hover {
+
+  @media (pointer: fine) { @content; }
 }
 
 .card-unit {
@@ -412,5 +423,166 @@ $image-width: 280px;
   
   .card-button + .card-button {
     margin-left: 10px;
+  }
+}
+
+/* tooltip-top ----------------------------------------------------------------------- */
+
+@include media-hover {
+
+  [data-placement="top"]:hover::after {
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+
+    z-index: $z-tooltip;
+    display: block;
+    max-width: 10rem;
+    // box-shadow: 0 0 1px 1px $font-color-tooltip;
+  
+    padding: 3px 8px;
+    font-size: $font-size-tooltip;
+    line-height: 1.3;
+    font-weight: normal;
+    text-align: center;
+    color: $font-color-tooltip;
+
+    background-color: $color-background-tooltip;
+    border-radius: 3px;
+    text-transform: uppercase;
+    transform: translateX(-50%) translateY(-100%);
+    content: attr(data-title);
+  }
+  
+  [data-placement="top"]:hover::before {
+    position: absolute;
+    top: -1rem;
+    left: calc(50% - 5px);
+    z-index: $z-tooltip;
+    border: transparent 5px solid;
+    content: "";
+    border-width: 5px 5px 0 5px;
+    border-top-color: $color-background-tooltip;
+  }
+}
+
+
+/* tooltip-right --------------------------------------------------------------------- */
+
+@include media-hover {
+
+  [data-placement="right"]:hover::after {
+    position: absolute;
+    right: -1rem;
+    bottom: 50%;
+
+    z-index: $z-tooltip;
+    display: block;
+    max-width: 20rem;
+    padding: 3px 8px;
+    font-size: $font-size-tooltip;
+    line-height: 1.3;
+    font-weight: normal;
+    text-align: center;
+    // box-shadow: 0 0 1px 1px $font-color-tooltip;
+  
+    color: $font-color-tooltip;
+  
+    background-color: $color-background-tooltip;
+    border-radius: 3px;
+    text-transform: uppercase;
+    transform: translate(100%, 50%);
+    content: attr(data-title);
+  }
+  
+  [data-placement="right"]:hover::before {
+    position: absolute;
+    right: -1rem;
+    bottom: calc(50% - 5px);
+    z-index: $z-tooltip;
+    border: transparent 5px solid;
+    content: "";
+    border-width: 5px 5px 5px 0;
+    border-right-color: $color-background-tooltip;
+  }
+}
+
+/* tooltip-bottom -------------------------------------------------------------------- */
+
+@include media-hover {
+
+  [data-placement="bottom"]:hover::after {
+    position: absolute;
+    bottom: -1rem;
+    left: 50%;
+
+    z-index: $z-tooltip;
+    display: block;
+    max-width: 20rem;
+    // box-shadow: 0 0 1px 1px $font-color-tooltip;
+  
+    padding: 3px 8px;
+    font-size: $font-size-tooltip;
+    line-height: 1.3;
+    font-weight: normal;
+    text-align: center;
+    color: $font-color-tooltip;
+  
+    background-color: $color-background-tooltip;
+    border-radius: 3px;
+    text-transform: uppercase;
+    transform: translateX(-50%) translateY(100%);
+    content: attr(data-title);
+  }
+  
+  [data-placement="bottom"]:hover::before {
+    position: absolute;
+    bottom: -1rem;
+    left: calc(50% - 5px);
+    z-index: $z-tooltip;
+    border: transparent 5px solid;
+    content: "";
+    border-width: 0 5px 5px 5px;
+    border-bottom-color: $color-background-tooltip;
+  }
+}
+
+/* tooltip-left ---------------------------------------------------------------------- */
+
+@include media-hover {
+
+  [data-placement="left"]:hover::after {
+    position: absolute;
+    bottom: 50%;
+    left: -1rem;
+
+    z-index: $z-tooltip;
+    display: block;
+    max-width: 20rem;
+    // box-shadow: 0 0 1px 1px $font-color-tooltip;
+  
+    padding: 3px 8px;
+    font-size: $font-size-tooltip;
+    line-height: 1.3;
+    font-weight: normal;
+    text-align: center;
+    color: $font-color-tooltip;
+  
+    background-color: $color-background-tooltip;
+    border-radius: 3px;
+    text-transform: uppercase;
+    transform: translateX(-100%) translateY(50%);
+    content: attr(data-title);
+  }
+  
+  [data-placement="left"]:hover::before {
+    position: absolute;
+    bottom: calc(50% - 5px);
+    left: -1rem;
+    z-index: $z-tooltip;
+    border: transparent 5px solid;
+    content: "";
+    border-width: 5px 0 5px 5px;
+    border-left-color: $color-background-tooltip;
   }
 }

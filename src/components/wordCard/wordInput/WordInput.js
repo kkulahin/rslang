@@ -44,9 +44,9 @@ const WordInput = ({
   const inputRef = useRef();
 
   useEffect(() => {
-    if (isInputInFocus.isFocus) {
+    if (isInputInFocus.isFocus && inputRef.current) {
       inputRef.current.focus();
-    } else {
+    } else if (inputRef.current) {
       inputRef.current.blur();
     }
   }, [isInputInFocus]);
@@ -61,7 +61,11 @@ const WordInput = ({
   }
 
   const marked = (isWordInput && !isCorrect)
-    ? <span className="word__size word__size--visible">{getFormattedWordOnError(currentValue, word)}</span>
+    ? (
+      <span className="word__size word__size--visible">
+        {getFormattedWordOnError(currentValue, word)}
+      </span>
+    )
     : <span className={classes}>{word}</span>;
 
   const element = (

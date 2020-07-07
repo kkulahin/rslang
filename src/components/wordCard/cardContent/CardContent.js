@@ -31,6 +31,8 @@ const CardContent = (props) => {
     <Button
       id="showWord"
       label="Answer"
+      dataTitle="Show the answer"
+      dataPlacement="top"
       isDisabled={isCorrect || isShowBtnClick || isEducation}
       clickHandler={(id) => onCardBtnClick(id)}
     />
@@ -39,6 +41,8 @@ const CardContent = (props) => {
   const DeleteBtn = (
     <Button
       id="deleteWord"
+      dataTitle="Delete the word from training"
+      dataPlacement="top"
       clickHandler={(id) => onCardBtnClick(id)}
     />
   );
@@ -47,6 +51,8 @@ const CardContent = (props) => {
     <Button
       isDisabled={isAgainBtnClick}
       id="againWord"
+      dataTitle="Repeat the word in this training"
+      dataPlacement="top"
       clickHandler={(id) => onCardBtnClick(id)}
     />
   );
@@ -68,6 +74,8 @@ const CardContent = (props) => {
         onChange={onWordComplexityBtnClick}
         checkedItem={complexity}
         // isAttention={isCorrect || isShowBtnClick}
+        dataTitle="Select the word difficulty category"
+        dataPlacement="top"
       />
     </div>
   );

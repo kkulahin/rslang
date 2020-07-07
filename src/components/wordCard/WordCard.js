@@ -40,17 +40,19 @@ const WordCard = ({
   const { definition: { word } } = currentWord;
 
   function reducer(state, action) {
+    const newState = {};
+
     switch (action.type) {
       case 'resetWord':
         return { ...initialState, isAudioOn: { audioOn: false }, isInputInFocus: { isFocus: true } };
+      case 'resetWordToPrev':
+        return { ...initialState, isAudioOn: { audioOn: false }, isInputInFocus: { isFocus: false } };
       case 'setState':
         return { ...state, ...action.payload };
       case 'handleAnswer':
-        const newState = {
-          value: '',
-          isWordInput: true,
-          isInputInFocus: { isFocus: false },
-        };
+        newState.value = '';
+        newState.isWordInput = true;
+        newState.isInputInFocus = { isFocus: false };
 
         if (action.payload.isCorrect) {
           newState.isCorrect = true;
@@ -91,7 +93,7 @@ const WordCard = ({
         && !state.isCorrect
         && !state.isShowBtnClick
         && !isAnswered) {
-      dispatch({ type: 'resetWord' });
+      dispatch({ type: 'resetWordToPrev' });
       onPrevBtnClick();
     }
   };
@@ -185,7 +187,7 @@ const WordCard = ({
       && !state.isCorrect
       && !state.isShowBtnClick
       && !isAnswered) {
-      dispatch({ type: 'resetWord' });
+      dispatch({ type: 'resetWordToPrev' });
       onPrevBtnClick();
     }
   }, [state, hasPrevious, isAnswered, onPrevBtnClick]);
