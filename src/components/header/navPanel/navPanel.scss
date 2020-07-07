@@ -3,18 +3,17 @@
 @import '../../../styles/variables.scss';
 
 .vertical.menu {
-  position: sticky;
-  top: 0;
+	position: sticky;
+	top: 0;
+	z-index: 2;
 	background-color: $background-color;
 		
 	@include flex(row, center, center);
 
-	@include size(200px, 100vh);
+	@include size(150px, 100vh);
 }
 
 .logo-wrapper {
-	flex: 1 80px;
-	height: 90px;
 	
 	@include flex(row, center, center);
 
@@ -24,23 +23,22 @@
 }
 
 .app-link {
-	flex: 2 60%;
-	width: 95%;
 	font-size: 1.6rem;
-}
 
-.login {
-  flex: 4
+	@include flex(column, stretch, space-around);
+
+	@include size(95%, 75%);
 }
 
 .ui.vertical.menu.app-menu {
 	display: flex !important;
   height: 90%;
 	font-family: inherit;
+	overflow: hidden;
   background-color: $background-color;
   border-radius: $container-border-radius;
 	box-shadow: $container-box-shadow;
-	transition: all .5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 }
 
 .app-menu.min {
@@ -56,10 +54,12 @@
   flex-direction: unset !important;
   justify-content: space-between;
   align-items: center !important;
+	min-width: 95% !important;
+	padding: 5px !important;
 	color: $main-color !important;
 	
 	&[name="login"] {
-		font-size:1.6rem;
+		font-size: 1.6rem;
 	}
 }
 
@@ -78,7 +78,7 @@
 .app-menu a.item p {
 	flex: 1;
 	text-align: left;
-	transition: opacity .4s ease-in-out;
+	transition: opacity 0.4s ease-in-out;
 }
 
 .app-menu a.item  p.visible {
@@ -90,8 +90,7 @@
 }
 
 .app-menu__resize {
-	flex: 3 30px;
-	width: 100%;
+	width: 95%;
 	font-size: 2.4rem;
 	color: $main-color;
 	font-weight: 500;
@@ -102,10 +101,55 @@
 	box-shadow: $container-box-shadow;
 }
 
+.login {
+	width: 95%;
+	font-size: 1.2rem;
+}
+
 .app-menu__resize .item {
 	min-width: 100% !important;
 }
 
-.app-menu .login {
-	flex: 4;
+@media (max-width: 767px) {
+
+	.menu-wrapper {
+
+		> .vertical.menu {
+			position: fixed;
+			z-index: 3;
+			justify-content: flex-start;
+			background-color: transparent;
+			pointer-events: none;
+
+			.app-menu {
+				height: 100%;
+				background-color: transparent;
+				border: 0;
+				box-shadow: none;
+				pointer-events: auto;
+
+				> div:not(:first-child) {
+					visibility: hidden;
+				}
+			}
+
+			&.opened {
+
+				.app-menu {
+					background-color: $background-color;
+					border-radius: 0;
+					box-shadow: $container-box-shadow;
+	
+					> div:not(:first-child) {
+						transition: visibility 0.1s 0.3s;
+						visibility: visible;
+					}
+				}
+			}
+		}
+
+		.logo-wrapper {
+			cursor: pointer;
+		}
+	}
 }

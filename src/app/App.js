@@ -22,6 +22,17 @@ import GreetingWrapper from '../components/greetingWrapper/GreetingWrapper';
 import './App.scss';
 import PrivateRoute from '../components/route/PrivateRoute';
 
+document.addEventListener('click', ({ target }) => {
+  const isMobileDevice = window.innerWidth <= 767;
+  const isLogo = target.alt === 'Logo';
+  const isMenu = target.classList.contains('app-menu');
+  const isResizeBtn = target.closest('.app-menu__resize');
+
+  if (isMobileDevice && !(isLogo || isMenu || isResizeBtn)) {
+    document.querySelector('.vertical.menu').classList.remove('opened');
+  }
+});
+
 const App = () => (
   <Router history={History}>
     <div className="app-wrapper">
