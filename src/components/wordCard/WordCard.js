@@ -36,6 +36,7 @@ const WordCard = ({
   hasPrevious,
   isAnswered,
   isEducation,
+  wordDifficulty,
 }) => {
   const { isAudioAuto, isComplexityBtn } = settings;
   const { definition: { word } } = currentWord;
@@ -261,6 +262,7 @@ const WordCard = ({
             onWordComplexityBtnClick={handleWordComplexityBtnClick}
             onAudioEnd={handleAudioEnd}
             isEducation={isEducation}
+            wordDifficulty={wordDifficulty}
             isPrevWord={isAnswered}
             {...state}
           />
@@ -277,6 +279,7 @@ const WordCard = ({
 
 WordCard.defaultProps = {
   onShowAnswerBtnClick: () => {},
+  wordDifficulty: 'normal',
 };
 
 export default WordCard;
@@ -296,6 +299,7 @@ WordCard.propTypes = {
   onPrevBtnClick: PropTypes.func.isRequired,
   isAnswered: PropTypes.bool.isRequired,
   isEducation: PropTypes.bool.isRequired,
+  wordDifficulty: PropTypes.string,
   onWordAnswered: PropTypes.func.isRequired,
   onWordMistaken: PropTypes.func.isRequired,
   hasPrevious: PropTypes.bool.isRequired,

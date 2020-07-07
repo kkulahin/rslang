@@ -8,7 +8,6 @@ import HelpText from '../helpText/HelpText';
 import WordInput from '../wordInput/WordInput';
 import Button from '../button/Button';
 import AudioComponent from '../audioComponent/AudioComponent';
-import Word from '../../../utils/spacedRepetition/Word';
 
 const CardContent = (props) => {
   const {
@@ -18,15 +17,13 @@ const CardContent = (props) => {
     },
     isPrevWord,
     isEducation,
-    word,
+    wordDifficulty,
     isCorrect,
     isShowBtnClick,
     isAgainBtnClick,
     onCardBtnClick,
     onWordComplexityBtnClick,
   } = props;
-
-  const complexity = word.getDifficulty();
 
   const ShowAnswerBtn = (
     <Button
@@ -73,7 +70,7 @@ const CardContent = (props) => {
       <RadioButtonContainer
         items={radioButtons}
         onChange={onWordComplexityBtnClick}
-        checkedItem={complexity}
+        checkedItem={wordDifficulty}
         // isAttention={isCorrect || isShowBtnClick}
         dataTitle="Select the word difficulty category"
         dataPlacement="top"
@@ -102,10 +99,13 @@ const CardContent = (props) => {
   );
 };
 
+CardContent.defaultProps = {
+  wordDifficulty: 'normal',
+};
+
 export default CardContent;
 
 CardContent.propTypes = {
-  word: PropTypes.instanceOf(Word).isRequired,
   settings: PropTypes.shape({
     isShowAnswerBtn: PropTypes.bool.isRequired,
     isDeleteBtn: PropTypes.bool.isRequired,
@@ -121,4 +121,5 @@ CardContent.propTypes = {
   isAgainBtnClick: PropTypes.bool.isRequired,
   onCardBtnClick: PropTypes.func.isRequired,
   onWordComplexityBtnClick: PropTypes.func.isRequired,
+  wordDifficulty: PropTypes.string,
 };
