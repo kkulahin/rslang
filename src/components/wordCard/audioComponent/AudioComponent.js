@@ -23,8 +23,9 @@ const AudioComponent = (props) => {
 
   const audioRef = useRef();
 
-  const [currentTruck, setCurrentTruck] = useState(0);
+  const [currentTrack, setCurrentTrack] = useState({ track: 0 });
   const [isAudioPlay, setIsAudioPlay] = useState(false);
+  const [isAudioPause, setIsAudioPause] = useState(true);
   const [audioData, setAudioData] = useState({
     loading: true,
     src: null,
@@ -43,7 +44,7 @@ const AudioComponent = (props) => {
   }
 
   const handleAudioPlayBtnClick = () => {
-    setCurrentTruck(0);
+    setCurrentTrack({ track: 0 });
     setIsAudioPlay(true);
   };
 
@@ -52,9 +53,10 @@ const AudioComponent = (props) => {
   };
 
   const onAudioEnded = () => {
-    if (currentTruck < tracks.length - 1) {
-      audioRef.current.pause();
-      setCurrentTruck((truck) => truck + 1);
+    setIsAudioPause(true);
+
+    if (currentTrack.track < tracks.length - 1) {
+      setCurrentTrack((current) => ({ track: current.track + 1 }));
     } else {
       setIsAudioPlay(false);
       onAudioEnd();
@@ -68,10 +70,10 @@ const AudioComponent = (props) => {
       setIsAudioPlay(false);
     }
 
-    setCurrentTruck(0);
+    setCurrentTrack({ track: 0 });
   }, [isAudioOn]);
 
-  const currentSrc = useMemo(() => tracks[currentTruck], [tracks, currentTruck]);
+  const currentSrc = useMemo(() => tracks[currentTrack.track], [tracks, currentTrack]);
   useEffect(() => {
     let cancelled = false;
 
@@ -90,6 +92,7 @@ const AudioComponent = (props) => {
             src: URL.createObjectURL(blob),
             error: null,
           });
+          setIsAudioPause(false);
         }
       })
       .catch(() => {
@@ -99,6 +102,7 @@ const AudioComponent = (props) => {
             src: null,
             error: 'Sorry, we couldn\'t upload the audio',
           });
+          setIsAudioPause(false);
         }
       });
 
@@ -113,9 +117,9 @@ const AudioComponent = (props) => {
     };
   }, [currentSrc]);
 
-  if (isAudioPlay && audioData.src) {
+  if (audioData.src && isAudioPlay && !isAudioPause) {
     audioPlay();
-  } else if (audioData.error) {
+  } else if (audioData.error && isAudioPlay && !isAudioPause) {
     onAudioEnded();
   }
 

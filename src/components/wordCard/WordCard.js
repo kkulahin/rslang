@@ -180,16 +180,6 @@ const WordCard = ({
     handlers[id]();
   };
 
-  // const createHandleKeydown = (actualState, actualHasPrevious, actualIsAnswered) => (evt) => {
-  //   const { key } = evt;
-
-  //   if (key === 'ArrowRight') {
-  //     handleNavigateNextClick();
-  //   } else if (key === 'ArrowLeft') {
-  //     handleNavigatePrevClick();
-  //   }
-  // };
-
   const handlePrevClick = useCallback(() => {
     if (hasPrevious
       && !state.isCorrect
@@ -198,11 +188,16 @@ const WordCard = ({
       dispatch({ type: 'resetWord' });
       onPrevBtnClick();
     }
-  }, [state, hasPrevious, isAnswered]);
+  }, [state, hasPrevious, isAnswered, onPrevBtnClick]);
+
+  const memoGetNextWord = useCallback(() => {
+    dispatch({ type: 'resetWord' });
+    onNextBtnClick();
+  }, [onNextBtnClick]);
 
   const handleNextClick = useCallback(() => {
     if (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation) {
-      getNextWord();
+      memoGetNextWord();
     } else if (state.value === '') {
       dispatch({
         type: 'setState',
@@ -220,15 +215,15 @@ const WordCard = ({
         },
       });
     }
-  }, [state, isEducation, isAnswered]);
+  }, [state, isEducation, isAnswered, word, memoGetNextWord]);
 
-  const createHandleKeydown = (handlePrevClick, handleNextClick) => (evt) => {
+  const createHandleKeydown = (handlePrev, handleNext) => (evt) => {
     const { key } = evt;
 
     if (key === 'ArrowRight') {
-      handleNextClick();
+      handleNext();
     } else if (key === 'ArrowLeft') {
-      handlePrevClick();
+      handlePrev();
     }
   };
 

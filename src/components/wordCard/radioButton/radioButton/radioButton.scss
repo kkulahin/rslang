@@ -3,22 +3,44 @@
 .card-unit {
 
   .card-radio-button {
-    width: 70px;
     height: 100%;
-    padding: 5px 10px;
+    padding: 5px 10px 5px 32px;
+
     font-size: 2rem;
     line-height: 1;
     font-family: inherit;
     text-align: center;
     color: $enabled-color;
-    background: $background-color;
+
+    background-color: $background-color;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: 5px, center;
+
     border: none;
     border-radius: 125px;
+
     outline: none;
     cursor: pointer;
 
     &--checked {
       box-shadow: $container-box-shadow-inset;
     }
+  }
+
+  #hard.card-radio-button {
+    background-image: url("./../../hard-kettlebell-icon.svg");
+  }
+
+  #normal.card-radio-button {
+    background-image: url("./../../normal-kettlebell-icon.svg");
+  }
+
+  #easy.card-radio-button {
+    background-image: url("./../../easy-kettlebell-icon.svg");
+  }
+
+  .card-radio-button + .card-radio-button {
+    margin-left: 5px;
   }
 }

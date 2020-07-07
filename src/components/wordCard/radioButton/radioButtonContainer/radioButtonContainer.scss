@@ -14,7 +14,9 @@
     box-shadow: $container-box-shadow;
   
     user-select: none;
-  
+
+    animation: fadeIn 0.4s linear;
+
     &--disabled {
       pointer-events: none;
       opacity: 0.25;
@@ -24,6 +26,17 @@
       -moz-animation: cycle 2s linear;
       -webkit-animation: cycle 2s linear;
               animation: cycle 2s linear;
+    }
+  }
+
+  @keyframes fadeIn {
+  
+    0% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1
     }
   }
 
