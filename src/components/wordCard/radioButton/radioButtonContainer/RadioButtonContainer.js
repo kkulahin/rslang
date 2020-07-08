@@ -5,7 +5,7 @@ import './radioButtonContainer.scss';
 import RadioButton from '../radioButton/RadioButton';
 
 const RadioButtonContainer = ({
-  items, checkedItem, onChange, isDisabled, isAttention,
+  items, checkedItem, onChange, isDisabled, isAttention, dataTitle, dataPlacement,
 }) => {
   let className = 'card-radio-button-container';
   if (isAttention) {
@@ -31,12 +31,22 @@ const RadioButtonContainer = ({
     />
   ));
 
-  return <div className={className}>{radioButtons}</div>;
+  return (
+    <div
+      className={className}
+      data-title={dataTitle}
+      data-placement={dataPlacement}
+    >
+      {radioButtons}
+    </div>
+  );
 };
 
 RadioButtonContainer.defaultProps = {
   isDisabled: false,
   isAttention: false,
+  dataTitle: null,
+  dataPlacement: null,
 };
 
 RadioButtonContainer.propTypes = {
@@ -45,6 +55,8 @@ RadioButtonContainer.propTypes = {
   checkedItem: PropTypes.string.isRequired,
   isDisabled: PropTypes.bool,
   isAttention: PropTypes.bool,
+  dataTitle: PropTypes.string,
+  dataPlacement: PropTypes.string,
 };
 
 export default RadioButtonContainer;
