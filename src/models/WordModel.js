@@ -28,8 +28,8 @@ export default class WordModel {
     }
     await this.getStatistics();
     if (!this.hasQueueForToday()) {
-      const userWords = await this.queryUserWords();
-      const newWords = await this.queryNewWords();
+      const { data: userWords } = await this.queryUserWords();
+      const { data: newWords } = await this.queryNewWords();
       this.wordQueue = new WordQueue(this.settings);
       this.wordQueue.makeQueue(newWords, userWords);
       this.updateStatistics();
