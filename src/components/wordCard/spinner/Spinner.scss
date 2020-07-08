@@ -1,4 +1,6 @@
-$color-loader: #25CEDE;
+@import '../../../styles/mixin.scss';
+
+@import '../../../styles/variables.scss';
 
 .spinner {
   position: absolute;
@@ -7,23 +9,22 @@ $color-loader: #25CEDE;
   bottom: 0;
   left: 0;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex($flex-direction: row);
 
   background-color: transparent;
+
   border-radius: inherit;
 
   pointer-events: none;
 }
 
 .donut {
-  width: 3.2rem;
-  height: 3.2rem;
 
-  border: 0.5rem solid rgba($color-loader, 0.1);
+  @include size(3.2rem);
+
+  border: 0.5rem solid rgba($enabled-color, 0.1);
+  border-top-color: $enabled-color;
   border-radius: 50%;
-  border-top-color: $color-loader;
 
   animation: spin 1.5s infinite linear;
 }

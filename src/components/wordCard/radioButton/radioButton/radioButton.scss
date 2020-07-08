@@ -1,30 +1,52 @@
+@import '../../../../styles/mixin.scss';
+
 @import '../../../../styles/variables.scss';
+
+@mixin media-hover {
+
+  @media (pointer: fine) { @content; }
+}
+
+$padding: 0.5rem 1rem 0.5rem 3.2rem;
+$border-radius: 10rem;
+$box-shadow-inset: inset 5px 5px 15px $box-shadow-first-color, 
+                  inset -5px -5px 15px $box-shadow-second-color;
 
 .card-unit {
 
   .card-radio-button {
     height: 100%;
-    padding: 5px 10px 5px 32px;
+    padding: $padding;
 
-    font-size: 2rem;
-    line-height: 1;
+    @include font (2rem, 1, 500);
+
     font-family: inherit;
     text-align: center;
-    color: $enabled-color;
+    color: $main-color;
 
     background-color: $background-color;
     background-repeat: no-repeat;
-    background-size: 30px;
-    background-position: 5px, center;
+    background-size: 3rem;
+    background-position: 0.5rem, center;
 
     border: none;
-    border-radius: 125px;
+    border-radius: $border-radius;
 
     outline: none;
+
+    transition: color 0.3s linear, box-shadow 0.3s linear;
+
     cursor: pointer;
 
+    @include media-hover {
+
+      &:hover {
+        color: $hover-color;
+      }
+    }
+
     &--checked {
-      box-shadow: $container-box-shadow-inset;
+      box-shadow: $box-shadow-inset;
     }
   }
 
@@ -41,6 +63,6 @@
   }
 
   .card-radio-button + .card-radio-button {
-    margin-left: 5px;
+    margin-left: 0.5rem;
   }
 }

@@ -1,20 +1,28 @@
+@import '../../../../styles/mixin.scss';
+
 @import '../../../../styles/variables.scss';
+
+$box-shadow: 5px 5px 15px $box-shadow-first-color, 
+            -5px -5px 15px $box-shadow-second-color;
+$padding: 0.5rem 0.5rem;
+$margin: 0 0 0 1rem;
 
 .card-unit {
 
   .card-radio-button-container {
     position: relative;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex($flex-direction: row);
+
     height: 100%;
-    margin-left: 1rem;
-    padding: 5px 5px;
+    margin: $margin;
+    padding: $padding;
+
     background-color: $background-color;
+
     border-radius: 125px;
-    box-shadow: $container-box-shadow;
-  
+    box-shadow: $box-shadow;
+
     user-select: none;
 
     animation: fadeIn 0.4s linear;
@@ -38,7 +46,7 @@
     }
   
     100% {
-      opacity: 1
+      opacity: 1;
     }
   }
 

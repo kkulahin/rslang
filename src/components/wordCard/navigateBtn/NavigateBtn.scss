@@ -1,12 +1,10 @@
-$navigate-width: 40px;
-$btn-padding: 10px;
-$transition-duration: 0.5s;
+@import '../../../styles/mixin.scss';
 
-@mixin flex($flex-direction: row, $align-items: center, $justify-content: center) {
-  display: flex;
-  justify-content: $justify-content;
-  align-items: $align-items;
-}
+@import '../../../styles/variables.scss';
+
+$navigate-width: 4rem;
+$btn-padding: 1rem;
+$transition-duration: 0.5s;
 
 .navigate {
   width: $navigate-width;
@@ -22,7 +20,7 @@ $transition-duration: 0.5s;
 
   padding: 0;
 
-  @include flex();
+  @include flex($flex-direction: row);
 
   background-color: transparent;
 
