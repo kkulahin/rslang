@@ -15,4 +15,4 @@
 | Create Sprint game | 25.06.2020 | 03.07.2020 | 58 h |
 | Add responsive for greeting wrapper, sing-ip, sugn-up pages | 06.07.2020 | 06.07.2020 | 7 h |
 | Add responsive for nav panel, settings page, about team page | 07.07.2020 | 07.07.2020 | 9 h |
-| Add responsive for promo page | 08.07.2020 | 08.07.2020 | 2 h |
+| Add responsive for promo page, statistic page | 08.07.2020 | 08.07.2020 | 4 h |
