@@ -282,6 +282,8 @@ $font-color-tooltip: #fff;
     @include flex();
 
     .card-button {
+      width: 100%;
+
       background: url("./audio-play-icon.svg");
       background-position: center;
       background-repeat: no-repeat;
