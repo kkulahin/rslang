@@ -12,16 +12,18 @@ $margin: 5px;
 
 @media (max-width: 991px) {
 
-	.container-with-shadow {
+	.greeting-wrapper {
+		.container-with-shadow {
 
-		&:first-child {
-			width: 40% !important;
+			&:first-child {
+				width: 40% !important;
+			}
+	
+			&:last-child {
+				width: 50% !important;
+			}
 		}
-
-		&:last-child {
-			width: 50% !important;
-		}
-	}
+  }
 }
 
 @media (max-width: 767px) {

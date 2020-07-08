@@ -67,7 +67,6 @@ const StatisticLong = ({ statistics }) => {
     <div className="statistic-long">
       <h3 className="statistic-long__title">Your statistics</h3>
       <div className="statistic-long__period">
-        Words learned
         <Dropdown
           values={periods}
           defaultValue="0"

@@ -126,7 +126,7 @@
 				background-color: transparent;
 				border: 0;
 				box-shadow: none;
-				pointer-events: auto;
+				pointer-events: none;
 
 				> div:not(:first-child) {
 					visibility: hidden;
@@ -139,6 +139,7 @@
 					background-color: $background-color;
 					border-radius: 0;
 					box-shadow: $container-box-shadow;
+					pointer-events: auto;
 	
 					> div:not(:first-child) {
 						transition: visibility 0.1s 0.3s;
@@ -150,6 +151,7 @@
 
 		.logo-wrapper {
 			cursor: pointer;
+			pointer-events: auto;
 		}
 	}
 }
