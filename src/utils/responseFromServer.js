@@ -1,6 +1,5 @@
 import { SchoolURL } from '../config/default';
 import authService from '../services/AuthService';
-import history from './history';
 import signinSubject from './observers/SignInSubject';
 import { deleteCookie } from './cookie';
 

@@ -2,40 +2,54 @@
 
 @import '../../../styles/variables.scss';
 
-.card-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+@mixin media-hover {
 
-  width: 80px;
+  @media (pointer: fine) { @content; }
+}
+
+$padding: 0.5rem 1rem;
+$border-radius: 10rem;
+$box-shadow: 5px 5px 15px $box-shadow-first-color, 
+            -5px -5px 15px $box-shadow-second-color;
+$box-shadow-inset: inset 5px 5px 15px $box-shadow-first-color, 
+                  inset -5px -5px 15px $box-shadow-second-color;
+
+.card-button {
+  position: relative;
+
+  @include flex($flex-direction: row);
+
   height: 100%;
-  padding: 5px 10px;
+  padding: $padding;
+
   font-family: inherit;
   color: $main-color;
+  font-weight: bold;
 
   background-color: $background-color;
 
   border: none;
-  border-radius: 110px;
+  border-radius: $border-radius;
 
-  box-shadow: 5px 5px 15px $box-shadow-first-color, 
-              -5px -5px 15px $box-shadow-second-color;
+  box-shadow: $box-shadow;
   outline: none;
 
   transition: color 0.3s linear, background-color 0.3s linear, box-shadow 0.3s linear;
-  cursor: pointer;
-  font-weight: bold;
 
+  cursor: pointer;
   user-select: none;
 
   &:active,
   &--active {
     background-color: $background-color;
-    box-shadow: $container-box-shadow-inset;
+    box-shadow: $box-shadow-inset;
   }
 
-  &:hover {
-    color: $hover-color;
+  @include media-hover {
+
+    &:hover {
+      color: $hover-color;
+    }
   }
 
   &:disabled {
