@@ -6,10 +6,9 @@ import {
   Button, Form, Grid, Image,
 } from 'semantic-ui-react';
 import VectorMan from '../../assets/image/vector_man.png';
-import { SchoolURL } from '../../config/default';
-import responseFromServer from '../../utils/responseFromServer';
+import { createUser } from '../../controllers/users/users';
 import {
-  patternValidate, emailError, passwordError, requiredFieldError,
+  patternValidate, emailError, passwordError, requiredFieldError, nicknameError, passwordErrorMaxLength,
 } from './validation';
 
 import './SignupPage.scss';
@@ -22,6 +21,12 @@ const errorState = {
   },
   password: {
     error: false,
+    maxLength: false,
+    isRequired: false,
+    isChanged: false,
+  },
+  nickname: {
+    error: false,
     isRequired: false,
     isChanged: false,
   },
@@ -30,6 +35,7 @@ const errorState = {
 const userData = {
   email: '',
   password: '',
+  nickname: '',
 };
 
 const notification = {
@@ -52,13 +58,19 @@ const SignUpForm = () => {
 
   useEffect(() => {
     let errors = true;
-    Object.keys(isValid).forEach((field) => {
-      if (isValid[field].isChanged && !isValid[field].isRequired && !isValid[field].error) {
+    const errKeys = Object.keys(isValid);
+    for (let err = 0; err < errKeys.length; err += 1) {
+      if (isValid[errKeys[err]].isChanged && !isValid[errKeys[err]].isRequired && !isValid[errKeys[err]].error) {
         errors = false;
+        if (errKeys[err] === 'password' && isValid[errKeys[err]].maxLength) {
+          errors = true;
+          break;
+        }
       } else {
         errors = true;
+        break;
       }
-    });
+    }
     // eslint-disable-next-line no-unused-expressions
     errors === true ? setButtonBehaviour(true) : setButtonBehaviour(false);
   }, [isValid]);
@@ -103,6 +115,7 @@ const SignUpForm = () => {
     if (password.isChanged) {
       password.isRequired = isEmptyField(e.target.value);
       password.error = isValidatePattern(e.target.value, patternValidate.password);
+      password.maxLength = !(e.target.value.length >= passwordErrorMaxLength.maxLength);
       const newErrorState = {
         ...errorState,
         password,
@@ -110,6 +123,32 @@ const SignUpForm = () => {
       const newUserData = {
         ...data,
         password: e.target.value,
+      };
+      setUserData(newUserData);
+      setValidate(newErrorState);
+    }
+  };
+
+  const validateNickname = (e) => {
+    const { nickname } = isValid;
+    if (!nickname.isChanged) {
+      nickname.isChanged = true;
+      const newErrorState = {
+        ...errorState,
+        nickname,
+      };
+      setValidate(newErrorState);
+    }
+    if (nickname.isChanged) {
+      nickname.isRequired = isEmptyField(e.target.value);
+      nickname.error = isValidatePattern(e.target.value, patternValidate.nickname);
+      const newErrorState = {
+        ...errorState,
+        nickname,
+      };
+      const newUserData = {
+        ...data,
+        nickname: e.target.value,
       };
       setUserData(newUserData);
       setValidate(newErrorState);
@@ -132,20 +171,39 @@ const SignUpForm = () => {
     if (password.isRequired) {
       return requiredFieldError;
     }
+    if (!password.isRequired && password.maxLength) {
+      return passwordErrorMaxLength;
+    }
     if (!password.isRequired && password.error) {
       return passwordError;
     }
     return null;
   };
 
+  const sendErrorNickName = () => {
+    const { nickname } = isValid;
+    if (nickname.isRequired) {
+      return requiredFieldError;
+    }
+    if (!nickname.isRequired && nickname.error) {
+      return nicknameError;
+    }
+    return null;
+  };
+
   const onSubmit = () => {
-    const createUser = async () => {
+    const submitUser = async () => {
       try {
         const userMsg = {
           msg: 'User created successfully. You will be redirected',
           status: true,
         };
-        const response = await responseFromServer(`${SchoolURL}/users`, userMsg, 'POST', data);
+        const userServerData = {
+          name: data.nickname,
+          email: data.email,
+          password: data.password,
+        };
+        const response = await createUser(userServerData, userMsg);
         setUserNotification(response.notification);
         if (response.notification.status) {
           setTimeout(() => setRedirect(true), 3000);
@@ -154,7 +212,7 @@ const SignUpForm = () => {
         throw new Error('invalid request');
       }
     };
-    createUser();
+    submitUser();
   };
 
   return (
@@ -181,6 +239,15 @@ const SignUpForm = () => {
             </div>
           </div>
           <Form.Input
+            error={isValid.nickname.isChanged ? sendErrorNickName() : null}
+            fluid
+            autoComplete="off"
+            icon="user"
+            iconPosition="left"
+            placeholder="Nickname"
+            onChange={validateNickname}
+          />
+          <Form.Input
             error={isValid.email.isChanged ? sendErrorEmail() : null}
             fluid
             autoComplete="off"
@@ -190,7 +257,7 @@ const SignUpForm = () => {
             onChange={validateEmail}
           />
           <Form.Input
-            error={isValid.email.isChanged ? sendErrorPassword() : null}
+            error={isValid.password.isChanged ? sendErrorPassword() : null}
             fluid
             required
             autoComplete="off"

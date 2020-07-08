@@ -5,10 +5,10 @@ import {
   Button, Form, Grid, Image, Checkbox,
 } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
-import responseFromServer from '../../utils/responseFromServer';
+import { isAuthUser } from '../../controllers/users/users';
 import VectorMan from '../../assets/image/vector_man.png';
 
-import { SchoolURL, cookieLifeCyrcle } from '../../config/default';
+import { cookieLifeCyrcle } from '../../config/default';
 
 import { setCookie } from '../../utils/cookie';
 
@@ -96,7 +96,7 @@ const LoginForm = () => {
           msg: 'User get successfully',
           status: true,
         };
-        const response = await responseFromServer(`${SchoolURL}/signin`, null, getUserNotification, 'POST', data);
+        const response = await isAuthUser(data, getUserNotification);
         setUserNotification(response.notification);
         if (response.notification.status) {
           setCookie('auth', JSON.stringify(response.data), cookieLifeCyrcle);
@@ -109,7 +109,6 @@ const LoginForm = () => {
           msg: 'Incorrect e-mail or password',
           status: false,
         };
-        console.log(error);
         setUserNotification(userAuthMsg);
         throw new Error('invalid request');
       }
