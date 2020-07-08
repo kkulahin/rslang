@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { CanvasJSChart, CanvasJS } from 'canvasjs-react-charts';
 import ContainerWithShadow from '../../../components/containerWithShadow/ContainerWithShadow';
-import CanvasJSReact from '../canvasjs.react';
 import Dropdown from '../../../components/dropdown/Dropdown';
 
 import './StatisticLong.scss';
+import { getDateFromSeconds } from '../../../utils/time';
 
-const StatisticLong = () => {
+const StatisticLong = ({ statistics }) => {
+  const { optional: { longStatistics } } = statistics;
   const [statisticPeriod, setStatisticPeriod] = useState('Weekly');
   const periods = ['Weekly', 'Monthly'];
-
-  const { CanvasJS, CanvasJSChart } = CanvasJSReact;
 
   CanvasJS.addColorSet('rslang', [
     '#25CEDE',
@@ -26,12 +27,13 @@ const StatisticLong = () => {
     axisY: {
       title: 'Word Count',
       includeZero: false,
-      suffix: '',
+      valueFormatString: '#,###',
     },
     axisX: {
-      title: `day of ${statisticPeriod.substring(0, statisticPeriod.length - 2)}`,
-      prefix: 'day ',
+      title: `day of the ${statisticPeriod.substring(0, statisticPeriod.length - 2)}`,
+      valueFormatString: 'MMM DD',
       interval: 1,
+      intervalType: 'day',
     },
     data: [{
       type: 'spline',
@@ -39,57 +41,33 @@ const StatisticLong = () => {
       dataPoints: null,
     }],
   };
+
+  const updateChart = (interval, period) => {
+    options.axisX.interval = interval;
+    let datesArray = Object.keys(longStatistics).map((daySec) => {
+      const seconds = parseInt(daySec, 10);
+      const day = getDateFromSeconds(seconds);
+      return { date: day, count: longStatistics[daySec] };
+    });
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    today.setDate(today.getDate() - period);
+    datesArray = datesArray.filter((day) => day.date >= today && day.count > 0);
+    options.data[0].dataPoints = datesArray.map((day) => ({ x: day.date, y: day.count }));
+  };
+
   if (statisticPeriod === 'Weekly') {
-    options.data[0].dataPoints = [
-      { x: 1, y: 10 },
-      { x: 2, y: 15 },
-      { x: 3, y: 30 },
-      { x: 4, y: 20 },
-      { x: 5, y: 50 },
-      { x: 6, y: 25 },
-      { x: 7, y: 40 },
-    ];
+    updateChart(1, 7);
   }
   if (statisticPeriod === 'Monthly') {
-    options.data[0].dataPoints = [
-      { x: 1, y: 10 },
-      { x: 2, y: 15 },
-      { x: 3, y: 30 },
-      { x: 4, y: 20 },
-      { x: 5, y: 50 },
-      { x: 6, y: 25 },
-      { x: 7, y: 40 },
-      { x: 8, y: 32 },
-      { x: 9, y: 68 },
-      { x: 10, y: 45 },
-      { x: 11, y: 55 },
-      { x: 12, y: 12 },
-      { x: 13, y: 43 },
-      { x: 14, y: 36 },
-      { x: 15, y: 37 },
-      { x: 16, y: 21 },
-      { x: 17, y: 11 },
-      { x: 18, y: 22 },
-      { x: 19, y: 33 },
-      { x: 20, y: 51 },
-      { x: 21, y: 29 },
-      { x: 22, y: 23 },
-      { x: 23, y: 41 },
-      { x: 24, y: 32 },
-      { x: 25, y: 45 },
-      { x: 26, y: 62 },
-      { x: 27, y: 14 },
-      { x: 28, y: 19 },
-      { x: 29, y: 52 },
-      { x: 30, y: 32 },
-    ];
+    updateChart(4, 30);
   }
 
   return (
     <div className="statistic-long">
       <h3 className="statistic-long__title">Your statistics</h3>
       <div className="statistic-long__period">
-        Word learned
+        Words learned
         <Dropdown
           values={periods}
           defaultValue="0"
@@ -101,6 +79,26 @@ const StatisticLong = () => {
       </ContainerWithShadow>
     </div>
   );
+};
+
+StatisticLong.defaultProps = {
+  statistics: {
+    learnedWords: 0,
+    optional: {
+      longStatistics: {},
+    },
+  },
+};
+
+StatisticLong.propTypes = {
+  statistics: PropTypes.shape({
+    learnedWords: PropTypes.number.isRequired,
+    optional: PropTypes.shape({
+      longStatistics: PropTypes.shape({
+        key: PropTypes.number,
+      }),
+    }),
+  }),
 };
 
 export default StatisticLong;

@@ -6,13 +6,13 @@ import settingSubject from '../../utils/observers/SettingSubject';
 import './Settings.scss';
 
 const Settings = () => {
-  const [settings, setSettings] = useState(settingsController.getConfig());
+  const [settings, setSettings] = useState(settingsController.get());
 
   useEffect(() => {
     settingSubject.subscribe(setSettings);
-    if (settings === null) {
-      settingsController.getConfigFromServer();
-    }
+    // if (settings === null) {
+    //   settingsController.getConfigFromServer();
+    // }
 
     return () => settingSubject.unsubscribe(setSettings);
   }, [settings, setSettings]);

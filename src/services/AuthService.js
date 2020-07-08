@@ -10,9 +10,17 @@ class AuthService {
     return { auth: auth !== null && auth !== '', login: login !== null && login !== '' };
   }
 
-  tryLogIn = async () => {
+  getUser = () => {
     const authStr = getCookie('auth');
-    if (authStr === null && authStr !== '') {
+    if (authStr === null || authStr === '') {
+      return null;
+    }
+    return JSON.parse(authStr);
+  }
+
+  tryLogIn = async () => {
+    const auth = this.getUser();
+    if (auth === null) {
       const userLogged = await this.tryToUseLocalStorage();
       if (!userLogged) {
         deleteCookie('login');
@@ -20,7 +28,6 @@ class AuthService {
       signinSubject.notify(userLogged);
     }
     try {
-      const auth = JSON.parse(authStr);
       const tokenWorks = await this.checkTokenWorks(auth);
       if (tokenWorks) {
         signinSubject.notify(tokenWorks);

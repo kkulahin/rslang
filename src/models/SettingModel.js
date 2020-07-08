@@ -24,9 +24,10 @@ class SettingModel {
   getConfigFromServer = async () => {
     let configFromServer;
 
-    const user = JSON.parse(getCookie('auth'));
+    const userStr = getCookie('auth');
 
-    if (user) {
+    if (userStr && userStr !== '') {
+      const user = JSON.parse(userStr);
       try {
         const response = await responseFromServer(
           `${SchoolURL}/users/${user.userId}/settings`,
@@ -85,6 +86,10 @@ class SettingModel {
       }
     }
   };
+
+  reset = () => {
+    this.settings = null;
+  }
 }
 
 const settingModel = new SettingModel();

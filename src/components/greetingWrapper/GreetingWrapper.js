@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import PropsType from 'prop-types';
 import Greeting from '../greeting/Greeting';
 import ContinueTrainingBlock from '../continueTrainingBlock/ContinueTrainingBlock';
 import './GreetingWrapper.scss';
 import settingsController from '../../controllers/SettingsController';
 import settingSubject from '../../utils/observers/SettingSubject';
+import statisticsSubject from '../../utils/observers/StatisticsSubject';
+import statisticsController from '../../controllers/StatisticsController';
 
 const GreetingWrapper = () => {
   const [cardsCount, setCardCount] = useState(settingsController.getCardsCount());
+  const [passedCount, setPassedCount] = useState(statisticsController.getPassedCount());
 
   const updateCardCount = () => {
     setCardCount(settingsController.getCardsCount());
   };
 
+  const updatePassedCount = () => {
+    setPassedCount(statisticsController.getPassedCount());
+  };
+
   useEffect(() => {
     settingSubject.subscribe(updateCardCount);
-    if (settingsController.getConfig() === null) {
-      settingsController.getConfigFromServer();
-    }
+    statisticsSubject.subscribe(updatePassedCount);
 
-    return () => settingSubject.unsubscribe(updateCardCount);
+    return () => {
+      settingSubject.unsubscribe(updateCardCount);
+      statisticsSubject.unsubscribe(updatePassedCount);
+    };
   }, []);
 
   const location = useLocation();
@@ -34,6 +41,7 @@ const GreetingWrapper = () => {
         <div className="greeting-wrapper">
           <Greeting />
           <ContinueTrainingBlock
+            completedWordsCount={passedCount}
             cardsCount={cardsCount}
             isFullState={!isHomePage}
           />

@@ -2,12 +2,11 @@ import Difficulty from './Difficulty';
 import IntervalPhase from './IntervalPhase';
 
 const phaseNames = {
+  now: '0s',
   fiveSec: '5s',
   twentyFiveSec: '25s',
   twoMin: '2min',
   tenMin: '10min',
-  oneH: '1h',
-  fiveH: '5h',
   twoD: '2d',
   fiveD: '5d',
   twentyFiveD: '25d',
@@ -33,6 +32,7 @@ export default {
   ],
   phaseNames,
   phase: [
+    new IntervalPhase(phaseNames.now, 0, unlimited),
     new IntervalPhase(phaseNames.fiveSec, 5, unlimited),
     new IntervalPhase(phaseNames.twentyFiveSec, 25, unlimited),
     new IntervalPhase(phaseNames.twoMin, 120, unlimited),

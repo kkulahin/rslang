@@ -245,12 +245,12 @@ const Savanna = () => {
   };
 
   const getSuccessRate = () => {
-		if (option === null || !screen.result) {
-			return null;
-		}
+    if (option === null || !screen.result) {
+      return null;
+    }
     let errors = option.maxLife - option.curLife;
-		const persent = ((option.maxWords - wordsForPlay.length) / option.maxWords) * 100;
-		errors = errors === 0 ? 1 : errors;
+    const persent = ((option.maxWords - wordsForPlay.length) / option.maxWords) * 100;
+    errors = errors === 0 ? 1 : errors;
     return Math.round(persent / errors);
   };
 
