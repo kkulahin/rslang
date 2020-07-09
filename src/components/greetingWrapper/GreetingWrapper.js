@@ -4,16 +4,17 @@ import Greeting from '../greeting/Greeting';
 import ContinueTrainingBlock from '../continueTrainingBlock/ContinueTrainingBlock';
 import './GreetingWrapper.scss';
 import settingsController from '../../controllers/SettingsController';
-import settingSubject from '../../utils/observers/SettingSubject';
 import statisticsSubject from '../../utils/observers/StatisticsSubject';
 import statisticsController from '../../controllers/StatisticsController';
+import wordQueueSubject from '../../utils/observers/WordQueueSubject';
+import wordController from '../../controllers/WordConrtoller';
 
 const GreetingWrapper = () => {
   const [cardsCount, setCardCount] = useState(settingsController.getCardsCount());
   const [passedCount, setPassedCount] = useState(statisticsController.getPassedCount());
 
   const updateCardCount = () => {
-    setCardCount(settingsController.getCardsCount());
+    setCardCount(wordController.getWordsCount());
   };
 
   const updatePassedCount = () => {
@@ -21,11 +22,11 @@ const GreetingWrapper = () => {
   };
 
   useEffect(() => {
-    settingSubject.subscribe(updateCardCount);
+    wordQueueSubject.subscribe(updateCardCount);
     statisticsSubject.subscribe(updatePassedCount);
 
     return () => {
-      settingSubject.unsubscribe(updateCardCount);
+      wordQueueSubject.unsubscribe(updateCardCount);
       statisticsSubject.unsubscribe(updatePassedCount);
     };
   }, []);
