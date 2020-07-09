@@ -44,7 +44,7 @@ const getWordsCount = async (group = 0, notification = wordsNotification) => {
   }
 };
 
-const getWordsById = async (id, page, notification = wordsNotification) => {
+const getWordsById = async (id, notification = wordsNotification) => {
   try {
     const response = await responseFromServer(`${SchoolURL}/words/${id}`, null, notification);
     return response;
