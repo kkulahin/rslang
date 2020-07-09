@@ -4,6 +4,7 @@ import TabContent from '../components/tabs/tabContent/TabContent';
 import { getAllUserWords } from '../controllers/words/userWords';
 import { getWordsById } from '../controllers/words/words';
 import { getCookie } from '../utils/cookie';
+import Button from '../components/button/Button';
 
 const isEmptyArr = (arr) => {
   if (Array.isArray(arr) && !arr.length) {
@@ -16,6 +17,7 @@ const Dictionary = () => {
   const [dictionaryWords, setDictionaryWords] = useState(null);
   const [dictionaryInfoWords, setDictionaryInfoWords] = useState(null);
   const [tabContent, setTabContent] = useState({ normal: [], hard: [], deleted: [] });
+  const [isUpdated, setUpdate] = useState(false);
   useEffect(() => {
     const auth = JSON.parse(getCookie('auth'));
     const getDictionaryWords = async (token, id) => {
@@ -71,10 +73,22 @@ const Dictionary = () => {
   const buildTab = (cTab) => {
     const tab = [];
     tabContent[cTab].forEach((w) => {
-      const cWord = w[0].data;
-      tab.push({ origin: cWord.word, transcript: cWord.transcription, translation: cWord.wordTranslate });
+			const cWord = w[0].data;
+      tab.push({ id: cWord.id, origin: cWord.word, transcript: cWord.transcription, translation: cWord.wordTranslate });
     });
     return tab;
+  };
+
+  const isUpdateButtonActive = (status) => {
+    setUpdate(status);
+  };
+
+  const getNewWorList = (words) => {
+    console.log(words);
+  };
+
+  const saveChange = () => {
+
   };
 
   return (
@@ -84,7 +98,13 @@ const Dictionary = () => {
           {
 isEmptyArr(tabContent.normal)
   ? null
-  : <TabContent wordList={buildTab('normal')}> </TabContent>
+  : (
+    <TabContent
+      getStatus={isUpdateButtonActive}
+      wordList={buildTab('normal')}
+      getWordList={getNewWorList}
+    />
+  )
 }
 
         </div>
@@ -92,17 +112,39 @@ isEmptyArr(tabContent.normal)
           {
 isEmptyArr(tabContent.hard)
   ? null
-  : <TabContent wordList={buildTab('hard')}> </TabContent>
+  : (
+    <TabContent
+      getStatus={isUpdateButtonActive}
+      wordList={buildTab('hard')}
+      getWordList={getNewWorList}
+    />
+  )
 }
         </div>
         <div label="Deleted">
           {
 isEmptyArr(tabContent.deleted)
   ? null
-  : <TabContent wordList={buildTab('deleted')}> </TabContent>
+  : (
+    <TabContent
+      getStatus={isUpdateButtonActive}
+      wordList={buildTab('deleted')}
+      getWordList={getNewWorList}
+    />
+  )
 }
         </div>
       </Tabs>
+      {
+!isUpdated ? null : (
+  <Button
+    id="dictionary-save"
+    label="update"
+    clickHandler={saveChange}
+  />
+)
+}
+
     </div>
   );
 };

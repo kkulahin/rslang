@@ -8,7 +8,7 @@ const Header = () => {
   const isVisibleMenu = () => location.pathname === '/signin' || location.pathname === '/signup';
   return (
     <div className="menu-wrapper">
-      { isVisibleMenu() ? null : <Nav />}
+      { isVisibleMenu() ? null : <Nav getLocation={location} />}
     </div>
   );
 };
