@@ -11,13 +11,15 @@ $padding: 0.5rem 1rem;
 $border-radius: 10rem;
 $box-shadow: 5px 5px 15px $box-shadow-first-color, 
             -5px -5px 15px $box-shadow-second-color;
+$box-shadow-mobile: 3px 3px 5px $box-shadow-first-color, 
+                    -3px -3px 5px $box-shadow-second-color;
 $box-shadow-inset: inset 5px 5px 15px $box-shadow-first-color, 
                   inset -5px -5px 15px $box-shadow-second-color;
 
 .card-button {
   position: relative;
 
-  @include flex($flex-direction: row);
+  @include flex(row);
 
   height: 100%;
   padding: $padding;
@@ -45,15 +47,40 @@ $box-shadow-inset: inset 5px 5px 15px $box-shadow-first-color,
     box-shadow: $box-shadow-inset;
   }
 
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.25;
+  }
+
+  @media (max-width: 767px) {
+    box-shadow: $box-shadow-mobile;
+  }
+
+  svg {
+    transition: fill 0.3s linear;
+    pointer-events: none;
+  }
+
+  .svg-icon {
+    fill: $main-color;
+  }
+
   @include media-hover {
 
     &:hover {
       color: $hover-color;
     }
+
+    &:hover .svg-icon {
+      fill: $hover-color;
+    }
   }
 
-  &:disabled {
+  .button__label {
     pointer-events: none;
-    opacity: 0.25;
+
+    @media (max-width: 767px) {
+      display: none;
+    }
   }
 }

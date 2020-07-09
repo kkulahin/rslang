@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'semantic-ui-react';
 
 import './button.scss';
 
@@ -11,14 +10,10 @@ const Button = (props) => {
     isActive,
     label,
     clickHandler,
-    iconName,
+    icon,
     dataTitle,
     dataPlacement,
   } = props;
-
-  const icon = (iconName)
-    ? <Icon name={iconName} />
-    : null;
 
   const className = (isActive)
     ? 'card-button card-button--active'
@@ -36,7 +31,7 @@ const Button = (props) => {
     >
       {icon}
       {(label && icon) && ' '}
-      {label}
+      <span className="button__label">{label}</span>
     </button>
   );
 };
@@ -44,7 +39,7 @@ const Button = (props) => {
 Button.defaultProps = {
   isDisabled: false,
   isActive: false,
-  iconName: '',
+  icon: null,
   label: null,
   dataTitle: null,
   dataPlacement: null,
@@ -56,7 +51,7 @@ Button.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string,
   clickHandler: PropTypes.func.isRequired,
-  iconName: PropTypes.string,
+  icon: PropTypes.node,
   dataTitle: PropTypes.string,
   dataPlacement: PropTypes.string,
 };

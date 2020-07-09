@@ -8,6 +8,10 @@ import HelpText from '../helpText/HelpText';
 import WordInput from '../wordInput/WordInput';
 import Button from '../button/Button';
 import AudioComponent from '../audioComponent/AudioComponent';
+import RepeatIcon from '../icons/RepeatIcon';
+import DeleteIcon from '../icons/DeleteIcon';
+import KettlebellIcon from '../icons/KettlebellIcon';
+import ShowAnswerIcon from '../icons/ShowAnswerIcon';
 
 const CardContent = (props) => {
   const {
@@ -33,15 +37,18 @@ const CardContent = (props) => {
       dataPlacement="top"
       isDisabled={isCorrect || isShowBtnClick || isEducation}
       clickHandler={(id) => onCardBtnClick(id)}
+      icon={<ShowAnswerIcon iconTitle="show answer icon" />}
     />
   );
 
   const DeleteBtn = (
     <Button
       id="deleteWord"
+      label="Delete"
       dataTitle="Delete the word from training"
       dataPlacement="top"
       clickHandler={(id) => onCardBtnClick(id)}
+      icon={<DeleteIcon iconTitle="delete icon" />}
     />
   );
 
@@ -52,13 +59,14 @@ const CardContent = (props) => {
       dataTitle="Repeat the word in this training"
       dataPlacement="top"
       clickHandler={(id) => onCardBtnClick(id)}
+      icon={<RepeatIcon iconTitle="repeat icon" />}
     />
   );
 
   const radioButtons = [
-    { label: 'hard', id: 'hard' },
-    { label: 'normal', id: 'normal' },
-    { label: 'easy', id: 'easy' },
+    { label: 'hard', id: 'hard', icon: <KettlebellIcon iconTitle="kettlebell icon" /> },
+    { label: 'normal', id: 'normal', icon: <KettlebellIcon iconTitle="kettlebell icon" /> },
+    { label: 'easy', id: 'easy', icon: <KettlebellIcon iconTitle="kettlebell icon" /> },
   ];
 
   const isAvailableComplexityButtons = isComplexityBtn
@@ -71,7 +79,6 @@ const CardContent = (props) => {
         items={radioButtons}
         onChange={onWordComplexityBtnClick}
         checkedItem={wordDifficulty}
-        // isAttention={isCorrect || isShowBtnClick}
         dataTitle="Select the word difficulty category"
         dataPlacement="top"
       />

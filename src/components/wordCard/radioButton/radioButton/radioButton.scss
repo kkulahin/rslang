@@ -7,10 +7,13 @@
   @media (pointer: fine) { @content; }
 }
 
-$padding: 0.5rem 1rem 0.5rem 3.2rem;
+$padding: 0.5rem 1rem;
 $border-radius: 10rem;
 $box-shadow-inset: inset 5px 5px 15px $box-shadow-first-color, 
                   inset -5px -5px 15px $box-shadow-second-color;
+$hard-color: #f00;
+$normal-color: #ff0;
+$easy-color: #0f0;
 
 .card-unit {
 
@@ -18,16 +21,15 @@ $box-shadow-inset: inset 5px 5px 15px $box-shadow-first-color,
     height: 100%;
     padding: $padding;
 
-    @include font (2rem, 1, 500);
+    @include flex(row);
+
+    @include font(0.7em, 1, 500);
 
     font-family: inherit;
     text-align: center;
     color: $main-color;
 
     background-color: $background-color;
-    background-repeat: no-repeat;
-    background-size: 3rem;
-    background-position: 0.5rem, center;
 
     border: none;
     border-radius: $border-radius;
@@ -38,31 +40,66 @@ $box-shadow-inset: inset 5px 5px 15px $box-shadow-first-color,
 
     cursor: pointer;
 
+    &--checked {
+      box-shadow: $box-shadow-inset;
+      transition: none;
+      cursor: unset;
+    }
+
     @include media-hover {
 
       &:hover {
         color: $hover-color;
       }
+
+      &--checked:hover {
+        color: $main-color;
+      }
     }
 
-    &--checked {
-      box-shadow: $box-shadow-inset;
+    @media (max-width: 767px) {
+      width: 3rem;
+    }
+
+    svg {
+      pointer-events: none;
     }
   }
 
   #hard.card-radio-button {
-    background-image: url("./../../hard-kettlebell-icon.svg");
+
+    .svg-icon {
+      fill: $hard-color;
+    }
   }
 
   #normal.card-radio-button {
-    background-image: url("./../../normal-kettlebell-icon.svg");
+
+    .svg-icon {
+      fill: $normal-color;
+    }
   }
 
   #easy.card-radio-button {
-    background-image: url("./../../easy-kettlebell-icon.svg");
+
+    .svg-icon {
+      fill: $easy-color;
+    }
   }
 
   .card-radio-button + .card-radio-button {
     margin-left: 0.5rem;
+
+    @media (max-width: 767px) {
+      margin-left: 0;
+    }
+  }
+
+  .radio-button__label {
+    pointer-events: none;
+
+    @media (max-width: 767px) {
+      display: none;
+    }
   }
 }

@@ -1,5 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect, useReducer, useCallback } from 'react';
+import React, {
+  useEffect, useReducer, useRef, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import ContainerWithShadow from '../containerWithShadow/ContainerWithShadow';
@@ -13,12 +15,13 @@ const checkCorrect = ({ value, word }) => value.toLowerCase() === word.toLowerCa
 
 const initialState = {
   isWordInput: false,
-  isInputInFocus: { isFocus: true },
+  isInputInFocus: false,
   isCorrect: false,
   isShowBtnClick: false,
   isAgainBtnClick: false,
   isAudioOn: { audioOn: false },
   value: '',
+  currentValue: '',
 };
 
 const WordCard = ({
@@ -41,20 +44,20 @@ const WordCard = ({
   const { isAudioAuto, isComplexityBtn } = settings;
   const { definition: { word } } = currentWord;
 
+  const inputRef = useRef();
+
   function reducer(state, action) {
     const newState = {};
 
     switch (action.type) {
       case 'resetWord':
-        return { ...initialState, isAudioOn: { audioOn: false }, isInputInFocus: { isFocus: true } };
-      case 'resetWordToPrev':
-        return { ...initialState, isAudioOn: { audioOn: false }, isInputInFocus: { isFocus: false } };
+        return { ...initialState, isAudioOn: { audioOn: false } };
       case 'setState':
         return { ...state, ...action.payload };
       case 'handleAnswer':
         newState.value = '';
+        newState.currentValue = state.value;
         newState.isWordInput = true;
-        newState.isInputInFocus = { isFocus: false };
 
         if (action.payload.isCorrect) {
           newState.isCorrect = true;
@@ -75,14 +78,10 @@ const WordCard = ({
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const getNextWord = () => {
-    dispatch({ type: 'resetWord' });
-    onNextBtnClick();
-  };
-
   const handleAudioEnd = () => {
     if ((state.isCorrect || state.isShowBtnClick) && !isComplexityBtn) {
-      getNextWord();
+      dispatch({ type: 'resetWord' });
+      onNextBtnClick();
     }
   };
 
@@ -95,24 +94,26 @@ const WordCard = ({
         && !state.isCorrect
         && !state.isShowBtnClick
         && !isAnswered) {
-      dispatch({ type: 'resetWordToPrev' });
+      dispatch({ type: 'resetWord' });
       onPrevBtnClick();
     }
   };
 
   const handleNavigateNextClick = () => {
     if (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation) {
-      getNextWord();
-    } else if (state.value === '') {
+      dispatch({ type: 'resetWord' });
+      onNextBtnClick();
+    } if (state.value === '') {
+      inputRef.current.focus();
       dispatch({
         type: 'setState',
         payload: {
           isWordInput: false,
           isAudioOn: { audioOn: false },
-          isInputInFocus: { isFocus: true },
         },
       });
     } else {
+      inputRef.current.blur();
       dispatch({
         type: 'handleAnswer',
         payload: {
@@ -125,22 +126,36 @@ const WordCard = ({
   const handleInputEnter = (evt) => {
     if (evt.key === 'Enter') {
       const { value: val } = evt.target;
-      dispatch({
-        type: 'handleAnswer',
-        payload: {
-          isCorrect: checkCorrect({ value: val, word }),
-        },
-      });
+
+      if (val !== '') {
+        inputRef.current.blur();
+        dispatch({
+          type: 'handleAnswer',
+          payload: {
+            isCorrect: checkCorrect({ value: val, word }),
+          },
+        });
+      }
     }
   };
 
-  const handleInputFocus = () => {
-    if (state.isWordInput) {
+  const handleInputFocus = (isFocus) => {
+    if (isFocus) {
+      if (state.isWordInput) {
+        dispatch({
+          type: 'setState',
+          payload: {
+            isWordInput: false,
+            isAudioOn: { audioOn: false },
+            isInputInFocus: isFocus,
+          },
+        });
+      }
+    } else {
       dispatch({
         type: 'setState',
         payload: {
-          isWordInput: false,
-          isAudioOn: { audioOn: false },
+          isInputInFocus: isFocus,
         },
       });
     }
@@ -154,10 +169,13 @@ const WordCard = ({
         isCorrect: true,
       },
     });
+
+    inputRef.current.blur();
     dispatch({
       type: 'handleAnswer',
       payload: { isCorrect: false },
     });
+
     onShowAnswerBtnClick();
   };
 
@@ -172,6 +190,7 @@ const WordCard = ({
         isAgainBtnClick: true,
       },
     });
+
     onAgainBtnClick();
   };
 
@@ -184,61 +203,67 @@ const WordCard = ({
     handlers[id]();
   };
 
-  const handlePrevClick = useCallback(() => {
-    if (hasPrevious
-      && !state.isCorrect
-      && !state.isShowBtnClick
-      && !isAnswered) {
-      dispatch({ type: 'resetWordToPrev' });
-      onPrevBtnClick();
-    }
-  }, [state, hasPrevious, isAnswered, onPrevBtnClick]);
+  const createHandleKeydown = useCallback(() => (evt) => {
+    const { code } = evt;
 
-  const memoGetNextWord = useCallback(() => {
-    dispatch({ type: 'resetWord' });
-    onNextBtnClick();
-  }, [onNextBtnClick]);
-
-  const handleNextClick = useCallback(() => {
-    if (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation) {
-      memoGetNextWord();
-    } else if (state.value === '') {
+    if ((code === 'ArrowRight')
+        || (code === 'Enter'
+            && (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation))) {
+      if (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation) {
+        dispatch({ type: 'resetWord' });
+        onNextBtnClick();
+      } if (state.value === '') {
+        inputRef.current.focus();
+        dispatch({
+          type: 'setState',
+          payload: {
+            isWordInput: false,
+            isAudioOn: { audioOn: false },
+          },
+        });
+      } else {
+        inputRef.current.blur();
+        dispatch({
+          type: 'handleAnswer',
+          payload: {
+            isCorrect: checkCorrect({ value: state.value, word }),
+          },
+        });
+      }
+    } else if (code === 'ArrowLeft') {
+      if (hasPrevious
+          && !state.isCorrect
+          && !state.isShowBtnClick
+          && !isAnswered) {
+        dispatch({ type: 'resetWord' });
+        onPrevBtnClick();
+      }
+    } else if (code !== 'Enter' && !state.isCorrect && !state.isShowBtnClick
+                && !isAnswered && !isEducation
+                && !state.isInputInFocus) {
+      inputRef.current.focus();
       dispatch({
         type: 'setState',
         payload: {
           isWordInput: false,
           isAudioOn: { audioOn: false },
-          isInputInFocus: { isFocus: true },
-        },
-      });
-    } else {
-      dispatch({
-        type: 'handleAnswer',
-        payload: {
-          isCorrect: checkCorrect({ value: state.value, word }),
         },
       });
     }
-  }, [state, isEducation, isAnswered, word, memoGetNextWord]);
-
-  const createHandleKeydown = (handlePrev, handleNext) => (evt) => {
-    const { key } = evt;
-
-    if (key === 'ArrowRight') {
-      handleNext();
-    } else if (key === 'ArrowLeft') {
-      handlePrev();
-    }
-  };
+  }, [state, word, hasPrevious, isAnswered, isEducation, onPrevBtnClick, onNextBtnClick]);
 
   useEffect(() => {
-    const handleKeydown = createHandleKeydown(handlePrevClick, handleNextClick);
+    const handleKeydown = createHandleKeydown();
     document.addEventListener('keydown', handleKeydown);
 
     return () => {
       document.removeEventListener('keydown', handleKeydown);
     };
-  }, [handlePrevClick, handleNextClick]);
+  }, [createHandleKeydown]);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [word, isAnswered]);
 
   return (
     <div className="card-unit">
@@ -254,7 +279,7 @@ const WordCard = ({
           <CardContent
             helpSettings={helpSettings}
             settings={settings}
-            word={currentWord}
+            word={currentWord.definition}
             onInputEnter={handleInputEnter}
             onInputFocus={handleInputFocus}
             onInputChange={handleInputChange}
@@ -264,6 +289,7 @@ const WordCard = ({
             isEducation={isEducation}
             wordDifficulty={wordDifficulty}
             isPrevWord={isAnswered}
+            inputRef={inputRef}
             {...state}
           />
         </ContainerWithShadow>

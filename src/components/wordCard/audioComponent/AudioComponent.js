@@ -8,13 +8,13 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import Spinner from '../spinner/Spinner';
 import { urlToAssets } from '../../../constants/urls';
-import Word from '../../../utils/spacedRepetition/Word';
+import AudioPlayIcon from '../icons/AudioPlayIcon';
 
 const AudioComponent = (props) => {
   const {
     helpSettings: { isTextExampleShow, isTextMeaningShow },
     settings: { isComplexityBtn },
-    word: { definition: { audio, audioExample, audioMeaning } },
+    word: { audio, audioExample, audioMeaning },
     onAudioEnd,
     isPrevWord,
     isEducation,
@@ -138,6 +138,7 @@ const AudioComponent = (props) => {
         dataPlacement="top"
         isDisabled={!AudioPlayBtnEnabled}
         clickHandler={handleAudioPlayBtnClick}
+        icon={<AudioPlayIcon iconTitle="audio play icon" />}
       />
       {audioData.loading && <Spinner />}
       <audio
@@ -152,7 +153,11 @@ const AudioComponent = (props) => {
 export default AudioComponent;
 
 AudioComponent.propTypes = {
-  word: PropTypes.instanceOf(Word).isRequired,
+  word: PropTypes.shape({
+    audio: PropTypes.string.isRequired,
+    audioExample: PropTypes.string.isRequired,
+    audioMeaning: PropTypes.string.isRequired,
+  }).isRequired,
   settings: PropTypes.shape({
     isComplexityBtn: PropTypes.bool.isRequired,
   }).isRequired,
