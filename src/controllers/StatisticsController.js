@@ -57,8 +57,18 @@ class StatisticsController {
     return longStatistics;
   }
 
-  updateQueue = async (todayQueue) => {
-    statisticsModel.save({ todayQueue });
+  updateQueue = async (todayQueue) => statisticsModel.save({ todayQueue })
+
+  resetQueue = async (todayQueue) => {
+    const { optional: { todayStatistics } } = statisticsModel.get();
+    todayStatistics.newWords = 0;
+    todayStatistics.passedCards = 0;
+    todayStatistics.incorrectAnswers = 0;
+    todayStatistics.correctAnswers = 0;
+    todayStatistics.passedWords = 0;
+    todayStatistics.currentStrike = 0;
+    todayStatistics.strike = 0;
+    return statisticsModel.save({ todayQueue, todayQueue });
   }
 
   getPassedCount = () => {

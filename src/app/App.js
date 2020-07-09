@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 
 import History from '../utils/history';
-import Home from '../pages/Home';
+import Home from '../pages/homePage/Home';
 import NotFound from '../pages/NotFound';
 import LoginPage from '../pages/loginPage/LoginPage';
 import Logout from '../pages/logoutPage/Logout';

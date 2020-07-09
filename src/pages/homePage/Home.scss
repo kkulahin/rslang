@@ -1,0 +1,15 @@
+@import '../../styles/mixin.scss';
+
+.main-game__end-game {
+  width: 100%;
+  user-select: none;
+
+  @include flex(row, center, center);
+
+  &_button {
+    width: fit-content;
+    height: fit-content;
+    margin-left: 30px;
+    @include flex(row, center, center);
+  }
+}
