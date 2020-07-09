@@ -155,7 +155,14 @@ export default class WordQueue {
     if (repetitionTime) {
       queue.push({ word, isEducation: false, nextTime: repetitionTime });
     }
-    educationTimes.forEach((time) => queue.push({ word, isEducation: true, nextTime: time }));
+    educationTimes.forEach((time) => {
+      if (!repetitionTime) {
+        queue.push({ word, isEducation: true, nextTime: time - 1000 * Math.random(20) });
+        queue.push({ word, isEducation: false, nextTime: time + 1000 * Math.random(20) });
+      } else {
+        queue.push({ word, isEducation: true, nextTime: time });
+      }
+    });
   }
 
   getTodayWords = () => this.words.map((word) => word.definition.wordId);
