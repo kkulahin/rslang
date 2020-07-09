@@ -5,6 +5,7 @@ import { getTodaySeconds } from '../time';
 import wordController from '../../controllers/WordConrtoller';
 import settingsController from '../../controllers/SettingsController';
 import settingsNames from '../../constants/settingsNames';
+import wordQueueSubject from '../observers/WordQueueSubject';
 
 export default class WordQueue {
   constructor() {
@@ -195,6 +196,14 @@ export default class WordQueue {
   updateWord = async (isNew) => {
     const { word } = this.getCurrentWord();
     return wordController.updateWord(word, isNew);
+  }
+
+  reset = async () => {
+    console.log('do reset');
+    this.queuePointer = 0;
+    this.lastAnswered = -1;
+    await statisticsController.resetQueue(this.getQueueToSave());
+    wordQueueSubject.notify(this);
   }
 
   getWords= () => this.words;
