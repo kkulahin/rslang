@@ -2,6 +2,10 @@
 
 @import '../../styles/variables.scss';
 
+$container-min-size: 300px;
+$container-max-size: 500px;
+$padding: 10px;
+
 .login {
 
   &-wrapper {
@@ -12,8 +16,9 @@
   }
 
   &-column {
-    width: 80%;
-    max-width: 500px;
+    width: 80% !important;
+    max-width: $container-max-size;
+    min-width: $container-min-size;
   }
 
   &-header {
@@ -40,11 +45,11 @@
     label {
       display: flex !important;
       margin: 0 !important;
+      font-size: 1.5rem !important;
+      line-height: 1.2em;
       color: $main-color !important;
 
       @include flex(row, center, stretch);  
-    
-      @include font(2rem, 1.2em, 500);
     }
 
     .field {
@@ -57,20 +62,20 @@
 
   &-button {
     width: 80%;
-    padding: 20px !important;
+    padding: ($padding * 2) !important;
     font-size: 2.2rem !important;
     line-height: 1.2em !important;
     color: $main-color !important;
     background: $enabled-color !important;
     border-radius: $container-border-radius !important;
     box-shadow: 12px 12px 31px rgba(0, 0, 0, 0.5), -12px -12px 31px rgb(59, 68, 81) !important;
-    font-weight: 500;
+    font-weight: 400;
   }
 }
 
 .ui.fluid input {
-  padding-top: 15px !important;
-  padding-bottom: 15px !important;
+  padding-top: ($padding * 1.5) !important;
+  padding-bottom: ($padding * 1.5) !important;
   background: $main-color !important;
   border-radius: 18px !important;
   box-shadow: inset 6px 6px 18px rgba(136, 160, 183, 0.25), inset -6px -6px 18px rgba(255, 255, 255, 0.5) !important;
@@ -132,7 +137,7 @@ a.login-signup {
   color: $main-color;
   background-color: $enabled-color;
   border-radius: 20px;
-  font-weight: 500;
+  font-weight: 400;
   font-variant: small-caps;
 
   @include size(50%, 5vh);
@@ -148,18 +153,25 @@ a.login-signup {
 
 @media (max-width: 767px) {
 
-  .login-header {
+  .login {
 
-    .image {
-      display: none !important;
+    &-header {
+
+      .image {
+        display: none !important;
+      }
     }
-  }
 
-  .login-column {
-    width: 95%;
-  }
+    &-column {
+      width: 95% !important;
+    }
 
-  .input {
-    padding-left: 10px !important;
+    &-wrapper .input {
+      padding-left: $padding !important;
+    }
+
+    &-form .field:nth-child(4) > * {
+      font-size: 1.3rem !important;
+    }
   }
 }
