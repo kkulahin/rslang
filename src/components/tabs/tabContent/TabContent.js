@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
@@ -23,8 +23,10 @@ Row.propTypes = {
   onClickCrashButton: PropTypes.func.isRequired,
 };
 
-const TabContent = ({ wordList }) => {
+const TabContent = ({ wordList, getStatus, getWordList }) => {
   const [words, setWords] = useState(wordList);
+  const [deletedWords, setDeletedWords] = useState([]);
+  const [isUpdated, setUpdate] = useState(false);
   const rows = words.map((word, idx) => (
     <Row
       word={word}
@@ -32,10 +34,23 @@ const TabContent = ({ wordList }) => {
       onClickCrashButton={() => {
         const before = words.slice(0, idx);
         const after = words.slice(idx + 1);
+        setDeletedWords([...deletedWords, words[idx]]);
         setWords([...before, ...after]);
+        setUpdate(true);
       }}
     />
   ));
+
+  useEffect(() => {
+    if (getStatus !== undefined) {
+      getStatus(isUpdated);
+    }
+  }, [isUpdated, getStatus]);
+
+  useEffect(() => {
+    getWordList({ words, deletedWords });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getWordList, words]);
 
   return (
     <table className="tab-content">
@@ -56,6 +71,13 @@ const TabContent = ({ wordList }) => {
 
 TabContent.propTypes = {
   wordList: PropTypes.instanceOf(Array).isRequired,
+  getStatus: PropTypes.func,
+  getWordList: PropTypes.func,
+};
+
+TabContent.defaultProps = {
+  getStatus: () => {},
+  getWordList: () => {},
 };
 
 export default TabContent;
