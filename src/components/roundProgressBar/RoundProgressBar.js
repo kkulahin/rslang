@@ -14,15 +14,12 @@ const RoundProgressBar = ({
   const radius = (size - thumbWidth) / 2;
   const viewBox = `0 0 ${size} ${size}`;
   const dashArray = radius * Math.PI * 2;
-  const dashOffset = dashArray - dashArray * value / maxValue;
+  const ratio = maxValue === 0 ? 0 : value / maxValue;
+  const dashOffset = dashArray - dashArray * ratio;
 
   const innerRingSize = size - 2 * thumbWidth;
   const coreSize = size - 2 * (thumbWidth + innerPadding);
-  const percentage = (value / maxValue) * 100;
-
-  if (maxValue === 0 || percentage < 0 || percentage > 100) {
-    return null;
-  }
+  const percentage = ratio * 100;
 
   return (
     <div

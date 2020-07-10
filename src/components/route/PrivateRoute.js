@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import authService from '../../services/AuthService';
+import { Redirect, Route, useHistory } from 'react-router-dom';
+import { AuthService } from '../../utils/responseFromServer';
 import signinSubject from '../../utils/observers/SignInSubject';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { auth, login } = authService.isLoggedIn();
+  const history = useHistory();
+
+  useEffect(() => history.listen((location) => {
+    console.log(location);
+  }), [history]);
+  const { auth, login } = AuthService.isLoggedIn();
   const [isLoggedIn, setLoggedIn] = useState(login);
 
   useEffect(() => {
     if (!auth) {
-      authService.tryLogIn().then(() => {
+      AuthService.tryLogIn().then(() => {
         'try log in end';
       });
     }
     const updateLoggedIn = () => {
-      const { login: l } = authService.isLoggedIn();
+      const { login: l } = AuthService.isLoggedIn();
       setLoggedIn(l);
     };
     signinSubject.subscribe(updateLoggedIn);

@@ -18,14 +18,16 @@ class StatisticsModel {
           putData,
         );
         if (!postResponse.ok) {
-          throw new Error(
-            `POST Statisctics failed with ${postResponse.status} ${postResponse.statusText}`,
-          );
+          if (!postResponse.status === 401) {
+            throw new Error(
+              `POST Statisctics failed with ${postResponse.status} ${postResponse.statusText}`,
+            );
+          }
         } else {
           this.statistics = putData;
           statisticsSubject.notify(this.statistics);
         }
-      } else {
+      } else if (!response.status === 401) {
         throw new Error(
           `Get Statisctics failed with ${response.status} ${response.statusText}`,
         );
@@ -70,6 +72,9 @@ class StatisticsModel {
     }
     if (todayStatistics) {
       statistics.optional.todayStatistics = todayStatistics;
+    }
+    if (longStatistics) {
+      statistics.optional.longStatistics = longStatistics;
     }
     const { response } = await makeRequest(
       'PUT',
