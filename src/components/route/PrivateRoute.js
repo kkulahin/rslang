@@ -14,8 +14,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       });
     }
     const updateLoggedIn = () => {
-      const { login } = authService.isLoggedIn();
-      setLoggedIn(login);
+      const { login: l } = authService.isLoggedIn();
+      setLoggedIn(l);
     };
     signinSubject.subscribe(updateLoggedIn);
 

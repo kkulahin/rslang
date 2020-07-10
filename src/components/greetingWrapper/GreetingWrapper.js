@@ -28,7 +28,7 @@ const GreetingWrapper = () => {
       settingSubject.unsubscribe(updateCardCount);
       statisticsSubject.unsubscribe(updatePassedCount);
     };
-  }, []);
+  }, [setCardCount, setPassedCount]);
 
   const location = useLocation();
 
