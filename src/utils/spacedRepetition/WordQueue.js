@@ -120,7 +120,6 @@ export default class WordQueue {
     const { word, isEducation } = this.getCurrentWord();
     word.setTime();
     const isNew = word.isNew();
-    console.log(isNew, word.difficulty, word.definition.word);
     if (!isEducation || isNew) {
       word.upgradeDifficulty();
     }
@@ -129,6 +128,13 @@ export default class WordQueue {
     }
     this.updateStatistics(true, isNew);
     this.updateWord(isNew);
+  }
+
+  /**
+   * @param {boolean} value
+   */
+  setWordDeleted = (value) => {
+    this.getCurrentWord().word.isDeleted = value;
   }
 
   changeWord = () => {

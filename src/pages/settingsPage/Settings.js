@@ -10,9 +10,6 @@ const Settings = () => {
 
   useEffect(() => {
     settingSubject.subscribe(setSettings);
-    // if (settings === null) {
-    //   settingsController.getConfigFromServer();
-    // }
 
     return () => settingSubject.unsubscribe(setSettings);
   }, [settings, setSettings]);

@@ -29,7 +29,7 @@ const GreetingWrapper = () => {
       wordQueueSubject.unsubscribe(updateCardCount);
       statisticsSubject.unsubscribe(updatePassedCount);
     };
-  }, []);
+  }, [setCardCount, setPassedCount]);
 
   const location = useLocation();
 

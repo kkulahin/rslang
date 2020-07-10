@@ -129,7 +129,9 @@ export default class WordModel {
   }
 
   getWordsFromSavedQueue = async () => {
-    const words = statisticsController.get().optional.todayQueue.queue.map((qWord) => ({ word: qWord.w }));
+    let words = statisticsController.get().optional.todayQueue.queue.map((qWord) => (qWord.w));
+    words = words.filter((word, pos) => words.indexOf(word) === pos);
+    words = words.map((word) => ({ word }));
     const filter = {
       $or: words,
     };

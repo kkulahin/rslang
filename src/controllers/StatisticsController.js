@@ -72,7 +72,7 @@ class StatisticsController {
   }
 
   getPassedCount = () => {
-    if (statisticsModel.get() === null) {
+    if (this.get() === null) {
       return 0;
     }
     return statisticsModel.getPassedCount();
