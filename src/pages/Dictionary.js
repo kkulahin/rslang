@@ -18,6 +18,7 @@ const Dictionary = () => {
   const [dictionaryInfoWords, setDictionaryInfoWords] = useState(null);
   const [tabContent, setTabContent] = useState({ normal: [], hard: [], deleted: [] });
   const [isUpdated, setUpdate] = useState(false);
+  const [tabContentUpdated, setTabContentUpdated] = useState(null);
   useEffect(() => {
     const auth = JSON.parse(getCookie('auth'));
     const getDictionaryWords = async (token, id) => {
@@ -70,11 +71,19 @@ const Dictionary = () => {
     }
   }, [dictionaryInfoWords, dictionaryWords]);
 
+  useEffect(() => {
+    if (tabContentUpdated === null) {
+      setUpdate(false);
+    }
+  }, [tabContentUpdated]);
+
   const buildTab = (cTab) => {
     const tab = [];
     tabContent[cTab].forEach((w) => {
-			const cWord = w[0].data;
-      tab.push({ id: cWord.id, origin: cWord.word, transcript: cWord.transcription, translation: cWord.wordTranslate });
+      const cWord = w[0].data;
+      tab.push({
+        id: cWord.id, origin: cWord.word, transcript: cWord.transcription, translation: cWord.wordTranslate,
+      });
     });
     return tab;
   };
@@ -83,12 +92,23 @@ const Dictionary = () => {
     setUpdate(status);
   };
 
-  const getNewWorList = (words) => {
-    console.log(words);
+  const getNewWordList = (words) => {
+    if (JSON.stringify(tabContentUpdated) !== JSON.stringify(words)) {
+      setTabContentUpdated(words);
+    }
   };
 
   const saveChange = () => {
-
+    const { deletedWords } = tabContentUpdated;
+    const newDictionaryWords = JSON.parse(JSON.stringify(dictionaryWords));
+    deletedWords.forEach((w) => {
+      const wordsIdx = dictionaryWords.findIndex((e) => e.wordId === w.id);
+      let statusWords = newDictionaryWords[wordsIdx].optional.isDeleted;
+      statusWords = statusWords === undefined ? true : !statusWords;
+      newDictionaryWords[wordsIdx].optional.isDeleted = statusWords;
+    });
+    setTabContentUpdated(null);
+    setDictionaryWords(newDictionaryWords);
   };
 
   return (
@@ -102,7 +122,7 @@ isEmptyArr(tabContent.normal)
     <TabContent
       getStatus={isUpdateButtonActive}
       wordList={buildTab('normal')}
-      getWordList={getNewWorList}
+      getWordList={getNewWordList}
     />
   )
 }
@@ -116,7 +136,7 @@ isEmptyArr(tabContent.hard)
     <TabContent
       getStatus={isUpdateButtonActive}
       wordList={buildTab('hard')}
-      getWordList={getNewWorList}
+      getWordList={getNewWordList}
     />
   )
 }
@@ -129,7 +149,7 @@ isEmptyArr(tabContent.deleted)
     <TabContent
       getStatus={isUpdateButtonActive}
       wordList={buildTab('deleted')}
-      getWordList={getNewWorList}
+      getWordList={getNewWordList}
     />
   )
 }

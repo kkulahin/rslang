@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
 import './TabContent.scss';
-import { getWordsById } from '../../../controllers/words/words';
 
 const Row = ({ word, onClickCrashButton }) => {
   const { origin, transcript, translation } = word;
@@ -50,6 +49,7 @@ const TabContent = ({ wordList, getStatus, getWordList }) => {
 
   useEffect(() => {
     getWordList({ words, deletedWords });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getWordList, words]);
 
   return (
