@@ -7,6 +7,7 @@ import {
 } from '../../../config/default';
 
 import './SettingsSection.scss';
+import settingsWordCountSubject from '../../../utils/observers/SettingWordCountSubject';
 
 const SettingsSection = ({ sectionInfo, handleChange }) => {
   const { sectionName, settingsArr: settingsInfo } = sectionInfo;
@@ -42,10 +43,11 @@ const SettingsSection = ({ sectionInfo, handleChange }) => {
 
         const [wordsCount, cardsCount] = newSettingsValue;
 
-        const isValidInputRatio = cardsCount - wordsCount > defaultInputRatio;
+        const isValidInputRatio = cardsCount >= (wordsCount + 2) * 5;
 
         if (isValidInputRatio) {
           handleChange(inputId, sectionName, newInputValue);
+          settingsWordCountSubject.notify();
         }
       }
     },

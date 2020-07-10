@@ -102,6 +102,9 @@ const WordCard = ({
 
   const handleNavigateNextClick = () => {
     if (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation) {
+      if (isEducation) {
+        onWordAnswered();
+      }
       getNextWord();
     } else if (state.value === '') {
       dispatch({
@@ -175,13 +178,13 @@ const WordCard = ({
     onAgainBtnClick();
   };
 
-  const handleCardBtnClick = (id) => {
+  const handleCardBtnClick = (id, ...args) => {
     const handlers = {
       deleteWord: onDeleteBtnClick,
       againWord: handleAgainBtnClick,
       showWord: handleShowBtnClick,
     };
-    handlers[id]();
+    handlers[id](...args);
   };
 
   const handlePrevClick = useCallback(() => {

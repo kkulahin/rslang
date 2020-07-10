@@ -87,10 +87,9 @@ const Home = () => {
         helpSettings={initHelpSettings}
         settings={initSettings}
         onAgainBtnClick={wordQueue.setAgain}
-        onErrorAnswer={() => console.log('------ error answer ------')}
         onHardBtnClick={() => console.log('------ hard btn click ------')}
         onComplexityBtnClick={(id) => console.log(`------ complexity btn click ${id} ------`)}
-        onDeleteBtnClick={() => console.log('------ delete btn click ------')}
+        onDeleteBtnClick={wordQueue.setWordDeleted}
         onNextBtnClick={handleNextBtnClick}
         onPrevBtnClick={handlePrevBtnClick}
         isEducation={word.isEducation}
@@ -99,6 +98,7 @@ const Home = () => {
         onWordMistaken={wordQueue.setWordMistaken}
         hasPrevious={wordQueue.hasPreviousWord()}
       />
+      <span>{`${wordQueue.getCurrentPosition()} out of ${wordQueue.getLength()}`}</span>
     </div>
   );
 };
