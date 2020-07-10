@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import WordCard from '../components/wordCard/WordCard';
-import wordController from '../controllers/WordConrtoller';
-import wordQueueSubject from '../utils/observers/WordQueueSubject';
+import WordCard from '../../components/wordCard/WordCard';
+import wordController from '../../controllers/WordConrtoller';
+import wordQueueSubject from '../../utils/observers/WordQueueSubject';
+import statisticsSubject from '../../utils/observers/StatisticsSubject';
+import StatisticShort from '../../components/statisticShort/StatisticShort';
+import statisticsController from '../../controllers/StatisticsController';
+import Button from '../../components/button/Button';
+import './Home.scss';
 
 const initHelpSettings = {
   isImageShow: true,
@@ -31,12 +36,16 @@ const Home = () => {
     setWordQueue(wQueue);
     setWord(wQueue.getCurrentWord());
   };
+  const [statistics, setStatistics] = useState(statisticsController.get());
+
   useEffect(() => {
     wordQueueSubject.subscribe(updateWordQueue);
+    statisticsSubject.subscribe(setStatistics);
     return () => {
       wordQueueSubject.unsubscribe(updateWordQueue);
+      statisticsSubject.unsubscribe(setStatistics);
     };
-  });
+  }, [setStatistics]);
 
   const handleNextBtnClick = () => {
     setWord(wordQueue.changeWord());
@@ -46,6 +55,20 @@ const Home = () => {
     setWord(wordQueue.getPreviousWord());
   };
 
+  if (wordQueue && wordQueue.getLength() <= wordQueue.queuePointer) {
+    return (
+      <div className="main-game__end-game">
+        <StatisticShort statistics={statistics !== null ? statistics : undefined} />
+        <Button
+          id="restartMainGame"
+          name="restartMainGame"
+          label="Restart"
+          buttonClassName="main-game__end-game_button"
+          clickHandler={wordQueue.reset}
+        />
+      </div>
+    );
+  }
   if (!word) {
     return (<div>Loading...</div>);
   }

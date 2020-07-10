@@ -27,16 +27,7 @@ const Statistic = () => {
   }, [statistics]);
 
   return (
-    <>
-      <Link to={`${url}/${nextStatistics}`}>
-        {nextStatistics}
-        {/* <span
-          name="chevron right"
-          size="huge"
-          className="statistic__right-arrow"
-          onClick={() => { setStatisticType(nextStatistics); }}
-        /> */}
-      </Link>
+    <div className="statistic">
       <Switch>
         <Route exact path={`${path}`}>
           <StatisticLong statistics={statistics !== null ? statistics : undefined} />
@@ -48,7 +39,16 @@ const Statistic = () => {
           <StatisticShort statistics={statistics !== null ? statistics : undefined} />
         </Route>
       </Switch>
-    </>
+      <Link
+        to={`${url}/${nextStatistics}`}
+        className={`statistic__${nextStatistics === 'long' ? 'right' : 'left'}-arrow`}
+      >
+        <Icon
+          name={`chevron ${nextStatistics === 'long' ? 'right' : 'left'}`}
+          size="huge"
+        />
+      </Link>
+    </div>
   );
 };
 

@@ -16,4 +16,8 @@
       color: $hover-color;
     }
   }
+
+  &__left-arrow {
+    order: -1;
+  }
 }
