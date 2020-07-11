@@ -11,7 +11,7 @@ class StatisticsModel {
     const { data, response } = await makeRequest('GET', 'users/%%userId%%/statistics');
     if (!response.ok) {
       if (response.status === 404) {
-        const putData = { learnedWords: 0, optional: {} };
+        const putData = { learnedWords: 0, optional: { todayStatistics: {}, todayQueue: {}, longStatistics: {} } };
         const { response: postResponse } = await makeRequest(
           'PUT',
           'users/%%userId%%/statistics',
@@ -34,6 +34,9 @@ class StatisticsModel {
       }
     } else {
       this.statistics = data;
+      if (!this.statistics.optional) {
+        this.statistics.optional = {};
+      }
       if (!this.statistics.optional.todayStatistics) {
         this.resetTodayStatistics();
       }

@@ -111,9 +111,13 @@ export default class WordModel {
   queryUserWords = async () => {
     const maxNewWords = settingsController.getSettingByName(settingsNames.sections.education, settingsNames.items.newWords);
     const maxWords = settingsController.getSettingByName(settingsNames.sections.education, settingsNames.items.allWords);
+    let maxCount = maxWords - maxNewWords * 5;
+    if (maxCount < 0) {
+      maxCount = 0;
+    }
     const todaySeconds = getTodaySeconds();
     const params = {
-      wordsPerPage: maxWords - maxNewWords * 5,
+      wordsPerPage: maxCount,
       filter: JSON.stringify({
         $and: [{ 'userWord.optional.nextRepetition': { $lte: todaySeconds } },
           {

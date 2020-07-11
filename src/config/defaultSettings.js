@@ -33,11 +33,11 @@ const appDefaultSettings = [
     settingsArr: [
       {
         name: 'New words per day',
-        value: 5,
+        value: 4,
       },
       {
         name: 'Words cards per day',
-        value: 10,
+        value: 25,
       },
     ],
   },
