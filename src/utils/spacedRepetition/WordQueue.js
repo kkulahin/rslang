@@ -1,13 +1,18 @@
 import Word from './Word';
 import WordDefinition from './WordDefinition';
+import statisticsController from '../../controllers/StatisticsController';
+import { getTodaySeconds } from '../time';
+import wordController from '../../controllers/WordConrtoller';
+import settingsController from '../../controllers/SettingsController';
+import settingsNames from '../../constants/settingsNames';
+import wordQueueSubject from '../observers/WordQueueSubject';
 
 export default class WordQueue {
-  constructor(settings) {
+  constructor() {
     /** @type {[Word]} */
     this.words = [];
     this.queue = [];
     this.repeatCount = 0;
-    this.settings = settings;
     this.queuePointer = 0;
     this.lastAnswered = -1;
   }
@@ -20,8 +25,9 @@ export default class WordQueue {
    * @param {[{}]} userWords array of flat words (if not specified words will be treted as today words)
    */
   makeQueue = (newWords, userWords) => {
-    if (newWords.length > this.settings.MAX_NEW_WORDS) {
-      newWords.splice(this.settings.MAX_NEW_WORDS, newWords.length - this.settings.MAX_NEW_WORDS);
+    const maxNewWords = settingsController.getSettingByName(settingsNames.sections.education, settingsNames.items.newWords);
+    if (newWords.length > maxNewWords) {
+      newWords.splice(maxNewWords, newWords.length - maxNewWords);
     }
     newWords.forEach((word) => this.words.push(new Word(this, new WordDefinition(word), {})));
     const pontentialWords = [];
@@ -33,8 +39,8 @@ export default class WordQueue {
     WordQueue.fillQueue(pontentialWords, potentialQueue);
     WordQueue.fillQueue(this.words, this.queue);
     this.filterUserWordsByCount(potentialQueue);
-    console.log(this.words);
-    this.words.forEach((w) => w.shiftMistakes());
+    // do we need this?
+    // this.words.forEach((w) => w.shiftMistakes());
   }
 
   /**
@@ -45,14 +51,14 @@ export default class WordQueue {
    * @param {[{}]} words array of flat words ( new or already prepared for this day)
    */
   usePredefinedQueue = (queueSettings, words) => {
-    this.words = words;
+    this.words = words.map((w) => new Word(this, new WordDefinition(w),
+      w.userWord && w.userWord.optional ? w.userWord.optional : {}));
     // TODO: uncomment 2 lines
     this.queuePointer = queueSettings.pointer;
     this.lastAnswered = queueSettings.pointer - 1;
     queueSettings.queue.forEach((qWord) => {
-      const [queueWord] = words.filter((word) => qWord.w === word.word);
-      const wordConfigs = queueWord.userWord && queueWord.userWord.optional ? queueWord.userWord.optional : {};
-      this.queue.push({ word: new Word(this, new WordDefinition(queueWord), wordConfigs), isEducation: qWord.isEd });
+      const [word] = this.words.filter((w) => qWord.w === w.definition.word);
+      this.queue.push({ word, isEducation: qWord.isEd });
     });
   };
 
@@ -69,7 +75,9 @@ export default class WordQueue {
   }
 
   filterUserWordsByCount = (potentialQueue) => {
-    const maxCount = this.settings.MAX_WORDS - this.settings.MAX_NEW_WORDS;
+    const maxNewWords = settingsController.getSettingByName(settingsNames.sections.education, settingsNames.items.newWords);
+    const maxWords = settingsController.getSettingByName(settingsNames.sections.education, settingsNames.items.allWords);
+    const maxCount = maxWords - maxNewWords;
     const userWords = [];
     potentialQueue.sort(WordQueue.queueSort);
     potentialQueue.forEach((queueWord) => {
@@ -84,12 +92,23 @@ export default class WordQueue {
     this.queue.sort(WordQueue.queueSort);
   }
 
+  /**
+   * @returns {{isEducation: boolean, word: Word}} queued word
+   */
   getCurrentWord = () => this.queue[this.queuePointer];
 
   setWordMistaken = () => {
-    const qWord = this.queue[this.queuePointer];
+    const qWord = this.getCurrentWord();
+    const { word, isEducation } = qWord;
     this.queue.push(qWord);
-    qWord.word.setMistake();
+    word.setMistake();
+    const isNew = word.isNew();
+    word.downgradeDifficulty();
+    if (isEducation) {
+      word.upgradePhase();
+    }
+    this.updateStatistics(false, isNew);
+    this.updateWord(isNew);
   }
 
   setAgain = () => {
@@ -97,7 +116,26 @@ export default class WordQueue {
     this.queue.push(qWord);
   };
 
-  setWordAnswered = () => this.queue[this.queuePointer].word.setTime();
+  setWordAnswered = () => {
+    const { word, isEducation } = this.getCurrentWord();
+    word.setTime();
+    const isNew = word.isNew();
+    if (!isEducation || isNew) {
+      word.upgradeDifficulty();
+    }
+    if (isEducation) {
+      word.upgradePhase();
+    }
+    this.updateStatistics(true, isNew);
+    this.updateWord(isNew);
+  }
+
+  /**
+   * @param {boolean} value
+   */
+  setWordDeleted = (value) => {
+    this.getCurrentWord().word.isDeleted = value;
+  }
 
   changeWord = () => {
     this.queuePointer += 1;
@@ -113,7 +151,7 @@ export default class WordQueue {
     if (this.hasPreviousWord()) {
       this.queuePointer -= 1;
     }
-    return this.queue[this.queuePointer];
+    return this.getCurrentWord();
   }
 
   isCurrentWordAnswered = () => this.lastAnswered >= this.queuePointer;
@@ -124,7 +162,14 @@ export default class WordQueue {
     if (repetitionTime) {
       queue.push({ word, isEducation: false, nextTime: repetitionTime });
     }
-    educationTimes.forEach((time) => queue.push({ word, isEducation: true, nextTime: time }));
+    educationTimes.forEach((time) => {
+      if (!repetitionTime) {
+        queue.push({ word, isEducation: true, nextTime: time - 1000 * Math.random(20) });
+        queue.push({ word, isEducation: false, nextTime: time + 1000 * Math.random(20) });
+      } else {
+        queue.push({ word, isEducation: true, nextTime: time });
+      }
+    });
   }
 
   getTodayWords = () => this.words.map((word) => word.definition.wordId);
@@ -137,14 +182,35 @@ export default class WordQueue {
    * @returns {{queue:[{w:string,isEd:boolean}],pointer:number,date:number}} queue
    */
   getQueueToSave= () => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const seconds = getTodaySeconds();
     return {
       queue: this.queue.map((qWord) => ({ w: qWord.word.definition.word, isEd: qWord.isEducation })),
-      pointer: this.queuePointer,
-      date: Math.ceil(today.getTime() / 1000),
+      pointer: this.queuePointer + 1,
+      date: seconds,
     };
   };
+
+  /**
+   * @param {boolean} isAnswered
+   */
+  updateStatistics = async (isAnswered, isNew) => {
+    const { word, isEducation } = this.getCurrentWord();
+    const isLast = !this.queue.some((qWord, index) => qWord.word === word && index > this.queuePointer);
+    return statisticsController.updateAll(isEducation, isAnswered, isNew, isLast, this.getQueueToSave());
+  }
+
+  updateWord = async (isNew) => {
+    const { word } = this.getCurrentWord();
+    return wordController.updateWord(word, isNew);
+  }
+
+  reset = async () => {
+    console.log('do reset');
+    this.queuePointer = 0;
+    this.lastAnswered = -1;
+    await statisticsController.resetQueue(this.getQueueToSave());
+    wordQueueSubject.notify(this);
+  }
 
   getWords= () => this.words;
 }

@@ -12,10 +12,12 @@ const Button = (props) => {
     label,
     clickHandler,
     iconName,
+    dataTitle,
+    dataPlacement,
   } = props;
 
   const icon = (iconName)
-    ? icon = <Icon name={iconName} />
+    ? <Icon name={iconName} />
     : null;
 
   const className = (isActive)
@@ -26,6 +28,8 @@ const Button = (props) => {
     <button
       type="button"
       id={id}
+      data-title={dataTitle}
+      data-placement={dataPlacement}
       disabled={isDisabled}
       className={className}
       onClick={(evt) => clickHandler(evt.target.id)}
@@ -42,6 +46,8 @@ Button.defaultProps = {
   isActive: false,
   iconName: '',
   label: null,
+  dataTitle: null,
+  dataPlacement: null,
 };
 
 Button.propTypes = {
@@ -51,6 +57,8 @@ Button.propTypes = {
   label: PropTypes.string,
   clickHandler: PropTypes.func.isRequired,
   iconName: PropTypes.string,
+  dataTitle: PropTypes.string,
+  dataPlacement: PropTypes.string,
 };
 
 export default Button;

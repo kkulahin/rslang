@@ -9,3 +9,7 @@
 | Refactor app styles | 21.06.2020 | 22.06.2020 | 8 h |
 | Create greeting wrapper component | 22.06.2020 | 22.06.2020 | 1 h |
 | Create settings page | 18.06.2020 | 24.06.2020 | 30 h |
+| Fix component styles and props | 24.06.2020 | 26.06.2020 | 8 h |
+| Bind 2 inputs (number-pickers from setting page) together | 27.06.2020 | 27.07.2020 | 3 h |
+| Add loading and saving user settings from\to server | 27.06.2020 | 30.07.2020 | 15 h |
+| Create Sprint game | 25.06.2020 | 03.07.2020 | 58 h |

@@ -2,11 +2,11 @@
 
 .statistic {
   position: relative;
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
 
   &__left-arrow,
   &__right-arrow {
@@ -15,5 +15,9 @@
     &:hover {
       color: $hover-color;
     }
+  }
+
+  &__left-arrow {
+    order: -1;
   }
 }

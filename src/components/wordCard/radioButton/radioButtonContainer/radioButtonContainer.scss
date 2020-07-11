@@ -1,20 +1,32 @@
+@import '../../../../styles/mixin.scss';
+
 @import '../../../../styles/variables.scss';
+
+$box-shadow: 5px 5px 15px $box-shadow-first-color, 
+            -5px -5px 15px $box-shadow-second-color;
+$padding: 0.5rem 0.5rem;
+$margin: 0 0 0 1rem;
 
 .card-unit {
 
   .card-radio-button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+
+    @include flex($flex-direction: row);
+
     height: 100%;
-    margin-right: auto;
-    padding: 5px 5px;
+    margin: $margin;
+    padding: $padding;
+
     background-color: $background-color;
+
     border-radius: 125px;
-    box-shadow: $container-box-shadow;
-  
+    box-shadow: $box-shadow;
+
     user-select: none;
-  
+
+    animation: fadeIn 0.4s linear;
+
     &--disabled {
       pointer-events: none;
       opacity: 0.25;
@@ -27,36 +39,71 @@
     }
   }
 
+  @keyframes fadeIn {
+  
+    0% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+
   @-moz-keyframes cycle {
+
     35% {transform: rotate(0) translate(0, 0);}
+
     40% {transform: rotate(5deg) translate(0, -2px);}
+
     45% {transform: rotate(-3deg) translate(0, -2px);}
+
     50% {transform: rotate(5deg) translate(0, -2px);}
+
     55% {transform: rotate(-3deg) translate(0, -2px);}
+
     60% {transform: rotate(5deg) translate(0, -2px);}
+
     65% {transform: rotate(-3deg) translate(0, -2px);}
+
     70% {transform: rotate(0) translate(0, 0);}
   }
   
   @-webkit-keyframes cycle {
+
     35% {transform: rotate(0) translate(0, 0);}
+
     40% {transform: rotate(5deg) translate(0, -2px);}
+
     45% {transform: rotate(-3deg) translate(0, -2px);}
+
     50% {transform: rotate(5deg) translate(0, -2px);}
+
     55% {transform: rotate(-3deg) translate(0, -2px);}
+
     60% {transform: rotate(5deg) translate(0, -2px);}
+
     65% {transform: rotate(-3deg) translate(0, -2px);}
+
     70% {transform: rotate(0) translate(0, 0);}
   }
   
   @keyframes cycle {
+
     35% {transform: rotate(0) translate(0, 0);}
+
     40% {transform: rotate(5deg) translate(0, -2px);}
+
     45% {transform: rotate(-3deg) translate(0, -2px);}
+
     50% {transform: rotate(5deg) translate(0, -2px);}
+
     55% {transform: rotate(-3deg) translate(0, -2px);}
+
     60% {transform: rotate(5deg) translate(0, -2px);}
+
     65% {transform: rotate(-3deg) translate(0, -2px);}
+
     70% {transform: rotate(0) translate(0, 0);}
   }
 }

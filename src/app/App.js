@@ -1,11 +1,11 @@
 // eslint-disable-next-line linebreak-style
 import React, { useState, useEffect } from 'react';
 import {
-  BrowserRouter as Router, Route, Switch,
+  BrowserRouter as Router, Switch, Route,
 } from 'react-router-dom';
 
 import History from '../utils/history';
-import Home from '../pages/Home';
+import Home from '../pages/homePage/Home';
 import NotFound from '../pages/NotFound';
 import LoginPage from '../pages/loginPage/LoginPage';
 import Logout from '../pages/logoutPage/Logout';
@@ -19,67 +19,31 @@ import Settings from '../pages/settingsPage/Settings';
 
 import Header from '../components/header/Header';
 import GreetingWrapper from '../components/greetingWrapper/GreetingWrapper';
-import WordController from '../utils/spacedRepetition/WordConrtoller';
-
-import appDefaultSettings from '../config/defaultSettings';
-import { getConfig, saveConfig } from '../controllers/appConfig/appConfig';
-import settingQueueSubject from '../utils/observers/SettingQueueSubject';
-
 import './App.scss';
+import PrivateRoute from '../components/route/PrivateRoute';
 
-const App = () => {
-  const wordController = new WordController();
-  wordController.init();
-
-  const [settings, setSettings] = useState(appDefaultSettings);
-
-  useEffect(() => {
-    settingQueueSubject.subscribe(setSettings);
-
-    getConfig();
-
-    return () => settingQueueSubject.unsubscribe(setSettings);
-  }, []);
-
-  useEffect(() => {
-    if (settings !== appDefaultSettings) {
-      saveConfig(settings);
-    }
-  }, [settings]);
-
-  const [cardSettings, educationSettings, buttonSettings] = settings;
-  const [wordsCount, cardsCount] = educationSettings.settingsArr;
-
-  return (
-    <Router history={History}>
-      <div className="app-wrapper">
-        <Header />
-        <div className="app-main">
-          <GreetingWrapper
-            cardsCount={cardsCount.value}
-          />
-          <Switch>
-            <Route exact path="/" render={() => <Home wordController={wordController} />} />
-            <Route path="/signin" component={LoginPage} />
-            <Route path="/signup" component={SignupPage} />
-            <Route path="/logout" component={Logout} />
-            <Route path="/dictionary" component={Dictionary} />
-            <Route path="/statistic" component={Statistic} />
-            <Route path="/settings">
-              <Settings
-                settings={settings}
-                handleAppChange={(newSettings) => setSettings(newSettings)}
-              />
-            </Route>
-            <Route path="/promo" component={Promo} />
-            <Route path="/about" component={About} />
-            <Route path="/games" component={GamesPage} />
-            <Route component={NotFound} />
-          </Switch>
-        </div>
+const App = () => (
+  <Router history={History}>
+    <div className="app-wrapper">
+      <Header />
+      <div className="app-main">
+        <GreetingWrapper />
+        <Switch>
+          <PrivateRoute exact path="/" component={Home} />
+          <Route path="/signin" component={LoginPage} />
+          <Route path="/signup" component={SignupPage} />
+          <Route path="/logout" component={Logout} />
+          <PrivateRoute path="/dictionary" component={Dictionary} />
+          <PrivateRoute path="/statistic" component={Statistic} />
+          <PrivateRoute path="/settings" component={Settings} />
+          <PrivateRoute path="/promo" component={Promo} />
+          <PrivateRoute path="/about" component={About} />
+          <PrivateRoute path="/games" component={GamesPage} />
+          <PrivateRoute component={NotFound} />
+        </Switch>
       </div>
-    </Router>
-  );
-};
+    </div>
+  </Router>
+);
 
 export default App;
