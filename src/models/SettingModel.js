@@ -1,6 +1,6 @@
 import { SchoolURL } from '../config/default';
 import appDefaultSettings from '../config/defaultSettings';
-import responseFromServer from '../utils/responseFromServer';
+import responseFromServer, { makeRequest } from '../utils/responseFromServer';
 import { getCookie } from '../utils/cookie';
 import settingSubject from '../utils/observers/SettingSubject';
 
@@ -22,26 +22,43 @@ class SettingModel {
   getConfig = () => this.settings;
 
   getConfigFromServer = async () => {
-    let configFromServer;
-
-    const userStr = getCookie('auth');
-
-    if (userStr && userStr !== '') {
-      const user = JSON.parse(userStr);
-      try {
-        const response = await responseFromServer(
-          `${SchoolURL}/users/${user.userId}/settings`,
-          user.token,
-          SettingModel.configReceivedMsg,
-          'GET',
+    const { data, response } = await makeRequest('GET', 'users/%%userId%%/settings');
+    if (!response.ok) {
+      if (response.status === 404) {
+        const [cardSettings, educationSettings, buttonSettings] = appDefaultSettings;
+        const [, cardsCount] = educationSettings.settingsArr;
+        const putData = {
+          wordsPerDay: cardsCount.value,
+          optional: {
+            cardSettings,
+            educationSettings,
+            buttonSettings,
+          },
+        };
+        const { response: postResponse } = await makeRequest(
+          'PUT',
+          'users/%%userId%%/settings',
+          putData,
         );
-        configFromServer = Object.values(response.data.optional);
-      } catch {
-        configFromServer = null;
+        if (!postResponse.ok) {
+          if (!postResponse.status === 401) {
+            throw new Error(
+              `POST settings failed with ${postResponse.status} ${postResponse.statusText}`,
+            );
+          }
+        } else {
+          this.settings = Object.values(putData.optional);
+          settingSubject.notify(this.settings);
+        }
+      } else if (!response.status === 401) {
+        throw new Error(
+          `Get Statisctics failed with ${response.status} ${response.statusText}`,
+        );
       }
+    } else {
+      this.settings = Object.values(data.optional);
+      settingSubject.notify(this.settings);
     }
-    this.settings = configFromServer || appDefaultSettings;
-    settingSubject.notify(this.settings);
   };
 
   getCardsCount = () => {
@@ -53,15 +70,11 @@ class SettingModel {
     return 0;
   }
 
-  saveConfig = (config) => {
-    if (config === appDefaultSettings) {
-      return;
-    }
-    settingSubject.notify(config);
+  saveConfig = async (config) => {
     this.settings = config;
     const [cardSettings, educationSettings, buttonSettings] = config;
     const [, cardsCount] = educationSettings.settingsArr;
-    const data = {
+    const putData = {
       wordsPerDay: cardsCount.value,
       optional: {
         cardSettings,
@@ -70,20 +83,11 @@ class SettingModel {
       },
     };
 
-    const user = JSON.parse(getCookie('auth'));
-
-    if (user) {
-      try {
-        responseFromServer(
-          `${SchoolURL}/users/${user.userId}/settings`,
-          user.token,
-          SettingModel.configSavedMsg,
-          'PUT',
-          data,
-        );
-      } catch {
-        console.log('No response from the server');
-      }
+    const { data, response } = await makeRequest('PUT', 'users/%%userId%%/settings', putData);
+    if (!response.ok) {
+      console.log(response, data);
+    } else {
+      settingSubject.notify(config);
     }
   };
 

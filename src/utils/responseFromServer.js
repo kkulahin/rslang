@@ -174,7 +174,13 @@ const retryMakeRequest = async (method, path, token, body, params = {}) => {
       throw new Error('Retry');
     }
   }
-  const data = await response.json();
+  let data = {};
+  try {
+    data.text = await response.text();
+    data = JSON.parse(data.text);
+  } catch (e) {
+    console.debug(e);
+  }
   return { data, response };
 };
 
@@ -197,7 +203,6 @@ export const makeRequest = async (method, pathTemplate, body, params = {}) => {
         isAuthError = false;
         // eslint-disable-next-line no-await-in-loop
         const isLoggedIn = await AuthService.tryLogIn();
-        console.log(isLoggedIn);
         if (!isLoggedIn) {
           deleteCookie('login');
           signinSubject.notify(false);
