@@ -9,9 +9,11 @@ import BlockWithShadow from '../../components/containerWithShadow/ContainerWithS
 import './GamesPage.scss';
 
 import SpeakItPic from '../../assets/image/speakIt.png';
+import AudioCallPic from '../../assets/image/audiocall.png';
 
 import SpeakIt from './games/speakIt/SpeakIt';
 import Sprint from './games/sprint/Sprint';
+import AudioCall from './games/audiocall/Audiocall';
 import Savanna from './games/savanna/Savanna';
 
 const Games = () => {
@@ -34,6 +36,10 @@ const Games = () => {
     sprint: {
       link: 'sprint',
       pic: SpeakItPic,
+    },
+    audiocall: {
+      link: 'audiocall',
+      pic: AudioCallPic,
     },
     savanna: {
       link: 'savanna',
@@ -85,6 +91,9 @@ const Games = () => {
         </Route>
         <Route path={`${path}/sprint`}>
           <Sprint />
+        </Route>
+        <Route path={`${path}/audiocall`}>
+          <AudioCall />
         </Route>
         <Route path={`${path}/savanna`}>
           <Savanna />
