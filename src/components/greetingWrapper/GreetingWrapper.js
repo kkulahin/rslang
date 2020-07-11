@@ -3,14 +3,13 @@ import { useLocation } from 'react-router-dom';
 import Greeting from '../greeting/Greeting';
 import ContinueTrainingBlock from '../continueTrainingBlock/ContinueTrainingBlock';
 import './GreetingWrapper.scss';
-import settingsController from '../../controllers/SettingsController';
 import statisticsSubject from '../../utils/observers/StatisticsSubject';
 import statisticsController from '../../controllers/StatisticsController';
 import wordQueueSubject from '../../utils/observers/WordQueueSubject';
 import wordController from '../../controllers/WordConrtoller';
 
 const GreetingWrapper = () => {
-  const [cardsCount, setCardCount] = useState(settingsController.getCardsCount());
+  const [cardsCount, setCardCount] = useState(wordController.getWordsCount());
   const [passedCount, setPassedCount] = useState(statisticsController.getPassedCount());
 
   const updateCardCount = () => {
@@ -42,8 +41,8 @@ const GreetingWrapper = () => {
         <div className="greeting-wrapper">
           <Greeting />
           <ContinueTrainingBlock
-            completedWordsCount={passedCount}
-            cardsCount={cardsCount}
+            completedWordsCount={passedCount === null || cardsCount === null ? 0 : passedCount}
+            cardsCount={passedCount === null || cardsCount === null ? 0 : cardsCount}
             isFullState={!isHomePage}
           />
         </div>

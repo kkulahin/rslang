@@ -41,7 +41,7 @@ const CardContent = (props) => {
       id="deleteWord"
       dataTitle="Delete the word from training"
       dataPlacement="top"
-      clickHandler={(id) => onCardBtnClick(id)}
+      clickHandler={(id) => onCardBtnClick(id, true)}
     />
   );
 
