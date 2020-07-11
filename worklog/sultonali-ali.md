@@ -6,3 +6,4 @@
 | Create Dictionary basic layout | 20.06.2020 | 21.06.2020 | 1 day |
 | Create Promo page | 21.06.2020 | 22.06.2020 | 1 day |
 | Create Statistic page | 22.06.2020 | 24.06.2020 | 36 h |
+| Create audiocall game | 01.07.2020 | 11.07.2020 | 10 d |
