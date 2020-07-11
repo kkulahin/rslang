@@ -6,3 +6,6 @@
 | create team info and add style for about page | 24.06.2020 | 24.06.2020 | 4.5 h |
 | refactor style for about page, add responsive| 25.06.2020 | 26.06.2020 | 4 h |
 | made changes according to pull request| 27.06.2020 | 30.06.2020 | 30 h |
+| change the path icon and add field 'id' for button gitHub | 01.07.2020 | 01.07.2020 | 5.5 h |
+| create notification component | 06.07.2020 | 10.07.2020 | 34 h |
+| create home page spinner | 10.07.2020 | 11.07.2020 | 7 h |

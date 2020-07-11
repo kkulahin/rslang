@@ -70,7 +70,14 @@ const Home = () => {
     );
   }
   if (!word) {
-    return (<div>Loading...</div>);
+    return (
+      <div className="spinner">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    );
   }
   return (
     <div>
