@@ -137,6 +137,7 @@ const AudioComponent = (props) => {
         dataTitle="Listen to the word"
         dataPlacement="top"
         isDisabled={!AudioPlayBtnEnabled}
+        iconName="play circle"
         clickHandler={handleAudioPlayBtnClick}
       />
       {audioData.loading && <Spinner />}

@@ -56,4 +56,8 @@ $box-shadow-inset: inset 5px 5px 15px $box-shadow-first-color,
     pointer-events: none;
     opacity: 0.25;
   }
+
+  i.icon {
+    margin: 0;
+  }
 }
