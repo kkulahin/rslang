@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import MainWindow from './mainWindow/MainWindow';
 import StatisticWindow from './statisticWindow/StatisticWindow';
+import { urlToAssets as baseUrl } from '../../../../constants/urls';
 import './Audiocall.scss';
+import GreetingWindow from './greetingWindow/GreetingWindow';
 
 const AudioCall = () => {
-  const baseUrl = 'https://raw.githubusercontent.com/irinainina/rslang-data/master/';
+  // const baseUrl = 'https://raw.githubusercontent.com/irinainina/rslang-data/master/';
   const [showWindows, setShowWindows] = useState({
-    main: true,
+    greeting: true,
+    main: false,
     statistic: false,
   });
   const [result, setResult] = useState(null);
@@ -14,6 +17,22 @@ const AudioCall = () => {
 
   return (
     <div className="audiocall">
+      {
+        showWindows.greeting && (
+          <GreetingWindow
+            onComplete={
+              (group, page) => {
+                setDegree(30 * group + page);
+                setShowWindows({
+                  greeting: false,
+                  main: true,
+                  statistic: false,
+                });
+              }
+            }
+          />
+        )
+      }
       {
         showWindows.main && (
           <MainWindow
@@ -23,6 +42,7 @@ const AudioCall = () => {
               (resultInner) => {
                 setResult(resultInner);
                 setShowWindows({
+                  greeting: false,
                   main: false,
                   statistic: true,
                 });
@@ -39,6 +59,7 @@ const AudioCall = () => {
             onClickButtonContinueGame={
               () => {
                 setShowWindows({
+                  greeting: false,
                   main: true,
                   statistic: false,
                 });

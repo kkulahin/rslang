@@ -15,6 +15,21 @@ const VersionList = ({ items, onVersionClick, correctAnswer }) => {
     setCorrect(false);
   }, [items]);
 
+  useEffect(() => {
+    window.onkeydown = (evt) => {
+      if (evt.key === '1' || evt.key === '2' || evt.key === '3' || evt.key === '4' || evt.key === '5') {
+        let isCorrect = false;
+        setCheckedItem(items[evt.key - 1]);
+        setChecked(true);
+        if (items[evt.key - 1] === correctAnswer) {
+          setCorrect(true);
+          isCorrect = true;
+        }
+        onVersionClick(isCorrect);
+      }
+    };
+  }, [checkedItem]);
+
   const buttons = items.map((item, idx) => {
     let iconName = '';
     let isActive = false;
@@ -33,7 +48,7 @@ const VersionList = ({ items, onVersionClick, correctAnswer }) => {
         name="check"
         isActive={isActive}
         isDisabled={checked}
-        label={item}
+        label={`${idx + 1}. ${item}`}
         iconName={iconName}
         clickHandler={() => {
           let isCorrect = false;

@@ -49,8 +49,10 @@ const getWordVersions = async (wordObj) => {
           const needWordsCount = VERSIONSCOUNT - (filteredMeanings.length + 1);
           if (needWordsCount > 0) {
             versions = [...filteredMeanings, ...d[0].alternativeTranslations.splice(0, needWordsCount)];
-          } else {
+          } else if (needWordsCount === 0) {
             versions = filteredMeanings;
+          } else {
+            versions = [...filteredMeanings.splice(0, VERSIONSCOUNT - 1)];
           }
           return getRenderData([wordObj, ...versions]);
         });

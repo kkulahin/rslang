@@ -6,8 +6,12 @@ import Image from '../image/Image';
 import Voice from '../voice/Voice';
 import Button from '../../../../../components/button/Button';
 import { getWords } from '../../../../../controllers/words/words';
+import { getAllUserWords } from '../../../../../controllers/words/userWords';
 import LinearProgressBar from '../../../../../components/linearProgressBar/LinearProgressBar';
 import getWordVersions from './MainWindowFunctions';
+import { getCookie } from '../../../../../utils/cookie';
+
+const WORDCOUNTPERROUND = 20;
 
 const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
   const [datas, setDatas] = useState(null);
@@ -32,6 +36,41 @@ const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
     words = stepData.words;
     versions = stepData.versions;
   }
+
+  // const auth = JSON.parse(getCookie('auth'));
+  // console.log(auth);
+  // getAllUserWords(auth.token, auth.userId)
+  //   .then((res) => console.log(res));
+
+  useEffect(() => {
+    window.onkeydown = (evt) => {
+      if ((evt.code === 'ArrowRight' || evt.code === 'Enter') && nextButtonAvailable) {
+        if (level < WORDCOUNTPERROUND - 1) {
+          cardRef.current.classList.add('audiocall__card--animated');
+          setTimeout(() => {
+            cardRef.current.classList.remove('audiocall__card--animated');
+          }, 950);
+
+          setTimeout(() => {
+            setLevel((s) => s + 1);
+            setShowCardLoading(true);
+            setNextButtonAvailable(false);
+            setShowImage(false);
+          }, 950);
+        }
+        if (level >= WORDCOUNTPERROUND - 1) {
+          cardRef.current.classList.add('audiocall__card--animated');
+          setTimeout(() => {
+            cardRef.current.classList.remove('audiocall__card--animated');
+            onEndOfGame({
+              gameStat: answers,
+              gameWords,
+            });
+          }, 950);
+        }
+      }
+    };
+  }, [nextButtonAvailable]);
 
   useEffect(() => {
     if (datas) {
@@ -128,7 +167,7 @@ const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
       <div className="audiocall__main-header">
         <div className="audiocall__main-progress">
           { 'Step: ' }
-          <LinearProgressBar value={level + 1} size={10} />
+          <LinearProgressBar value={level + 1} size={WORDCOUNTPERROUND} />
         </div>
         <div className="audiocall__main-progress">
           { `Level :  ${degree + 1} / 180` }
@@ -143,20 +182,20 @@ const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
           label="Next"
           isDisabled={!nextButtonAvailable}
           clickHandler={() => {
-            if (level < 9) {
+            if (level < WORDCOUNTPERROUND - 1) {
               cardRef.current.classList.add('audiocall__card--animated');
               setTimeout(() => {
                 cardRef.current.classList.remove('audiocall__card--animated');
-              }, 1050);
+              }, 950);
 
               setTimeout(() => {
-                setLevel(level + 1);
+                setLevel((s) => s + 1);
                 setShowCardLoading(true);
                 setNextButtonAvailable(false);
                 setShowImage(false);
               }, 950);
             }
-            if (level >= 9) {
+            if (level >= WORDCOUNTPERROUND - 1) {
               cardRef.current.classList.add('audiocall__card--animated');
               setTimeout(() => {
                 cardRef.current.classList.remove('audiocall__card--animated');
@@ -172,7 +211,10 @@ const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
     </>
   );
   return (
-    <div className="audiocall__main" ref={mainRef}>
+    <div
+      className="audiocall__main"
+      ref={mainRef}
+    >
       {
         showLoading
           ? (
