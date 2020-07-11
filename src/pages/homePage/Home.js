@@ -32,9 +32,11 @@ const Home = () => {
   wordController.init();
   const [wordQueue, setWordQueue] = useState(wordController.getQueue());
   const [word, setWord] = useState(wordQueue ? wordQueue.getCurrentWord() : null);
+  const [wordDifficulty, setWordDifficulty] = useState(wordQueue ? wordQueue.getCurrentWord().word.getDifficulty() : null);
   const updateWordQueue = (wQueue) => {
     setWordQueue(wQueue);
     setWord(wQueue.getCurrentWord());
+    setWordDifficulty(wQueue.getCurrentWord().word.getDifficulty());
   };
   const [statistics, setStatistics] = useState(statisticsController.get());
 
@@ -79,6 +81,7 @@ const Home = () => {
       </div>
     );
   }
+  console.log(word.word.difficulty);
   return (
     <div>
       <WordCard
@@ -87,12 +90,12 @@ const Home = () => {
         helpSettings={initHelpSettings}
         settings={initSettings}
         onAgainBtnClick={wordQueue.setAgain}
-        onHardBtnClick={() => console.log('------ hard btn click ------')}
-        onComplexityBtnClick={(id) => console.log(`------ complexity btn click ${id} ------`)}
+        onComplexityBtnClick={(id) => { wordQueue.setWordDifficulty(id); setWordDifficulty(word.word.getDifficulty()); }}
         onDeleteBtnClick={wordQueue.setWordDeleted}
         onNextBtnClick={handleNextBtnClick}
         onPrevBtnClick={handlePrevBtnClick}
         isEducation={word.isEducation}
+        wordDifficulty={word.word.getDifficulty()}
         isAnswered={wordQueue.isCurrentWordAnswered()}
         onWordAnswered={wordQueue.setWordAnswered}
         onWordMistaken={wordQueue.setWordMistaken}
