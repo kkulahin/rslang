@@ -17,3 +17,5 @@
 | Add responsive for nav panel, settings page, about team page | 07.07.2020 | 07.07.2020 | 9 h |
 | Add responsive for promo, statistic, dictionary pages | 08.07.2020 | 09.07.2020 | 8 h |
 | Refactor login page styles | 10.07.2020 | 10.07.2020 | 1 h |
+| Add responsive for games page | 11.07.2020 | 11.07.2020 | 3 h |
+| Use stylefix for all styles | 11.07.2020 | 11.07.2020 | 5 min |

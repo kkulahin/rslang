@@ -6,6 +6,7 @@ $margin: 10px;
 $padding: $margin;
 
 .games {
+
   &-wrapper {
     width: 100%;
   }
@@ -22,16 +23,16 @@ $padding: $margin;
   }
 
   &-cards {
-    width: 100%;
     flex-wrap: wrap;
+    width: 100%;
 
     @include flex(row, center, space-around);
 
     .column {
-      width: 45%;
-      margin: $margin;
       z-index: 2;
+      width: 45%;
       min-width: 300px;
+      margin: $margin;
     }
 
     .container-with-shadow {
@@ -55,6 +56,7 @@ $padding: $margin;
 }
 
 @media (max-width: 991px) {
+
   .games-cards .column {
     width: 75%;
   }
