@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Word from '../../../utils/spacedRepetition/Word';
 
@@ -31,19 +31,41 @@ const getFormattedWordOnError = (errorWord, word) => {
 
 const WordInput = ({
   word: { definition: { word } },
-  onInputEnter, onInputFocus, onInputChange, isWordInput, inputRef, value, isCorrect, isPrevWord,
+  onInputEnter,
+  onInputFocus,
+  onInputChange,
+  isWordInput,
+  value,
+  isCorrect,
+  isPrevWord,
+  isEducation,
+  isInputInFocus,
 }) => {
+  const inputRef = useRef();
+
+  useEffect(() => {
+    if (isInputInFocus.isFocus && inputRef.current) {
+      inputRef.current.focus();
+    } else if (inputRef.current) {
+      inputRef.current.blur();
+    }
+  }, [isInputInFocus]);
+
   const currentValue = isWordInput
     ? inputRef.current.value
     : '';
 
   let classes = 'word__size';
-  if ((isWordInput && isCorrect) || isPrevWord) {
+  if ((isWordInput && isCorrect) || isPrevWord || isEducation) {
     classes += ' word__size--correct';
   }
 
   const marked = (isWordInput && !isCorrect)
-    ? <span className="word__size word__size--visible">{getFormattedWordOnError(currentValue, word)}</span>
+    ? (
+      <span className="word__size word__size--visible">
+        {getFormattedWordOnError(currentValue, word)}
+      </span>
+    )
     : <span className={classes}>{word}</span>;
 
   const element = (
@@ -54,8 +76,7 @@ const WordInput = ({
           className="word__input"
           type="text"
           value={value}
-          disabled={isCorrect || isPrevWord}
-          autoFocus="on"
+          disabled={isCorrect || isPrevWord || isEducation}
           onKeyUp={(evt) => onInputEnter(evt)}
           onFocus={() => onInputFocus()}
           onChange={(evt) => onInputChange(evt)}
@@ -72,15 +93,15 @@ export default WordInput;
 
 WordInput.propTypes = {
   word: PropTypes.instanceOf(Word).isRequired,
-  inputRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]).isRequired,
   onInputFocus: PropTypes.func.isRequired,
   onInputEnter: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
   isWordInput: PropTypes.bool.isRequired,
   isCorrect: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
+  isEducation: PropTypes.bool.isRequired,
+  isInputInFocus: PropTypes.shape({
+    isFocus: PropTypes.bool.isRequired,
+  }).isRequired,
   value: PropTypes.string.isRequired,
 };

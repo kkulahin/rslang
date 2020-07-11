@@ -8,9 +8,14 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   const [isLoggedIn, setLoggedIn] = useState(login);
 
   useEffect(() => {
+    if (!auth) {
+      authService.tryLogIn().then(() => {
+        'try log in end';
+      });
+    }
     const updateLoggedIn = () => {
-      const { login } = authService.isLoggedIn();
-      setLoggedIn(login);
+      const { login: l } = authService.isLoggedIn();
+      setLoggedIn(l);
     };
     signinSubject.subscribe(updateLoggedIn);
 
@@ -18,12 +23,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       signinSubject.unsubscribe(updateLoggedIn);
     };
   });
-
-  if (!auth) {
-    authService.tryLogIn().then(() => {
-      'try log in end';
-    });
-  }
 
   return (
     <Route

@@ -67,6 +67,10 @@
 	color:$hover-color !important;
 }
 
+.app-menu a.item.active {
+	color:$hover-color !important;
+}
+
 .app-menu a.item .icon {
 	flex: 0 50px;
 }

@@ -85,6 +85,16 @@ module.exports = (env = {}) => {
             { loader: 'css-loader' },
           ],
         },
+        {
+          test: /\.mp3$/,
+          use: [{
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'audio',
+            },
+          }],
+        },
       ],
     },
 
@@ -94,5 +104,6 @@ module.exports = (env = {}) => {
       open: true,
       historyApiFallback: true,
     },
+    devtool: 'source-map',
   };
 };

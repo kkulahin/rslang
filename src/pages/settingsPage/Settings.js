@@ -1,25 +1,39 @@
-import React from 'react';
-import PropsType from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import SettingsSection from './settingsSection/SettingsSection';
+import settingsController from '../../controllers/SettingsController';
+import settingSubject from '../../utils/observers/SettingSubject';
 
 import './Settings.scss';
 
-const Settings = ({ settings, handleAppChange }) => {
-  const handleChange = (elementId, elementSectionName, newElementValue) => handleAppChange(settings.map((section) => {
-    const { sectionName, settingsArr } = section;
+const Settings = () => {
+  const [settings, setSettings] = useState(settingsController.get());
 
-    if (sectionName === elementSectionName) {
-      const itemId = settingsArr.findIndex((setting) => setting.name.replace(/\s/g, '-').toLowerCase() === elementId);
+  useEffect(() => {
+    settingSubject.subscribe(setSettings);
 
-      if (newElementValue) {
-        settingsArr[itemId].value = Number(newElementValue);
-      } else {
-        settingsArr[itemId].isChecked = !settingsArr[itemId].isChecked;
+    return () => settingSubject.unsubscribe(setSettings);
+  }, [settings, setSettings]);
+
+  const handleChange = (elementId, elementSectionName, newElementValue) => {
+    const newSettings = settings.map((section) => {
+      const { sectionName, settingsArr } = section;
+      if (sectionName === elementSectionName) {
+        const itemId = settingsArr.findIndex((setting) => setting.name.replace(/\s/g, '-').toLowerCase() === elementId);
+        if (newElementValue) {
+          settingsArr[itemId].value = Number(newElementValue);
+        } else {
+          settingsArr[itemId].isChecked = !settingsArr[itemId].isChecked;
+        }
       }
-    }
+      return section;
+    });
+    settingsController.saveConfig(newSettings);
+    setSettings(newSettings);
+  };
 
-    return section;
-  }));
+  if (settings === null) {
+    return (<div>Loading...</div>);
+  }
 
   return (
     <div className="settings">
@@ -32,11 +46,6 @@ const Settings = ({ settings, handleAppChange }) => {
       ))}
     </div>
   );
-};
-
-Settings.propTypes = {
-  settings: PropsType.arrayOf(PropsType.object).isRequired,
-  handleAppChange: PropsType.func.isRequired,
 };
 
 export default Settings;
