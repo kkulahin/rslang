@@ -2,28 +2,60 @@
 
 @import '../../styles/variables.scss';
 
-.games-header {
-  height: 20vh;
-  color: $main-color !important;
+$margin: 10px;
+$padding: $margin;
 
-  @include flex(row);
-}
-
-.games-cards .container-with-shadow {
-  padding: 10px !important;
-
-  @include flex(column, stretch, space-evenly);
-}
-
-.games-cards .container-with-shadow img {
-    width: 90%;
-    border-radius: 20px;
-}
-
-.games-card__header {
-    color: $main-color !important;
-}
-
-.games-wrapper {
+.games {
+  &-wrapper {
     width: 100%;
+  }
+
+  &-header {
+    height: 10vh;
+    color: $main-color !important;
+  
+    @include flex(row);
+
+    .content {
+      font-size: 3rem;
+    }
+  }
+
+  &-cards {
+    width: 100%;
+    flex-wrap: wrap;
+
+    @include flex(row, center, space-around);
+
+    .column {
+      width: 45%;
+      margin: $margin;
+      z-index: 2;
+      min-width: 300px;
+    }
+
+    .container-with-shadow {
+      padding: $padding !important;
+    
+      @include flex(column, center, space-around);
+
+      img {
+        border-radius: 0 0 15px 15px;
+      }
+    }
+  }
+
+  &-card__header {
+    color: $main-color !important;
+
+    .content {
+      font-size: 2rem;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .games-cards .column {
+    width: 75%;
+  }
 }
