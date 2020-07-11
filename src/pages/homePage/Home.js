@@ -3,10 +3,13 @@ import WordCard from '../../components/wordCard/WordCard';
 import wordController from '../../controllers/WordConrtoller';
 import wordQueueSubject from '../../utils/observers/WordQueueSubject';
 import statisticsSubject from '../../utils/observers/StatisticsSubject';
+import settingsSubject from '../../utils/observers/SettingSubject';
 import StatisticShort from '../../components/statisticShort/StatisticShort';
 import statisticsController from '../../controllers/StatisticsController';
 import Button from '../../components/button/Button';
 import './Home.scss';
+import settingsController from '../../controllers/SettingsController';
+import settingsNames from '../../constants/settingsNames';
 
 const initHelpSettings = {
   isImageShow: true,
@@ -39,15 +42,25 @@ const Home = () => {
     setWordDifficulty(wQueue.getCurrentWord().word.getDifficulty());
   };
   const [statistics, setStatistics] = useState(statisticsController.get());
+  const [settings, setSettings] = useState(settingsController.get());
 
   useEffect(() => {
     wordQueueSubject.subscribe(updateWordQueue);
     statisticsSubject.subscribe(setStatistics);
+    settingsSubject.subscribe(setSettings);
     return () => {
       wordQueueSubject.unsubscribe(updateWordQueue);
       statisticsSubject.unsubscribe(setStatistics);
+      settingsSubject.unsubscribe(setSettings);
     };
   }, [setStatistics]);
+
+  if (settings) {
+    const [card, , buttons] = settings;
+    console.log(card);
+    console.log(buttons);
+    console.log(settingsNames);
+  }
 
   const handleNextBtnClick = () => {
     setWord(wordQueue.changeWord());
@@ -56,6 +69,7 @@ const Home = () => {
   const handlePrevBtnClick = () => {
     setWord(wordQueue.getPreviousWord());
   };
+
 
   if (wordQueue && wordQueue.getLength() <= wordQueue.queuePointer) {
     return (
@@ -81,7 +95,6 @@ const Home = () => {
       </div>
     );
   }
-  console.log(word.word.difficulty);
   return (
     <div>
       <WordCard
