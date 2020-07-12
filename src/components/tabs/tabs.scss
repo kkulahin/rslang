@@ -2,27 +2,44 @@
 
 @import '../../styles/variables.scss';
 
-$padding: 40px;
+$padding: 20px;
 
 .tabs {
-  font-family: inherit;
-  background-color: $background-color;
+  z-index: 2;
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
 
   &__tab-content {
     position: relative;
     z-index: 1;
     min-height: 150px;
-    padding: $padding;
     color: $main-color;
     background-color: $background-color;
     border-radius: $container-border-radius;
     box-shadow: $container-box-shadow;
+
+    .tab-content {
+      padding: 0 ($padding * 2) $padding;  
+    }
+
+    .row__item {
+
+      &:not(:last-child) {
+        width: 30%;
+        overflow-wrap: break-word;
+      }
+
+      &:last-child {
+        width: 10%;
+      }
+    }
   }
 
   &__tab-list {
     z-index: 0;
     margin: 0;
-    padding-left: 0;
+    padding-left: ($padding * 0.5);
 
     &__tab-list-item {
       position: relative;
@@ -67,6 +84,45 @@ $padding: 40px;
         button:hover {
           color: $hover-color;
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+
+  .tabs {
+
+    .tab-content {
+      padding: 0 $padding $padding;
+    }
+
+    &__tab-list__tab-list-item {
+      width: 140px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+
+  .tabs__tab {
+
+    &-list__tab-list-item {
+      width: max-content;
+      margin: 0 1rem;
+      padding: 0 ($padding * 0.25);
+      
+      button {
+        font-size: 2rem;
+      }
+    }
+
+    &-content {
+      overflow-x: auto;
+      
+      tbody,
+      .tab-content__header {
+        min-width: 350px;
       }
     }
   }

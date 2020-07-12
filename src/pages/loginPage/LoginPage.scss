@@ -2,64 +2,89 @@
 
 @import '../../styles/variables.scss';
 
-.login-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center !important;
-  height: 100%;
-}
+$container-min-size: 300px;
+$container-max-size: 500px;
+$padding: 10px;
 
-.login-column {
-  width: 500px !important;
-}
+.login {
 
-.login-header {
-  text-align: center;
-  color: $enabled-color;
+  &-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center !important;
+    height: 100vh;
+  }
 
-  @include font(6.4rem, 1.2em, 800);
-}
+  &-column {
+    width: 80% !important;
+    max-width: $container-max-size;
+    min-width: $container-min-size;
+  }
 
-.login-header .image {
-  position: absolute !important;
-  top: -14.45%;
-  left: -3.51%;
-}
+  &-header {
+    text-align: center;
+    color: $enabled-color;
+  
+    @include font(6.4rem, 1.2em, 800);
 
-.login-form {
-  background-color: $background-color !important;
-  border-radius: $container-border-radius;
-  box-shadow: $container-box-shadow;
+    .image {
+      position: absolute !important;
+      top: -14.45%;
+      left: -3.51%;
+    }
+  }
 
-  font-size: 1.5rem !important;
+  &-form {
+    font-size: 1.5rem !important;
+    background-color: $background-color !important;
+    border-radius: $container-border-radius;
+    box-shadow: $container-box-shadow;
+  
+    @include flex(column, center, stretch);
 
-  @include flex(column, center, stretch);
-}
+    label {
+      display: flex !important;
+      margin: 0 !important;
+      font-size: 1.5rem !important;
+      line-height: 1.2em;
+      color: $main-color !important;
 
-.login-form .label {
-  width: 200px;
-  margin: 25px auto;
-  color: $main-color;
+      @include flex(row, center, stretch);  
+    }
 
-  @include font(2rem, 1.2em, 500);
-}
+    .field {
+      width: 90%;
+      color: $main-color;
+    
+      @include flex(row, center, space-between);
+    }
+  }
 
-.login-form .field {
-  width: 90%;
+  &-button {
+    width: 80%;
+    padding: ($padding * 2) !important;
+    font-size: 2.2rem !important;
+    line-height: 1.2em !important;
+    color: $main-color !important;
+    background: $enabled-color !important;
+    border-radius: $container-border-radius !important;
+    box-shadow: 12px 12px 31px rgba(0, 0, 0, 0.5), -12px -12px 31px rgb(59, 68, 81) !important;
+    font-weight: 400;
+  }
 }
 
 .ui.fluid input {
-  padding-top: 15px !important;
-  padding-bottom: 15px !important;
+  padding-top: ($padding * 1.5) !important;
+  padding-bottom: ($padding * 1.5) !important;
   background: $main-color !important;
   border-radius: 18px !important;
   box-shadow: inset 6px 6px 18px rgba(136, 160, 183, 0.25), inset -6px -6px 18px rgba(255, 255, 255, 0.5) !important;
 }
 
 .checkbox-wrapper label {
+  font-size: 1.4rem;
   color: $main-color !important;
   font-weight: 600;
-  font-size: 1.4rem;
 }
 
 .ui.checkbox input.hidden+label {
@@ -86,18 +111,6 @@
 	font-weight: 600;
 }
 
-.login-button {
-	width: 80%;
-	padding: 20px !important;
-	font-size: 2.2rem !important;
-  line-height: 1.2em !important;
-	color: $main-color !important;
-	background: $enabled-color !important;
-	border-radius: $container-border-radius !important;
-	box-shadow: 12px 12px 31px rgba(0, 0, 0, 0.5), -12px -12px 31px rgb(59, 68, 81) !important;
-	font-weight: 500;
-}
-
 .form .field:last-child {
 	width: 175px;
   margin: 15px !important;
@@ -116,7 +129,6 @@ a.login-signup {
 	color: $enabled-color !important;
 }
 
-
 .user-notification {
   position: absolute;
   top: 80px;
@@ -125,7 +137,7 @@ a.login-signup {
   color: $main-color;
   background-color: $enabled-color;
   border-radius: 20px;
-  font-weight: 500;
+  font-weight: 400;
   font-variant: small-caps;
 
   @include size(50%, 5vh);
@@ -135,3 +147,31 @@ a.login-signup {
   background-color: rgb(222, 37, 118);
 }
 
+#remember-me {
+  margin-right: 15px;
+}
+
+@media (max-width: 767px) {
+
+  .login {
+
+    &-header {
+
+      .image {
+        display: none !important;
+      }
+    }
+
+    &-column {
+      width: 95% !important;
+    }
+
+    &-wrapper .input {
+      padding-left: $padding !important;
+    }
+
+    &-form .field:nth-child(4) > * {
+      font-size: 1.3rem !important;
+    }
+  }
+}

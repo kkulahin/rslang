@@ -1,6 +1,8 @@
 @import '../../../../../styles/variables.scss';
+
 .statistic-window {
-  & .container-with-shadow {
+
+  .container-with-shadow {
     flex-direction: column;
   }
 
@@ -19,19 +21,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
     &-bullets {
       padding: 10px;
       text-align: center;
     }
+
     &-bullet {
       color: $hover-color;
+
       &:hover {
-        cursor: pointer;
         color: $enabled-color;
+        cursor: pointer;
       }
     }
 
-    & .button {
+    .button {
       margin-top: 20px;
       font: inherit;
       font-size: 14px;
@@ -71,11 +76,13 @@
     margin: 10px 0;
     font-size: 14px;
     line-height: 18px;
+
     &-icon {
       color: $hover-color;
+
       &:hover {
-        cursor: pointer;
-        color: $enabled-color
+        color: $enabled-color;
+        cursor: pointer
       }
     }
   }

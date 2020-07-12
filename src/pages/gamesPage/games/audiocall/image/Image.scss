@@ -1,10 +1,10 @@
 .image {
   display: block;
-  margin: 0 auto;
   width: 200px;
   height: 200px;
+  margin: 0 auto;
   text-align: center;
+  overflow: hidden;
 
   border-radius: 20px;
-  overflow: hidden;
 }

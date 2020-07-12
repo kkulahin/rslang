@@ -55,7 +55,7 @@ const Games = () => {
     const listItems = Object.keys(games).map((g) => (
       <Grid.Column key={`${games[g].link}`}>
         <Link to={`${url}/${games[g].link}`}>
-          <BlockWithShadow height="40vh" className="games-card">
+          <BlockWithShadow className="games-card">
             <Header as="h4" className="games-card__header">
               <Icon name="game" />
               <Header.Content>{games[g].link}</Header.Content>
@@ -76,9 +76,9 @@ const Games = () => {
         <Icon name="game" />
         <Header.Content>Games</Header.Content>
       </Header>
-      <Grid container columns={2} className="games-cards">
+      <div className="games-cards">
         {buildColumn()}
-      </Grid>
+      </div>
     </>
   );
 

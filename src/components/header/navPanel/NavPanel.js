@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Menu, Transition } from 'semantic-ui-react';
 import { getCookie } from '../../../utils/cookie';
@@ -34,11 +34,25 @@ const NavPanel = () => {
     return false;
   };
 
+  useEffect(() => {
+    const logoClickHandler = () => {
+      const isMobileDevice = window.innerWidth <= 767;
+
+      if (isMobileDevice) {
+        document.querySelector('.vertical.menu').classList.toggle('opened');
+      }
+    };
+
+    document.querySelector('.logo-wrapper').addEventListener('click', logoClickHandler);
+
+    return () => document.querySelector('.logo-wrapper').removeEventListener('click', logoClickHandler);
+  }, []);
+
   return (
     <div className="vertical menu">
       <Menu className={`app-menu  ${menuSize.size}`} icon="labeled" vertical>
         <div className="logo-wrapper">
-          <img src={Logo} alt="" />
+          <img src={Logo} alt="Logo" />
         </div>
         <div className="app-link">
           <Link
