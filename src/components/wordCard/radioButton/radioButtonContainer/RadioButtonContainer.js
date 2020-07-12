@@ -24,6 +24,7 @@ const RadioButtonContainer = ({
   const radioButtons = items.map((item) => (
     <RadioButton
       label={item.label}
+      icon={item.icon}
       id={item.id}
       checked={checkedItem === item.id}
       onClickRadioButton={handleChangeRadio}

@@ -21,7 +21,7 @@ export default class WordDefinition {
     Object.keys(param).forEach((key) => {
       if (key === '_id') {
         this.wordId = param[key];
-      } else {
+      } else if (key !== 'userWord') {
         this[key] = param[key];
       }
     });

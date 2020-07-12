@@ -3,23 +3,21 @@ import PropTypes from 'prop-types';
 import HelpTextFormatted from './HelpTextFormatted';
 
 const HelpText = ({
-  helpSettings: {
-    isTranscriptionShow,
-    isWordTranslateShow,
-    isTextExampleShow,
-    isTextMeaningShow,
-    isTranslateShow,
-    isImageShow,
+  settings: {
+    isTranscriptionShow = true,
+    isWordTranslateShow = true,
+    isTextExampleShow = true,
+    isTextMeaningShow = true,
+    isTranslateShow = true,
+    isImageShow = true,
   },
   word: {
-    definition: {
-      transcription,
-      wordTranslate,
-      textExample,
-      textExampleTranslate,
-      textMeaning,
-      textMeaningTranslate,
-    },
+    transcription = '',
+    wordTranslate = '',
+    textExample = '',
+    textExampleTranslate = '',
+    textMeaning = '',
+    textMeaningTranslate = '',
   },
   isWordInput,
   isPrevWord,
@@ -96,27 +94,30 @@ const HelpText = ({
   );
 };
 
+HelpText.defaultProps = {
+  settings: {},
+  word: {},
+};
+
 export default HelpText;
 
 HelpText.propTypes = {
-  helpSettings: PropTypes.shape({
-    isTranscriptionShow: PropTypes.bool.isRequired,
-    isWordTranslateShow: PropTypes.bool.isRequired,
-    isTextExampleShow: PropTypes.bool.isRequired,
-    isTextMeaningShow: PropTypes.bool.isRequired,
-    isTranslateShow: PropTypes.bool.isRequired,
-    isImageShow: PropTypes.bool.isRequired,
-  }).isRequired,
+  settings: PropTypes.shape({
+    isTranscriptionShow: PropTypes.bool,
+    isWordTranslateShow: PropTypes.bool,
+    isTextExampleShow: PropTypes.bool,
+    isTextMeaningShow: PropTypes.bool,
+    isTranslateShow: PropTypes.bool,
+    isImageShow: PropTypes.bool,
+  }),
   word: PropTypes.shape({
-    definition: PropTypes.shape({
-      transcription: PropTypes.string.isRequired,
-      wordTranslate: PropTypes.string.isRequired,
-      textExample: PropTypes.string.isRequired,
-      textExampleTranslate: PropTypes.string.isRequired,
-      textMeaning: PropTypes.string.isRequired,
-      textMeaningTranslate: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+    transcription: PropTypes.string,
+    wordTranslate: PropTypes.string,
+    textExample: PropTypes.string,
+    textExampleTranslate: PropTypes.string,
+    textMeaning: PropTypes.string,
+    textMeaningTranslate: PropTypes.string,
+  }),
   isWordInput: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
   isEducation: PropTypes.bool.isRequired,

@@ -1,15 +1,40 @@
 @import '../../styles/mixin.scss';
 
+.home-block {
+  &__card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  $margin-end-sub-queue: 20px;
+  &__end-sub-queue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h2 {
+      margin-bottom: $margin-end-sub-queue;
+    }
+
+    .button {
+      width: fit-content;
+      margin-bottom: $margin-end-sub-queue;
+    }
+  }
+}
+
 .main-game__end-game {
   width: 100%;
   user-select: none;
+  flex-wrap: wrap;
 
   @include flex(row, center, center);
 
   &_button {
     width: fit-content;
     height: fit-content;
-    margin-left: 30px;
+    margin: 30px 0 30px 30px;
     @include flex(row, center, center);
   }
 }

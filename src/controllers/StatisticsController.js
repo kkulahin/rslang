@@ -16,14 +16,14 @@ class StatisticsController {
     return statisticsModel.get();
   }
 
-  updateAll = async (isEducation, isAnswered, isNew, isLastOccurence, todayQueue) => {
-    const todayStatistics = this.updateTodayStatistics(isEducation, isAnswered, isNew, isLastOccurence);
+  updateAll = async (isEducation, isAnswered, wasNew, isLastOccurence, todayQueue) => {
+    const todayStatistics = this.updateTodayStatistics(isEducation, isAnswered, wasNew, isLastOccurence);
     const seconds = getTodaySeconds();
     const longStatistics = this.updateLongStatistics(`${seconds}`, isLastOccurence);
     statisticsModel.save({ todayStatistics, longStatistics, todayQueue });
   }
 
-  updateTodayStatistics = (isEducation, isAnswered, isNew, isLastOccurence) => {
+  updateTodayStatistics = (isEducation, isAnswered, wasNew, isLastOccurence) => {
     const { optional: { todayStatistics } } = statisticsModel.get();
     if (!isEducation) {
       if (isAnswered) {
@@ -35,14 +35,14 @@ class StatisticsController {
         if (todayStatistics.currentStrike > todayStatistics.strike) {
           todayStatistics.strike = todayStatistics.currentStrike;
         }
+        if (wasNew) {
+          todayStatistics.newWords += 1;
+        }
       } else {
         todayStatistics.incorrectAnswers += 1;
         todayStatistics.currentStrike = 0;
-        if (isNew) {
-          todayStatistics.newWords += 1;
-        }
       }
-    } else if (isNew) {
+    } else if (wasNew) {
       todayStatistics.newWords += 1;
     }
     todayStatistics.passedCards += 1;
