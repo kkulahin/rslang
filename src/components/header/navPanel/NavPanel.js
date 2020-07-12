@@ -131,7 +131,7 @@ const NavPanel = () => {
 
         <div className="app-menu__resize">
           <Link
-            className={activeItem.link === 'promo' ? 'item active' : 'item'}
+            className={activeItem.link === 'size' ? 'item active' : 'item'}
             name="size"
             onClick={changeMenuSize}
             to="/"
@@ -142,7 +142,7 @@ const NavPanel = () => {
         </div>
         <div className="login">
           <Link
-            className={activeItem.link === 'promo' ? 'item active' : 'item'}
+            className={activeItem.link === 'login' ? 'item active' : 'item'}
             onClick={handleItemClick}
             name={isUserAuth() ? 'logout' : 'login'}
             to={isUserAuth() ? '/logout' : '/signin'}
