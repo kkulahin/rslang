@@ -8,12 +8,19 @@ import HelpText from '../helpText/HelpText';
 import WordInput from '../wordInput/WordInput';
 import Button from '../button/Button';
 import AudioComponent from '../audioComponent/AudioComponent';
+import RepeatIcon from '../icons/RepeatIcon';
+import DeleteIcon from '../icons/DeleteIcon';
+import RestoreIcon from '../icons/RestoreIcon';
+import KettlebellIcon from '../icons/KettlebellIcon';
+import ShowAnswerIcon from '../icons/ShowAnswerIcon';
 
 const CardContent = (props) => {
   const {
-    helpSettings: { isImageShow },
     settings: {
-      isShowAnswerBtn, isDeleteBtn, isComplexityBtn,
+      isShowAnswerBtn = true,
+      isDeleteBtn = true,
+      isComplexityBtn = true,
+      isImageShow = true,
     },
     isPrevWord,
     isEducation,
@@ -35,15 +42,17 @@ const CardContent = (props) => {
       dataPlacement="top"
       isDisabled={isCorrect || isShowBtnClick || isEducation}
       clickHandler={(id) => onCardBtnClick(id)}
+      icon={<ShowAnswerIcon iconTitle="show answer icon" />}
     />
   );
 
   const DeleteBtn = (
     <Button
       id="deleteWord"
+      label="Delete"
       dataTitle="Delete the word from training"
       dataPlacement="top"
-      iconName="trash alternate outline"
+      icon={<DeleteIcon iconTitle="delete icon" />}
       clickHandler={(id) => { onCardBtnClick(id, true); setDeleted(true); }}
     />
   );
@@ -51,9 +60,10 @@ const CardContent = (props) => {
   const UndoDeleteBtn = (
     <Button
       id="undoDeleteWord"
-      dataTitle="Undo delete word"
+      label="Restore"
+      dataTitle="Undo delete word from training"
       dataPlacement="top"
-      iconName="undo"
+      icon={<RestoreIcon iconTitle="restore icon" />}
       clickHandler={(id) => { onCardBtnClick(id, false); setDeleted(false); }}
     />
   );
@@ -64,15 +74,15 @@ const CardContent = (props) => {
       id="againWord"
       dataTitle="Repeat the word in this training"
       dataPlacement="top"
-      iconName="sync"
       clickHandler={(id) => onCardBtnClick(id)}
+      icon={<RepeatIcon iconTitle="repeat icon" />}
     />
   );
 
   const radioButtons = [
-    { label: 'hard', id: 'hard' },
-    { label: 'normal', id: 'normal' },
-    { label: 'easy', id: 'easy' },
+    { label: 'hard', id: 'hard', icon: <KettlebellIcon iconTitle="kettlebell icon" /> },
+    { label: 'normal', id: 'normal', icon: <KettlebellIcon iconTitle="kettlebell icon" /> },
+    { label: 'easy', id: 'easy', icon: <KettlebellIcon iconTitle="kettlebell icon" /> },
   ];
 
   const isAvailableComplexityButtons = isComplexityBtn
@@ -85,7 +95,6 @@ const CardContent = (props) => {
         items={radioButtons}
         onChange={onWordComplexityBtnClick}
         checkedItem={wordDifficulty}
-        // isAttention={isCorrect || isShowBtnClick}
         dataTitle="Select the word difficulty category"
         dataPlacement="top"
       />
@@ -115,20 +124,18 @@ const CardContent = (props) => {
 };
 
 CardContent.defaultProps = {
-  wordDifficulty: 'normal',
+  settings: {},
 };
 
 export default CardContent;
 
 CardContent.propTypes = {
   settings: PropTypes.shape({
-    isShowAnswerBtn: PropTypes.bool.isRequired,
-    isDeleteBtn: PropTypes.bool.isRequired,
-    isComplexityBtn: PropTypes.bool.isRequired,
-  }).isRequired,
-  helpSettings: PropTypes.shape({
-    isImageShow: PropTypes.bool.isRequired,
-  }).isRequired,
+    isShowAnswerBtn: PropTypes.bool,
+    isDeleteBtn: PropTypes.bool,
+    isComplexityBtn: PropTypes.bool,
+    isImageShow: PropTypes.bool,
+  }),
   isCorrect: PropTypes.bool.isRequired,
   isEducation: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
@@ -136,5 +143,5 @@ CardContent.propTypes = {
   isAgainBtnClick: PropTypes.bool.isRequired,
   onCardBtnClick: PropTypes.func.isRequired,
   onWordComplexityBtnClick: PropTypes.func.isRequired,
-  wordDifficulty: PropTypes.string,
+  wordDifficulty: PropTypes.string.isRequired,
 };

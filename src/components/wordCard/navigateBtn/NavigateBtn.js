@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import NavigateNextIcon from '../icons/NavigateNextIcon';
+
 import './NavigateBtn.scss';
 
 const NavigateBtn = ({
@@ -19,7 +21,9 @@ const NavigateBtn = ({
         onClick={() => onClick({ id })}
         disabled={isDisabled}
       >
-        <span className="navigate__icon" />
+        <NavigateNextIcon iconTitle="navigate icon" />
+        {/* <span className="navigate__icon">
+        </span> */}
       </button>
     </div>
   );

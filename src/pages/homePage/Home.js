@@ -10,23 +10,7 @@ import Button from '../../components/button/Button';
 import './Home.scss';
 import settingsController from '../../controllers/SettingsController';
 import settingsNames from '../../constants/settingsNames';
-
-const initHelpSettings = {
-  isImageShow: true,
-  isTranscriptionShow: true,
-  isWordTranslateShow: true,
-  isTextExampleShow: true,
-  isTextMeaningShow: true,
-  isTranslateShow: true,
-};
-
-const initSettings = {
-  isShowAnswerBtn: true,
-  isDeleteBtn: true,
-  isHardBtn: true,
-  isComplexityBtn: true,
-  isAudioAuto: true,
-};
+import getModifiedSettings from '../../components/wordCard/getModifiedSettings';
 
 /**
  * @param {Object} param
@@ -55,11 +39,9 @@ const Home = () => {
     };
   }, [setStatistics]);
 
+  let cardSettings;
   if (settings) {
-    const [card, , buttons] = settings;
-    console.log(card);
-    console.log(buttons);
-    console.log(settingsNames);
+    cardSettings = getModifiedSettings(settings);
   }
 
   const handleNextBtnClick = () => {
@@ -69,7 +51,6 @@ const Home = () => {
   const handlePrevBtnClick = () => {
     setWord(wordQueue.getPreviousWord());
   };
-
 
   if (wordQueue && wordQueue.getLength() <= wordQueue.queuePointer) {
     return (
@@ -100,8 +81,7 @@ const Home = () => {
       <WordCard
         currentWord={word.word}
         wordQueue={wordQueue}
-        helpSettings={initHelpSettings}
-        settings={initSettings}
+        settings={cardSettings}
         onAgainBtnClick={wordQueue.setAgain}
         onComplexityBtnClick={(id) => { wordQueue.setWordDifficulty(id); setWordDifficulty(word.word.getDifficulty()); }}
         onDeleteBtnClick={wordQueue.setWordDeleted}

@@ -8,13 +8,20 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import Spinner from '../spinner/Spinner';
 import { urlToAssets } from '../../../constants/urls';
-import Word from '../../../utils/spacedRepetition/Word';
+import AudioPlayIcon from '../icons/AudioPlayIcon';
 
 const AudioComponent = (props) => {
   const {
-    helpSettings: { isTextExampleShow, isTextMeaningShow },
-    settings: { isComplexityBtn },
-    word: { definition: { audio, audioExample, audioMeaning } },
+    settings: {
+      isComplexityBtn = true,
+      isTextExampleShow = true,
+      isTextMeaningShow = true,
+    },
+    word: {
+      audio = '',
+      audioExample = '',
+      audioMeaning = '',
+    },
     onAudioEnd,
     isPrevWord,
     isEducation,
@@ -137,8 +144,8 @@ const AudioComponent = (props) => {
         dataTitle="Listen to the word"
         dataPlacement="top"
         isDisabled={!AudioPlayBtnEnabled}
-        iconName="play circle"
         clickHandler={handleAudioPlayBtnClick}
+        icon={<AudioPlayIcon iconTitle="audio play icon" />}
       />
       {audioData.loading && <Spinner />}
       <audio
@@ -150,17 +157,24 @@ const AudioComponent = (props) => {
   );
 };
 
+AudioComponent.defaultProps = {
+  word: {},
+  settings: {},
+};
+
 export default AudioComponent;
 
 AudioComponent.propTypes = {
-  word: PropTypes.instanceOf(Word).isRequired,
+  word: PropTypes.shape({
+    audio: PropTypes.string,
+    audioExample: PropTypes.string,
+    audioMeaning: PropTypes.string,
+  }),
   settings: PropTypes.shape({
-    isComplexityBtn: PropTypes.bool.isRequired,
-  }).isRequired,
-  helpSettings: PropTypes.shape({
-    isTextExampleShow: PropTypes.bool.isRequired,
-    isTextMeaningShow: PropTypes.bool.isRequired,
-  }).isRequired,
+    isComplexityBtn: PropTypes.bool,
+    isTextExampleShow: PropTypes.bool,
+    isTextMeaningShow: PropTypes.bool,
+  }),
   isShowBtnClick: PropTypes.bool.isRequired,
   isCorrect: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,

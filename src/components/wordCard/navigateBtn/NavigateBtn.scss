@@ -2,8 +2,15 @@
 
 @import '../../../styles/variables.scss';
 
+@mixin media-hover {
+
+  @media (pointer: fine) { @content; }
+}
+
 $navigate-width: 4rem;
+$navigate-width-mobile: 2rem;
 $btn-padding: 1rem;
+$btn-padding-mobile: 0.5rem;
 $transition-duration: 0.5s;
 
 .navigate {
@@ -12,6 +19,10 @@ $transition-duration: 0.5s;
   flex-shrink: 0;
 
   background-color: transparent;
+
+  @media (max-width: 767px) {
+    width: $navigate-width-mobile;
+  }
 }
 
 .navigate__btn {
@@ -20,7 +31,7 @@ $transition-duration: 0.5s;
 
   padding: 0;
 
-  @include flex($flex-direction: row);
+  @include flex(row);
 
   background-color: transparent;
 
@@ -43,15 +54,37 @@ $transition-duration: 0.5s;
     visibility: hidden;
     pointer-events: none;
   }
+
+  .svg-icon {
+    width: 100%;
+    height: auto;
+
+    fill: $main-color;
+
+    pointer-events: none;
+
+    transition: fill 0.2s linear;
+  }
 }
 
 .next {
   justify-content: flex-end;
   padding-right: $btn-padding;
 
-  &:hover {
+  @include media-hover {
+
+    &:hover {
+      padding-right: 0;
+      padding-left: $btn-padding;
+    }
+
+    &:hover .svg-icon {
+      fill: $hover-color;
+    }
+  }
+
+  @media (max-width: 767px) {
     padding-right: 0;
-    padding-left: $btn-padding;
   }
 }
 
@@ -59,26 +92,23 @@ $transition-duration: 0.5s;
   justify-content: flex-start;
   padding-left: $btn-padding;
 
-  &:hover {
-    padding-right: $btn-padding;
+  @include media-hover {
+
+    &:hover {
+      padding-right: $btn-padding;
+      padding-left: 0;
+    }
+
+    &:hover .svg-icon {
+      fill: $hover-color;
+    }
+  }
+
+  @media (max-width: 767px) {
     padding-left: 0;
   }
 }
 
-.navigate__icon {
-  width: 100%;
-  height: 100%;
-
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.next > .navigate__icon {
-  background-image: url('./navigateNext.svg');
-}
-
-.prev > .navigate__icon {
-  background-image: url('./navigateNext.svg');
+.prev > .svg-icon {
   transform: rotate(180deg);
 }
