@@ -9,7 +9,7 @@
   bottom: 0;
   left: 0;
 
-  @include flex($flex-direction: row);
+  @include flex(row);
 
   background-color: transparent;
 
