@@ -36,7 +36,7 @@ export default class WordModel {
     const { optional: { todayQueue } } = statistics;
     const todaySeconds = getTodaySeconds();
     if (todayQueue) {
-      if (todayQueue.queue.length === 0) {
+      if (!todayQueue.queue || todayQueue.queue.length === 0) {
         return false;
       }
       if (todayQueue.date === todaySeconds) {

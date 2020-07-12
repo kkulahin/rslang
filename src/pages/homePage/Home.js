@@ -20,14 +20,14 @@ const Home = () => {
   wordController.init();
   const [wordQueue, setWordQueue] = useState(wordController.getQueue());
   const [word, setWord] = useState(wordQueue && wordQueue.getCurrentWord() ? wordQueue.getCurrentWord() : null);
-  const [, setWordDifficulty] = useState(wordQueue ? wordQueue.getWordDifficulty() : null);
+  const [wordDifficulty, setWordDifficulty] = useState(wordQueue ? wordQueue.getWordDifficulty() : null);
   /**
    * @param {WordQueue} wQueue
    */
   const updateWordQueue = (wQueue) => {
     setWordQueue(wQueue);
-    setWord(wQueue.getCurrentWord());
     setWordDifficulty(wQueue.getWordDifficulty());
+    setWord(wQueue.getCurrentWord());
   };
   const [statistics, setStatistics] = useState(statisticsController.get());
   const [settings, setSettings] = useState(settingsController.get());
@@ -107,12 +107,12 @@ const Home = () => {
         wordQueue={wordQueue}
         settings={cardSettings}
         onAgainBtnClick={wordQueue.setAgain}
-        onComplexityBtnClick={(id) => { wordQueue.setWordDifficulty(id); setWordDifficulty(word.word.getDifficulty()); }}
+        onComplexityBtnClick={(id) => { wordQueue.setWordDifficulty(id); setWordDifficulty(wordQueue.getWordDifficulty()); }}
         onDeleteBtnClick={wordQueue.setWordDeleted}
         onNextBtnClick={handleNextBtnClick}
         onPrevBtnClick={handlePrevBtnClick}
         isEducation={word.isEducation}
-        wordDifficulty={word.word.getDifficulty()}
+        wordDifficulty={wordDifficulty}
         isAnswered={wordQueue.isCurrentWordAnswered()}
         onWordAnswered={wordQueue.setWordAnswered}
         onWordMistaken={wordQueue.setWordMistaken}
