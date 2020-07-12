@@ -24,12 +24,12 @@ class WordController {
 
   getWordsCount = () => {
     if (!this.model.wordQueue) {
-      return 0;
+      return null;
     }
     return this.model.wordQueue.getWords().length;
   }
 
-  endQueue = async () => this.endQueue();
+  makeQueue = async () => this.model.makeQueue();
 
   reset = () => {
     this.isInitialized = false;

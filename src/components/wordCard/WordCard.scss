@@ -295,17 +295,34 @@ $font-color-tooltip: $main-color;
 
     @include flex(row, $justify-content: flex-end);
 
-    #deleteWord {
+    .card-button {
+      animation: fadeIn 0.3s linear;
+
+      @keyframes fadeIn {
+
+        0% {
+          opacity: 0;
+        }
+    
+        100% {
+          opacity: 1;
+        }
+      }
+    }
+
+    #deleteWord, #undoDeleteWord {
+      width: 11rem;
 
       @media (max-width: 767px) {
         width: 3.5rem;
+        padding: 0.75rem;
       }
 
       svg {
         fill: $main-color;
       }
 
-      svg .polygon-2 {
+      .polygon-2 {
         fill: $enabled-color;
       }
 
@@ -321,6 +338,7 @@ $font-color-tooltip: $main-color;
 
       @media (max-width: 767px) {
         width: 3.5rem;
+        padding: 0.75rem;
       }
 
       svg {

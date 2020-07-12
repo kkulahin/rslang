@@ -27,7 +27,7 @@ const Button = (props) => {
       data-placement={dataPlacement}
       disabled={isDisabled}
       className={className}
-      onClick={(evt) => clickHandler(evt.target.id)}
+      onClick={() => clickHandler(id)}
     >
       {icon}
       {(label && icon) && ' '}

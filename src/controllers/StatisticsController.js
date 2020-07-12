@@ -57,7 +57,19 @@ class StatisticsController {
     return longStatistics;
   }
 
-  updateQueue = async (todayQueue) => statisticsModel.save({ todayQueue })
+  updateQueue = async (todayQueue) => statisticsModel.save({ todayQueue });
+
+  resetToday = async () => {
+    const { optional: { todayStatistics } } = statisticsModel.get();
+    todayStatistics.newWords = 0;
+    todayStatistics.passedCards = 0;
+    todayStatistics.incorrectAnswers = 0;
+    todayStatistics.correctAnswers = 0;
+    todayStatistics.passedWords = 0;
+    todayStatistics.currentStrike = 0;
+    todayStatistics.strike = 0;
+    return statisticsModel.save({ todayStatistics });
+  }
 
   resetQueue = async (todayQueue) => {
     const { optional: { todayStatistics } } = statisticsModel.get();
@@ -68,12 +80,14 @@ class StatisticsController {
     todayStatistics.passedWords = 0;
     todayStatistics.currentStrike = 0;
     todayStatistics.strike = 0;
-    return statisticsModel.save({ todayQueue, todayQueue });
+    const newTodayQueue = { ...todayQueue };
+    newTodayQueue.queue = todayQueue.queue.filter((qWord) => !qWord.isA);
+    return statisticsModel.save({ todayQueue: newTodayQueue, todayStatistics });
   }
 
   getPassedCount = () => {
-    if (statisticsModel.get() === null) {
-      return 0;
+    if (this.get() === null) {
+      return null;
     }
     return statisticsModel.getPassedCount();
   }

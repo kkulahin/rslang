@@ -1,10 +1,8 @@
 import fetch from 'node-fetch';
 // import Word from './Word';
 import WordQueue from '../utils/spacedRepetition/WordQueue';
-import { getCookie } from '../utils/cookie';
 import wordQueueSubject from '../utils/observers/WordQueueSubject';
 import { makeRequest } from '../utils/responseFromServer';
-import signinSubject from '../utils/observers/SignInSubject';
 import statisticsController from '../controllers/StatisticsController';
 import { getTodaySeconds } from '../utils/time';
 import settingsController from '../controllers/SettingsController';
@@ -17,30 +15,27 @@ export default class WordModel {
 
   init = async () => {
     if (!this.hasQueueForToday()) {
-      const { data: userWords } = await this.queryUserWords();
-      const { data: newWords } = await this.queryNewWords();
-      this.wordQueue = new WordQueue();
-      this.wordQueue.makeQueue(newWords, userWords);
-      this.updateStatistics();
+      await this.makeQueue();
     } else {
       this.wordQueue = new WordQueue();
       const { data: words } = await this.getWordsFromSavedQueue();
       this.wordQueue.usePredefinedQueue(statisticsController.get().optional.todayQueue, words);
+      wordQueueSubject.notify(this.wordQueue);
     }
+  }
 
+  makeQueue = async () => {
+    const { data: userWords } = await this.queryUserWords();
+    const { data: newWords } = await this.queryNewWords();
+    this.wordQueue = new WordQueue();
+    this.wordQueue.makeQueue(newWords, userWords);
+    await this.initStatistics();
     wordQueueSubject.notify(this.wordQueue);
-
-    // test
-    const words = this.wordQueue.queue.map((queueW) => ({
-      word: queueW.word.definition.word,
-      phase: queueW.word.repetitionPhase,
-      isEducation: queueW.isEducation,
-      nextTime: queueW.nextTime,
-    }));
   }
 
   hasQueueForToday = () => {
-    const { todayQueue } = statisticsController.get().optional;
+    const statistics = statisticsController.get();
+    const { optional: { todayQueue } } = statistics;
     const todaySeconds = getTodaySeconds();
     if (todayQueue) {
       if (todayQueue.queue.length === 0) {
@@ -55,6 +50,10 @@ export default class WordModel {
       }
     }
     return false;
+  }
+
+  initStatistics = async () => {
+    statisticsController.resetQueue(this.wordQueue.getQueueToSave());
   }
 
   updateStatistics = async () => {
@@ -79,6 +78,7 @@ export default class WordModel {
         mistakes: word.mistakes,
         totalMistakes: word.totalMistakes,
         totalRepetition: word.totalRepetition,
+        isDeleted: word.isDeleted,
         nextRepetition: Math.ceil(word.getNextRepetition().getTime() / 1000),
       },
     };
@@ -111,10 +111,20 @@ export default class WordModel {
   queryUserWords = async () => {
     const maxNewWords = settingsController.getSettingByName(settingsNames.sections.education, settingsNames.items.newWords);
     const maxWords = settingsController.getSettingByName(settingsNames.sections.education, settingsNames.items.allWords);
+    let maxCount = maxWords - maxNewWords * 5;
+    if (maxCount < 0) {
+      maxCount = 0;
+    }
     const todaySeconds = getTodaySeconds();
     const params = {
-      wordsPerPage: maxWords - maxNewWords,
-      filter: JSON.stringify({ $or: [{ 'userWord.optional.nextRepetition': { $lte: todaySeconds } }] }),
+      wordsPerPage: maxCount,
+      filter: JSON.stringify({
+        $and: [{ 'userWord.optional.nextRepetition': { $lte: todaySeconds } },
+          {
+            $or: [{ 'userWord.optional.isDeleted': false },
+              { 'userWord.optional.isDeleted': null }],
+          }],
+      }),
     };
     return this.queryWords(params);
   }
@@ -129,7 +139,9 @@ export default class WordModel {
   }
 
   getWordsFromSavedQueue = async () => {
-    const words = statisticsController.get().optional.todayQueue.queue.map((qWord) => ({ word: qWord.w }));
+    let words = statisticsController.get().optional.todayQueue.queue.map((qWord) => (qWord.w));
+    words = words.filter((word, pos) => words.indexOf(word) === pos);
+    words = words.map((word) => ({ word }));
     const filter = {
       $or: words,
     };

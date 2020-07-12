@@ -1,0 +1,82 @@
+@import '../../../../../styles/variables.scss';
+.statistic-window {
+  & .container-with-shadow {
+    flex-direction: column;
+  }
+
+  &__tabs {
+    width: 250px;
+    min-height: 450px;
+  }
+
+  &-first,
+  &-second {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &-bullets {
+      padding: 10px;
+      text-align: center;
+    }
+    &-bullet {
+      color: $hover-color;
+      &:hover {
+        cursor: pointer;
+        color: $enabled-color;
+      }
+    }
+
+    & .button {
+      margin-top: 20px;
+      font: inherit;
+      font-size: 14px;
+    }
+  }
+}
+
+.first-tab {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 10px;
+
+  font: inherit;
+
+  &__title {
+    margin-bottom: 70px;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+  }
+}
+
+.second-tab {
+
+  font: inherit;
+
+  &__title {
+    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  &__row {
+    margin: 10px 0;
+    font-size: 14px;
+    line-height: 18px;
+    &-icon {
+      color: $hover-color;
+      &:hover {
+        cursor: pointer;
+        color: $enabled-color
+      }
+    }
+  }
+}

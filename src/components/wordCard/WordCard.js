@@ -101,9 +101,13 @@ const WordCard = ({
 
   const handleNavigateNextClick = () => {
     if (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation) {
+      if (isEducation) {
+        onWordAnswered();
+      }
+
       dispatch({ type: 'resetWord' });
       onNextBtnClick();
-    } if (state.value === '') {
+    } else if (state.value === '') {
       inputRef.current.focus();
       dispatch({
         type: 'setState',
@@ -194,13 +198,15 @@ const WordCard = ({
     onAgainBtnClick();
   };
 
-  const handleCardBtnClick = (id) => {
+  const handleCardBtnClick = (id, ...args) => {
     const handlers = {
       deleteWord: onDeleteBtnClick,
+      undoDeleteWord: onDeleteBtnClick,
       againWord: handleAgainBtnClick,
       showWord: handleShowBtnClick,
     };
-    handlers[id]();
+
+    handlers[id](...args);
   };
 
   const createHandleKeydown = useCallback(() => (evt) => {
@@ -210,6 +216,10 @@ const WordCard = ({
         || (code === 'Enter'
             && (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation))) {
       if (state.isCorrect || state.isShowBtnClick || isAnswered || isEducation) {
+        if (isEducation) {
+          onWordAnswered();
+        }
+
         dispatch({ type: 'resetWord' });
         onNextBtnClick();
       } if (state.value === '') {
@@ -250,7 +260,7 @@ const WordCard = ({
         },
       });
     }
-  }, [state, word, hasPrevious, isAnswered, isEducation, onPrevBtnClick, onNextBtnClick]);
+  }, [state, word, hasPrevious, isAnswered, isEducation, onPrevBtnClick, onNextBtnClick, onWordAnswered]);
 
   useEffect(() => {
     const handleKeydown = createHandleKeydown();

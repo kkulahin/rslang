@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import RadioButtonContainer from '../radioButton/radioButtonContainer/RadioButtonContainer';
@@ -10,6 +10,7 @@ import Button from '../button/Button';
 import AudioComponent from '../audioComponent/AudioComponent';
 import RepeatIcon from '../icons/RepeatIcon';
 import DeleteIcon from '../icons/DeleteIcon';
+import RestoreIcon from '../icons/RestoreIcon';
 import KettlebellIcon from '../icons/KettlebellIcon';
 import ShowAnswerIcon from '../icons/ShowAnswerIcon';
 
@@ -29,6 +30,8 @@ const CardContent = (props) => {
     onWordComplexityBtnClick,
   } = props;
 
+  const [isDeleted, setDeleted] = useState(false);
+
   const ShowAnswerBtn = (
     <Button
       id="showWord"
@@ -47,8 +50,19 @@ const CardContent = (props) => {
       label="Delete"
       dataTitle="Delete the word from training"
       dataPlacement="top"
-      clickHandler={(id) => onCardBtnClick(id)}
       icon={<DeleteIcon iconTitle="delete icon" />}
+      clickHandler={(id) => { onCardBtnClick(id, true); setDeleted(true); }}
+    />
+  );
+
+  const UndoDeleteBtn = (
+    <Button
+      id="undoDeleteWord"
+      label="Restore"
+      dataTitle="Undo delete word from training"
+      dataPlacement="top"
+      icon={<RestoreIcon iconTitle="restore icon" />}
+      clickHandler={(id) => { onCardBtnClick(id, false); setDeleted(false); }}
     />
   );
 
@@ -94,7 +108,8 @@ const CardContent = (props) => {
       <div className="card-controls">
         {isAvailableComplexityButtons && complexityButtons}
         <div className="card-controls__buttons">
-          {isDeleteBtn && !isPrevWord && DeleteBtn}
+          {isDeleteBtn && !isPrevWord && !isDeleted && DeleteBtn}
+          {isDeleteBtn && !isPrevWord && isDeleted && UndoDeleteBtn}
           {isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
           <AudioComponent {...props} />
         </div>

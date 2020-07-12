@@ -1,7 +1,6 @@
-import { SchoolURL } from '../config/default';
-import authService from '../services/AuthService';
+import { SchoolURL, cookieLifeCyrcle } from '../config/default';
+import { getCookie, setCookie, deleteCookie } from './cookie';
 import signinSubject from './observers/SignInSubject';
-import { deleteCookie } from './cookie';
 
 const responseFromServer = async (url,
   token = null,
@@ -46,6 +45,112 @@ const responseFromServer = async (url,
   return { data, notification: setNotification };
 };
 
+export class AuthService {
+  static isLoggedIn = () => {
+    const login = getCookie('login');
+    const auth = getCookie('auth');
+    return { auth: auth !== null && auth !== '', login: login !== null && login !== '' };
+  }
+
+  static getUser = () => {
+    const authStr = getCookie('auth');
+    if (authStr === null || authStr === '') {
+      return null;
+    }
+    return JSON.parse(authStr);
+  }
+
+  static tryLogIn = async () => {
+    const auth = this.getUser();
+    if (auth === null) {
+      const userLogged = await this.tryToUseLocalStorage();
+      if (!userLogged) {
+        deleteCookie('login');
+        return false;
+      }
+      signinSubject.notify(userLogged);
+    }
+    try {
+      const tokenWorks = await this.checkTokenWorks(auth);
+      if (tokenWorks) {
+        signinSubject.notify(tokenWorks);
+        return true;
+      }
+      const userLogged = await this.tryToUseLocalStorage();
+      if (!userLogged) {
+        deleteCookie('login');
+        return false;
+      }
+      signinSubject.notify(userLogged);
+      return true;
+    } catch (e) {
+      deleteCookie('login');
+      signinSubject.notify(false);
+      return false;
+    }
+  }
+
+  /**
+   * @param {Object} userData
+   * @param {string} userData.email
+   * @param {string} userData.password
+   */
+  static getNewToken = async (userData) => {
+    const getUserNotification = {
+      msg: 'Token was gotten successfully',
+      status: true,
+    };
+    try {
+      const response = await responseFromServer(`${SchoolURL}/signin`, null, getUserNotification, 'POST', userData);
+      if (response.notification.status) {
+        setCookie('auth', JSON.stringify(response.data), cookieLifeCyrcle);
+      }
+      return response.data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
+   * @param {Object} auth
+   * @param {string} auth.token
+   * @param {string} auth.userId
+   */
+  static checkTokenWorks = async (auth) => {
+    const getUserNotification = {
+      msg: 'Token was verified',
+      status: true,
+    };
+    try {
+      const response = await responseFromServer(`${SchoolURL}/users/${auth.userId}`, auth.token, getUserNotification, 'GET');
+      return response.notification.status;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static tryToUseLocalStorage = async () => {
+    const userDataStr = getCookie('login');
+    if (userDataStr === null || userDataStr === '') {
+      return false;
+    }
+    try {
+      const userData = JSON.parse(userDataStr);
+      if (userData.email && userData.password) {
+        const newAuth = await this.getNewToken(userData);
+        if (!newAuth) {
+          return false;
+        }
+        const tokenWorks = await this.checkTokenWorks(newAuth);
+        return tokenWorks;
+      }
+    } catch (e) {
+      return false;
+    }
+    return false;
+  }
+}
+
 const retryMakeRequest = async (method, path, token, body, params = {}) => {
   const url = new URL(`${SchoolURL}/${path}`);
   Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
@@ -69,7 +174,13 @@ const retryMakeRequest = async (method, path, token, body, params = {}) => {
       throw new Error('Retry');
     }
   }
-  const data = await response.json();
+  let data = {};
+  try {
+    data.text = await response.text();
+    data = JSON.parse(data.text);
+  } catch (e) {
+    console.debug(e);
+  }
   return { data, response };
 };
 
@@ -79,7 +190,7 @@ export const makeRequest = async (method, pathTemplate, body, params = {}) => {
   let isAuthError = false;
   let path = pathTemplate;
   let response = {};
-  let user = authService.getUser();
+  let user = AuthService.getUser();
   if (user === null) {
     isAuthError = true;
   } else {
@@ -91,13 +202,13 @@ export const makeRequest = async (method, pathTemplate, body, params = {}) => {
       if (isAuthError) {
         isAuthError = false;
         // eslint-disable-next-line no-await-in-loop
-        const isLoggedIn = await authService.tryLogIn();
+        const isLoggedIn = await AuthService.tryLogIn();
         if (!isLoggedIn) {
           deleteCookie('login');
           signinSubject.notify(false);
           return { response: { ok: false, statusText: 'Unauthorized', status: 401 } };
         }
-        user = authService.getUser();
+        user = AuthService.getUser();
         if (user) {
           path = pathTemplate.replace('%%userId%%', user.userId);
         }

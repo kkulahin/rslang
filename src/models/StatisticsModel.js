@@ -11,27 +11,32 @@ class StatisticsModel {
     const { data, response } = await makeRequest('GET', 'users/%%userId%%/statistics');
     if (!response.ok) {
       if (response.status === 404) {
-        const putData = { learnedWords: 0, optional: {} };
+        const putData = { learnedWords: 0, optional: { todayStatistics: {}, todayQueue: {}, longStatistics: {} } };
         const { response: postResponse } = await makeRequest(
           'PUT',
           'users/%%userId%%/statistics',
           putData,
         );
         if (!postResponse.ok) {
-          throw new Error(
-            `POST Statisctics failed with ${postResponse.status} ${postResponse.statusText}`,
-          );
+          if (!postResponse.status === 401) {
+            throw new Error(
+              `POST Statisctics failed with ${postResponse.status} ${postResponse.statusText}`,
+            );
+          }
         } else {
           this.statistics = putData;
           statisticsSubject.notify(this.statistics);
         }
-      } else {
+      } else if (!response.status === 401) {
         throw new Error(
           `Get Statisctics failed with ${response.status} ${response.statusText}`,
         );
       }
     } else {
       this.statistics = data;
+      if (!this.statistics.optional) {
+        this.statistics.optional = {};
+      }
       if (!this.statistics.optional.todayStatistics) {
         this.resetTodayStatistics();
       }
@@ -70,6 +75,9 @@ class StatisticsModel {
     }
     if (todayStatistics) {
       statistics.optional.todayStatistics = todayStatistics;
+    }
+    if (longStatistics) {
+      statistics.optional.longStatistics = longStatistics;
     }
     const { response } = await makeRequest(
       'PUT',

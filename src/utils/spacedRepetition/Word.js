@@ -28,6 +28,7 @@ export default class Word {
       totalMistakes = 0,
       mistakes = 'zzzzzzz',
       totalRepetition = 0,
+      isDeleted = false,
     },
   ) {
     this.definition = definition;
@@ -43,6 +44,7 @@ export default class Word {
     this.totalMistakes = totalMistakes;
     this.totalRepetition = totalRepetition;
     this.wordQueue = wordQueue;
+    this.isDeleted = isDeleted;
   }
 
   setTime = () => {
@@ -127,6 +129,7 @@ export default class Word {
    * @param {number|string} difficulty difficulty - can be index or name
    */
   setDifficulty = (difficulty) => {
+    console.log(difficulty);
     if (typeof difficulty === 'number') {
       this.difficulty = difficulty;
     } else if (typeof difficulty === 'string') {
@@ -136,6 +139,7 @@ export default class Word {
         }
       });
     }
+    console.log(this.difficulty);
   }
 
   upgradeDifficulty = () => {
