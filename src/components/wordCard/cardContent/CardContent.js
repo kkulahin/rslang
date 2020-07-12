@@ -24,6 +24,8 @@ const CardContent = (props) => {
     },
     isPrevWord,
     isEducation,
+    isWordDeleted,
+    setWordDeleted,
     wordDifficulty,
     isCorrect,
     isShowBtnClick,
@@ -31,8 +33,6 @@ const CardContent = (props) => {
     onCardBtnClick,
     onWordComplexityBtnClick,
   } = props;
-
-  const [isDeleted, setDeleted] = useState(false);
 
   const ShowAnswerBtn = (
     <Button
@@ -53,7 +53,7 @@ const CardContent = (props) => {
       dataTitle="Delete the word from training"
       dataPlacement="top"
       icon={<DeleteIcon iconTitle="delete icon" />}
-      clickHandler={(id) => { onCardBtnClick(id, true); setDeleted(true); }}
+      clickHandler={(id) => { onCardBtnClick(id, true); setWordDeleted(true); }}
     />
   );
 
@@ -64,7 +64,7 @@ const CardContent = (props) => {
       dataTitle="Undo delete word from training"
       dataPlacement="top"
       icon={<RestoreIcon iconTitle="restore icon" />}
-      clickHandler={(id) => { onCardBtnClick(id, false); setDeleted(false); }}
+      clickHandler={(id) => { onCardBtnClick(id, false); setWordDeleted(false); }}
     />
   );
 
@@ -110,8 +110,8 @@ const CardContent = (props) => {
       <div className="card-controls">
         {isAvailableComplexityButtons && complexityButtons}
         <div className="card-controls__buttons">
-          {isDeleteBtn && !isPrevWord && !isDeleted && DeleteBtn}
-          {isDeleteBtn && !isPrevWord && isDeleted && UndoDeleteBtn}
+          {isDeleteBtn && !isPrevWord && !isWordDeleted && DeleteBtn}
+          {isDeleteBtn && !isPrevWord && isWordDeleted && UndoDeleteBtn}
           {isShowAnswerBtn && !isPrevWord && ShowAnswerBtn}
           <AudioComponent {...props} />
         </div>
@@ -138,6 +138,8 @@ CardContent.propTypes = {
   }),
   isCorrect: PropTypes.bool.isRequired,
   isEducation: PropTypes.bool.isRequired,
+  isWordDeleted: PropTypes.bool.isRequired,
+  setWordDeleted: PropTypes.func.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
   isShowBtnClick: PropTypes.bool.isRequired,
   isAgainBtnClick: PropTypes.bool.isRequired,
