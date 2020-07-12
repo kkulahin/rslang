@@ -38,6 +38,8 @@ const WordCard = ({
   hasPrevious,
   isAnswered,
   isEducation,
+  isWordDeleted,
+  setWordDeleted,
   wordDifficulty,
 }) => {
   const {
@@ -301,6 +303,8 @@ const WordCard = ({
             wordDifficulty={wordDifficulty}
             isEducation={isEducation}
             isPrevWord={isAnswered}
+            isWordDeleted={isWordDeleted}
+            setWordDeleted={setWordDeleted}
             inputRef={inputRef}
             {...state}
           />
@@ -349,6 +353,8 @@ WordCard.propTypes = {
   onWordMistaken: PropTypes.func,
   isAnswered: PropTypes.bool,
   isEducation: PropTypes.bool,
+  isWordDeleted: PropTypes.bool.isRequired,
+  setWordDeleted: PropTypes.func.isRequired,
   hasPrevious: PropTypes.bool,
   wordDifficulty: PropTypes.string,
 };
