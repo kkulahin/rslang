@@ -28,7 +28,7 @@ const VersionList = ({ items, onVersionClick, correctAnswer }) => {
         onVersionClick(isCorrect);
       }
     };
-  }, [checkedItem]);
+  }, [checked]);
 
   const buttons = items.map((item, idx) => {
     let iconName = '';

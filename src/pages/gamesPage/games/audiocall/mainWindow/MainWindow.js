@@ -6,10 +6,8 @@ import Image from '../image/Image';
 import Voice from '../voice/Voice';
 import Button from '../../../../../components/button/Button';
 import { getWords } from '../../../../../controllers/words/words';
-import { getAllUserWords } from '../../../../../controllers/words/userWords';
 import LinearProgressBar from '../../../../../components/linearProgressBar/LinearProgressBar';
 import getWordVersions from './MainWindowFunctions';
-import { getCookie } from '../../../../../utils/cookie';
 
 const WORDCOUNTPERROUND = 20;
 
@@ -36,40 +34,35 @@ const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
     words = stepData.words;
     versions = stepData.versions;
   }
-
-  // const auth = JSON.parse(getCookie('auth'));
-  // console.log(auth);
-  // getAllUserWords(auth.token, auth.userId)
-  //   .then((res) => console.log(res));
-
   useEffect(() => {
-    window.onkeydown = (evt) => {
-      if ((evt.code === 'ArrowRight' || evt.code === 'Enter') && nextButtonAvailable) {
-        if (level < WORDCOUNTPERROUND - 1) {
-          cardRef.current.classList.add('audiocall__card--animated');
-          setTimeout(() => {
-            cardRef.current.classList.remove('audiocall__card--animated');
-          }, 950);
-
-          setTimeout(() => {
-            setLevel((s) => s + 1);
-            setShowCardLoading(true);
-            setNextButtonAvailable(false);
-            setShowImage(false);
-          }, 950);
+    if (nextButtonAvailable) {
+      window.onkeydown = (evt) => {
+        if ((evt.code === 'ArrowRight' || evt.code === 'Enter') && nextButtonAvailable) {
+          if (level < WORDCOUNTPERROUND - 1) {
+            cardRef.current.classList.add('audiocall__card--animated');
+            setTimeout(() => {
+              cardRef.current.classList.remove('audiocall__card--animated');
+            }, 950);
+            setTimeout(() => {
+              setLevel((s) => s + 1);
+              setShowCardLoading(true);
+              setNextButtonAvailable(false);
+              setShowImage(false);
+            }, 950);
+          }
+          if (level >= WORDCOUNTPERROUND - 1) {
+            cardRef.current.classList.add('audiocall__card--animated');
+            setTimeout(() => {
+              cardRef.current.classList.remove('audiocall__card--animated');
+              onEndOfGame({
+                gameStat: answers,
+                gameWords,
+              });
+            }, 950);
+          }
         }
-        if (level >= WORDCOUNTPERROUND - 1) {
-          cardRef.current.classList.add('audiocall__card--animated');
-          setTimeout(() => {
-            cardRef.current.classList.remove('audiocall__card--animated');
-            onEndOfGame({
-              gameStat: answers,
-              gameWords,
-            });
-          }, 950);
-        }
-      }
-    };
+      };
+    }
   }, [nextButtonAvailable]);
 
   useEffect(() => {
@@ -137,7 +130,6 @@ const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
             onVersionClick={(answerIn) => {
               setGameWords((s) => [...s, [words[currentWordNumber], answerIn]]);
               setShowImage(true);
-              setNextButtonAvailable(true);
               if (answerIn) {
                 setAnswers((s) => {
                   const result = {
@@ -155,6 +147,7 @@ const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
                   return result;
                 });
               }
+              setNextButtonAvailable(true);
             }}
             correctAnswer={versions[currentWordNumber]}
           />
