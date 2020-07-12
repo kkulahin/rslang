@@ -16,7 +16,6 @@ const DropdownItem = (props) => {
       tabIndex={0}
     >
       <span className="dropdown__item-text">{label}</span>
-      <hr />
     </div>
 
   );
