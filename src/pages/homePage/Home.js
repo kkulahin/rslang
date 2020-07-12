@@ -118,7 +118,18 @@ const Home = () => {
         onWordMistaken={wordQueue.setWordMistaken}
         hasPrevious={wordQueue.hasPreviousWord()}
       />
-      <span>{`${wordQueue.getCurrentPosition()} out of ${wordQueue.getLength()}`}</span>
+      <div className="home_progress_bar">
+        <div
+          className="line_progress"
+          style={{
+            width: `${(wordQueue.getCurrentPosition() * 100) / wordQueue.getLength()}% `,
+            background: 'linear-gradient(0.25turn, rgba(37, 206, 222, 0.2), rgba(37, 206, 222, 0.8))',
+            height: '100%',
+            borderRadius: '25px',
+          }}
+        />
+        <p className="total_words">{`${wordQueue.getCurrentPosition()} out of ${wordQueue.getLength()}`}</p>
+      </div>
     </div>
   );
 };
