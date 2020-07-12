@@ -44,47 +44,47 @@ $margin-end-sub-queue: 20px;
 }
 
 .spinner {
-  transform: translate(-50%, -50%);
   position: relative;
   top: 10%;
   left: $spinner-position;
   border-radius: 25%;
+  transform: translate(-50%, -50%);
   animation: rotate-spinner 2s infinite linear;  
 
   @include size($spinner-size);
 }
 
 .spinner > span {
-  display: block;
   position: absolute;
+  display: block;
+  background-color: $background-color;
   border-radius: 50%;
   box-shadow: 0px 0px 15px 3px $enabled-color inset;  
   animation: rotate-span 2s infinite ease-in-out;
-  background-color: $background-color;
 
   @include size(40%);
 }
 
 .spinner > span::after {
-  content: "";
   position: absolute;
-  border-radius: 50%;
   top: -50%;
   left: -50%;
+  border-radius: 50%;
   box-shadow: 0px 0px 15px 3px $enabled-color;
   animation: translate-span-after-before 3s infinite linear;
+  content: "";
 
   @include size(10%);
 }
 
 .spinner > span::before {
-  content: "";
   position: absolute;
-  border-radius: 50%;
   top: -50%;
   left: -50%;
+  border-radius: 50%;
   box-shadow: 0px 0px 15px 3px $enabled-color;
   animation: translate-span-after-before 3s infinite ;
+  content: "";
   animation-delay: 1.5s;
 
   @include size(10%);
@@ -103,8 +103,8 @@ $margin-end-sub-queue: 20px;
 }
 
 .spinner span:nth-child(3) {
-  bottom: -2%;
-  right: -2%;  
+  right: -2%;
+  bottom: -2%;  
   -webkit-animation-delay: 1s;
   animation-delay: 1s;
 }
@@ -117,33 +117,41 @@ $margin-end-sub-queue: 20px;
 }
 
 @keyframes rotate-spinner {
+
   from {
     transform: rotate(0deg);
   }
+
   to {
       transform: rotate(-360deg);
   }          
 }
 
 @keyframes rotate-span {
+
   0% {
     transform: rotate(0deg);
   }
+
   100% {
       transform: rotate(360deg);
   }         
 }
 
 @keyframes translate-span-after-before {
+
   0% {
       transform: translate(0%);
   }
+
   25% {
       transform: translate(650%);
   }
+
   50% {
       transform: translate(650%, 650%);
   }
+
   75% {
       transform: translate(0%, 650%);
   }  
