@@ -103,7 +103,6 @@ const LoginForm = () => {
           setCookie('login', JSON.stringify(data), (10 * 365 * 24 * 60 * 60));
           setRedirect(true);
         }
-        setUserNotification(response.notification);
       } catch (error) {
         const userAuthMsg = {
           msg: 'Incorrect e-mail or password',
