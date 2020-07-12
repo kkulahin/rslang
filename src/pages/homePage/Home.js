@@ -21,6 +21,7 @@ const Home = () => {
   const [wordQueue, setWordQueue] = useState(wordController.getQueue());
   const [word, setWord] = useState(wordQueue && wordQueue.getCurrentWord() ? wordQueue.getCurrentWord() : null);
   const [wordDifficulty, setWordDifficulty] = useState(wordQueue ? wordQueue.getWordDifficulty() : null);
+  const [isWordDeleted, setWordDeleted] = useState(wordQueue ? wordQueue.isWordDeleted() : false);
   /**
    * @param {WordQueue} wQueue
    */
@@ -28,6 +29,7 @@ const Home = () => {
     setWordQueue(wQueue);
     setWordDifficulty(wQueue.getWordDifficulty());
     setWord(wQueue.getCurrentWord());
+    setWordDeleted(wQueue.isWordDeleted());
   };
   const [statistics, setStatistics] = useState(statisticsController.get());
   const [settings, setSettings] = useState(settingsController.get());
@@ -50,6 +52,7 @@ const Home = () => {
 
   const handleNextBtnClick = () => {
     setWord(wordQueue.changeWord());
+    setWordDeleted(wordQueue.isWordDeleted());
   };
 
   const handlePrevBtnClick = () => {
@@ -95,6 +98,7 @@ const Home = () => {
       </div>
     );
   }
+
   return (
     <div className="home-block__card">
       <Dropdown
@@ -112,13 +116,26 @@ const Home = () => {
         onNextBtnClick={handleNextBtnClick}
         onPrevBtnClick={handlePrevBtnClick}
         isEducation={word.isEducation}
+        isWordDeleted={isWordDeleted}
+        setWordDeleted={setWordDeleted}
         wordDifficulty={wordDifficulty}
         isAnswered={wordQueue.isCurrentWordAnswered()}
         onWordAnswered={wordQueue.setWordAnswered}
         onWordMistaken={wordQueue.setWordMistaken}
         hasPrevious={wordQueue.hasPreviousWord()}
       />
-      <span>{`${wordQueue.getCurrentPosition()} out of ${wordQueue.getLength()}`}</span>
+      <div className="home_progress_bar">
+        <div
+          className="line_progress"
+          style={{
+            width: `${(wordQueue.getCurrentPosition() * 100) / wordQueue.getLength()}% `,
+            background: 'linear-gradient(0.25turn, rgba(37, 206, 222, 0.2), rgba(37, 206, 222, 0.8))',
+            height: '100%',
+            borderRadius: '25px',
+          }}
+        />
+        <p className="total_words">{`${wordQueue.getCurrentPosition()} out of ${wordQueue.getLength()}`}</p>
+      </div>
     </div>
   );
 };

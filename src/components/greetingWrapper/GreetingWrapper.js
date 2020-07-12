@@ -35,13 +35,18 @@ const GreetingWrapper = () => {
   const isAuthenticationPage = location.pathname === '/signin' || location.pathname === '/signup';
   const isHomePage = location.pathname === '/';
 
+  let completedWordsCount = passedCount === null || cardsCount === null ? 0 : passedCount;
+  if (completedWordsCount > cardsCount) {
+    completedWordsCount = cardsCount;
+  }
+
   return (
     !isAuthenticationPage
         && (
         <div className="greeting-wrapper">
           <Greeting />
           <ContinueTrainingBlock
-            completedWordsCount={passedCount === null || cardsCount === null ? 0 : passedCount}
+            completedWordsCount={completedWordsCount}
             cardsCount={passedCount === null || cardsCount === null ? 0 : cardsCount}
             isFullState={!isHomePage}
           />

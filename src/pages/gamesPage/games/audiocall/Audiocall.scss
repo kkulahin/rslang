@@ -1,28 +1,46 @@
 @-webkit-keyframes card-animation {
+
   10% { transform: translateX(100px); }
+
   20% { transform: translateX(0); }
+
   30% { transform: translateX(-50px); }
-  40% { transform: translateX(-75px); opacity: 1;}
-  70% { transform: translateX(-100px); opacity: 0.5;}
-  100% { transform: translateX(-125px); opacity: 0;}
+
+  40% { opacity: 1; transform: translateX(-75px);}
+
+  70% { opacity: 0.5; transform: translateX(-100px);}
+
+  100% { opacity: 0; transform: translateX(-125px);}
 }
 
 @-moz-keyframes card-animation {
+
   10% { transform: translateX(100px); }
+
   20% { transform: translateX(0); }
+
   30% { transform: translateX(-50px); }
-  40% { transform: translateX(-75px); opacity: 1;}
-  70% { transform: translateX(-100px); opacity: 0.5;}
-  100% { transform: translateX(-125px); opacity: 0;}
+
+  40% { opacity: 1; transform: translateX(-75px);}
+
+  70% { opacity: 0.5; transform: translateX(-100px);}
+
+  100% { opacity: 0; transform: translateX(-125px);}
 }
 
 @keyframes card-animation {
+
   10% { transform: translateX(100px); }
+
   20% { transform: translateX(0); }
+
   30% { transform: translateX(-50px); }
-  40% { transform: translateX(-75px); opacity: 1;}
-  70% { transform: translateX(-100px); opacity: 0.5;}
-  100% { transform: translateX(-125px); opacity: 0;}
+
+  40% { opacity: 1; transform: translateX(-75px);}
+
+  70% { opacity: 0.5; transform: translateX(-100px);}
+
+  100% { opacity: 0; transform: translateX(-125px);}
 }
 
 .audiocall {
@@ -31,6 +49,7 @@
   justify-content: center;
 
   &__main {
+
     &-header {
       display: flex;
       flex-wrap: wrap;
@@ -51,11 +70,13 @@
   }
 
   &__card {
+
     &--animated {
       animation: card-animation 1s linear;
     }
 
     &-loading {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -87,7 +108,7 @@
   &__button {
     width: 100%;
     
-    & .button {
+    .button {
       margin: 20px auto;
       padding: 15px 60px;
     }

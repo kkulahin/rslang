@@ -76,7 +76,6 @@ export default class WordQueue {
     this.needAnUpdate = null;
     const isQueueStarted = this.queue.some(({ isDone }) => isDone === true);
     if (isQueueStarted) {
-      // notify user you will reset the current queue
       this.needAnUpdate = confirm('You have started today learning. Do you want to recreate today game?');
     }
     if (!isQueueStarted || this.needAnUpdate) {
@@ -217,6 +216,8 @@ export default class WordQueue {
     }
   }
 
+  isWordDeleted = () => this.hasWordDeleted === true;
+
   getWordDifficulty = () => (this.getCurrentWord()
     ? this.getCurrentWord().word.getDifficulty()
     : null);
@@ -242,6 +243,7 @@ export default class WordQueue {
         this.queuePointer = queue.length;
       }
       this.hasWordDeleted = false;
+      wordQueueSubject.notify(this);
     } else {
       this.queuePointer = queue.reduce((fInd, { isDone }, i) => {
         if (isDone !== true && fInd === queue.length) {

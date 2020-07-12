@@ -103,16 +103,3 @@ describe('set difficulty:', () => {
     expect(word.difficulty).toBe(1);
   });
 });
-
-// describe('get next repetition', () => {
-//   test('should get next repetition', () => {
-//     WordQueue.mockImplementationOnce(() => (
-//       {
-//         queue: [1, 2, 3],
-//       }
-//     ));
-//     const WordQueue = new WordQueue([], [], 1, 0);
-//     const word1 = new Word(WordQueue, null, {});
-//     console.log(word1.getNextRepetition());
-//   });
-// });

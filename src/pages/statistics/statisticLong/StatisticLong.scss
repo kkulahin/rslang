@@ -1,52 +1,76 @@
 @import '../../../styles/variables.scss';
 
-.statistic-long {
-  width: 100%;
-  max-width: 1020px;
-  padding: 10px 30px;
+@import '../../../styles/mixin.scss';
 
-  &__title {
-    font: inherit;
-    font-size: 2.4rem;
-    line-height: 1.6em;
-    text-align: center;
+$margin: 20px;
+$padding: $margin;
 
-    color: $main-color;
-    font-weight: normal;
-  }
+.statistic {
 
-  &__period {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 70px;
-    margin: 20px 0;
-
-    font: inherit;
-    font-weight: normal;
-    font-size: 1.6rem;
-    line-height: 1.6em;
-
-    color: $main-color;
-
-    .dropdown {
-      position: absolute;
-      top: 0;
-      right: 0;
-
-      z-index: 10;
-      margin: 0;
-
-      &__title {
-        font: inherit;
-        color: #000000;
-        background-color: $main-color;
+  &-long {
+    width: 100%;
+    max-width: 1020px;
+    min-width: 300px;
+    padding: ($padding * 0.5) ($padding * 1.5);
+    order: 2;
+  
+    &__title {
+      text-align: center;
+      color: $main-color;
+  
+      @include font(3rem, 1.6em, 800);
+    }
+  
+    &__period {
+      position: relative;
+      min-height: 70px;
+      margin: $margin 0;
+      color: $main-color;
+  
+      @include flex(row, center, space-between);
+  
+      @include font(1.6rem, 1.6em, 400);
+  
+      .dropdown {
+        position: absolute;
+        top: 0;
+        right: 4%;
+        z-index: 2;
+        margin: 0;
+  
+        &__title {
+          color: #000000;
+          background-color: $main-color;
+          font-weight: 800;
+        }
       }
     }
   }
 
-  @media (max-width: 768px) {
-    width: 100%;
+  &__left-arrow {
+    order: 1;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .statistic {
+
+    &-long {
+      padding: ($padding * 0.5) 0;
+      order: 1;
+  
+      .container-with-shadow {
+        width: 95% !important;
+        min-width: 300px;
+        margin: 0 auto;
+        padding: $padding !important;
+        overflow-x: auto;
+      }
+    }
+
+    &__left-arrow {
+      order: 2;
+    }
   }
 }

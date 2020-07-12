@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Tabs from '../components/tabs/Tabs';
-import TabContent from '../components/tabs/tabContent/TabContent';
-import { getAllUserWords } from '../controllers/words/userWords';
-import { getWordsById } from '../controllers/words/words';
-import { getCookie } from '../utils/cookie';
-import Button from '../components/button/Button';
+import Tabs from '../../components/tabs/Tabs';
+import TabContent from '../../components/tabs/tabContent/TabContent';
+import { getAllUserWords } from '../../controllers/words/userWords';
+import { getWordsById } from '../../controllers/words/words';
+import Button from '../../components/button/Button';
+import { getTodaySeconds, getDateFromSeconds, checkDayDifferenceAbs } from '../../utils/time';
 
 const isEmptyArr = (arr) => {
   if (Array.isArray(arr) && !arr.length) {
@@ -19,17 +19,15 @@ const Dictionary = () => {
   const [tabContent, setTabContent] = useState({ normal: [], hard: [], deleted: [] });
   const [isUpdated, setUpdate] = useState(false);
   const [tabContentUpdated, setTabContentUpdated] = useState(null);
+  const [isRender, setRenderPage] = useState(false);
   useEffect(() => {
-    const auth = JSON.parse(getCookie('auth'));
-    const getDictionaryWords = async (token, id) => {
-      const response = await getAllUserWords(token, id);
-      if (response.notification.status) {
-        setDictionaryWords(response.data);
-      } else {
-        console.log('something wrongs');
+    const getDictionaryWords = async () => {
+      const { data, response } = await getAllUserWords();
+      if (response.ok) {
+        setDictionaryWords(data);
       }
     };
-    getDictionaryWords(auth.token, auth.userId);
+    getDictionaryWords();
   }, []);
 
   useEffect(() => {
@@ -40,6 +38,7 @@ const Dictionary = () => {
       });
       Promise.all(list).then((resps) => {
         setDictionaryInfoWords(resps);
+        setRenderPage(true);
       });
     };
     if (dictionaryWords !== null) {
@@ -57,13 +56,33 @@ const Dictionary = () => {
       dictionaryWords.forEach((d) => {
         const word = dictionaryInfoWords.filter((w) => w.data.id === d.wordId);
         if (word !== null) {
-          const { isDeleted } = d.optional;
-          if (isDeleted !== undefined && isDeleted) {
-            tabContentLocal.deleted.push(word);
-          } else if (d.difficulty === 'normal') {
-            tabContentLocal.normal.push(word);
+          const {
+            isDeleted,
+            totalMistakes,
+            totalRepetition,
+            nextRepetition,
+          } = d.optional;
+          const [oneWord] = word;
+
+          const today = getDateFromSeconds(getTodaySeconds());
+          const repetition = getDateFromSeconds(nextRepetition);
+
+          if (repetition - today <= 0) {
+            oneWord.data.nextRepetition = 'today or soon';
+          } else if (checkDayDifferenceAbs(today, repetition) === 1) {
+            oneWord.data.nextRepetition = 'tomorrow or soon';
           } else {
-            tabContentLocal.hard.push(word);
+            oneWord.data.nextRepetition = `${repetition.getFullYear()}-${repetition.getMonth() + 1}-${repetition.getDate()}`;
+          }
+
+          oneWord.data.totalMistakes = totalMistakes;
+          oneWord.data.totalRepetition = totalRepetition;
+          if (isDeleted !== undefined && isDeleted) {
+            tabContentLocal.deleted.push(oneWord.data);
+          } else if (d.difficulty === 'normal') {
+            tabContentLocal.normal.push(oneWord.data);
+          } else {
+            tabContentLocal.hard.push(oneWord.data);
           }
         }
       });
@@ -74,9 +93,14 @@ const Dictionary = () => {
   const buildTab = (cTab) => {
     const tab = [];
     tabContent[cTab].forEach((w) => {
-      const cWord = w[0].data;
       tab.push({
-        id: cWord.id, origin: cWord.word, transcript: cWord.transcription, translation: cWord.wordTranslate,
+        id: w.id,
+        origin: w.word,
+        transcript: w.transcription,
+        translation: w.wordTranslate,
+        totalRepetition: w.totalRepetition,
+        totalMistakes: w.totalMistakes,
+        nextRepetition: w.nextRepetition,
       });
     });
     return tab;
@@ -109,8 +133,19 @@ const Dictionary = () => {
     setDictionaryWords(newDictionaryWords);
   };
 
+  if (!isRender) {
+    return (
+      <div className="spinner">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    );
+  }
   return (
-    <div>
+
+    <div className="dictionary">
       <Tabs>
         <div label="All">
           {

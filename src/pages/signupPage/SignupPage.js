@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
@@ -7,6 +5,7 @@ import {
 } from 'semantic-ui-react';
 import VectorMan from '../../assets/image/vector_man.png';
 import { createUser } from '../../controllers/users/users';
+
 import {
   patternValidate, emailError, passwordError, requiredFieldError, nicknameError, passwordErrorMaxLength,
 } from './validation';

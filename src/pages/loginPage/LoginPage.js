@@ -1,16 +1,16 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
-
 import {
-  Button, Form, Grid, Image, Checkbox,
+  Form, Grid, Image,
 } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
 import { isAuthUser } from '../../controllers/users/users';
 import VectorMan from '../../assets/image/vector_man.png';
 
 import { cookieLifeCyrcle } from '../../config/default';
-
 import { setCookie } from '../../utils/cookie';
+
+import Checkbox from '../../components/checkbox/Checkbox';
+import Button from '../../components/button/Button';
 
 import './LoginPage.scss';
 
@@ -82,9 +82,8 @@ const LoginForm = () => {
     setUserData(userPassword);
   };
 
-  const isChecked = (e) => {
-    const { currentTarget } = e;
-    const checkBoxValue = !currentTarget.querySelector('input.hidden').checked;
+  const isChecked = ({ target }) => {
+    const checkBoxValue = target.checked;
     localStorage.setItem('rememberUser', checkBoxValue);
     setRememberUser(checkBoxValue);
   };
@@ -103,7 +102,6 @@ const LoginForm = () => {
           setCookie('login', JSON.stringify(data), (10 * 365 * 24 * 60 * 60));
           setRedirect(true);
         }
-        setUserNotification(response.notification);
       } catch (error) {
         const userAuthMsg = {
           msg: 'Incorrect e-mail or password',
@@ -151,21 +149,24 @@ const LoginForm = () => {
             defaultValue={data.password}
           />
           <div className="field">
-            <div className="checkbox-wrapper">
-              <Checkbox
-                label="remember me"
-                onChange={isChecked}
-                defaultChecked={rememberUser}
-              />
-            </div>
+            <Checkbox
+              labelContent="remember me"
+              inputId="remember-me"
+              handleSwitch={isChecked}
+              isChecked={rememberUser}
+            />
             <div>
               <a href="/forgot">Forgot password?</a>
             </div>
           </div>
-
-          <Button className="login-button" disabled={isDisabled}>
-            Sign in
-          </Button>
+          <Button
+            name="light"
+            id="login-button"
+            buttonClassName="login-button"
+            label="Sign in"
+            isDisabled={isDisabled}
+            clickHandler={onSubmit}
+          />
           <div className="field">
             <span className="login-signup">New here?</span>
             <Link to="/signup" className="login-signup"> Sign up</Link>

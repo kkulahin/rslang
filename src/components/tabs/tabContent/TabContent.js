@@ -5,10 +5,28 @@ import { Icon, Pagination } from 'semantic-ui-react';
 import './TabContent.scss';
 
 const Row = ({ word, onClickCrashButton }) => {
-  const { origin, transcript, translation } = word;
+  const {
+    origin, transcript, translation, totalRepetition, totalMistakes, nextRepetition,
+  } = word;
   return (
     <tr className="row">
-      <td className="row__item">{origin}</td>
+      <td className="row__item">
+        <span>{origin}</span>
+        <div className="tooltip">
+          <span>
+            Total Repetition:
+            {totalRepetition}
+          </span>
+          <span>
+            Total Mistakes:
+            {totalMistakes}
+          </span>
+          <span>
+            Next Repetition:
+            {nextRepetition}
+          </span>
+        </div>
+      </td>
       <td className="row__item">{transcript}</td>
       <td className="row__item">{translation}</td>
       <td className="row__item">
@@ -77,17 +95,21 @@ const TabContent = ({
         {rows}
         {
 controlPagination.maxPage <= 1 ? null : (
-  <Pagination
-    className="tab-content__pagination"
-    boundaryRange={0}
-    defaultActivePage={1}
-    ellipsisItem={null}
-    firstItem={null}
-    lastItem={null}
-    siblingRange={1}
-    totalPages={controlPagination.maxPage}
-    onPageChange={onChangeList}
-  />
+  <tr className="tab-pagination">
+    <td colSpan="4">
+      <Pagination
+        className="tab-content__pagination"
+        boundaryRange={0}
+        defaultActivePage={1}
+        ellipsisItem={null}
+        firstItem={null}
+        lastItem={null}
+        siblingRange={1}
+        totalPages={controlPagination.maxPage}
+        onPageChange={onChangeList}
+      />
+    </td>
+  </tr>
 )
 }
       </tbody>
