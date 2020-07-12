@@ -130,6 +130,7 @@
 
 				> div:not(:first-child) {
 					visibility: hidden;
+					opacity: 0;
 				}
 			}
 
@@ -142,8 +143,9 @@
 					pointer-events: auto;
 	
 					> div:not(:first-child) {
-						transition: visibility 0.1s 0.3s;
+						transition: visibility 0.1s 0.3s, opacity 0.1s 0.3s;
 						visibility: visible;
+						opacity: 1;
 					}
 				}
 			}
