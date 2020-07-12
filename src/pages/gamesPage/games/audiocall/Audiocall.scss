@@ -82,6 +82,10 @@
       align-items: center;
       height: 380px;
       margin: 0 auto;
+
+      @media (max-width: 768px) {
+        justify-content: unset;
+      }
     }
   }
 
