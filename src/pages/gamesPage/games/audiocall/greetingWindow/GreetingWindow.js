@@ -87,7 +87,7 @@ const GreetingWindow = ({ onComplete }) => {
       seconds={5}
       weight={40}
       showMilliseconds={false}
-      size={300}
+      size={250}
       onComplete={() => {
         onComplete(level.group, level.page);
       }}
