@@ -1,0 +1,86 @@
+@import '../../../styles/mixin.scss';
+
+@import '../../../styles/variables.scss';
+
+@mixin media-hover {
+
+  @media (pointer: fine) { @content; }
+}
+
+$padding: 0.5rem 1rem;
+$border-radius: 10rem;
+$box-shadow: 5px 5px 15px $box-shadow-first-color, 
+            -5px -5px 15px $box-shadow-second-color;
+$box-shadow-mobile: 3px 3px 5px $box-shadow-first-color, 
+                    -3px -3px 5px $box-shadow-second-color;
+$box-shadow-inset: inset 5px 5px 15px $box-shadow-first-color, 
+                  inset -5px -5px 15px $box-shadow-second-color;
+
+.card-button {
+  position: relative;
+
+  @include flex(row);
+
+  height: 100%;
+  padding: $padding;
+
+  font-family: inherit;
+  color: $main-color;
+  font-weight: bold;
+
+  background-color: $background-color;
+
+  border: none;
+  border-radius: $border-radius;
+
+  box-shadow: $box-shadow;
+  outline: none;
+
+  transition: color 0.3s linear, background-color 0.3s linear, box-shadow 0.3s linear;
+
+  cursor: pointer;
+  user-select: none;
+
+  &:active,
+  &--active {
+    background-color: $background-color;
+    box-shadow: $box-shadow-inset;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.25;
+  }
+
+  @media (max-width: 767px) {
+    box-shadow: $box-shadow-mobile;
+  }
+
+  svg {
+    transition: fill 0.3s linear;
+    pointer-events: none;
+  }
+
+  .svg-icon {
+    fill: $main-color;
+  }
+
+  @include media-hover {
+
+    &:hover {
+      color: $hover-color;
+    }
+
+    &:hover .svg-icon {
+      fill: $hover-color;
+    }
+  }
+
+  .button__label {
+    pointer-events: none;
+
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+}

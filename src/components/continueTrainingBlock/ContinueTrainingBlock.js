@@ -8,13 +8,15 @@ import Button from '../button/Button';
 import './ContinueTrainingBlock.scss';
 
 const ContinueTrainingBlock = ({ completedWordsCount, cardsCount, isFullState }) => {
-  const button = isFullState && (
-  <Button
-    label="Continue"
-    name="light"
-  />
-  );
-
+  const buttonLabel = cardsCount === 0 && completedWordsCount === 0 ? 'Update' : 'Continue';
+  const label = cardsCount === 0 && completedWordsCount === 0
+    ? (<h2>Your queue has not been created yet</h2>)
+    : (
+      <>
+        <h3>{`${completedWordsCount} out of ${cardsCount} words`}</h3>
+        <p>you have learned today</p>
+      </>
+    );
   return (
     <ContainerWithShadow
       width="42%"
@@ -23,11 +25,16 @@ const ContinueTrainingBlock = ({ completedWordsCount, cardsCount, isFullState })
     >
       <div className="continue-training-block">
         <div className="continue-training-block__item">
-          <h3>{`${completedWordsCount} out of ${cardsCount} words`}</h3>
-          <p>you have learned today</p>
-          <Link to="/">
-            {button}
-          </Link>
+          {label}
+          {isFullState && (
+            <Link to="/">
+              <Button
+                label={buttonLabel}
+                name="light"
+                id="continue-training-btn"
+              />
+            </Link>
+          )}
         </div>
         <RoundProgressBar
           value={completedWordsCount}
@@ -35,7 +42,6 @@ const ContinueTrainingBlock = ({ completedWordsCount, cardsCount, isFullState })
         />
       </div>
     </ContainerWithShadow>
-
   );
 };
 

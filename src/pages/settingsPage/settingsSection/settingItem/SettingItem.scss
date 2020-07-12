@@ -1,0 +1,20 @@
+@import '../../../../styles/mixin.scss';
+
+.settings__section__item {
+  width: 100%;
+
+  @include flex(row, center, space-between);
+
+  .number-picker {
+    width: 160px;
+  }
+
+  &__title {
+    margin-right: 30px;
+    margin-bottom: 0;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}

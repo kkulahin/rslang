@@ -14,6 +14,7 @@ const options = {
 
 const propTypes = {
   getSpeechQuery: PropTypes.func,
+  getStatusMic: PropTypes.func,
   setInputValue: PropTypes.shape({
     current: PropTypes.object,
   }),
@@ -32,6 +33,7 @@ const propTypes = {
 
 const Dictaphone = ({
   getSpeechQuery,
+  getStatusMic,
   setInputValue,
   transcript,
   finalTranscript,
@@ -72,6 +74,10 @@ const Dictaphone = ({
     }
   }, [finalTranscript, abortListening, setInputValue]);
 
+  useEffect(() => {
+    getStatusMic(icon);
+  }, [icon, getStatusMic]);
+
   if (!browserSupportsSpeechRecognition) {
     return null;
   }
@@ -89,6 +95,7 @@ const Dictaphone = ({
 Dictaphone.propTypes = propTypes;
 Dictaphone.defaultProps = {
   getSpeechQuery: () => {},
+  getStatusMic: () => {},
   setInputValue: {
     current: {},
   },

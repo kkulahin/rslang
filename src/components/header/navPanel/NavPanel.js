@@ -9,11 +9,11 @@ import Logo from '../../../assets/image/icon/reload.png';
 import './navPanel.scss';
 
 const NavPanel = () => {
-  const [activeItem, setActiveItem] = useState({ link: '' });
+  const [activeItem, setActiveItem] = useState({ link: 'home' });
   const [menuSize, setMenuSize] = useState({ size: 'min' });
   const [isVisible, setVisible] = useState(false);
   const handleItemClick = (e) => {
-    const activeLink = e.target.getAttribute('name');
+    const activeLink = e.currentTarget.getAttribute('name');
     setActiveItem({ link: activeLink });
   };
 

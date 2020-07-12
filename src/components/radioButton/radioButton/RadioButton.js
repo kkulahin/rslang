@@ -3,18 +3,24 @@ import PropTypes from 'prop-types';
 
 import './radioButton.scss';
 
-const RadioButton = ({ label, checked, onClickRadioButton }) => {
+const RadioButton = ({
+  label, id, checked, onClickRadioButton,
+}) => {
   let className = 'radio-button';
   if (checked) {
-    className += ' radio-button--checked';
+    className = `${className} radio-button--checked`;
   }
+  const cardClassName = checked
+    ? 'card-radio-button card-radio-button--checked'
+    : 'card-radio-button';
 
   return (
     <button
       type="button"
-      className={className}
-      onClick={() => {
-        onClickRadioButton();
+      id={id}
+      className={`${className} ${cardClassName}`}
+      onClick={(evt) => {
+        onClickRadioButton(evt);
       }}
     >
       {label}
@@ -24,6 +30,7 @@ const RadioButton = ({ label, checked, onClickRadioButton }) => {
 
 RadioButton.propTypes = {
   label: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
   onClickRadioButton: PropTypes.func.isRequired,
 };

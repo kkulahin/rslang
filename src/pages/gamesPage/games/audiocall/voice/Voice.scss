@@ -1,0 +1,18 @@
+@import '../../../../../styles/variables.scss';
+.voice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 230px;
+  height: 230px;
+  margin: 0 auto;
+  border-radius: 50%;
+
+  outline: none;
+
+  &--active {
+    background-color: $enabled-color;
+
+    box-shadow: 0 0 20px $enabled-color;
+  }
+}

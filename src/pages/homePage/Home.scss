@@ -1,0 +1,146 @@
+@import '../../styles/mixin.scss';
+
+.home-block {
+  &__card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  $margin-end-sub-queue: 20px;
+  &__end-sub-queue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h2 {
+      margin-bottom: $margin-end-sub-queue;
+    }
+
+    .button {
+      width: fit-content;
+      margin-bottom: $margin-end-sub-queue;
+    }
+  }
+}
+
+.main-game__end-game {
+  width: 100%;
+  user-select: none;
+  flex-wrap: wrap;
+
+  @include flex(row, center, center);
+
+  &_button {
+    width: fit-content;
+    height: fit-content;
+    margin: 30px 0 30px 30px;
+    @include flex(row, center, center);
+  }
+}
+
+.spinner {
+  width: 100px;
+  height: 100px;
+  transform: translate(-50%, -50%);
+  position: absolute; 
+  top: 50%; 
+  left: 50%;
+  border-radius: 25%;
+  animation: rotate-spinner 2s infinite linear;  
+}
+
+.spinner > span {
+  display: block;
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  box-shadow: 0px 0px 15px 3px #25CEDE inset;  
+  animation: rotate-span 2s infinite ease-in-out;
+  background-color: #2c2f33;
+}
+
+.spinner > span::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  top: -50%;
+  left: -50%;
+  width: 10%;
+  height: 10%;
+  box-shadow: 0px 0px 15px 3px #25CEDE;
+  animation: translate-span-after-before 3s infinite linear;
+}
+
+.spinner > span::before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  top: -50%;
+  left: -50%;
+  width: 10%;
+  height: 10%;
+  box-shadow: 0px 0px 15px 3px #25CEDE;
+  animation: translate-span-after-before 3s infinite ;
+  animation-delay: 1.5s;
+}
+
+.spinner span:nth-child(1) {
+    top: -2%;
+    left: -2%;
+}
+
+.spinner span:nth-child(2) {
+  top: -2%;
+  right: -2%;
+  -webkit-animation-delay: 0.5s;
+  animation-delay: 0.5s;
+}
+
+.spinner span:nth-child(3) {
+  bottom: -2%;
+  right: -2%;  
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
+}
+
+.spinner span:nth-child(4) {
+  bottom: -2%;
+  left: -2%;
+  -webkit-animation-delay: 1.5s;
+  animation-delay: 1.5s;
+}
+
+@keyframes rotate-spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(-360deg);
+  }          
+}
+
+@keyframes rotate-span {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }         
+}
+
+@keyframes translate-span-after-before {
+  0% {
+      transform: translate(0%);
+  }
+  25% {
+      transform: translate(650%);
+  }
+  50% {
+      transform: translate(650%, 650%);
+  }
+  75% {
+      transform: translate(0%, 650%);
+  }  
+}

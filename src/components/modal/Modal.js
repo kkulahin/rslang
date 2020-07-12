@@ -1,0 +1,66 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {
+  Header, Modal,
+} from 'semantic-ui-react';
+import Button from '../button/Button';
+import './modal.scss';
+
+export default class ModalWindow extends Component {
+  constructor() {
+    super();
+    this.state = {
+      modalOpen: true,
+    };
+  }
+
+  handleOpen = () => this.setState({ modalOpen: true })
+
+  handleClose = () => this.setState({ modalOpen: false })
+
+  render() {
+    const {
+      label, modalSize, content, contentHeader, clickHandler,
+    } = this.props;
+
+    const { modalOpen } = this.state;
+    return (
+      <Modal
+        open={modalOpen}
+        onClose={this.handleClose}
+        closeIcon
+        size={modalSize} // mini,tiny,small,large,fullscreen
+        dimmer="blurring"
+      >
+        <Header content={contentHeader} />
+        <Modal.Content>
+          {content}
+        </Modal.Content>
+        <Modal.Actions>
+          {(clickHandler
+          && (
+          <>
+            <Button id="1" label="Cancel" clickHandler={this.handleClose} />
+            <Button id="2" label={label} clickHandler={() => { this.handleClose(); clickHandler(); }} />
+          </>
+          )) || <Button id="2" label="Ok" clickHandler={this.handleClose} /> }
+        </Modal.Actions>
+      </Modal>
+    );
+  }
+}
+
+ModalWindow.propTypes = {
+  label: PropTypes.string,
+  modalSize: PropTypes.string,
+  content: PropTypes.string.isRequired,
+  contentHeader: PropTypes.string,
+  clickHandler: PropTypes.func,
+};
+
+ModalWindow.defaultProps = {
+  label: 'Ok',
+  contentHeader: 'message',
+  modalSize: 'small',
+  clickHandler: undefined,
+};

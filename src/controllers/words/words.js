@@ -1,4 +1,4 @@
-import { SchoolURL } from '../../default';
+import { SchoolURL } from '../../config/default';
 import responseFromServer from '../../utils/responseFromServer';
 
 import random from '../../utils/random';
@@ -44,7 +44,7 @@ const getWordsCount = async (group = 0, notification = wordsNotification) => {
   }
 };
 
-const getWordsById = async (id, page, notification = wordsNotification) => {
+const getWordsById = async (id, notification = wordsNotification) => {
   try {
     const response = await responseFromServer(`${SchoolURL}/words/${id}`, null, notification);
     return response;
