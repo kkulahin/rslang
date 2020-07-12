@@ -9,3 +9,4 @@
 | change the path icon and add field 'id' for button gitHub | 01.07.2020 | 01.07.2020 | 5.5 h |
 | create notification component | 06.07.2020 | 10.07.2020 | 34 h |
 | create home page spinner | 10.07.2020 | 11.07.2020 | 7 h |
+| create progress bar for home page | 11.07.2020 | 12.07.2020 | 6 h |

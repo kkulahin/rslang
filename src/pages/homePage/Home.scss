@@ -144,3 +144,34 @@
       transform: translate(0%, 650%);
   }  
 }
+
+.home-block__card .home_progress_bar{
+  position: relative;
+  width: 50%;
+  height: 30px;  
+  margin: 20px auto;
+  border-radius: 25px;
+  box-shadow: 6px 6px 18px black, -6px -6px 18px #3b4451;
+  background-color: #2c2f33;  
+  transition: 3s;
+}
+
+.home-block__card .home_progress_bar .line_progress{    
+  transition: 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  animation: line-progress 1.5s;
+}
+
+.home_progress_bar .total_words{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.8rem;
+}
+
+@keyframes line-progress {
+  from{
+    box-shadow: 0px 0px 40px 5px white;
+    width: 0%;
+  }
+}
