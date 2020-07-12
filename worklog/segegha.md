@@ -19,3 +19,4 @@
 | Refactor login page styles | 10.07.2020 | 10.07.2020 | 1 h |
 | Add responsive for games page | 11.07.2020 | 11.07.2020 | 3 h |
 | Use stylefix for all styles | 11.07.2020 | 11.07.2020 | 5 min |
+| Fix responsive, resolve conflict | 12.07.2020 | 12.07.2020 | 4 h |

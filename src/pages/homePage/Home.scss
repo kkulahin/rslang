@@ -7,6 +7,7 @@ $spinner-position: calc(50% - 50px);
 $margin-end-sub-queue: 20px;
 
 .home-block {
+
   &__card {
     width: 100%;
 
@@ -16,6 +17,7 @@ $margin-end-sub-queue: 20px;
   &__end-sub-queue {
     
     @include flex(column, center, stretch);
+
     h2 {
       margin-bottom: $margin-end-sub-queue;
     }
@@ -28,9 +30,9 @@ $margin-end-sub-queue: 20px;
 }
 
 .main-game__end-game {
+  flex-wrap: wrap;
   width: 100%;
   user-select: none;
-  flex-wrap: wrap;
 
   @include flex(row, center, center);
 
@@ -157,38 +159,40 @@ $margin-end-sub-queue: 20px;
   }  
 }
 
-.home-block__card .home_progress_bar{
+.home-block__card .home_progress_bar {
   position: relative;
   width: 50%;
   height: 30px;  
   margin: 20px auto;
+  background-color: #2c2f33;
   border-radius: 25px;
-  box-shadow: 6px 6px 18px black, -6px -6px 18px #3b4451;
-  background-color: #2c2f33;  
+  box-shadow: 6px 6px 18px black, -6px -6px 18px #3b4451;  
   transition: 3s;
 }
 
-.home-block__card .home_progress_bar .line_progress{    
+.home-block__card .home_progress_bar .line_progress {    
   transition: 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
   animation: line-progress 1.5s;
 }
 
-.home_progress_bar .total_words{
+.home_progress_bar .total_words {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   font-size: 1.8rem;
+  transform: translate(-50%, -50%);
 }
 
 @keyframes line-progress {
-  from{
-    box-shadow: 0px 0px 40px 5px white;
+
+  from {
     width: 0%;
+    box-shadow: 0px 0px 40px 5px white;
   }
 }
 
 @media (max-width: 767px) {
+
   .spinner {
     top: $spinner-position;
     left: $spinner-position;
