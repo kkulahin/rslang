@@ -87,8 +87,19 @@ export default class WordModel {
     }
     const { data, response } = await makeRequest(method, `users/%%userId%%/words/${word.definition.wordId}`, wordToPost);
     if (!response.ok) {
-      console.log(data);
-      throw new Error(`${method} Word failed with ${response.status} ${response.statusText}`);
+      if (response.status === 404) {
+        const { data: postData, response: postResponse } = await makeRequest('POST',
+          `users/%%userId%%/words/${word.definition.wordId}`,
+          wordToPost);
+        if (!postResponse.ok) {
+          console.debug(postData);
+          throw new Error(`${method} Word failed with ${postResponse.status} ${postResponse.statusText}`);
+        }
+        return postData;
+      } else {
+        console.debug(data);
+        throw new Error(`${method} Word failed with ${response.status} ${response.statusText}`);
+      }
     }
     return data;
   };
