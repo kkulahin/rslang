@@ -41,7 +41,9 @@ $padding: $margin;
       @include flex(column, center, space-around);
 
       img {
-        border-radius: 0 0 15px 15px;
+        width: 75%;
+        height: auto;
+        border-radius: 0;
       }
     }
   }

@@ -45,9 +45,9 @@ $margin-end-sub-queue: 20px;
 
 .spinner {
   transform: translate(-50%, -50%);
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: relative;
+  top: 10%;
+  left: $spinner-position;
   border-radius: 25%;
   animation: rotate-spinner 2s infinite linear;  
 
