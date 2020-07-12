@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import './RoundProgressBar.scss';
@@ -15,11 +15,26 @@ const RoundProgressBar = ({
   const viewBox = `0 0 ${size} ${size}`;
   const dashArray = radius * Math.PI * 2;
   const ratio = maxValue === 0 ? 0 : value / maxValue;
-  const dashOffset = dashArray - dashArray * ratio;
-
   const innerRingSize = size - 2 * thumbWidth;
   const coreSize = size - 2 * (thumbWidth + innerPadding);
-  const percentage = ratio * 100;
+
+  const [stateRatio, setStateRatio] = useState(0);
+
+  useEffect(() => {
+    const updateProgressBar = () => {
+      setTimeout(() => {
+        setStateRatio(stateRatio + 0.001);
+      }, 1);
+    };
+    if (stateRatio + 0.01 < ratio) {
+      updateProgressBar();
+    } else {
+      setStateRatio(ratio);
+    }
+  }, [stateRatio, ratio]);
+
+  const dashOffset = dashArray - dashArray * stateRatio;
+  const percentage = stateRatio * 100;
 
   return (
     <div
