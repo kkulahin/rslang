@@ -8,8 +8,10 @@ import {
 import BlockWithShadow from '../../components/containerWithShadow/ContainerWithShadow';
 import './GamesPage.scss';
 
-import SpeakItPic from '../../assets/image/speakIt.png';
-import AudioCallPic from '../../assets/image/audiocall.png';
+import SpeakItPic from '../../assets/image/speakit.jpg';
+import AudioCallPic from '../../assets/image/audiocall.jpg';
+import SprintPic from '../../assets/image/sprint.jpg';
+import SavannaPic from '../../assets/image/savanna.jpg';
 
 import SpeakIt from './games/speakIt/SpeakIt';
 import Sprint from './games/sprint/Sprint';
@@ -35,7 +37,7 @@ const Games = () => {
     },
     sprint: {
       link: 'sprint',
-      pic: SpeakItPic,
+      pic: SprintPic,
     },
     audiocall: {
       link: 'audiocall',
@@ -43,7 +45,7 @@ const Games = () => {
     },
     savanna: {
       link: 'savanna',
-      pic: SpeakItPic,
+      pic: SavannaPic,
     },
   };
 
