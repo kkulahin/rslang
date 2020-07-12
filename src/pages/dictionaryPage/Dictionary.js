@@ -4,7 +4,6 @@ import TabContent from '../../components/tabs/tabContent/TabContent';
 import { getAllUserWords } from '../../controllers/words/userWords';
 import { getWordsById } from '../../controllers/words/words';
 import Button from '../../components/button/Button';
-import './Dictionary.scss';
 import { getTodaySeconds, getDateFromSeconds, checkDayDifferenceAbs } from '../../utils/time';
 
 const isEmptyArr = (arr) => {
