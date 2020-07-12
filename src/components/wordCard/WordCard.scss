@@ -60,7 +60,7 @@ $font-color-tooltip: $main-color;
       font-size: $font-size-main;
 
       @media (max-width: 767px) {
-        margin: 0 0.5rem;
+        margin: 0;
         padding: 0.5rem !important;
 
         font-size: $font-size-main-mobile;
