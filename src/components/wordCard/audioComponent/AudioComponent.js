@@ -12,9 +12,16 @@ import AudioPlayIcon from '../icons/AudioPlayIcon';
 
 const AudioComponent = (props) => {
   const {
-    helpSettings: { isTextExampleShow, isTextMeaningShow },
-    settings: { isComplexityBtn },
-    word: { audio, audioExample, audioMeaning },
+    settings: {
+      isComplexityBtn = true,
+      isTextExampleShow = true,
+      isTextMeaningShow = true,
+    },
+    word: {
+      audio = '',
+      audioExample = '',
+      audioMeaning = '',
+    },
     onAudioEnd,
     isPrevWord,
     isEducation,
@@ -150,21 +157,24 @@ const AudioComponent = (props) => {
   );
 };
 
+AudioComponent.defaultProps = {
+  word: {},
+  settings: {},
+};
+
 export default AudioComponent;
 
 AudioComponent.propTypes = {
   word: PropTypes.shape({
-    audio: PropTypes.string.isRequired,
-    audioExample: PropTypes.string.isRequired,
-    audioMeaning: PropTypes.string.isRequired,
-  }).isRequired,
+    audio: PropTypes.string,
+    audioExample: PropTypes.string,
+    audioMeaning: PropTypes.string,
+  }),
   settings: PropTypes.shape({
-    isComplexityBtn: PropTypes.bool.isRequired,
-  }).isRequired,
-  helpSettings: PropTypes.shape({
-    isTextExampleShow: PropTypes.bool.isRequired,
-    isTextMeaningShow: PropTypes.bool.isRequired,
-  }).isRequired,
+    isComplexityBtn: PropTypes.bool,
+    isTextExampleShow: PropTypes.bool,
+    isTextMeaningShow: PropTypes.bool,
+  }),
   isShowBtnClick: PropTypes.bool.isRequired,
   isCorrect: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,

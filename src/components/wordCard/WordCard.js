@@ -25,7 +25,6 @@ const initialState = {
 };
 
 const WordCard = ({
-  helpSettings,
   settings,
   currentWord,
   onShowAnswerBtnClick,
@@ -41,8 +40,12 @@ const WordCard = ({
   isEducation,
   wordDifficulty,
 }) => {
-  const { isAudioAuto, isComplexityBtn } = settings;
-  const { definition: { word } } = currentWord;
+  const {
+    isAudioAuto = true,
+    isComplexityBtn = true,
+  } = settings;
+  const { definition = {} } = currentWord;
+  const { word = '' } = definition;
 
   const inputRef = useRef();
 
@@ -287,17 +290,16 @@ const WordCard = ({
         />
         <ContainerWithShadow padding="20px">
           <CardContent
-            helpSettings={helpSettings}
             settings={settings}
-            word={currentWord.definition}
+            word={definition}
             onInputEnter={handleInputEnter}
             onInputFocus={handleInputFocus}
             onInputChange={handleInputChange}
             onCardBtnClick={handleCardBtnClick}
             onWordComplexityBtnClick={handleWordComplexityBtnClick}
             onAudioEnd={handleAudioEnd}
-            isEducation={isEducation}
             wordDifficulty={wordDifficulty}
+            isEducation={isEducation}
             isPrevWord={isAnswered}
             inputRef={inputRef}
             {...state}
@@ -314,7 +316,18 @@ const WordCard = ({
 };
 
 WordCard.defaultProps = {
+  settings: {},
   onShowAnswerBtnClick: () => {},
+  onAgainBtnClick: () => {},
+  onComplexityBtnClick: () => {},
+  onDeleteBtnClick: () => {},
+  onNextBtnClick: () => {},
+  onPrevBtnClick: () => {},
+  onWordAnswered: () => {},
+  onWordMistaken: () => {},
+  isAnswered: false,
+  isEducation: false,
+  hasPrevious: false,
   wordDifficulty: 'normal',
 };
 
@@ -323,20 +336,19 @@ export default WordCard;
 WordCard.propTypes = {
   currentWord: PropTypes.instanceOf(Word).isRequired,
   settings: PropTypes.shape({
-    isAudioAuto: PropTypes.bool.isRequired,
-    isComplexityBtn: PropTypes.bool.isRequired,
-  }).isRequired,
-  helpSettings: PropTypes.shape().isRequired,
+    isAudioAuto: PropTypes.bool,
+    isComplexityBtn: PropTypes.bool,
+  }),
   onShowAnswerBtnClick: PropTypes.func,
-  onAgainBtnClick: PropTypes.func.isRequired,
-  onComplexityBtnClick: PropTypes.func.isRequired,
-  onDeleteBtnClick: PropTypes.func.isRequired,
-  onNextBtnClick: PropTypes.func.isRequired,
-  onPrevBtnClick: PropTypes.func.isRequired,
-  isAnswered: PropTypes.bool.isRequired,
-  isEducation: PropTypes.bool.isRequired,
+  onAgainBtnClick: PropTypes.func,
+  onComplexityBtnClick: PropTypes.func,
+  onDeleteBtnClick: PropTypes.func,
+  onNextBtnClick: PropTypes.func,
+  onPrevBtnClick: PropTypes.func,
+  onWordAnswered: PropTypes.func,
+  onWordMistaken: PropTypes.func,
+  isAnswered: PropTypes.bool,
+  isEducation: PropTypes.bool,
+  hasPrevious: PropTypes.bool,
   wordDifficulty: PropTypes.string,
-  onWordAnswered: PropTypes.func.isRequired,
-  onWordMistaken: PropTypes.func.isRequired,
-  hasPrevious: PropTypes.bool.isRequired,
 };

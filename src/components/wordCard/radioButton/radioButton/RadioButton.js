@@ -32,8 +32,8 @@ RadioButton.defaultProps = {
 };
 
 RadioButton.propTypes = {
-  label: PropTypes.string,
   id: PropTypes.string.isRequired,
+  label: PropTypes.string,
   checked: PropTypes.bool,
   onClickRadioButton: PropTypes.func,
   icon: PropTypes.node,

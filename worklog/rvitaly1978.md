@@ -7,4 +7,4 @@
 | add container with shadow | 19.06.2020 | 19.06.2020 | 1 h |
 | create word card | 20.06.2020 | 26.06.2020 | 40 h |
 | fix word card | 30.06.2020 | 08.07.2020 | 29 h |
-| add responsive and fix errors word card | 08.06.2020 | 11.07.2020 | 10 h |
+| add responsive and fix errors word card | 08.06.2020 | 12.07.2020 | 12 h |

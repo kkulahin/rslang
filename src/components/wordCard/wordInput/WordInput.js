@@ -29,7 +29,9 @@ const getFormattedWordOnError = (errorWord, word) => {
 };
 
 const WordInput = ({
-  word: { word },
+  word: {
+    word = '',
+  },
   onInputEnter,
   onInputFocus,
   onInputChange,
@@ -76,12 +78,16 @@ const WordInput = ({
   return element;
 };
 
+WordInput.defaultProps = {
+  word: {},
+};
+
 export default WordInput;
 
 WordInput.propTypes = {
   word: PropTypes.shape({
-    word: PropTypes.string.isRequired,
-  }).isRequired,
+    word: PropTypes.string,
+  }),
   onInputFocus: PropTypes.func.isRequired,
   onInputEnter: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,

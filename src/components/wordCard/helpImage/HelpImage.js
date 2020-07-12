@@ -4,7 +4,10 @@ import Spinner from '../spinner/Spinner';
 import { urlToAssets } from '../../../constants/urls';
 
 const HelpImage = ({
-  word: { image, wordTranslate },
+  word: {
+    image = '',
+    wordTranslate = '',
+  },
 }) => {
   const [imageData, setImageData] = useState({
     loading: true,
@@ -55,14 +58,15 @@ const HelpImage = ({
   );
 };
 
+HelpImage.defaultProps = {
+  word: {},
+};
+
 export default HelpImage;
 
 HelpImage.propTypes = {
-  helpSettings: PropTypes.shape({
-    isImageShow: PropTypes.bool.isRequired,
-  }).isRequired,
   word: PropTypes.shape({
-    image: PropTypes.string.isRequired,
-    wordTranslate: PropTypes.string.isRequired,
-  }).isRequired,
+    image: PropTypes.string,
+    wordTranslate: PropTypes.string,
+  }),
 };

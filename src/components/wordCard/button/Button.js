@@ -43,14 +43,15 @@ Button.defaultProps = {
   label: null,
   dataTitle: null,
   dataPlacement: null,
+  clickHandler: () => {},
 };
 
 Button.propTypes = {
+  id: PropTypes.string.isRequired,
   isDisabled: PropTypes.bool,
   isActive: PropTypes.bool,
-  id: PropTypes.string.isRequired,
   label: PropTypes.string,
-  clickHandler: PropTypes.func.isRequired,
+  clickHandler: PropTypes.func,
   icon: PropTypes.node,
   dataTitle: PropTypes.string,
   dataPlacement: PropTypes.string,

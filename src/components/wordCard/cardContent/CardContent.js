@@ -16,9 +16,11 @@ import ShowAnswerIcon from '../icons/ShowAnswerIcon';
 
 const CardContent = (props) => {
   const {
-    helpSettings: { isImageShow },
     settings: {
-      isShowAnswerBtn, isDeleteBtn, isComplexityBtn,
+      isShowAnswerBtn = true,
+      isDeleteBtn = true,
+      isComplexityBtn = true,
+      isImageShow = true,
     },
     isPrevWord,
     isEducation,
@@ -122,20 +124,18 @@ const CardContent = (props) => {
 };
 
 CardContent.defaultProps = {
-  wordDifficulty: 'normal',
+  settings: {},
 };
 
 export default CardContent;
 
 CardContent.propTypes = {
   settings: PropTypes.shape({
-    isShowAnswerBtn: PropTypes.bool.isRequired,
-    isDeleteBtn: PropTypes.bool.isRequired,
-    isComplexityBtn: PropTypes.bool.isRequired,
-  }).isRequired,
-  helpSettings: PropTypes.shape({
-    isImageShow: PropTypes.bool.isRequired,
-  }).isRequired,
+    isShowAnswerBtn: PropTypes.bool,
+    isDeleteBtn: PropTypes.bool,
+    isComplexityBtn: PropTypes.bool,
+    isImageShow: PropTypes.bool,
+  }),
   isCorrect: PropTypes.bool.isRequired,
   isEducation: PropTypes.bool.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
@@ -143,5 +143,5 @@ CardContent.propTypes = {
   isAgainBtnClick: PropTypes.bool.isRequired,
   onCardBtnClick: PropTypes.func.isRequired,
   onWordComplexityBtnClick: PropTypes.func.isRequired,
-  wordDifficulty: PropTypes.string,
+  wordDifficulty: PropTypes.string.isRequired,
 };
