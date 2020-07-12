@@ -7,17 +7,17 @@ $spinner-position: calc(50% - 50px);
 $margin-end-sub-queue: 20px;
 
 .home-block {
-
   &__card {
     width: 100%;
-
-    @include flex(column, center, stretch);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   &__end-sub-queue {
-    
-    @include flex(column, center, stretch);
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     h2 {
       margin-bottom: $margin-end-sub-queue;
     }
@@ -30,18 +30,17 @@ $margin-end-sub-queue: 20px;
 }
 
 .main-game__end-game {
-  flex-wrap: wrap;
   width: 100%;
   user-select: none;
+  flex-wrap: wrap;
 
   @include flex(row, center, center);
 
   &_button {
-    margin-left: 30px;
-
+    width: fit-content;
+    height: fit-content;
+    margin: 30px 0 30px 30px;
     @include flex(row, center, center);
-
-    @include size(fit-content, fit-content);
   }
 }
 
@@ -177,6 +176,8 @@ $margin-end-sub-queue: 20px;
 
 .home_progress_bar .total_words {
   position: absolute;
+  width: 100%;
+  text-align: center;
   top: 50%;
   left: 50%;
   font-size: 1.8rem;
@@ -194,7 +195,7 @@ $margin-end-sub-queue: 20px;
 @media (max-width: 767px) {
 
   .spinner {
-    top: $spinner-position;
+    top: 10%;
     left: $spinner-position;
   }
 }

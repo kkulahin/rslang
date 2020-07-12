@@ -118,7 +118,7 @@ $font-color-tooltip: $main-color;
     @media (max-width: 767px) {
       align-self: center;
 
-      width: $image-width-mobile;
+      width: 100%;
       height: calc(#{$image-width-mobile} * 2 / 3);
     }
   }
@@ -146,6 +146,11 @@ $font-color-tooltip: $main-color;
     object-position: center;
 
     animation: fadeIn 0.3s linear;
+
+    @media (max-width: 767px) {
+      width: 70%;
+      min-width: 240px;
+    }
   }
 
   @keyframes fadeIn {
