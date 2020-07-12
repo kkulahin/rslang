@@ -28,7 +28,7 @@ const checkDayDifference = (date1, date2) => {
   newDate1.setHours(0, 0, 0, 0);
   newDate2.setHours(0, 0, 0, 0);
   const diff = (newDate2 - newDate1) / 1000 / 60 / 60 / 24;
-  return diff;
+  return Math.ceil(diff);
 };
 
 const checkDayDifferenceAbs = (date1, date2) => Math.abs(checkDayDifference(date1, date2));

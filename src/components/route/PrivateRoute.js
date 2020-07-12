@@ -7,7 +7,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   const history = useHistory();
 
   useEffect(() => history.listen((location) => {
-    console.log(location);
   }), [history]);
   const { auth, login } = AuthService.isLoggedIn();
   const [isLoggedIn, setLoggedIn] = useState(login);

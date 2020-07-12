@@ -83,10 +83,8 @@ class SettingModel {
       },
     };
 
-    const { data, response } = await makeRequest('PUT', 'users/%%userId%%/settings', putData);
-    if (!response.ok) {
-      console.log(response, data);
-    } else {
+    const { response } = await makeRequest('PUT', 'users/%%userId%%/settings', putData);
+    if (response.ok) {
       settingSubject.notify(config);
     }
   };

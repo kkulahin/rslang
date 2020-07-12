@@ -34,6 +34,7 @@ const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
     words = stepData.words;
     versions = stepData.versions;
   }
+
   useEffect(() => {
     if (nextButtonAvailable) {
       window.onkeydown = (evt) => {

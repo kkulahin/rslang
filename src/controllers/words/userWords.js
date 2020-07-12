@@ -1,5 +1,5 @@
 import { SchoolURL } from '../../config/default';
-import responseFromServer from '../../utils/responseFromServer';
+import responseFromServer, { makeRequest } from '../../utils/responseFromServer';
 
 const wordsNotification = {
   msg: '',
@@ -11,12 +11,9 @@ const UserWordFailMsg = {
   status: true,
 };
 
-const getAllUserWords = async (token, id, notification = wordsNotification) => {
+const getAllUserWords = async (notification = wordsNotification) => {
   try {
-    if (token === null) {
-      return false;
-    }
-    const response = await responseFromServer(`${SchoolURL}/users/${id}/words`, token, notification);
+    const response = await makeRequest('GET', 'users/%%userId%%/words');
     return response;
   } catch (error) {
     throw new Error('invalid request');
