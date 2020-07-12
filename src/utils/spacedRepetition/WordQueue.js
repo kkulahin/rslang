@@ -216,6 +216,8 @@ export default class WordQueue {
     }
   }
 
+  isWordDeleted = () => this.hasWordDeleted === true;
+
   getWordDifficulty = () => (this.getCurrentWord()
     ? this.getCurrentWord().word.getDifficulty()
     : null);

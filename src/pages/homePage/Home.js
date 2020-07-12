@@ -21,6 +21,7 @@ const Home = () => {
   const [wordQueue, setWordQueue] = useState(wordController.getQueue());
   const [word, setWord] = useState(wordQueue && wordQueue.getCurrentWord() ? wordQueue.getCurrentWord() : null);
   const [wordDifficulty, setWordDifficulty] = useState(wordQueue ? wordQueue.getWordDifficulty() : null);
+  const [isWordDeleted, setWordDeleted] = useState(wordQueue ? wordQueue.isWordDeleted() : false);
   /**
    * @param {WordQueue} wQueue
    */
@@ -28,6 +29,7 @@ const Home = () => {
     setWordQueue(wQueue);
     setWordDifficulty(wQueue.getWordDifficulty());
     setWord(wQueue.getCurrentWord());
+    setWordDeleted(wQueue.isWordDeleted());
   };
   const [statistics, setStatistics] = useState(statisticsController.get());
   const [settings, setSettings] = useState(settingsController.get());
@@ -50,6 +52,7 @@ const Home = () => {
 
   const handleNextBtnClick = () => {
     setWord(wordQueue.changeWord());
+    setWordDeleted(wordQueue.isWordDeleted());
   };
 
   const handlePrevBtnClick = () => {
@@ -95,6 +98,7 @@ const Home = () => {
       </div>
     );
   }
+
   return (
     <div className="home-block__card">
       <Dropdown
@@ -112,6 +116,8 @@ const Home = () => {
         onNextBtnClick={handleNextBtnClick}
         onPrevBtnClick={handlePrevBtnClick}
         isEducation={word.isEducation}
+        isWordDeleted={isWordDeleted}
+        setWordDeleted={setWordDeleted}
         wordDifficulty={wordDifficulty}
         isAnswered={wordQueue.isCurrentWordAnswered()}
         onWordAnswered={wordQueue.setWordAnswered}
