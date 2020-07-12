@@ -1,0 +1,106 @@
+@import '../../../styles/mixin.scss';
+
+@import '../../../styles/variables.scss';
+
+$margin: 10px;
+$card-default-size: 300px;
+
+.about_page {
+  min-width: 100%;
+  min-height: 100vh;
+  color: $main-color;
+  background-color: $background-color;   
+    
+  @include flex(row, stretch);
+}
+
+.our_team { 
+  margin-bottom: $margin;
+  font-size: 3.6rem;
+  text-align: center;
+}
+
+.wrapper_card {
+  flex-wrap: wrap;
+  padding-bottom: $margin; 
+
+  @include flex(row, stretch);
+}
+
+.cards_person {
+  width: 45%;
+  max-width: ($card-default-size * 2);
+  min-width: $card-default-size;
+  margin: ($margin * 2);
+  padding: $margin;
+  border-radius: $container-border-radius;
+  box-shadow: $container-box-shadow;
+
+
+  .avatar_and_name {
+
+    @include flex(row);
+  }
+    
+  .img_avatar {
+    border-radius: 50%;
+
+    @include size(100px);
+  }
+    
+  .full_name {
+    margin-left: ($margin * 3);
+    font-size: 2.5rem;
+    font-weight: 600;
+  }
+    
+  .about_person {
+      margin-top: ($margin * 2);
+  }
+    
+  .about_person > p,
+  .contribution > p {
+    font-size: 1.6rem;
+    text-align: justify;
+    color: rgba(255, 255, 255, 0.8);    
+    text-indent: 1.5em;
+  }
+    
+  .link_github {
+    margin-top: ($margin * 2);
+
+    @include flex(row, stretch);
+    
+    .button {
+      position: relative;
+      margin-bottom: $margin;
+      border-radius: 50%;
+
+      @include size(45px);
+    }
+  }
+    
+  i.icon.github::before {
+    position: absolute;    
+    top: 50%;
+    left: 50%;
+    font-size: 3rem;
+    transform: translate(-50%, -50%);
+  }
+    
+}
+
+@media (max-width: 991px) {
+
+  .cards_person {
+    width: 95%;
+    margin: ($margin * 2) $margin;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .cards_person {
+    width: 75%;
+  }
+}

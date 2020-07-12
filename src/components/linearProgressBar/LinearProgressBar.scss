@@ -1,0 +1,73 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+// container
+$element-height: 30px;
+$element-width: 250px;
+$element-padding: 40px;
+
+$element-color-background: transparent;
+
+// track
+$track-border-radius: calc(#{$element-height} * 0.5);
+$margin-text: 10px;
+
+.linear-progress-bar {
+
+  &__container {
+    padding: 0 $element-padding;
+    font: inherit;
+    color: $main-color;
+    background-color: $element-color-background;
+    user-select: none;
+  
+    @include size($element-width, $element-height);
+  
+    @include font (2.4rem, 1, 500);
+  }
+
+  &__track {
+    position: relative;
+    background-color: $background-color;
+    border: none;
+    border-radius: $track-border-radius;
+    box-shadow: inset 4px 4px 7px $box-shadow-first-color, inset -7px -7px 7px $box-shadow-second-color;
+  
+    @include size(calc(#{$element-width} - 2 * #{$element-padding}), 100%);
+  
+    &::before {
+      position: absolute;
+      top: 50%;
+      right: calc(100% + #{$margin-text});
+      display: inline-block;
+      font: inherit;
+      color: inherit;
+      transform: translateY(-50%);
+      content: attr(data-value);
+    }
+  
+    &::after {
+      position: absolute;
+      top: 50%;
+      left: calc(100% + #{$margin-text});
+      display: inline-block;
+      font: inherit;
+      color: inherit;
+      transform: translateY(-50%);
+      content: attr(data-size);
+    }
+  }
+
+  &__thumb {
+    position: absolute;
+    left: 0;
+    z-index: 1;
+    height: 100%;
+    background-color: $enabled-color;
+    border: none;
+    border-radius: $track-border-radius;
+    box-shadow: 1px 1px 3px rgba(136, 160, 183, 0.35);
+    transition: width 0.5s;
+  }
+}

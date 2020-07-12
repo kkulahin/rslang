@@ -1,0 +1,40 @@
+@import '../../../styles/mixin.scss';
+
+@import '../../../styles/variables.scss';
+
+$row-underline: 1px solid rgba(255, 255, 255, 0.5);
+$margin: 20px;
+
+.settings__section {
+  height: max-content;
+  margin: ($margin / 2);
+  padding: 20px 30px;
+  border-radius: $container-border-radius;
+  box-shadow: $container-box-shadow;
+  cursor: default;
+  
+  &__title {
+    margin-bottom: $margin;
+    color: $main-color;
+
+    @include font(2.4rem, 1.6em, 800);
+  }
+
+  &--card > .settings__section__item:nth-child(4),
+  &__title {
+    position: relative;
+
+    &::after {
+      position: absolute;
+      bottom: ($margin / -2);
+      left: 0;
+      width: 100%;
+      border-bottom: $row-underline;
+      content: '';      
+    }
+  }
+
+  &__title::after {
+    bottom: 0;
+  }
+}

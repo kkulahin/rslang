@@ -1,0 +1,76 @@
+@import '../../../styles/variables.scss';
+
+@import '../../../styles/mixin.scss';
+
+$margin: 20px;
+$padding: $margin;
+
+.statistic {
+
+  &-long {
+    width: 100%;
+    max-width: 1020px;
+    min-width: 300px;
+    padding: ($padding * 0.5) ($padding * 1.5);
+    order: 2;
+  
+    &__title {
+      text-align: center;
+      color: $main-color;
+  
+      @include font(3rem, 1.6em, 800);
+    }
+  
+    &__period {
+      position: relative;
+      min-height: 70px;
+      margin: $margin 0;
+      color: $main-color;
+  
+      @include flex(row, center, space-between);
+  
+      @include font(1.6rem, 1.6em, 400);
+  
+      .dropdown {
+        position: absolute;
+        top: 0;
+        right: 4%;
+        z-index: 2;
+        margin: 0;
+  
+        &__title {
+          color: #000000;
+          background-color: $main-color;
+          font-weight: 800;
+        }
+      }
+    }
+  }
+
+  &__left-arrow {
+    order: 1;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .statistic {
+
+    &-long {
+      padding: ($padding * 0.5) 0;
+      order: 1;
+  
+      .container-with-shadow {
+        width: 95% !important;
+        min-width: 300px;
+        margin: 0 auto;
+        padding: $padding !important;
+        overflow-x: auto;
+      }
+    }
+
+    &__left-arrow {
+      order: 2;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@import '../../styles/mixin.scss';
+
+.greeting {
+  width: 100%;
+  padding: 0 10px;
+  user-select: none;
+
+  @include flex(row, center, space-around);
+
+  &__text {
+    font-size: 1.6rem;
+    line-height: 1.5em;
+
+    h1 {
+      font-size: 3.6rem;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+
+  .greeting {
+
+    img {
+      display: none;
+    }
+  }
+}
+

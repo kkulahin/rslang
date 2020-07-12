@@ -1,0 +1,19 @@
+@import '../../../styles/variables.scss';
+
+.radio-button {
+  margin: 0 20px;
+  padding: 0 25px;
+  font-size: 2.2rem;
+  line-height: 1.6em;
+  font-family: inherit;
+  text-align: center;
+  color: $enabled-color;
+  background: $background-color;
+  border: none;
+  border-radius: 125px;
+  outline: none;
+
+  &--checked {
+    box-shadow: $container-box-shadow-inset;
+  }
+}

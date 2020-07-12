@@ -1,0 +1,8 @@
+@import '../../../styles/variables.scss';
+
+.radio-button-container {
+  padding: 10px 20px;
+  background-color: $background-color;
+  border-radius: 125px;
+  box-shadow: $container-box-shadow;
+}

@@ -1,0 +1,23 @@
+@import '../styles/variables.scss';
+
+@import '../styles/mixin.scss';
+
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;;
+}
+
+.app-main {
+  flex: 1 90%;
+  padding: 10px;
+  min-height: 100vh;
+  background-color: $background-color;
+
+  @include flex(column, stretch, stretch);
+}
+
+@media (max-width: 767px) {
+  .app-main {
+    width: 100%;
+  }
+}

@@ -1,0 +1,116 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+// input
+$element-height: 70px;
+$element-width: 100%;
+
+$element-border-radius: $container-border-radius;
+
+$element-color-text: rgb(104, 120, 145);
+
+$shadow-first-setup: inset 6px 6px 18px;
+$shadow-second-setup: inset -6px -6px 18px;
+
+$shadow-first-color: rgba(136, 160, 183, 0.25);
+$shadow-second-color: rgba(255, 255, 255, 0.5);
+$shadow-valid-color: rgb(82, 247, 6);
+$shadow-invalid-color: rgb(247, 6, 6);
+
+$opacity-inactive: 0.25;
+
+// icon
+$icon-width: 25px;
+$icon-position-left: $icon-width;
+
+.input__container {
+  position: relative;
+  font: inherit;
+  color: $element-color-text;
+
+  @include flex(column);
+
+  @include font (2.2rem, 1, 500);
+}
+
+.input {
+  padding: 20px 20px 20px 60px;
+  font-family: inherit;
+  background-color: $main-color;
+  border: none;
+  border-radius: $element-border-radius;
+  box-shadow: $shadow-first-setup $shadow-first-color, $shadow-second-setup $shadow-second-color;
+
+  transition: background-color 0.5s;
+  order: 2;
+
+  @include size($element-width, $element-height);
+
+  &::-ms-input-placeholder {
+    color: $element-color-text;
+    opacity: $opacity-inactive;
+  }
+
+  &::placeholder {
+    color: $element-color-text;
+    opacity: $opacity-inactive;
+  }
+
+  &:hover {
+    background-color: rgba(rgb(238, 238, 238), 0.5);
+  }
+
+  &:focus {
+    outline: none;
+  }
+  
+  &:required:focus:not(:placeholder-shown):valid {
+    box-shadow: $shadow-first-setup $shadow-valid-color, $shadow-second-setup $shadow-second-color;
+  }
+
+  &:required:focus:not(:placeholder-shown):invalid {
+    box-shadow: $shadow-first-setup $shadow-invalid-color, $shadow-second-setup $shadow-second-color;
+  }
+}
+
+.input__label {
+  order: 1;
+
+  margin: 0 0 10px 25px;
+  font-size: 0.8em;
+
+  color: inherit;
+
+  opacity: $opacity-inactive;
+
+  user-select: none;
+
+  cursor: pointer;
+}
+
+.input__icon {
+
+  position: absolute;
+  bottom: calc(#{$element-height} * 0.5 - #{$icon-width} * 0.5);
+  left: $icon-position-left;
+
+  display: block;
+
+  opacity: $opacity-inactive;
+  order: 3;
+
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  user-select: none;
+  pointer-events: none;
+
+  @include size($icon-width);
+}
+
+.input:focus ~ .input__icon,
+.input:focus ~ .input__label {
+  opacity: 1;
+}

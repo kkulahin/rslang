@@ -1,0 +1,20 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+.container-with-shadow {
+
+  @include flex(row);
+
+  font: inherit;
+  color: $main-color;
+
+  background-color: $background-color;
+
+  border: none;
+  border-radius: $container-border-radius;
+
+  box-shadow: $container-box-shadow;
+
+  @include font (2.4rem, 1, 400);
+}

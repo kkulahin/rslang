@@ -1,0 +1,49 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+$element-size: 30px;
+$transition-duration: 0.5s;
+$box-shadow-standard-setup: 4px 4px 6px;
+
+.switcher--stylise {
+
+  @include size(($element-size * 2), $element-size);
+
+  input[type="checkbox"] {
+    position: relative;
+    background-color: $background-color;
+    border-radius: $container-border-radius;
+    box-shadow: inset $box-shadow-standard-setup $box-shadow-first-color, inset -2px -2px 6px $box-shadow-second-color;
+    outline: none;
+    transition: $transition-duration;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    @include size(100%);
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: ($element-size * 0.1);
+      background-color: rgb(238, 238, 238);
+      border-radius: 50%;
+      box-shadow: $box-shadow-standard-setup $box-shadow-first-color;
+      transition: $transition-duration;
+      content: '';
+
+      @include size(($element-size * 0.8));
+    }
+  }
+
+  input:checked[type="checkbox"] {
+    background-color: $enabled-color;
+
+    &::before {
+      left: 50%;
+      box-shadow: $box-shadow-standard-setup rgba(0, 0, 0, 0.5);
+    }
+  }
+}

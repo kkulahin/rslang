@@ -1,0 +1,81 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+$margin: 20px;
+$padding: $margin;
+
+.promo {
+  flex-wrap: wrap;
+  min-width: 300px;
+  margin: 0 $margin;
+
+  @include flex(row, stretch);
+
+  &__header {
+    padding: ($padding * 0.75) ($padding * 1.5);
+    text-align: justify;
+    color: $main-color;
+    background-color: $background-color;
+    border-radius: $container-border-radius;
+    box-shadow: $container-box-shadow;
+
+    &-title {
+      margin-bottom: ($margin * 1.25);
+  
+      @include font(3.6rem, 1, 800);
+    }
+
+    &-text {
+
+      @include font(1.6rem, 1.5em, 400);
+    }
+  }
+
+  &__video {
+    position: relative;
+    margin: ($margin * 1.5) auto;
+    padding: ($padding * 1.5);
+    padding-top: 55%;
+    text-align: center;
+    background-color: $background-color;
+    border-radius: $container-border-radius;
+    box-shadow: $container-box-shadow;
+
+    @include size(100%, 50%);
+
+    iframe {
+      position: absolute; 
+      top: 7%; 
+      left: 3%;
+
+      @include size(94%, 84%);
+    }
+  }
+}
+
+@media (max-width: 767px) {
+
+  .promo {
+    width: 85%;
+    margin: 0 auto;
+
+    &__header {
+      padding: ($padding * 0.75) $padding;
+
+      &-title {
+        text-align: center;
+      }
+    }
+    
+    &__video {
+      padding: $padding;
+      padding-top: 55%;
+
+      iframe {
+        left: 6%;
+        width: 88%;
+      }
+    }
+  }
+}

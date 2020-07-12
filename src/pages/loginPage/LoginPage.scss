@@ -1,0 +1,177 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+$container-min-size: 300px;
+$container-max-size: 500px;
+$padding: 10px;
+
+.login {
+
+  &-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center !important;
+    height: 100vh;
+  }
+
+  &-column {
+    width: 80% !important;
+    max-width: $container-max-size;
+    min-width: $container-min-size;
+  }
+
+  &-header {
+    text-align: center;
+    color: $enabled-color;
+  
+    @include font(6.4rem, 1.2em, 800);
+
+    .image {
+      position: absolute !important;
+      top: -14.45%;
+      left: -3.51%;
+    }
+  }
+
+  &-form {
+    font-size: 1.5rem !important;
+    background-color: $background-color !important;
+    border-radius: $container-border-radius;
+    box-shadow: $container-box-shadow;
+  
+    @include flex(column, center, stretch);
+
+    label {
+      display: flex !important;
+      margin: 0 !important;
+      font-size: 1.5rem !important;
+      line-height: 1.2em;
+      color: $main-color !important;
+
+      @include flex(row, center, stretch);  
+    }
+
+    .field {
+      width: 90%;
+      color: $main-color;
+    
+      @include flex(row, center, space-between);
+    }
+  }
+
+  &-button {
+    width: 80%;
+    padding: ($padding * 2) !important;
+    font-size: 2.2rem !important;
+    line-height: 1.2em !important;
+    color: $main-color !important;
+    background: $enabled-color !important;
+    border-radius: $container-border-radius !important;
+    box-shadow: 12px 12px 31px rgba(0, 0, 0, 0.5), -12px -12px 31px rgb(59, 68, 81) !important;
+    font-weight: 400;
+  }
+}
+
+.ui.fluid input {
+  padding-top: ($padding * 1.5) !important;
+  padding-bottom: ($padding * 1.5) !important;
+  background: $main-color !important;
+  border-radius: 18px !important;
+  box-shadow: inset 6px 6px 18px rgba(136, 160, 183, 0.25), inset -6px -6px 18px rgba(255, 255, 255, 0.5) !important;
+}
+
+.checkbox-wrapper label {
+  font-size: 1.4rem;
+  color: $main-color !important;
+  font-weight: 600;
+}
+
+.ui.checkbox input.hidden+label {
+  font-size: 1.4rem;
+}
+
+.ui.checkbox input:checked~.box:after, .ui.checkbox input:checked~label:after {
+  color: rgb(100, 53, 201) !important;
+  opacity: 1;
+}
+
+.field {
+	display: flex;
+	color: $main-color;
+}
+
+.checkbox-wrapper {
+  flex: 0 68%;
+	font-weight: 600;
+}
+
+.field a {
+	color: $main-color !important;
+	font-weight: 600;
+}
+
+.form .field:last-child {
+	width: 175px;
+  margin: 15px !important;
+}
+
+span.login-signup {
+	color: $main-color !important;
+	font-weight: 400 !important;
+}
+
+.ui.form .field:last-child span {
+	flex: 0 100px;
+}
+
+a.login-signup {
+	color: $enabled-color !important;
+}
+
+.user-notification {
+  position: absolute;
+  top: 80px;
+  line-height: 5vh;
+  text-align: center;
+  color: $main-color;
+  background-color: $enabled-color;
+  border-radius: 20px;
+  font-weight: 400;
+  font-variant: small-caps;
+
+  @include size(50%, 5vh);
+}
+
+.user-notification.error {
+  background-color: rgb(222, 37, 118);
+}
+
+#remember-me {
+  margin-right: 15px;
+}
+
+@media (max-width: 767px) {
+
+  .login {
+
+    &-header {
+
+      .image {
+        display: none !important;
+      }
+    }
+
+    &-column {
+      width: 95% !important;
+    }
+
+    &-wrapper .input {
+      padding-left: $padding !important;
+    }
+
+    &-form .field:nth-child(4) > * {
+      font-size: 1.3rem !important;
+    }
+  }
+}

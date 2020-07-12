@@ -1,0 +1,11 @@
+.version-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .button {
+    width: auto;
+    margin: 10px 20px;
+    padding: 10px 20px;
+  }
+}

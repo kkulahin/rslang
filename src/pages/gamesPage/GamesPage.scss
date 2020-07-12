@@ -1,0 +1,65 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+$margin: 10px;
+$padding: $margin;
+
+.games {
+
+  &-wrapper {
+    width: 100%;
+  }
+
+  &-header {
+    height: 10vh;
+    color: $main-color !important;
+  
+    @include flex(row);
+
+    .content {
+      font-size: 3rem;
+    }
+  }
+
+  &-cards {
+    flex-wrap: wrap;
+    width: 100%;
+
+    @include flex(row, center, space-around);
+
+    .column {
+      z-index: 2;
+      width: 45%;
+      min-width: 300px;
+      margin: $margin;
+    }
+
+    .container-with-shadow {
+      padding: $padding !important;
+    
+      @include flex(column, center, space-around);
+
+      img {
+        width: 75%;
+        height: auto;
+        border-radius: 0;
+      }
+    }
+  }
+
+  &-card__header {
+    color: $main-color !important;
+
+    .content {
+      font-size: 2rem;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+
+  .games-cards .column {
+    width: 75%;
+  }
+}

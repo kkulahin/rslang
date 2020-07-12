@@ -1,0 +1,52 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+.button {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-family: inherit;
+  color: $main-color;
+
+  background-color: $background-color;
+
+  border: none;
+  border-radius: 110px;
+
+  box-shadow: 5px 5px 15px $box-shadow-first-color, 
+              -5px -5px 15px $box-shadow-second-color;
+  outline: none;
+
+  transition: 0.3s linear;
+  cursor: pointer;
+  font-weight: bold;
+
+  &--light {
+    background-color: $enabled-color;
+
+    &:hover {
+      color: $main-color !important;
+    }
+  }
+
+  &--check {
+    color: $enabled-color;
+  }
+
+  &--press {
+    background-color: $background-color;
+    border-radius: 125px;
+    box-shadow: $container-box-shadow-inset;
+    transition: 0.5s linear;
+  }
+
+  &:hover {
+    color: $hover-color;
+  }
+
+  &:active {
+    transform: scale(0.8);
+  }
+
+}

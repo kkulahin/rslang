@@ -1,0 +1,60 @@
+@import '../../../../styles/mixin.scss';
+
+@import '../../../../styles/variables.scss';
+
+$box-shadow: 5px 5px 15px $box-shadow-first-color, 
+            -5px -5px 15px $box-shadow-second-color;
+$box-shadow-mobile: 3px 3px 5px $box-shadow-first-color, 
+                  -3px -3px 5px $box-shadow-second-color;
+$padding: 0.5rem 0.5rem;
+$padding-mobile: 0.25rem 0.25rem;
+$margin: 0 0 0 1rem;
+
+.card-unit {
+
+  .card-radio-button-container {
+    position: relative;
+
+    @include flex(row);
+
+    height: 100%;
+    margin: $margin;
+    padding: $padding;
+
+    background-color: $background-color;
+
+    border-radius: 125px;
+    box-shadow: $box-shadow;
+
+    user-select: none;
+
+    animation: fadeIn 0.3s linear;
+
+    &--disabled {
+      pointer-events: none;
+      opacity: 0.25;
+    }
+
+    &--attention {
+      background-color: $main-color;
+    }
+
+    @media (max-width: 767px) {
+      margin-left: 0.5rem;
+      padding: $padding-mobile;
+
+      box-shadow: $box-shadow-mobile;
+    }
+  }
+
+  @keyframes fadeIn {
+
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+}

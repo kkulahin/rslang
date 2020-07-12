@@ -1,0 +1,41 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+$element-size: 40px;
+$border-radius: 10px;
+
+.number-picker {
+  font-family: inherit;
+  user-select: none;
+
+  @include flex(row, center, space-between);
+
+  @include size(($element-size * 4.5), $element-size);
+
+  .input {
+
+    @include size(($element-size * 1.5), $element-size);
+    padding: 0;
+    text-align: center;
+    color: $main-color;
+    background-color: $background-color;
+    border-radius: $border-radius;
+    box-shadow: $container-box-shadow-inset;
+
+    &:required:focus:not(:placeholder-shown):valid,
+    &:required:focus:not(:placeholder-shown):invalid {
+      box-shadow: $container-box-shadow-inset;
+    }
+  }
+
+  .button {
+    padding: 0;
+    font-size: 2.4rem;
+    border-radius: $border-radius;
+
+    @include flex(row, center, center);
+
+    @include size($element-size);
+  }
+}

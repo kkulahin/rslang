@@ -1,0 +1,37 @@
+@import '../../../../../styles/mixin.scss';
+
+@import '../../../../../styles/variables.scss';
+
+.game-start-window {
+  font-size: 3.0rem;
+
+  @include flex(column);
+
+  &__title {
+    font-size: 3.6rem;
+    font-weight: 800;
+  }
+
+  .radio-button {
+
+    &:hover {
+      opacity: 0.7;
+      cursor: pointer;    
+    }
+
+    &-container {
+      width: max-content;
+      margin: 40px 0 80px 0;     
+    }
+  }
+
+  .button {
+    width: 130px;
+  }
+
+  .button[disabled] {
+    color: inherit;
+    opacity: 0.3;
+    cursor: no-drop;
+  }
+}

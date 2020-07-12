@@ -1,0 +1,27 @@
+@import '../../styles/variables.scss';
+
+@import '../../styles/mixin.scss';
+
+.statistic {
+  position: relative;
+
+  @include flex(row);
+
+  @include size(100%);
+
+  &__left-arrow,
+  &__right-arrow {
+    cursor: pointer;
+
+    &:hover {
+      color: $hover-color;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+
+  .statistic {
+    flex-wrap: wrap;
+  }
+}
