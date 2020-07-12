@@ -95,17 +95,21 @@ const TabContent = ({
         {rows}
         {
 controlPagination.maxPage <= 1 ? null : (
-  <Pagination
-    className="tab-content__pagination"
-    boundaryRange={0}
-    defaultActivePage={1}
-    ellipsisItem={null}
-    firstItem={null}
-    lastItem={null}
-    siblingRange={1}
-    totalPages={controlPagination.maxPage}
-    onPageChange={onChangeList}
-  />
+  <tr>
+    <td colSpan="4">
+      <Pagination
+        className="tab-content__pagination"
+        boundaryRange={0}
+        defaultActivePage={1}
+        ellipsisItem={null}
+        firstItem={null}
+        lastItem={null}
+        siblingRange={1}
+        totalPages={controlPagination.maxPage}
+        onPageChange={onChangeList}
+      />
+    </td>
+  </tr>
 )
 }
       </tbody>
