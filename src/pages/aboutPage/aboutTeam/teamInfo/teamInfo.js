@@ -1,21 +1,16 @@
 const teamInfo = [Object.freeze({
   name: {
     first: 'Sergey',
-    sur: ' ',
+    sur: ' Sudakov',
     nick: 'Developer',
   },
   avatar: 'https://avatars2.githubusercontent.com/u/21230284?s=400&u=8c419c79f7ab1e817ce05f2e1ecacc261f5aeea2&v=4',
   linkGitHub: 'https://github.com/segegha',
-  aboutPerson: `JavaScript && CSS: Projects from courses - Implementation of the functionality of a one-page sites, 
-  2018 year.
-  Delphi: Student project - Automatic calculations of economic indicators, 2016 year.  
-  Coding on FreeCodeCamp platform. Courses on htmlacademy.`,
+  aboutPerson: 'Worked as a forensic expert - escaped from slavery. In near future, I\'m a React Developer',
   id: 1,
-  contribution: `Create: switcher component, sheckbox component, greeting component,
-  continue training block, number-picker component, greeting wrapper component, settings page, sprint game.
-  Bind 2 inputs (number-pickers from setting page) together
-  Add loading and saving user settings from-to server.
-   `,
+  contribution: `Create: switcher component, checkbox component, greeting component,
+  continue training block, number-picker component, greeting wrapper component, settings page, sprint game, 
+  responsive for app and an incredible number of application fixes.`,
 }), Object.freeze({
   name: {
     first: 'Kanstantsin',
@@ -27,13 +22,12 @@ const teamInfo = [Object.freeze({
   aboutPerson: `Web developer with 4 year 
   of overall IT experience.`,
   id: 2,
-  contribution: `Netlify continuous deployment configuration, 
-  webhook configuration from Netlify & Github to Discord channels.
-  Create design in FIgma. Create TabbedFolder component. 
-  Investigate and describe spaced repetition algorithm.
-  Create WordController, WordModel, statistics query, WordQueue to use in the game, connect word queue to the card.
-  Connect Statistics backend to Statistics pages & Greeting page.
-  Connect Statistics & Word backend to Main card page.`,
+  contribution: `Create: netlify continuous deployment configuration, 
+  webhook configuration from Netlify & Github to Discord channels,
+  design in FIgma, tabbedFolder component, investigate and describe spaced repetition algorithm,
+  word controller, word model, statistics query, word queue to use in the game, connect word queue to the card,
+  connect statistics backend to statistics pages & greeting page, connect statistics & word backend to main card page
+  and an incredible number of application fixes.`,
 }), Object.freeze({
   name: {
     first: 'Vitaly',
@@ -47,8 +41,8 @@ const teamInfo = [Object.freeze({
   But to do my current job, I had to learn a lot of software stuff like SCAD Office, Autocad, MS Office, 
   and many others, so my learning skills are on a good level i think.`,
   id: 3,
-  contribution: `Create: reusable input component, linear progress bar, round progress bar, word card. 
-  Add responsive word card.`,
+  contribution: `Create: reusable input component, linear progress bar, round progress bar, word card, 
+  add responsive word card and an incredible number of components fixes.`,
 }), Object.freeze({
   name: {
     first: 'Kaxaru',
@@ -64,11 +58,8 @@ const teamInfo = [Object.freeze({
   I started to study it with first group in loftblog. `,
   id: 4,
   contribution: `Create: signup page, signin page, header component,
-  added games page and simple controller, begin speakIt game controller.
-  Add "speak it","savanna" mini-game.
-  Add game levels "savanna".
-  Add game levels "speakIt".
-  Setup routing.`,
+  added games page and simple controller, begin speakIt game controller,
+  add "speak it","savanna" mini-game, setup routing and an incredible number of application fixes..`,
 }), Object.freeze({
   name: {
     first: 'Ali',
@@ -84,7 +75,7 @@ const teamInfo = [Object.freeze({
   Have a passion for a career in developing. Good motivated and keen to learn.`,
   id: 5,
   contribution: `Create: reusable button component, radio button component,
-  dictionary basic layout, promo page, statistic page, audiocall game`,
+  dictionary basic layout, promo page, statistic page, audiocall game and an incredible number of components fixes.`,
 }), {
   name: {
     first: 'Vitaliy',
@@ -98,8 +89,8 @@ const teamInfo = [Object.freeze({
   Having a logical approach to problem solving.
   Responsible and with strong attention to detail.`,
   id: 6,
-  contribution: `Create: aboutTeam component, person component, team info,
-  notification component, home page spinner, progress bar for home page`,
+  contribution: `Create: about team component, person component, team info, aboute team page,
+  notification component, home page spinner, progress bar for home page and an incredible number of components fixes.`,
 }, Object.freeze({
   name: {
     first: 'julia',
