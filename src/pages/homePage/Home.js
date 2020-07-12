@@ -3,10 +3,13 @@ import WordCard from '../../components/wordCard/WordCard';
 import wordController from '../../controllers/WordConrtoller';
 import wordQueueSubject from '../../utils/observers/WordQueueSubject';
 import statisticsSubject from '../../utils/observers/StatisticsSubject';
+import settingsSubject from '../../utils/observers/SettingSubject';
 import StatisticShort from '../../components/statisticShort/StatisticShort';
 import statisticsController from '../../controllers/StatisticsController';
 import Button from '../../components/button/Button';
 import './Home.scss';
+import settingsController from '../../controllers/SettingsController';
+import settingsNames from '../../constants/settingsNames';
 
 const initHelpSettings = {
   isImageShow: true,
@@ -32,20 +35,32 @@ const Home = () => {
   wordController.init();
   const [wordQueue, setWordQueue] = useState(wordController.getQueue());
   const [word, setWord] = useState(wordQueue ? wordQueue.getCurrentWord() : null);
+  const [wordDifficulty, setWordDifficulty] = useState(wordQueue ? wordQueue.getCurrentWord().word.getDifficulty() : null);
   const updateWordQueue = (wQueue) => {
     setWordQueue(wQueue);
     setWord(wQueue.getCurrentWord());
+    setWordDifficulty(wQueue.getCurrentWord().word.getDifficulty());
   };
   const [statistics, setStatistics] = useState(statisticsController.get());
+  const [settings, setSettings] = useState(settingsController.get());
 
   useEffect(() => {
     wordQueueSubject.subscribe(updateWordQueue);
     statisticsSubject.subscribe(setStatistics);
+    settingsSubject.subscribe(setSettings);
     return () => {
       wordQueueSubject.unsubscribe(updateWordQueue);
       statisticsSubject.unsubscribe(setStatistics);
+      settingsSubject.unsubscribe(setSettings);
     };
   }, [setStatistics]);
+
+  if (settings) {
+    const [card, , buttons] = settings;
+    console.log(card);
+    console.log(buttons);
+    console.log(settingsNames);
+  }
 
   const handleNextBtnClick = () => {
     setWord(wordQueue.changeWord());
@@ -54,6 +69,7 @@ const Home = () => {
   const handlePrevBtnClick = () => {
     setWord(wordQueue.getPreviousWord());
   };
+
 
   if (wordQueue && wordQueue.getLength() <= wordQueue.queuePointer) {
     return (
@@ -87,12 +103,12 @@ const Home = () => {
         helpSettings={initHelpSettings}
         settings={initSettings}
         onAgainBtnClick={wordQueue.setAgain}
-        onHardBtnClick={() => console.log('------ hard btn click ------')}
-        onComplexityBtnClick={(id) => console.log(`------ complexity btn click ${id} ------`)}
+        onComplexityBtnClick={(id) => { wordQueue.setWordDifficulty(id); setWordDifficulty(word.word.getDifficulty()); }}
         onDeleteBtnClick={wordQueue.setWordDeleted}
         onNextBtnClick={handleNextBtnClick}
         onPrevBtnClick={handlePrevBtnClick}
         isEducation={word.isEducation}
+        wordDifficulty={word.word.getDifficulty()}
         isAnswered={wordQueue.isCurrentWordAnswered()}
         onWordAnswered={wordQueue.setWordAnswered}
         onWordMistaken={wordQueue.setWordMistaken}

@@ -10,7 +10,7 @@ const emailError = {
 };
 
 const passwordError = {
-  content: 'Please enter valid password. Password should contain 1 special symbol',
+  content: 'Password should contain one: special symbol, number, capital letter and lowercase letter.',
   pointing: 'below',
 };
 

@@ -166,6 +166,11 @@ export default class WordQueue {
     this.hasWordDeleted = value;
   }
 
+  setWordDifficulty = (name) => {
+    this.getCurrentWord().word.setDifficulty(name);
+    this.updateWord();
+  }
+
   changeWord = () => {
     if (this.hasWordDeleted) {
       const { word: deletedWord } = this.getCurrentWord();
@@ -254,8 +259,12 @@ export default class WordQueue {
   }
 
   updateWord = async (isNew) => {
+    let isNewWord = isNew;
     const { word } = this.getCurrentWord();
-    return wordController.updateWord(word, isNew);
+    if (isNew === undefined) {
+      isNewWord = word.isNew();
+    }
+    return wordController.updateWord(word, isNewWord);
   }
 
   reset = async () => {

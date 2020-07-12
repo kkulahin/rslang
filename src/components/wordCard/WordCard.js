@@ -179,11 +179,14 @@ const WordCard = ({
   };
 
   const handleCardBtnClick = (id, ...args) => {
+    console.log(id);
     const handlers = {
       deleteWord: onDeleteBtnClick,
+      undoDeleteWord: onDeleteBtnClick,
       againWord: handleAgainBtnClick,
       showWord: handleShowBtnClick,
     };
+    console.log(handlers[id]);
     handlers[id](...args);
   };
 
