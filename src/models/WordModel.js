@@ -96,10 +96,9 @@ export default class WordModel {
           throw new Error(`${method} Word failed with ${postResponse.status} ${postResponse.statusText}`);
         }
         return postData;
-      } else {
-        console.debug(data);
-        throw new Error(`${method} Word failed with ${response.status} ${response.statusText}`);
       }
+      console.debug(data);
+      throw new Error(`${method} Word failed with ${response.status} ${response.statusText}`);
     }
     return data;
   };

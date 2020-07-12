@@ -37,11 +37,6 @@ const MainWindow = ({ baseUrl, onEndOfGame, degree }) => {
     versions = stepData.versions;
   }
 
-  // const auth = JSON.parse(getCookie('auth'));
-  // console.log(auth);
-  // getAllUserWords(auth.token, auth.userId)
-  //   .then((res) => console.log(res));
-
   useEffect(() => {
     window.onkeydown = (evt) => {
       if ((evt.code === 'ArrowRight' || evt.code === 'Enter') && nextButtonAvailable) {
