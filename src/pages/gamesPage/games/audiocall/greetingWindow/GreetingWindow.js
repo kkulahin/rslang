@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactCountDown from 'react-countdown-clock';
+import PropTypes from 'prop-types';
+import Button from '../../../../../components/button/Button';
 
 import './GreetingWindow.scss';
-import Button from '../../../../../components/button/Button';
 
 const GreetingWindow = ({ onComplete }) => {
   const [showContent, setShowContent] = useState(true);
@@ -15,6 +16,42 @@ const GreetingWindow = ({ onComplete }) => {
     group: 0,
     page: 0,
   });
+
+  const onClickToStart = () => {
+    if (
+      (document.querySelector('.greeting-window__input-group').value !== ''
+      && document.querySelector('.greeting-window__input-page').value !== '')
+      && (document.querySelector('.greeting-window__input-group').value >= 1
+      && document.querySelector('.greeting-window__input-group').value <= 6
+      && document.querySelector('.greeting-window__input-page').value >= 1
+      && document.querySelector('.greeting-window__input-page').value <= 30)
+    ) {
+      setLevel({
+        group: +document.querySelector('.greeting-window__input-group').value - 1,
+        page: +document.querySelector('.greeting-window__input-page').value - 1,
+      });
+      setShowInputError({
+        value: false,
+        message: '',
+      });
+      setShowContent(false);
+      setShowTimer(true);
+    } else {
+      setShowInputError({
+        value: true,
+        message: 'Incorrect input data: group must be less than 7 and more 0'
+        + ', page must be less than 31 and more 0',
+      });
+    }
+  };
+
+  useEffect(() => {
+    window.onkeydown = (evt) => {
+      if (evt.code === 'Enter') {
+        onClickToStart();
+      }
+    };
+  }, []);
 
   const content = (
     <>
@@ -37,35 +74,7 @@ const GreetingWindow = ({ onComplete }) => {
           id="1"
           label="Start"
           name="check"
-          clickHandler={
-            () => {
-              if (
-                (document.querySelector('.greeting-window__input-group').value !== ''
-                && document.querySelector('.greeting-window__input-page').value !== '')
-                && (document.querySelector('.greeting-window__input-group').value >= 1
-                && document.querySelector('.greeting-window__input-group').value <= 6
-                && document.querySelector('.greeting-window__input-page').value >= 1
-                && document.querySelector('.greeting-window__input-page').value <= 30)
-              ) {
-                setLevel({
-                  group: +document.querySelector('.greeting-window__input-group').value - 1,
-                  page: +document.querySelector('.greeting-window__input-page').value - 1,
-                });
-                setShowInputError({
-                  value: false,
-                  message: '',
-                });
-                setShowContent(false);
-                setShowTimer(true);
-              } else {
-                setShowInputError({
-                  value: true,
-                  message: 'Incorrect input data: group must be less than 7 and more 0'
-                  + ', page must be less than 31 and more 0',
-                });
-              }
-            }
-          }
+          clickHandler={onClickToStart}
         />
       </form>
     </>
@@ -95,6 +104,10 @@ const GreetingWindow = ({ onComplete }) => {
       }
     </div>
   );
+};
+
+GreetingWindow.propTypes = {
+  onComplete: PropTypes.func.isRequired,
 };
 
 export default GreetingWindow;
