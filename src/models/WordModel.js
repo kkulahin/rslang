@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-// import Word from './Word';
 import WordQueue from '../utils/spacedRepetition/WordQueue';
 import wordQueueSubject from '../utils/observers/WordQueueSubject';
 import { makeRequest } from '../utils/responseFromServer';
@@ -62,6 +60,7 @@ export default class WordModel {
 
   /**
    * @param {Word} word
+   * @param {boolean} isNew
    */
   updateWord = async (word, isNew) => {
     let method = 'PUT';
@@ -73,6 +72,7 @@ export default class WordModel {
       optional: {
         difficultyId: word.difficulty,
         time: Math.ceil(word.time / 1000),
+        firstTime: word.firstTime,
         repetitionPhaseId: word.repetitionPhase,
         lastMistake: Math.ceil(word.lastMistake / 1000),
         mistakes: word.mistakes,

@@ -1,6 +1,6 @@
 import parameters from './parameters';
 import wordCanUpgradeSubject from '../observers/WordCanUpgradeSubject';
-import { checkDayDifferenceAbs } from '../time';
+import { checkDayDifferenceAbs, getTodaySeconds } from '../time';
 
 export default class Word {
   /**
@@ -23,6 +23,7 @@ export default class Word {
       difficultyId = 0,
       userDifficultyId = null,
       time = 0,
+      firstTime = 0,
       repetitionPhaseId = 0,
       lastMistake = 0,
       totalMistakes = 0,
@@ -38,6 +39,7 @@ export default class Word {
       this.difficulty = this.userDifficulty;
     }
     this.time = time * 1000;
+    this.firstTime = firstTime;
     this.repetitionPhase = repetitionPhaseId;
     this.lastMistake = lastMistake * 1000;
     this.mistakes = mistakes;
@@ -49,6 +51,9 @@ export default class Word {
 
   setTime = () => {
     this.time = new Date().getTime();
+    if (this.firstTime === 0) {
+      this.firstTime = getTodaySeconds();
+    }
     this.totalRepetition += 1;
     if (this.lastMistake === 0) {
       this.mistakes = `${this.mistakes.substr(0, this.mistakes.length - 1)}0`;
@@ -69,6 +74,8 @@ export default class Word {
   }
 
   isNew = () => parameters.difficultyNames.new === this.getAlgDifficulty();
+
+  wasNewToday = () => this.isNew() || this.firstTime === getTodaySeconds();
 
   getWhenWasLastMistake = () => {
     if (this.mistakes.indexOf('z') > -1) {
@@ -129,7 +136,6 @@ export default class Word {
    * @param {number|string} difficulty difficulty - can be index or name
    */
   setDifficulty = (difficulty) => {
-    console.log(difficulty);
     if (typeof difficulty === 'number') {
       this.difficulty = difficulty;
     } else if (typeof difficulty === 'string') {
@@ -139,7 +145,8 @@ export default class Word {
         }
       });
     }
-    console.log(this.difficulty);
+    this.lastMistake = 0;
+    this.mistakes = 'zzzzzzz';
   }
 
   upgradeDifficulty = () => {
@@ -153,7 +160,7 @@ export default class Word {
       }, -1);
     } else if (this.getWhenWasLastMistake() >= parameters.difficulty[this.difficulty].maxDays) {
       if (this.difficulty + 1 < parameters.difficulty.length) {
-        this.difficulty += 1;
+        this.setDifficulty(this.difficulty + 1);
       }
     }
     if (this.difficulty !== this.userDifficulty) {

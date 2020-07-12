@@ -7,33 +7,43 @@ import Button from '../button/Button';
 
 import './ContinueTrainingBlock.scss';
 
-const ContinueTrainingBlock = ({ completedWordsCount, cardsCount, isFullState }) => (
-  <ContainerWithShadow
-    width="42%"
-    height="160px"
-    padding="0"
-  >
-    <div className="continue-training-block">
-      <div className="continue-training-block__item">
+const ContinueTrainingBlock = ({ completedWordsCount, cardsCount, isFullState }) => {
+  const buttonLabel = cardsCount === 0 && completedWordsCount === 0 ? 'Update' : 'Continue';
+  const label = cardsCount === 0 && completedWordsCount === 0
+    ? (<h2>Your queue has not been created yet</h2>)
+    : (
+      <>
         <h3>{`${completedWordsCount} out of ${cardsCount} words`}</h3>
         <p>you have learned today</p>
-        {isFullState && (
-          <Link to="/">
-            <Button
-              label="Continue"
-              name="light"
-              id="continue-training-btn"
-            />
-          </Link>
-        )}
+      </>
+    );
+  return (
+    <ContainerWithShadow
+      width="42%"
+      height="160px"
+      padding="0"
+    >
+      <div className="continue-training-block">
+        <div className="continue-training-block__item">
+          {label}
+          {isFullState && (
+            <Link to="/">
+              <Button
+                label={buttonLabel}
+                name="light"
+                id="continue-training-btn"
+              />
+            </Link>
+          )}
+        </div>
+        <RoundProgressBar
+          value={completedWordsCount}
+          maxValue={cardsCount}
+        />
       </div>
-      <RoundProgressBar
-        value={completedWordsCount}
-        maxValue={cardsCount}
-      />
-    </div>
-  </ContainerWithShadow>
-);
+    </ContainerWithShadow>
+  );
+};
 
 ContinueTrainingBlock.propTypes = {
   isFullState: PropTypes.bool,
