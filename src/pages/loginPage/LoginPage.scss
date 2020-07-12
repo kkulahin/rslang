@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center !important;
-  height: 100vh;
+  height: 100%;
 }
 
 .login-column {
@@ -30,7 +30,7 @@
   background-color: $background-color !important;
   border-radius: $container-border-radius;
   box-shadow: $container-box-shadow;
-  
+
   font-size: 1.5rem !important;
 
   @include flex(column, center, stretch);

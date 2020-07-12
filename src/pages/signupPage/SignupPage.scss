@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center !important;
-  height: 100vh;
+  height: 100%;
 }
 
 .register-column {
@@ -89,4 +89,8 @@
 
 .user-notification.error {
   background-color: rgb(222, 37, 118);
+}
+
+.ui.button {
+  font-size: 1.5em !important;
 }
