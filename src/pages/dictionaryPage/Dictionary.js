@@ -20,6 +20,7 @@ const Dictionary = () => {
   const [tabContent, setTabContent] = useState({ normal: [], hard: [], deleted: [] });
   const [isUpdated, setUpdate] = useState(false);
   const [tabContentUpdated, setTabContentUpdated] = useState(null);
+  const [isRender, setRenderPage] = useState(false);
   useEffect(() => {
     const getDictionaryWords = async () => {
       const { data, response } = await getAllUserWords();
@@ -38,6 +39,7 @@ const Dictionary = () => {
       });
       Promise.all(list).then((resps) => {
         setDictionaryInfoWords(resps);
+        setRenderPage(true);
       });
     };
     if (dictionaryWords !== null) {
@@ -132,7 +134,18 @@ const Dictionary = () => {
     setDictionaryWords(newDictionaryWords);
   };
 
+  if (!isRender) {
+    return (
+      <div className="spinner">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    );
+  }
   return (
+
     <div className="dictionary">
       <Tabs>
         <div label="All">

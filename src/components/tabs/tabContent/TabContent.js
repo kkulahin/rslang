@@ -95,7 +95,7 @@ const TabContent = ({
         {rows}
         {
 controlPagination.maxPage <= 1 ? null : (
-  <tr>
+  <tr className="tab-pagination">
     <td colSpan="4">
       <Pagination
         className="tab-content__pagination"
