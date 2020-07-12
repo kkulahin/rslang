@@ -8,8 +8,10 @@ import {
 import BlockWithShadow from '../../components/containerWithShadow/ContainerWithShadow';
 import './GamesPage.scss';
 
-import SpeakItPic from '../../assets/image/speakIt.png';
-import AudioCallPic from '../../assets/image/audiocall.png';
+import SpeakItPic from '../../assets/image/speakit.jpg';
+import AudioCallPic from '../../assets/image/audiocall.jpg';
+import SprintPic from '../../assets/image/sprint.jpg';
+import SavannaPic from '../../assets/image/savanna.jpg';
 
 import SpeakIt from './games/speakIt/SpeakIt';
 import Sprint from './games/sprint/Sprint';
@@ -35,7 +37,7 @@ const Games = () => {
     },
     sprint: {
       link: 'sprint',
-      pic: SpeakItPic,
+      pic: SprintPic,
     },
     audiocall: {
       link: 'audiocall',
@@ -43,7 +45,7 @@ const Games = () => {
     },
     savanna: {
       link: 'savanna',
-      pic: SpeakItPic,
+      pic: SavannaPic,
     },
   };
 
@@ -55,7 +57,7 @@ const Games = () => {
     const listItems = Object.keys(games).map((g) => (
       <Grid.Column key={`${games[g].link}`}>
         <Link to={`${url}/${games[g].link}`}>
-          <BlockWithShadow height="40vh" className="games-card">
+          <BlockWithShadow className="games-card">
             <Header as="h4" className="games-card__header">
               <Icon name="game" />
               <Header.Content>{games[g].link}</Header.Content>
@@ -76,9 +78,9 @@ const Games = () => {
         <Icon name="game" />
         <Header.Content>Games</Header.Content>
       </Header>
-      <Grid container columns={2} className="games-cards">
+      <div className="games-cards">
         {buildColumn()}
-      </Grid>
+      </div>
     </>
   );
 

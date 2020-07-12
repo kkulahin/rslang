@@ -68,7 +68,7 @@ const StatisticWindow = ({ gameStatistics, baseUrl, onClickButtonContinueGame })
   const tab = visibleFirstTab ? (
     <div className="statistic-window__tabs-first first-tab">
       <h3 className="first-tab__title">{`${gameStat.correct} correct answers`}</h3>
-      <h3 className="first-tab__title">{`${gameStat.error} to learn`}</h3>
+      <h3 className="first-tab__title">{`${gameStat.error} mistake(s)`}</h3>
       <RoundProgressBar
         value={gameStat.correct}
         maxValue={gameStat.correct + gameStat.error}

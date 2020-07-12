@@ -20,16 +20,12 @@ const filterWordsWithSimilarTranslition = (arr, wordForEqual) => {
   const word = arr[0];
   const result = new Set();
   arr.forEach((item) => {
-    if ((wordForEqual !== item.translation.text)
+    if ((wordForEqual !== item.translation.text.trim())
     && word.partOfSpeechAbbreviation === item.partOfSpeechAbbreviation) {
       result.add(item.translation.text);
     }
   });
-  return Array.from(result).map((item) => ({
-    translation: {
-      text: item,
-    },
-  }));
+  return result;
 };
 
 const getWordVersions = async (wordObj) => {
@@ -46,15 +42,25 @@ const getWordVersions = async (wordObj) => {
           const filteredMeanings = filterWordsWithSimilarTranslition(
             [...d[0].meaningsWithSimilarTranslation], wordObj.wordTranslate,
           );
-          const needWordsCount = VERSIONSCOUNT - (filteredMeanings.length + 1);
+          const needWordsCount = VERSIONSCOUNT - (filteredMeanings.size + 1);
           if (needWordsCount > 0) {
-            versions = [...filteredMeanings, ...d[0].alternativeTranslations.splice(0, needWordsCount)];
+            const alternatives = [...d[0].alternativeTranslations];
+            while (filteredMeanings.size < 4) {
+              filteredMeanings.add(alternatives.shift().translation.text);
+            }
+            // versions = [...filteredMeanings, ...d[0].alternativeTranslations.splice(0, needWordsCount)];
+            versions = [...Array.from(filteredMeanings)];
           } else if (needWordsCount === 0) {
-            versions = filteredMeanings;
+            versions = Array.from(filteredMeanings);
           } else {
-            versions = [...filteredMeanings.splice(0, VERSIONSCOUNT - 1)];
+            versions = [...Array.from(filteredMeanings).splice(0, VERSIONSCOUNT - 1)];
           }
-          return getRenderData([wordObj, ...versions]);
+          const vers = Array.from(versions).map((item) => ({
+            translation: {
+              text: item,
+            },
+          }));
+          return getRenderData([wordObj, ...vers]);
         });
     });
 };
