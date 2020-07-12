@@ -71,12 +71,6 @@ const Dictionary = () => {
     }
   }, [dictionaryInfoWords, dictionaryWords]);
 
-  useEffect(() => {
-    if (tabContentUpdated === null) {
-      setUpdate(false);
-    }
-  }, [tabContentUpdated]);
-
   const buildTab = (cTab) => {
     const tab = [];
     tabContent[cTab].forEach((w) => {
@@ -93,6 +87,9 @@ const Dictionary = () => {
   };
 
   const getNewWordList = (words) => {
+    if (tabContentUpdated === null) {
+      setUpdate(false);
+    }
     if (JSON.stringify(tabContentUpdated) !== JSON.stringify(words)) {
       setTabContentUpdated(words);
     }
@@ -108,6 +105,7 @@ const Dictionary = () => {
       newDictionaryWords[wordsIdx].optional.isDeleted = statusWords;
     });
     setTabContentUpdated(null);
+
     setDictionaryWords(newDictionaryWords);
   };
 
