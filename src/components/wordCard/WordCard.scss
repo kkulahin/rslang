@@ -48,7 +48,7 @@ $font-color-tooltip: $main-color;
 
     @include flex(row, stretch, space-between);
 
-    @media (max-width: 767px) {
+    @media (max-width: 991px) {
       width: 100%;
     }
 
@@ -96,7 +96,7 @@ $font-color-tooltip: $main-color;
 
       user-select: none;
 
-      @media (max-width: 767px) {
+      @media (max-width: 991px) {
         flex-direction: column;
         justify-content: flex-start;
 
@@ -121,7 +121,7 @@ $font-color-tooltip: $main-color;
       border: none;
       border-radius: 0.5rem;
 
-      @media (max-width: 767px) {
+      @media (max-width: 991px) {
         align-self: center;
       }
 
@@ -144,6 +144,8 @@ $font-color-tooltip: $main-color;
       border-radius: inherit;
 
       box-shadow: $container-box-shadow-inset;
+
+      animation: fadeIn 0.3s linear;
     }
 
     .help-content__image img {
@@ -209,7 +211,7 @@ $font-color-tooltip: $main-color;
         border-radius: 2px;
       }
   
-      @media (max-width: 767px) {
+      @media (max-width: 991px) {
         height: 16rem;
         margin-top: 1rem;
         padding: 0 0.5rem;
@@ -246,7 +248,6 @@ $font-color-tooltip: $main-color;
   
       &--translate {
         display: inherit;
-        margin-top: 0.5rem;
     
         font-size: 0.8em;
         text-align: justify;
@@ -255,16 +256,9 @@ $font-color-tooltip: $main-color;
     
         user-select: none;
       }
-  
+
       &--hidden {
         display: none;
-      }
-  
-      @media (max-width: 767px) {
-  
-        &--translate {
-          margin-top: 0;
-        }
       }
     }
   
