@@ -112,12 +112,11 @@ const Home = () => {
         settings={cardSettings}
         onAgainBtnClick={wordQueue.setAgain}
         onComplexityBtnClick={(id) => { wordQueue.setWordDifficulty(id); setWordDifficulty(wordQueue.getWordDifficulty()); }}
-        onDeleteBtnClick={wordQueue.setWordDeleted}
+        onDeleteBtnClick={setWordDeleted}
         onNextBtnClick={handleNextBtnClick}
         onPrevBtnClick={handlePrevBtnClick}
         isEducation={word.isEducation}
         isWordDeleted={isWordDeleted}
-        setWordDeleted={setWordDeleted}
         wordDifficulty={wordDifficulty}
         isAnswered={wordQueue.isCurrentWordAnswered()}
         onWordAnswered={wordQueue.setWordAnswered}

@@ -13,7 +13,7 @@ const NavigateBtn = ({
     : `navigate__btn ${classes}`;
 
   return (
-    <div className="navigate">
+    <div className="navigate" id={id}>
       <button
         className={btnClasses}
         type="button"
@@ -22,8 +22,6 @@ const NavigateBtn = ({
         disabled={isDisabled}
       >
         <NavigateNextIcon iconTitle="navigate icon" />
-        {/* <span className="navigate__icon">
-        </span> */}
       </button>
     </div>
   );
