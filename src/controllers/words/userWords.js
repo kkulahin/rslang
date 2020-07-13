@@ -11,7 +11,7 @@ const UserWordFailMsg = {
   status: true,
 };
 
-const getAllUserWords = async (notification = wordsNotification) => {
+const getAllUserWords = async () => {
   try {
     const response = await makeRequest('GET', 'users/%%userId%%/words');
     return response;
