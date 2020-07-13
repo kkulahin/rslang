@@ -105,7 +105,7 @@ const NavPanel = () => {
             to="/settings"
             onClick={handleItemClick}
           >
-            <Icon name="settings" />
+            <Icon name="cogs" />
             {isMenuFullSize() ? <p>Settings</p> : null}
           </Link>
           <Link

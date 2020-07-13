@@ -15,3 +15,29 @@
 #dictionary-save {
   margin: 30px auto;
 }
+
+.dictionary-modal .header {
+  text-align: center;
+}
+
+.dictionary-modal .modal-content {
+  display: flex;
+  height: 260px;
+}
+
+.modal-content .image {
+  flex: 1 40% !important;
+}
+
+.modal-content .description {
+  flex: 2 45% !important;
+  color: black;
+}
+
+.modal-content .description .header {
+  font-size: 24px;
+}
+
+.modal-content .description p {
+  font-size: 18px;
+}
