@@ -275,7 +275,28 @@ export default class WordQueue {
   getQueueType = () => this.queueType;
 
   getPreviousWord = () => {
-    if (this.hasPreviousWord()) {
+    if (this.newSubQueue) {
+      this.subQueue = this.newSubQueue;
+      this.newSubQueue = null;
+    }
+    const isSubQueue = this.subQueue !== null;
+    const queue = isSubQueue ? this.subQueue : this.queue;
+    if (this.hasWordDeleted) {
+      const { word: deletedWord } = this.getCurrentWord();
+      const prevWord = queue.reduce((lastWord, qWord, i) => (i < this.queuePointer && qWord.word !== deletedWord
+        ? qWord : lastWord), null);
+      this.queue = this.queue.filter(({ word }) => word !== deletedWord);
+      if (isSubQueue) {
+        this.subQueue = this.subQueue.filter(({ word }) => word !== deletedWord);
+      }
+      this.words = this.words.filter((word) => word !== deletedWord);
+      if (prevWord) {
+        this.queuePointer = queue.indexOf(prevWord);
+      } else {
+        this.queuePointer = 0;
+      }
+      this.hasWordDeleted = false;
+    } else if (this.hasPreviousWord()) {
       this.queuePointer -= 1;
     }
     return this.getCurrentWord();
