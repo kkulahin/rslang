@@ -8,6 +8,7 @@ import settingsNames from '../../constants/settingsNames';
 import wordQueueSubject from '../observers/WordQueueSubject';
 import settingsWordCountSubject from '../observers/SettingWordCountSubject';
 import parameters from './parameters';
+import wordsReloadedSubject from '../observers/WordsReloadedSubject';
 
 export default class WordQueue {
   constructor() {
@@ -119,6 +120,17 @@ export default class WordQueue {
     this.subQueue = null;
     this.setQueueType();
     await wordController.makeQueue();
+  }
+
+  getUpdatedWords = async () => {
+    const { data: words } = await wordController.getUserWords(this.words);
+    words.forEach((word) => {
+      const [wordInQueue] = this.words.filter(({ definition: { wordId } }) => wordId === word._id);
+      if (wordInQueue && word.userWord && word.userWord.optional) {
+        wordInQueue.update(word.userWord.optional);
+      }
+    });
+    wordsReloadedSubject.notify(true);
   }
 
   static fillQueue = (words, queue) => {

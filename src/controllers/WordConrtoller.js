@@ -20,6 +20,8 @@ class WordController {
 
   updateWord = async (word, isNew) => this.model.updateWord(word, isNew);
 
+  getUserWords = async (words) => this.model.getWordsFromSavedQueue(words);
+
   getQueue = () => this.model.wordQueue;
 
   getWordsCount = () => {
