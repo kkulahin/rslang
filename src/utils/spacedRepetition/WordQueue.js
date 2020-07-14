@@ -8,6 +8,7 @@ import settingsNames from '../../constants/settingsNames';
 import wordQueueSubject from '../observers/WordQueueSubject';
 import settingsWordCountSubject from '../observers/SettingWordCountSubject';
 import parameters from './parameters';
+import wordsReloadedSubject from '../observers/WordsReloadedSubject';
 
 export default class WordQueue {
   constructor() {
@@ -119,6 +120,17 @@ export default class WordQueue {
     this.subQueue = null;
     this.setQueueType();
     await wordController.makeQueue();
+  }
+
+  getUpdatedWords = async () => {
+    const { data: words } = await wordController.getUserWords(this.words);
+    words.forEach((word) => {
+      const [wordInQueue] = this.words.filter(({ definition: { wordId } }) => wordId === word._id);
+      if (wordInQueue && word.userWord && word.userWord.optional) {
+        wordInQueue.update(word.userWord.optional);
+      }
+    });
+    wordsReloadedSubject.notify(true);
   }
 
   static fillQueue = (words, queue) => {
@@ -275,7 +287,28 @@ export default class WordQueue {
   getQueueType = () => this.queueType;
 
   getPreviousWord = () => {
-    if (this.hasPreviousWord()) {
+    if (this.newSubQueue) {
+      this.subQueue = this.newSubQueue;
+      this.newSubQueue = null;
+    }
+    const isSubQueue = this.subQueue !== null;
+    const queue = isSubQueue ? this.subQueue : this.queue;
+    if (this.hasWordDeleted) {
+      const { word: deletedWord } = this.getCurrentWord();
+      const prevWord = queue.reduce((lastWord, qWord, i) => (i < this.queuePointer && qWord.word !== deletedWord
+        ? qWord : lastWord), null);
+      this.queue = this.queue.filter(({ word }) => word !== deletedWord);
+      if (isSubQueue) {
+        this.subQueue = this.subQueue.filter(({ word }) => word !== deletedWord);
+      }
+      this.words = this.words.filter((word) => word !== deletedWord);
+      if (prevWord) {
+        this.queuePointer = queue.indexOf(prevWord);
+      } else {
+        this.queuePointer = 0;
+      }
+      this.hasWordDeleted = false;
+    } else if (this.hasPreviousWord()) {
       this.queuePointer -= 1;
     }
     return this.getCurrentWord();
