@@ -57,8 +57,9 @@ $easy-color: #0f0;
       }
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: 991px) {
       width: 3rem;
+      padding: 0.5rem;
     }
 
     svg {
@@ -98,7 +99,7 @@ $easy-color: #0f0;
   .radio-button__label {
     pointer-events: none;
 
-    @media (max-width: 767px) {
+    @media (max-width: 991px) {
       display: none;
     }
   }

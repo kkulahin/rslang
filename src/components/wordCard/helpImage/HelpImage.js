@@ -15,6 +15,14 @@ const HelpImage = ({
     error: null,
   });
 
+  const handleImgError = () => {
+    setImageData({
+      loading: false,
+      src: null,
+      error: 'Sorry, we couldn\'t upload the image',
+    });
+  }
+
   useEffect(() => {
     let cancelled = false;
 
@@ -46,7 +54,7 @@ const HelpImage = ({
   if (imageData.loading) {
     element = <Spinner />;
   } else if (imageData.src) {
-    element = <img src={imageData.src} alt={wordTranslate} />;
+    element = <img src={imageData.src} alt={wordTranslate} onError={handleImgError} />;
   } else {
     element = <div className="image--error">{imageData.error}</div>;
   }
