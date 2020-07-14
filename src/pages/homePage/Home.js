@@ -60,10 +60,13 @@ const Home = () => {
   const handleNextBtnClick = () => {
     setWord(wordQueue.changeWord());
     setWordDeleted(wordQueue.isWordDeleted());
+    setWordDifficulty(wordQueue.getWordDifficulty());
   };
 
   const handlePrevBtnClick = () => {
     setWord(wordQueue.getPreviousWord());
+    setWordDeleted(wordQueue.isWordDeleted());
+    setWordDifficulty(wordQueue.getWordDifficulty());
   };
 
   if (wordQueue && !word && wordQueue.getLength() <= wordQueue.getCurrentPosition() && wordQueue.getLength() > 0) {
