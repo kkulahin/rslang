@@ -5,6 +5,9 @@
 .container-with-shadow {
 
   @include flex(row);
+  width: auto;
+  height: auto;
+  padding: 40px,;
 
   font: inherit;
   color: $main-color;
@@ -16,5 +19,5 @@
 
   box-shadow: $container-box-shadow;
 
-  @include font (2.4rem, 1, 400);
+  @include font (2.4rem, 1, 400)
 }

@@ -6,16 +6,14 @@ import vectorMane from '../../assets/image/vector_man.png';
 import './Greeting.scss';
 
 const Greeting = ({ userName }) => {
-  const greetingMessage = `Hello, ${userName}!`;
+  const greetingMessage = `Hello, ${userName === '' ? 'stranger' : userName}!`;
   const text = (userName === 'stranger')
     ? 'It\'s good to see you.'
     : 'It\'s good to see you again.';
 
   return (
     <ContainerWithShadow
-      width="48%"
-      height="160px"
-      padding="0"
+      clName="container-with-shadow--greeting"
     >
       <div className="greeting">
         <div className="greeting__text">

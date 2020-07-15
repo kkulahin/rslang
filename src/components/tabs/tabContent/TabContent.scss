@@ -2,6 +2,12 @@
 
 @import '../../../styles/variables.scss';
 
+$border-radius: 10rem;
+$box-shadow: 5px 5px 15px $box-shadow-first-color, 
+            -5px -5px 15px $box-shadow-second-color;
+$box-shadow-mobile: 3px 3px 5px $box-shadow-first-color, 
+                    -3px -3px 5px $box-shadow-second-color;
+
 .tab-content {
   width: 100%;
 
@@ -10,82 +16,203 @@
   &__header {
     padding-bottom: 5px;
     border-bottom : 1px solid $main-color;
-  }
-}
 
-.row {
+    .tab-content__row {
 
-  @include flex(row, stretch, space-between);
-
-  &:hover {
-    & .row__item {
-      & .tooltip {
-        visibility: visible;
-        opacity: 1;
+      &::before {
+        content: unset;
       }
     }
   }
 
-  &__item {
+  &__body {
+
+    @include flex(column,stretch,stretch);
+  }
+
+  &__row {
     position: relative;
-    width      : 25%;
-    margin-top : 20px;
-    text-align : left;
-    color      : $main-color;
 
-    @include font(1.8rem, 1.2em, 400)
-  }
+    @include flex(row, stretch, space-between);
 
-  &__item:last-child {
-    text-align: right;
-  }
+    &::before {
+      position: absolute;
+      top: 0;
+      left: -10px;
+      z-index: -1;
+      width: calc(100% + 20px);
+      height: 100%;
+      border-radius: 6px;
+      content: '';
+    }
 
-  
-  &__item .tooltip {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    visibility: hidden;
-    width: 250px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 0;
-    margin-left: -10px;
-    opacity: 0;
-    transition: opacity 0.3s;
+    &:hover::before {
+      background-color: #36747b;
+      box-shadow: inset 0 0 10px #25cede,
+    }
 
-  }
+    &__item {
+      width      : 25%;
+      padding    : 10px 0;
+      color      : $main-color;
 
-  &__item .tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-  }
+      @include flex(row, center, flex-start);
 
-  &__crash-icon {
-    cursor: pointer;
+      @include font(1.8rem, 1.2em, 400);
 
-    &:hover {
-      color: $enabled-color; 
-      opacity: 0.5;
+      &--crash {
+        cursor: pointer;
+
+        &:hover, &:hover::before {
+          color: black;
+          opacity: 0.5;
+        }
+      }
+    }
+
+    &__item:last-child {
+      justify-content: flex-end;
     }
   }
 }
 
+@media screen and (max-width: 600px) {
 
+  .tab-content {
 
+    &__row:first-child {
+      margin-top: 10px;
+    }
 
+    &__row {
+      flex-direction: column;
+      padding: 20px 0;
 
+      &::before {
+        content: unset;
+      }
 
+      &__item {
+        justify-content: center;
+        width: 100%;
+        padding    : 4px 0;
 
+        
+        &--crash {
+
+          &:hover, &:hover::before {
+            color: $enabled-color;
+            opacity: 1;
+          }
+
+          i.icon {
+            width: unset;
+            height: unset;
+          }
+        }
+
+        &:last-child {
+          justify-content: center;
+          padding-bottom: 4px;
+        }
+        
+        &::before {
+          color: darken(#ffffff, 30)
+        }
+
+        &:first-child::before {
+          content: 'Word:\00a0';
+        }
+
+        &:nth-child(2)::before {
+          content: 'Transcript:\00a0';
+        }
+
+        &:nth-child(3)::before {
+          content: 'Translation:\00a0';
+        }
+
+        &:nth-child(4)::before {
+          content: 'Remove\00a0';
+        }
+      }
+    }
+
+    &__row:nth-child(2n+1) {
+      background-color: #36747b;
+      border-radius: 10px;
+    }
+
+    &__header {
+      display: none;
+    }
+  }
+}
+
+.ui.pagination.menu.tab-content__pagination {
+  flex-grow: 0;
+
+  align-self: center;
+
+  min-height: unset;
+  margin-top: 1rem;
+
+  font-family: inherit;
+
+  @include font(2.4rem, 1, 700);
+
+  color: $main-color;
+
+  background: transparent;
+
+  border: none;
+  border-radius: $border-radius;
+
+  box-shadow: $box-shadow;
+
+  outline: none;
+
+  transition: color 0.3s linear, box-shadow 0.3s linear;
+  
+  @media (max-width: 767px) {
+
+    @include font(1.8rem, 1, 700);
+
+    box-shadow: $box-shadow-mobile;
+  }
+
+  .item {
+    min-width: 5.5rem;
+    padding: 0.75rem 1rem;
+
+    font: inherit;
+    line-height: 1;
+    font-family: inherit;
+    color: inherit;
+
+    @include flex(row);
+
+    outline: none;
+
+    transition: color 0.3s linear;
+
+    &:hover {
+      color: $hover-color;
+    }
+
+    &::before {
+      background: rgba($main-color, 0.5);
+    }
+
+    @media (max-width: 767px) {
+
+      min-width: 4.5rem;
+    }
+  }
+
+  .item.active {
+    padding: 1rem 1.5rem;
+
+    color: $enabled-color;
+  }
+}

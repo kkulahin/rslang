@@ -28,10 +28,14 @@ $font-color-tooltip: $main-color;
   @media (pointer: fine) { @content; }
 }
 
-.card-unit {
+.container-with-shadow--card {
+  padding: 20px;
+}
 
+.card-unit {
   width: 100%;
-  padding: 2rem 0;
+  margin: 2rem 0;
+  padding: 0;
 
   color: $main-color;
 
@@ -39,14 +43,16 @@ $font-color-tooltip: $main-color;
 
   @include font($font-size-main, 1, 500);
 
-  @include flex(row);
+  @include flex(row, stretch);
 
   .card__container {
+    position: relative;
+
     width: 760px;
 
     @include flex(row, stretch, space-between);
 
-    @media (max-width: 767px) {
+    @media (max-width: 991px) {
       width: 100%;
     }
 
@@ -61,7 +67,7 @@ $font-color-tooltip: $main-color;
 
       @media (max-width: 767px) {
         margin: 0;
-        padding: 0.5rem !important;
+        padding: 1rem !important;
 
         font-size: $font-size-main-mobile;
 
@@ -69,495 +75,494 @@ $font-color-tooltip: $main-color;
         box-shadow: 3px 3px 6px $box-shadow-first-color, 
                     -3px -3px 6px $box-shadow-second-color;
       }
+
+      @media (max-width: 420px) {
+        margin: 0 1.5rem;
+        padding: 0.5rem 0.5rem 1rem 0.5rem !important;
+      }
     }
-  }
 
-  .card-content {
-    width: 100%;
-    height: 100%;
-
-    @include flex(column, center, space-between);
-    background-color: transparent;
-  }
-
-  .help-content {
-    width: 100%;
-    padding-bottom: 2rem;
-
-    @include flex(row, flex-start, space-between);
-
-    border-bottom: 1px solid rgba($main-color, 0.5);
-
-    user-select: none;
-
-    @media (max-width: 767px) {
-      flex-direction: column;
-      justify-content: flex-start;
-
-      padding-bottom: 1rem;
-    }
-  }
-
-  .help-content__image {
-    position: relative;
-
-    flex-shrink: 0;
-
-    @include flex(row);
-
-    width: $image-width;
-    height: calc(#{$image-width} * 2 / 3);
-
-    line-height: 0;
-
-    overflow: hidden;
-
-    border: none;
-    border-radius: 0.5rem;
-
-    @media (max-width: 767px) {
-      align-self: center;
-
+    .card-content {
       width: 100%;
-      height: calc(#{$image-width-mobile} * 2 / 3);
-    }
-  }
+      height: 100%;
 
-  .help-content__image .image--error {
-    width: 100%;
-    height: 100%;
-    padding: 0 2rem;
-
-    @include flex(row);
-
-    line-height: 1.6;
-    text-align: center;
-
-    border-radius: inherit;
-
-    box-shadow: $container-box-shadow-inset;
-  }
-
-  .help-content__image img {
-    width: 100%;
-    height: auto;
-
-    object-fit: fill;
-    object-position: center;
-
-    animation: fadeIn 0.3s linear;
-
-    @media (max-width: 767px) {
-      width: 70%;
-      min-width: 240px;
-    }
-  }
-
-  @keyframes fadeIn {
-  
-    0% {
-      opacity: 0;
-    }
-  
-    100% {
-      opacity: 1
-    }
-  }
-
-  .help-content__text {
-    width: 100%;
-    height: 21rem;
-
-    margin: 0;
-    padding: 0 1.5rem 0 0;
-
-    font-size: inherit;
-
-    list-style: none;
-
-    overflow-y: scroll;
-
-    &--max-height {
-      height: 26rem;
-      margin: 0 0 0 2rem;
-    }
-
-    &--min-height {
-      height: 16rem;
-    }
-
-    &--only-height {
-      height: 6rem;
-    }
-
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background-color: $hover-color;
-      border-radius: 2px;
-    }
-
-    &::-webkit-scrollbar-track {
+      @include flex(column, center, space-between);
       background-color: transparent;
-      border-radius: 2px;
     }
 
-    @media (max-width: 767px) {
-      height: 16rem;
-      margin-top: 1rem;
-      padding: 0 0.5rem;
+    .help-content {
+      width: 100%;
+      padding-bottom: 2rem;
 
-      &--max-height {
-        height: 16rem;
-        margin-left: 0;
+      @include flex(row, flex-start, space-between);
+
+      border-bottom: 1px solid rgba($main-color, 0.5);
+
+      user-select: none;
+
+      @media (max-width: 991px) {
+        flex-direction: column;
+        justify-content: flex-start;
+
+        padding-bottom: 1rem;
+      }
+    }
+
+    .help-content__image {
+      position: relative;
+  
+      flex-shrink: 0;
+  
+      @include flex(row);
+  
+      width: $image-width;
+      height: calc(#{$image-width} * 2 / 3);
+
+      line-height: 0;
+
+      overflow: hidden;
+
+      border: none;
+      border-radius: 0.5rem;
+
+      @media (max-width: 991px) {
+        align-self: center;
       }
 
+      @media (max-width: 420px) {
+        width: $image-width-mobile;
+        height: calc(#{$image-width-mobile} * 2 / 3);
+      }
+    }
+
+    .help-content__image .image--error {
+      width: 100%;
+      height: 100%;
+      padding: 0 2rem;
+
+      @include flex(row);
+
+      line-height: 1.6;
+      text-align: center;
+
+      border-radius: inherit;
+
+      box-shadow: $container-box-shadow-inset;
+
+      animation: fadeIn 0.3s linear;
+    }
+
+    .help-content__image img {
+      width: 100%;
+      height: auto;
+
+      object-fit: fill;
+      object-position: center;
+
+      border-radius: inherit;
+
+      animation: fadeIn 0.3s linear;
+    }
+
+    @keyframes fadeIn {
+    
+      0% {
+        opacity: 0;
+      }
+    
+      100% {
+        opacity: 1
+      }
+    }
+
+    .help-content__text {
+      width: 100%;
+      height: 21rem;
+  
+      margin: 0;
+      padding: 0 1.5rem 0 0;
+  
+      font-size: inherit;
+  
+      list-style: none;
+  
+      overflow-y: scroll;
+  
+      &--max-height {
+        height: 26rem;
+        margin: 0 0 0 2rem;
+      }
+  
       &--min-height {
-        height: 14rem;
+        height: 16rem;
       }
   
       &--only-height {
         height: 6rem;
       }
-    }
-  }
-
-  .help-content-text__item + .help-content-text__item {
-    margin-top: 2rem;
-
-    @media (max-width: 767px) {
-      margin-top: 1rem;
-    }
-  }
-
-  .text-item {
-    margin: 0;
-    padding: 0;
-
-    line-height: 1.2;
-    text-align: justify;
-
-    &--translate {
-      display: inherit;
-      margin-top: 0.5rem;
   
-      font-size: 0.8em;
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background-color: $hover-color;
+        border-radius: 2px;
+      }
+  
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+        border-radius: 2px;
+      }
+  
+      @media (max-width: 991px) {
+        height: 16rem;
+        margin-top: 1rem;
+        padding: 0 0.5rem;
+  
+        &--max-height {
+          height: 16rem;
+          margin-left: 0;
+        }
+  
+        &--min-height {
+          height: 14rem;
+        }
+    
+        &--only-height {
+          height: 6rem;
+        }
+      }
+    }
+  
+    .help-content-text__item + .help-content-text__item {
+      margin-top: 2rem;
+  
+      @media (max-width: 767px) {
+        margin-top: 1rem;
+      }
+    }
+  
+    .text-item {
+      margin: 0;
+      padding: 0;
+  
+      line-height: 1.2;
       text-align: justify;
   
-      opacity: 0.75;
+      &--translate {
+        display: inherit;
+    
+        font-size: 0.8em;
+        text-align: justify;
+    
+        opacity: 0.75;
+    
+        user-select: none;
+      }
+
+      &--hidden {
+        display: none;
+      }
+    }
   
+    .text--marked {
+      display: inline-block;
+      height: auto;
+      padding: 0 $word-input-padding;
+  
+      background-color: $hover-color;
+  
+      border: none;
+      border-radius: $element-border-radius;
+    }
+  
+    .text--hidden {
+      color: transparent;
+      pointer-events: none;
       user-select: none;
     }
-
-    &--hidden {
-      display: none;
-    }
-
-    @media (max-width: 767px) {
-
-      &--translate {
-        margin-top: 0;
-      }
-    }
-  }
-
-  .text--marked {
-    display: inline-block;
-    height: auto;
-    padding: 0 $word-input-padding;
-
-    background-color: $hover-color;
-
-    border: none;
-    border-radius: $element-border-radius;
-  }
-
-  .text--hidden {
-    color: transparent;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  .card-controls {
-    width: 100%;
-    height: 4rem;
-    margin: 1rem 0;
-
-    background-color: transparent;
-
-    @include flex(row, $justify-content: flex-end);
-
-    @media (max-width: 767px) {
-      height: 3.5rem;
-      margin: 0.5rem 0;
-    }
-  }
-
-  .card-controls__buttons {
-    height: 100%;
-
-    @include flex(row, $justify-content: flex-end);
-
-    .card-button {
-      animation: fadeIn 0.3s linear;
-
-      @keyframes fadeIn {
-
-        0% {
-          opacity: 0;
-        }
-    
-        100% {
-          opacity: 1;
-        }
-      }
-    }
-
-    #deleteWord, #undoDeleteWord {
-      width: 11rem;
-
-      @media (max-width: 767px) {
-        width: 3.5rem;
-        padding: 0.75rem;
-      }
-
-      svg {
-        fill: $main-color;
-      }
-
-      .polygon-2 {
-        fill: $enabled-color;
-      }
-
-      @include media-hover {
-
-        &:hover svg {
-          fill: $hover-color;
-        }
-      }
-    }
-
-    #showWord {
-
-      @media (max-width: 767px) {
-        width: 3.5rem;
-        padding: 0.75rem;
-      }
-
-      svg {
-        fill: $main-color;
-      }
-
-      svg .path-1 {
-        fill: $enabled-color;
-      }
-
-      @include media-hover {
-
-        &:hover svg {
-          fill: $hover-color;
-        }
-      }
-    }
-
-    #againWord {
-      width: 4rem;
-      padding: 0.75rem;
-
-      @media (max-width: 767px) {
-        width: 3.5rem;
-      }
-
-      svg {
-        width: 100%;
-        height: auto;
-      }
-    }
-  }
-
-  .card-controls__buttons + .card-controls__buttons {
-    margin-left: auto;
-  }
-
-  .card-controls__audio-btn {
-    position: relative;
-
-    width: 4rem;
-    height: 100%;
-    margin-left: 1rem;
-    padding: 0;
-
-    @include flex(row);
-
-    @media (max-width: 767px) {
-      width: 3.5rem;
-      margin-left: 0.5rem;
-    }
-
-    .card-button {
+  
+    .card-controls {
       width: 100%;
-      padding: 0.3rem;
-    }
-
-    .card-button .st0 {
-      fill: $enabled-color;
-    }
-
-    .card-button .st1 {
-      fill: transparent;
-    }
-
-    .donut {
-      z-index: 1;
-
-      width: 4rem;
       height: 4rem;
-    
-      border: 0.3rem solid transparent;
-      border-top-color: $enabled-color;
-
+      margin: 1rem 0;
+  
+      background-color: transparent;
+  
+      @include flex(row, $justify-content: flex-end);
+  
+      @media (max-width: 767px) {
+        height: 3.5rem;
+        margin: 0.5rem 0;
+      }
+    }
+  
+    .card-controls__buttons {
+      height: 100%;
+  
+      @include flex(row, $justify-content: flex-end);
+  
+      .card-button {
+        animation: fadeIn 0.3s linear;
+  
+        @keyframes fadeIn {
+  
+          0% {
+            opacity: 0;
+          }
+      
+          100% {
+            opacity: 1;
+          }
+        }
+      }
+  
+      #deleteWord, #undoDeleteWord {
+        width: 11rem;
+  
+        @media (max-width: 767px) {
+          width: 3.5rem;
+          padding: 0.75rem;
+        }
+  
+        svg {
+          fill: $main-color;
+        }
+  
+        .polygon-2 {
+          fill: $enabled-color;
+        }
+  
+        @include media-hover {
+  
+          &:hover svg {
+            fill: $hover-color;
+          }
+        }
+      }
+  
+      #showWord {
+  
+        @media (max-width: 767px) {
+          width: 3.5rem;
+          padding: 0.75rem;
+        }
+  
+        svg {
+          fill: $main-color;
+        }
+  
+        svg .path-1 {
+          fill: $enabled-color;
+        }
+  
+        @include media-hover {
+  
+          &:hover svg {
+            fill: $hover-color;
+          }
+        }
+      }
+  
+      #againWord {
+        width: 4rem;
+        padding: 0.75rem;
+  
+        @media (max-width: 767px) {
+          width: 3.5rem;
+        }
+  
+        svg {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  
+    .card-controls__buttons + .card-controls__buttons {
+      margin-left: auto;
+    }
+  
+    .card-controls__audio-btn {
+      position: relative;
+  
+      width: 4rem;
+      height: 100%;
+      margin-left: 1rem;
+      padding: 0;
+  
+      @include flex(row);
+  
       @media (max-width: 767px) {
         width: 3.5rem;
-        height: 3.5rem;
+        margin-left: 0.5rem;
+      }
+  
+      .card-button {
+        width: 100%;
+        padding: 0.3rem;
+      }
+  
+      .card-button .st0 {
+        fill: $enabled-color;
+      }
+  
+      .card-button .st1 {
+        fill: transparent;
+      }
+  
+      .donut {
+        z-index: 1;
+  
+        width: 4rem;
+        height: 4rem;
+      
+        border: 0.3rem solid transparent;
+        border-top-color: $enabled-color;
+  
+        @media (max-width: 767px) {
+          width: 3.5rem;
+          height: 3.5rem;
+        }
+      }
+    }
+  
+    .learn-content {
+      width: 100%;
+      padding-top: 2rem;
+  
+      @include flex(row);
+  
+      border-top: 1px solid rgba($main-color, 0.5);
+  
+      @media (max-width: 767px) {
+        padding-top: 1rem;
+      }
+    }
+  
+    .word__container {
+  
+      @include flex(column, center, flex-start);
+    }
+  
+    .word__wrapper {
+      position: relative;
+  
+      display: inline-block;
+  
+      padding: $element-border-radius 0;
+  
+      font-size: 1.4em;
+      line-height: 1.2;
+  
+      background-color: $hover-color;
+  
+      border: none;
+      border-radius: $element-border-radius;
+    }
+  
+    .word__size {
+      display: inline-block;
+  
+      visibility: hidden;
+  
+      padding: 0 $word-input-padding;
+  
+      background: transparent;
+      opacity: 0;
+  
+      pointer-events: none;
+      user-select: none;
+      cursor: none;
+  
+      &--correct {
+        visibility: visible;
+        color: $font-color-correct;
+        opacity: 1;
+      }
+  
+      &--errorMax {
+        visibility: visible;
+        color: $font-color-error;
+      }
+  
+      &--error {
+        visibility: visible;
+        color: $font-color-error-add;
+      }
+  
+      &--visible {
+        visibility: visible;
+        opacity: 0.5;
+        animation: errors 2s linear;
+      }
+    }
+  
+    .word__size > span {
+      display: inline-block;
+    }
+  
+    @keyframes errors {
+  
+      0% {
+        opacity: 1;
+      }
+  
+      5% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+  
+      20% {
+        opacity: 1;
+        transform: none;
+      }
+  
+      100% {
+        opacity: 0.5
+      }
+    }
+  
+    .word__input {
+      position: absolute;
+      bottom: $element-border-radius;
+      left: 0;
+      z-index: 1;
+  
+      display: inline-block;
+  
+      width: 100%;
+      height: calc(100% - 2 * #{$element-border-radius});
+      padding: 0 $word-input-padding;
+  
+      font: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      color: inherit;
+  
+      background-color: transparent;
+      border: none;
+      border-radius: inherit;
+  
+      &:focus {
+        outline: none;
+      }
+    }
+  
+    .card-button {
+      font-size: 0.7em;
+    }
+  
+    .card-button + .card-button {
+      margin-left: 1rem;
+  
+      @media (max-width: 767px) {
+        margin-left: 0.5rem;
       }
     }
   }
 
-  .learn-content {
-    width: 100%;
-    padding-top: 2rem;
-
-    @include flex(row);
-
-    border-top: 1px solid rgba($main-color, 0.5);
-
-    @media (max-width: 767px) {
-      padding-top: 1rem;
-    }
-  }
-
-  .word__container {
-
-    @include flex(column, center, flex-start);
-  }
-
-  .word__wrapper {
-    position: relative;
-
-    display: inline-block;
-
-    padding: $element-border-radius 0;
-
-    font-size: 1.4em;
-    line-height: 1.2;
-
-    background-color: $hover-color;
-
-    border: none;
-    border-radius: $element-border-radius;
-  }
-
-  .word__size {
-    display: inline-block;
-
-    visibility: hidden;
-
-    padding: 0 $word-input-padding;
-
-    background: transparent;
-    opacity: 0;
-
-    pointer-events: none;
-    user-select: none;
-    cursor: none;
-
-    &--correct {
-      visibility: visible;
-      color: $font-color-correct;
-      opacity: 1;
-    }
-
-    &--errorMax {
-      visibility: visible;
-      color: $font-color-error;
-    }
-
-    &--error {
-      visibility: visible;
-      color: $font-color-error-add;
-    }
-
-    &--visible {
-      visibility: visible;
-      opacity: 0.5;
-      animation: errors 2s linear;
-    }
-  }
-
-  .word__size > span {
-    display: inline-block;
-  }
-
-  @keyframes errors {
-
-    0% {
-      opacity: 1;
-    }
-
-    5% {
-      opacity: 1;
-      transform: scale(1.2);
-    }
-
-    20% {
-      opacity: 1;
-      transform: none;
-    }
-
-    100% {
-      opacity: 0.5
-    }
-  }
-
-  .word__input {
-    position: absolute;
-    bottom: $element-border-radius;
-    left: 0;
-    z-index: 1;
-
-    display: inline-block;
-
-    width: 100%;
-    height: calc(100% - 2 * #{$element-border-radius});
-    padding: 0 $word-input-padding;
-
-    font: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    color: inherit;
-
-    background-color: transparent;
-    border: none;
-    border-radius: inherit;
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  .card-button {
-    font-size: 0.7em;
-  }
-
-  .card-button + .card-button {
-    margin-left: 1rem;
-
-    @media (max-width: 767px) {
-      margin-left: 0.5rem;
-    }
-  }
 }
 
 /* tooltip-top ----------------------------------------------------------------------- */

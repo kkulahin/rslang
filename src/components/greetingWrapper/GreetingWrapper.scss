@@ -17,11 +17,11 @@ $margin: 5px;
 		.container-with-shadow {
 
 			&:first-child {
-				width: 40% !important;
+				width: 40%;
 			}
 	
 			&:last-child {
-				width: 50% !important;
+				width: 50%;
 			}
 		}
   }
@@ -37,6 +37,20 @@ $margin: 5px;
 			min-width: 300px;
 			height: 120px !important;
 			margin: ($margin * 2) $margin;
+		}
+  }
+}
+
+@media (max-width: 659px) {
+
+  .greeting-wrapper {
+
+		.container-with-shadow {
+			width: 100% !important;
+
+			&:first-child {
+				display: none;
+			}
 		}
   }
 }

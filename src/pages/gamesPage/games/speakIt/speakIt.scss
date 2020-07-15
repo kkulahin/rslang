@@ -1,112 +1,134 @@
+@import "../../../../styles/mixin.scss";
+
 .speakIt {
+  width: 100%;
+
+  @include flex(column, center, stretch);
+
+  &-progressbar {
+    width: 50%;
+  }
+
+  &-level {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &-image__wrapper {
     width: 100%;
+    margin-top: 30px;
+
+    @include flex(column);
+
+    p {
+      margin: 20px;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    img {
+      width: 500px !important;
+    }
+  }
+
+  .step {
+    margin-right: 5px !important;
+
+    &::after {
+      display:none !important;
+    }
+  }
+
+  &-items {
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+
+    @include flex(row, stretch, center);
+
+    .container-with-shadow {
+      height: 50px !important;
+      margin: 10px !important;
+      padding: 10px !important;
+
+      &.active {
+        background-color:#b67932;
+      }
+    }
+  }
+
+  .item {
+    display: grid; 
+    grid-template-columns: repeat(3, 6rem);
+
+    &-icon {
+      font-size: 3.0rem;
+      color:#fff;
+
+      @include flex(row);
+    }
+
+    &-content {
+      font-size: 1.8rem;
+      color: #fff;
+
+      @include flex(column, flex-start, center);
+    }
+  }
+
+  &-panel {
+    width: 60%;
+    margin: 20px auto;
+
+    @include flex(row, stretch);
+
+    button {
+      justify-content: center;
+      margin-right: 20px;
+  
+      @include size(150px, 50px);
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &-result {
+
+    @include flex(column, center, stretch);
+
+    .speakIt-progressbar {
+      margin: 30px auto;
+    }
+  }
 }
 
 .startScreen .container-with-shadow {
-	display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    height: 50vh !important;
+  height: 50vh !important;
+
+  @include flex(column, stretch, space-evenly);
 }
 
-.speakIt-progressbar {
-    width: 50%;
+.RSPBstep {
+  user-select: none;
+  cursor: pointer;
 }
 
-.speakIt-image__wrapper {
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%; 
-    margin-top: 30px;
-}
-
-.speakIt-image__wrapper p {
-    margin: 20px;
-    font-size: 24px;
-    font-weight: 600;
-    color: #fff;
-}
-
-.speakIt-image__wrapper img {
-    width: 500px !important;
-}
-
-.speakIt .step {
-    margin-right: 5px !important;
-}
-
-.speakIt .step:after {
-    display:none !important;
-}
-
-.speakIt-items {
-	display: flex;
-	flex-wrap: wrap;
-	width: 1200px;
-	margin: 20px auto;
-}
-
-.speakIt .item {
-    display: grid; 
-    grid-template-columns: repeat(2, 5rem);
-    width:19%;
-    min-height: 50px;
-    margin: 5px;
-    border: 1px solid #fff;
+#speakit-start-btn {
+  width: 220px;
+  height: 50px;
+  margin: 20px auto 0;
 }
 
 .results-container .result-item {
-    display: grid; 
-    grid-template-columns: repeat(3, 5rem);
-    border: 1px solid #fff;
-}
-
-.speakIt .item-icon {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    color:#fff;
-}
-
-.speakIt .item-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    font-size: 18px;
-    color: #fff;
-}
-
-.speakIt-panel {
-    display: flex;
-    width: 60%;
-    margin: 20px auto;
-}
-
-.speakIt-panel button {
-	justify-content: center;
-}
-
-.speakIt button:first-child {
-    flex: 1 25%
-}
-
-.speakIt button+button {
-    flex: 2 50%
-}
-
-.speakIt button:last-child {
-   /* flex: 3 25%*/
-}
-
-.speakIt .active.item {
-    background: black;
+    display: grid;
+    grid-template-columns: repeat(3, 135px);
+    padding: 7px 0;
+    border-bottom: 1px solid #5e5c5c;
 }
 
 .input-wrapper {
@@ -114,18 +136,16 @@
     justify-content: center;
     width: 80%;
     margin: 20px auto;
-}
 
-.speakIt-result {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    input {
+      font-size: 20px;
+      text-align: center;
+      color: white;
+      background: #2c2f33;
+      border: none;
+      border-bottom: 1px solid #c8c8c8;
+    }
 }
-
-.speakIt-result .speakIt-progressbar {
-    margin: 30px auto;
-}
-
 
 .visible {
     display: flex;
@@ -135,6 +155,51 @@
     display: none !important;
 }
 
-.item.success {
+.container-with-shadow {
+
+  &.success {
     background: greenyellow !important;
+  }
+
+  &.resultpage {
+    display: flex;
+    flex-direction: column;
+  }
 }
+
+.resultpage {
+  width: 100%;
+  max-width: 600px;
+  overflow: auto;
+}
+
+.results-errors {
+  text-align: center;
+}
+
+.results-right {
+  text-align: center;
+}
+
+.result-button__wrapper {
+  display: flex;
+  margin: 10px;
+}
+
+#speakit-again-btn {
+  margin-right: 20px;
+}
+
+.result-item {
+  cursor: pointer;
+}
+
+.result-item:hover {
+  background-color: #21ba45;
+}
+
+.result-item .item-icon {
+  margin-left: 70px;
+}
+
+

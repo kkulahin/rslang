@@ -8,107 +8,148 @@
 }
 
 $navigate-width: 4rem;
+$navigate-width-tablet: 3rem;
 $navigate-width-mobile: 2rem;
 $btn-padding: 1rem;
 $btn-padding-mobile: 0.5rem;
 $transition-duration: 0.5s;
 
-.navigate {
-  width: $navigate-width;
+.card-unit {
 
-  flex-shrink: 0;
+  .navigate {
+    width: $navigate-width;
+    height: 100%;
 
-  background-color: transparent;
+    flex-shrink: 0;
 
-  @media (max-width: 767px) {
-    width: $navigate-width-mobile;
-  }
-}
+    background-color: transparent;
+  
+    @media (max-width: 767px) {
+      width: $navigate-width-tablet;
+    }
 
-.navigate__btn {
-  width: 100%;
-  height: 100%;
+    @media (max-width: 420px) {
+      position: absolute;
 
-  padding: 0;
-
-  @include flex(row);
-
-  background-color: transparent;
-
-  border: none;
-
-  transition: padding $transition-duration;
-
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
+      width: $navigate-width-mobile;
+    }
   }
 
-  &:disabled {
-    pointer-events: none;
-    opacity: 0.1;
+  #prev.navigate {
+
+    @media (max-width: 420px) {
+      left: -0.5rem;
+    }
   }
 
-  &--invisible {
-    visibility: hidden;
-    pointer-events: none;
+  #next.navigate {
+
+    @media (max-width: 420px) {
+      right: -0.5rem;
+    }
   }
 
-  .svg-icon {
+  .navigate__btn {
     width: 100%;
-    height: auto;
-
-    fill: $main-color;
-
-    pointer-events: none;
-
-    transition: fill 0.2s linear;
+    height: 100%;
+  
+    padding: 0;
+  
+    @include flex(row);
+  
+    background-color: transparent;
+  
+    border: none;
+  
+    transition: padding $transition-duration;
+  
+    cursor: pointer;
+  
+    &:focus {
+      outline: none;
+    }
+  
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.1;
+    }
+  
+    &--invisible {
+      visibility: hidden;
+      pointer-events: none;
+    }
+  
+    .svg-icon {
+      width: 100%;
+      height: auto;
+  
+      fill: $main-color;
+  
+      pointer-events: none;
+  
+      transition: fill 0.2s linear;
+    }
   }
-}
 
-.next {
-  justify-content: flex-end;
-  padding-right: $btn-padding;
+  .next {
+    justify-content: flex-end;
+    padding-right: $btn-padding;
 
-  @include media-hover {
-
-    &:hover {
+    @include media-hover {
+  
+      &:hover {
+        padding-right: 0;
+        padding-left: $btn-padding;
+      }
+  
+      &:hover .svg-icon {
+        fill: $hover-color;
+      }
+    }
+  
+    @media (max-width: 767px) {
       padding-right: 0;
-      padding-left: $btn-padding;
-    }
+      padding-left: 0.5rem;
 
-    &:hover .svg-icon {
-      fill: $hover-color;
+      @include media-hover {
+
+        &:hover {
+          padding-left: 0.5rem;
+        }
+      }
     }
   }
 
-  @media (max-width: 767px) {
-    padding-right: 0;
-  }
-}
+  .prev {
+    justify-content: flex-start;
+    padding-left: $btn-padding;
 
-.prev {
-  justify-content: flex-start;
-  padding-left: $btn-padding;
+    @include media-hover {
 
-  @include media-hover {
+      &:hover {
+        padding-right: $btn-padding;
+        padding-left: 0;
+      }
 
-    &:hover {
-      padding-right: $btn-padding;
+      &:hover .svg-icon {
+        fill: $hover-color;
+      }
+    }
+
+    @media (max-width: 767px) {
+      padding-right: 0.5rem;
       padding-left: 0;
-    }
 
-    &:hover .svg-icon {
-      fill: $hover-color;
+      @include media-hover {
+
+        &:hover {
+          padding-right: 0.5rem;
+        }
+      }
     }
   }
 
-  @media (max-width: 767px) {
-    padding-left: 0;
+  .prev > .svg-icon {
+    transform: rotate(180deg);
   }
-}
-
-.prev > .svg-icon {
-  transform: rotate(180deg);
 }

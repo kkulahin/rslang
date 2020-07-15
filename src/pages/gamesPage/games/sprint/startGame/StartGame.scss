@@ -9,10 +9,12 @@
 
   &__title {
     font-size: 3.6rem;
+    text-align: center;
     font-weight: 800;
   }
 
   .radio-button {
+    margin: 0;
 
     &:hover {
       opacity: 0.7;
@@ -20,8 +22,10 @@
     }
 
     &-container {
-      width: max-content;
-      margin: 40px 0 80px 0;     
+      flex-wrap: wrap;
+      margin: 40px 0 80px 0;  
+      
+      @include flex(row, stretch);
     }
   }
 

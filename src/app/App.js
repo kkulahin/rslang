@@ -6,7 +6,7 @@ import {
 
 import History from '../utils/history';
 import Home from '../pages/homePage/Home';
-import NotFound from '../pages/NotFound';
+import NotFound from '../pages/notFoundPage/NotFound';
 import LoginPage from '../pages/loginPage/LoginPage';
 import Logout from '../pages/logoutPage/Logout';
 import SignupPage from '../pages/signupPage/SignupPage';
@@ -18,9 +18,11 @@ import GamesPage from '../pages/gamesPage/GamesPage';
 import Settings from '../pages/settingsPage/Settings';
 
 import Header from '../components/header/Header';
+import Modal from '../components/modal/Modal';
 import GreetingWrapper from '../components/greetingWrapper/GreetingWrapper';
 import './App.scss';
 import PrivateRoute from '../components/route/PrivateRoute';
+import notificationSubject from '../utils/observers/NotificationSubject';
 
 document.addEventListener('click', ({ target }) => {
   const isMobileDevice = window.innerWidth <= 767;
@@ -33,28 +35,57 @@ document.addEventListener('click', ({ target }) => {
   }
 });
 
-const App = () => (
-  <Router history={History}>
-    <div className="app-wrapper">
-      <Header />
-      <div className="app-main">
-        <GreetingWrapper />
-        <Switch>
-          <PrivateRoute exact path="/" component={Home} />
-          <Route path="/signin" component={LoginPage} />
-          <Route path="/signup" component={SignupPage} />
-          <Route path="/logout" component={Logout} />
-          <PrivateRoute path="/dictionary" component={Dictionary} />
-          <PrivateRoute path="/statistic" component={Statistic} />
-          <PrivateRoute path="/settings" component={Settings} />
-          <PrivateRoute path="/promo" component={Promo} />
-          <PrivateRoute path="/about" component={About} />
-          <PrivateRoute path="/games" component={GamesPage} />
-          <PrivateRoute component={NotFound} />
-        </Switch>
+const App = () => {
+  const [isUserLogin, setUserLogin] = useState(false);
+  const [notification, setNotification] = useState(null);
+
+  const getLoginStatus = (status) => {
+    setUserLogin(status);
+  };
+
+  useEffect(() => {
+    notificationSubject.subscribe(setNotification);
+
+    return () => {
+      notificationSubject.unsubscribe(setNotification);
+    };
+  }, [setNotification]);
+
+  return (
+    <Router history={History}>
+      <div className="app-wrapper">
+        <Header />
+        <div className="app-main">
+          <GreetingWrapper userOnline={isUserLogin} />
+          <Switch>
+            <PrivateRoute exact path="/" component={Home} />
+            <Route path="/signin">
+              <LoginPage getLoginStatus={getLoginStatus} isUserOnline={isUserLogin} />
+            </Route>
+            <Route path="/signup" component={SignupPage} isUserOffline={isUserLogin} />
+            <Route path="/logout">
+              <Logout getLoginStatus={getLoginStatus} />
+            </Route>
+            <PrivateRoute path="/dictionary" component={Dictionary} />
+            <PrivateRoute path="/statistic" component={Statistic} />
+            <PrivateRoute path="/settings" component={Settings} />
+            <Route path="/promo" component={Promo} />
+            <PrivateRoute path="/about" component={About} />
+            <PrivateRoute path="/games" component={GamesPage} />
+            <PrivateRoute component={NotFound} />
+          </Switch>
+        </div>
+        { notification
+          ? (
+            <Modal
+              content={notification.message}
+              contentHeader={notification.title}
+              clickHandler={() => setNotification(null)}
+            />
+          ) : null }
       </div>
-    </div>
-  </Router>
-);
+    </Router>
+  );
+};
 
 export default App;

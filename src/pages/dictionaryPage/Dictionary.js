@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { Modal } from 'semantic-ui-react';
 import Tabs from '../../components/tabs/Tabs';
 import TabContent from '../../components/tabs/tabContent/TabContent';
+import DictionaryWordCard from '../../components/dictionaryWordCard/DictionaryWordCard';
+import PageSpinner from '../../components/pageSpinner/PageSpinner';
+import getModifiedSettings from '../../components/wordCard/getModifiedSettings';
 import { getAllUserWords } from '../../controllers/words/userWords';
 import { getWordsById } from '../../controllers/words/words';
-import Button from '../../components/button/Button';
+import Button from '../../components/wordCard/button/Button';
+import ButtonDefault from '../../components/button/Button';
 import { getTodaySeconds, getDateFromSeconds, checkDayDifferenceAbs } from '../../utils/time';
+import WordController from '../../controllers/WordConrtoller';
+import settingsController from '../../controllers/SettingsController';
+import settingsSubject from '../../utils/observers/SettingSubject';
+import './Dictionary.scss';
+import parameters from '../../utils/spacedRepetition/parameters';
 
 const isEmptyArr = (arr) => {
   if (Array.isArray(arr) && !arr.length) {
@@ -20,6 +30,13 @@ const Dictionary = () => {
   const [isUpdated, setUpdate] = useState(false);
   const [tabContentUpdated, setTabContentUpdated] = useState(null);
   const [isRender, setRenderPage] = useState(false);
+  const [activeTab, setActiveTab] = useState({ cTab: null, updated: false });
+  const [isRemove, setRemoveWords] = useState(false);
+  const [isOpenModal, setStatusModal] = useState({
+    open: false, dimmer: 'blurring', word: null, wordInfo: null,
+  });
+  const [settings, setSettings] = useState(settingsController.get());
+
   useEffect(() => {
     const getDictionaryWords = async () => {
       const { data, response } = await getAllUserWords();
@@ -61,13 +78,17 @@ const Dictionary = () => {
             totalMistakes,
             totalRepetition,
             nextRepetition,
+            time,
           } = d.optional;
           const [oneWord] = word;
 
           const today = getDateFromSeconds(getTodaySeconds());
           const repetition = getDateFromSeconds(nextRepetition);
+          const lastRepetition = getDateFromSeconds(time);
 
-          if (repetition - today <= 0) {
+          if (isDeleted) {
+            oneWord.data.nextRepetition = 'never';
+          } else if (repetition - today <= 0) {
             oneWord.data.nextRepetition = 'today or soon';
           } else if (checkDayDifferenceAbs(today, repetition) === 1) {
             oneWord.data.nextRepetition = 'tomorrow or soon';
@@ -75,11 +96,19 @@ const Dictionary = () => {
             oneWord.data.nextRepetition = `${repetition.getFullYear()}-${repetition.getMonth() + 1}-${repetition.getDate()}`;
           }
 
+          if (checkDayDifferenceAbs(lastRepetition, today) === 0) {
+            oneWord.data.lastRepetition = 'today';
+          } else if (checkDayDifferenceAbs(lastRepetition, today) === 1) {
+            oneWord.data.lastRepetition = 'yesterday';
+          } else {
+            oneWord.data.lastRepetition = `${lastRepetition.getFullYear()}-${lastRepetition.getMonth() + 1}-${lastRepetition.getDate()}`;
+          }
+
           oneWord.data.totalMistakes = totalMistakes;
           oneWord.data.totalRepetition = totalRepetition;
           if (isDeleted !== undefined && isDeleted) {
             tabContentLocal.deleted.push(oneWord.data);
-          } else if (d.difficulty === 'normal') {
+          } else if (d.difficulty !== parameters.difficultyNames.hard) {
             tabContentLocal.normal.push(oneWord.data);
           } else {
             tabContentLocal.hard.push(oneWord.data);
@@ -90,6 +119,18 @@ const Dictionary = () => {
     }
   }, [dictionaryInfoWords, dictionaryWords]);
 
+  useEffect(() => {
+    settingsSubject.subscribe(setSettings);
+    return () => {
+      settingsSubject.unsubscribe(setSettings);
+    };
+  }, [setSettings]);
+
+  let cardSettings;
+  if (settings) {
+    cardSettings = getModifiedSettings(settings);
+  }
+
   const buildTab = (cTab) => {
     const tab = [];
     tabContent[cTab].forEach((w) => {
@@ -98,9 +139,6 @@ const Dictionary = () => {
         origin: w.word,
         transcript: w.transcription,
         translation: w.wordTranslate,
-        totalRepetition: w.totalRepetition,
-        totalMistakes: w.totalMistakes,
-        nextRepetition: w.nextRepetition,
       });
     });
     return tab;
@@ -119,6 +157,16 @@ const Dictionary = () => {
     }
   };
 
+  const getActiveTab = (tab) => {
+    if (activeTab.cTab === null || activeTab.cTab !== tab) {
+      const cTab = {
+        updated: false,
+        cTab: tab,
+      };
+      setActiveTab(cTab);
+    }
+  };
+
   const saveChange = () => {
     const { deletedWords } = tabContentUpdated;
     const newDictionaryWords = JSON.parse(JSON.stringify(dictionaryWords));
@@ -129,76 +177,161 @@ const Dictionary = () => {
       newDictionaryWords[wordsIdx].optional.isDeleted = statusWords;
     });
     setTabContentUpdated(null);
-
+    const cTab = {
+      updated: true,
+      cTab: activeTab.cTab,
+    };
+    setActiveTab(cTab);
     setDictionaryWords(newDictionaryWords);
+    setRemoveWords(true);
+  };
+
+  const getStatusRemove = (removedWords) => {
+    if (isEmptyArr(removedWords)) {
+      return false;
+    }
+
+    setRemoveWords(false);
+    const updatedWords = [];
+    removedWords.forEach((w) => {
+      for (let i = 0; i < dictionaryWords.length; i += 1) {
+        if (dictionaryWords[i].wordId === w.id) {
+          updatedWords.push(dictionaryWords[i]);
+          break;
+        }
+      }
+    });
+    if (!isEmptyArr(updatedWords)) {
+      updatedWords.forEach((updW) => {
+        WordController.updateWord(updW, false);
+      });
+    }
+    return false;
+  };
+
+  const closeModal = () => {
+    const newStatusModal = {
+      open: false,
+      dimmer: isOpenModal.dimmer,
+      word: null,
+      wordInfo: null,
+    };
+    setStatusModal(newStatusModal);
+  };
+
+  const showModal = (cId) => {
+    const word = dictionaryWords.filter((w) => w.wordId === cId);
+    const wordInfo = dictionaryInfoWords.filter((w) => w.data.id === cId);
+    const newStatusModal = {
+      open: true,
+      dimmer: 'blurring',
+      word: word[0],
+      wordInfo: wordInfo[0].data,
+    };
+    setStatusModal(newStatusModal);
   };
 
   if (!isRender) {
     return (
-      <div className="spinner">
-        <span />
-        <span />
-        <span />
-        <span />
+      <div className="dictionary-spinner-container">
+        <PageSpinner />
       </div>
     );
   }
+
   return (
-
-    <div className="dictionary">
-      <Tabs>
-        <div label="All">
-          {
-isEmptyArr(tabContent.normal)
-  ? null
-  : (
-    <TabContent
-      getStatus={isUpdateButtonActive}
-      wordList={buildTab('normal')}
-      getWordList={getNewWordList}
-    />
-  )
-}
-
-        </div>
-        <div label="Hard">
-          {
-isEmptyArr(tabContent.hard)
-  ? null
-  : (
-    <TabContent
-      getStatus={isUpdateButtonActive}
-      wordList={buildTab('hard')}
-      getWordList={getNewWordList}
-    />
-  )
-}
-        </div>
-        <div label="Deleted">
-          {
-isEmptyArr(tabContent.deleted)
-  ? null
-  : (
-    <TabContent
-      getStatus={isUpdateButtonActive}
-      wordList={buildTab('deleted')}
-      getWordList={getNewWordList}
-    />
-  )
-}
-        </div>
-      </Tabs>
-      {
-!isUpdated ? null : (
-  <Button
-    id="dictionary-save"
-    label="update"
-    clickHandler={saveChange}
-  />
-)
-}
-
-    </div>
+    <>
+      <div className="dictionary">
+        <Tabs getActiveTab={getActiveTab}>
+          <div label="All">
+            {
+              isEmptyArr(tabContent.normal)
+                ? null
+                : (
+                  <TabContent
+                    getStatus={isUpdateButtonActive}
+                    wordList={buildTab('normal')}
+                    getWordList={getNewWordList}
+                    isRemoveWords={isRemove}
+                    getStatusRemove={getStatusRemove}
+                    openModal={showModal}
+                    closeModal={closeModal}
+                    isOpenModal={isOpenModal.open}
+                  />
+                )
+            }
+          </div>
+          <div label="Hard">
+            {
+              isEmptyArr(tabContent.hard)
+                ? null
+                : (
+                  <TabContent
+                    getStatus={isUpdateButtonActive}
+                    wordList={buildTab('hard')}
+                    getWordList={getNewWordList}
+                    isRemoveWords={isRemove}
+                    getStatusRemove={getStatusRemove}
+                    openModal={showModal}
+                    closeModal={closeModal}
+                    isOpenModal={isOpenModal.open}
+                  />
+                )
+            }
+          </div>
+          <div label="Deleted">
+            {
+              isEmptyArr(tabContent.deleted)
+                ? null
+                : (
+                  <TabContent
+                    getStatus={isUpdateButtonActive}
+                    wordList={buildTab('deleted')}
+                    getWordList={getNewWordList}
+                    isRemoveWords={isRemove}
+                    getStatusRemove={getStatusRemove}
+                    openModal={showModal}
+                    closeModal={closeModal}
+                    isOpenModal={isOpenModal.open}
+                  />
+                )
+            }
+          </div>
+        </Tabs>
+        {
+          !isUpdated ? null : (
+            <ButtonDefault
+              id="dictionary-save"
+              label="update"
+              clickHandler={saveChange}
+            />
+          )
+        }
+      </div>
+      <Modal
+        className="dictionary-modal"
+        dimmer={isOpenModal.dimmer}
+        open={isOpenModal.open}
+        onClose={closeModal}
+      >
+        <Modal.Header>
+          {`${isOpenModal.wordInfo?.word}`}
+        </Modal.Header>
+        <Modal.Content>
+          <DictionaryWordCard
+            settings={cardSettings}
+            word={isOpenModal.wordInfo}
+          />
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+            id="modal-close"
+            label="Close"
+            clickHandler={closeModal}
+          />
+        </Modal.Actions>
+      </Modal>
+    </>
   );
 };
 

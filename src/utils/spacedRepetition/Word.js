@@ -49,6 +49,33 @@ export default class Word {
     this.isDeleted = isDeleted;
   }
 
+  update = ({
+    difficultyId = 0,
+    userDifficultyId = null,
+    time = 0,
+    firstTime = 0,
+    repetitionPhaseId = 0,
+    lastMistake = 0,
+    totalMistakes = 0,
+    mistakes = 'zzzzzzz',
+    totalRepetition = 0,
+    isDeleted = false,
+  }) => {
+    this.difficulty = difficultyId;
+    this.userDifficulty = userDifficultyId;
+    if (this.userDifficulty !== null && this.userDifficulty !== this.difficulty) {
+      this.difficulty = this.userDifficulty;
+    }
+    this.time = time * 1000;
+    this.firstTime = firstTime;
+    this.repetitionPhase = repetitionPhaseId;
+    this.lastMistake = lastMistake * 1000;
+    this.mistakes = mistakes;
+    this.totalMistakes = totalMistakes;
+    this.totalRepetition = totalRepetition;
+    this.isDeleted = isDeleted;
+  }
+
   setTime = () => {
     this.time = new Date().getTime();
     if (this.firstTime === 0) {

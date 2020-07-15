@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import Greeting from '../greeting/Greeting';
 import ContinueTrainingBlock from '../continueTrainingBlock/ContinueTrainingBlock';
@@ -7,10 +8,13 @@ import statisticsSubject from '../../utils/observers/StatisticsSubject';
 import statisticsController from '../../controllers/StatisticsController';
 import wordQueueSubject from '../../utils/observers/WordQueueSubject';
 import wordController from '../../controllers/WordConrtoller';
+import { getCookie } from '../../utils/cookie';
+import wordsReloadedSubject from '../../utils/observers/WordsReloadedSubject';
 
-const GreetingWrapper = () => {
+const GreetingWrapper = ({ userOnline }) => {
   const [cardsCount, setCardCount] = useState(wordController.getWordsCount());
   const [passedCount, setPassedCount] = useState(statisticsController.getPassedCount());
+  const [userInfo, setUserInfo] = useState({ name: '' });
 
   const updateCardCount = () => {
     setCardCount(wordController.getWordsCount());
@@ -22,13 +26,35 @@ const GreetingWrapper = () => {
 
   useEffect(() => {
     wordQueueSubject.subscribe(updateCardCount);
+    wordsReloadedSubject.subscribe(updateCardCount);
     statisticsSubject.subscribe(updatePassedCount);
 
     return () => {
       wordQueueSubject.unsubscribe(updateCardCount);
+      wordsReloadedSubject.unsubscribe(updateCardCount);
       statisticsSubject.unsubscribe(updatePassedCount);
     };
   }, [setCardCount, setPassedCount]);
+
+  useEffect(() => {
+    const setUserName = (cookie) => {
+      const auth = JSON.parse(cookie);
+      if (Object.keys(auth).length > 0 && userInfo.name !== auth.name) {
+        setUserInfo({ name: auth.name });
+      }
+    };
+
+    const cookie = getCookie('auth');
+    if (cookie === null || cookie === '') {
+      if (userOnline) {
+        setUserName(cookie);
+      } else {
+        setUserInfo({ name: '' });
+      }
+    } else {
+      setUserName(cookie);
+    }
+  }, [userInfo.name, userOnline]);
 
   const location = useLocation();
 
@@ -44,7 +70,7 @@ const GreetingWrapper = () => {
     !isAuthenticationPage
         && (
         <div className="greeting-wrapper">
-          <Greeting />
+          <Greeting userName={userInfo.name} />
           <ContinueTrainingBlock
             completedWordsCount={completedWordsCount}
             cardsCount={passedCount === null || cardsCount === null ? 0 : cardsCount}
@@ -53,6 +79,14 @@ const GreetingWrapper = () => {
         </div>
         )
   );
+};
+
+GreetingWrapper.propTypes = {
+  userOnline: PropTypes.bool,
+};
+
+GreetingWrapper.defaultProps = {
+  userOnline: false,
 };
 
 export default GreetingWrapper;

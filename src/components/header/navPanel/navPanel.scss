@@ -3,50 +3,51 @@
 @import '../../../styles/variables.scss';
 
 .vertical.menu {
-	position: sticky;
-	top: 0;
-	z-index: 2;
-	background-color: $background-color;
-		
-	@include flex(row, center, center);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: $background-color;
+      
+  @include flex(row, center, center);
 
-	@include size(150px, 100vh);
+  @include size(150px, 100vh);
 }
 
 .logo-wrapper {
 	
-	@include flex(row, center, center);
+  @include flex(row, center, center);
 
-	img {
+  img {
     width: 50px;
-	}
+  }
 }
 
 .app-link {
-	font-size: 1.6rem;
+  font-size: 1.6rem;
 
-	@include flex(column, stretch, space-around);
+  @include flex(column, stretch, space-around);
 
-	@include size(95%, 75%);
+  @include size(95%, 75%);
 }
 
 .ui.vertical.menu.app-menu {
-	display: flex !important;
+  display: flex !important;
+  justify-content: space-between;
   height: 90%;
-	font-family: inherit;
-	overflow: hidden;
+  font-family: inherit;
+  overflow: hidden;
   background-color: $background-color;
   border-radius: $container-border-radius;
-	box-shadow: $container-box-shadow;
-	transition: all 0.5s ease-in-out;
+  box-shadow: $container-box-shadow;
+  transition: all 0.5s ease-in-out;
 }
 
 .app-menu.min {
-	width: 50% !important;
+  width: 50% !important;
 }
 
 .app-menu.max {
-	width: 90% !important;
+  width: 90% !important;
 }
 
 .app-menu a.item {
@@ -54,106 +55,130 @@
   flex-direction: unset !important;
   justify-content: space-between;
   align-items: center !important;
-	min-width: 95% !important;
-	padding: 5px !important;
-	color: $main-color !important;
+  min-width: 95% !important;
+  padding: 5px !important;
+  color: $main-color !important;
 	
-	&[name="login"] {
-		font-size: 1.6rem;
-	}
+  &[name="login"] {
+    font-size: 1.6rem;
+  }
 }
 
 .app-menu a.item:hover {
-	color:$hover-color !important;
+  color:$hover-color !important;
 }
 
 .app-menu a.item.active {
-	color:$hover-color !important;
+  color:$hover-color !important;
 }
 
 .app-menu a.item .icon {
-	flex: 0 50px;
+  flex: 0 50px;
 }
 
 .app-menu a.item p {
-	flex: 1;
-	text-align: left;
-	transition: opacity 0.4s ease-in-out;
+  flex: 1;
+  text-align: left;
+  transition: opacity 0.4s ease-in-out;
 }
 
 .app-menu a.item  p.visible {
-	opacity: 1;
+  opacity: 1;
 }
 
 .app-menu a.item  p.invisible {
-	opacity: 0;
+  opacity: 0;
 }
 
 .app-menu__resize {
-	width: 95%;
-	font-size: 2.4rem;
-	color: $main-color;
-	font-weight: 500;
-	font-variant: all-small-caps;
+  width: 95%;
+  font-size: 2.4rem;
+  color: $main-color;
+  font-weight: 500;
+  font-variant: all-small-caps;
 }
 
 .app-menu__resize-wrapper {
-	box-shadow: $container-box-shadow;
+  box-shadow: $container-box-shadow;
 }
 
 .login {
-	width: 95%;
-	font-size: 1.2rem;
+  width: 95%;
+  font-size: 1.2rem;
 }
 
 .app-menu__resize .item {
-	min-width: 100% !important;
+  min-width: 100% !important;
 }
 
 @media (max-width: 767px) {
 
-	.menu-wrapper {
+  .menu-wrapper {
 
-		> .vertical.menu {
-			position: fixed;
-			z-index: 3;
-			justify-content: flex-start;
-			background-color: transparent;
-			pointer-events: none;
+    > .vertical.menu {
+      position: fixed;
+      z-index: 3;
+      justify-content: flex-start;
+      background-color: transparent;
+      pointer-events: none;
 
-			.app-menu {
-				height: 100%;
-				background-color: transparent;
-				border: 0;
-				box-shadow: none;
-				pointer-events: none;
+      .app-menu {
+        height: 100%;
+        background-color: transparent;
+        border: 0;
+        box-shadow: none;
+        pointer-events: none;
 
-				> div:not(:first-child) {
-					visibility: hidden;
-					opacity: 0;
-				}
-			}
+        > div:not(:first-child) {
+          visibility: hidden;
+          opacity: 0;
+        }
+      }
 
-			&.opened {
+      &.opened {
 
-				.app-menu {
-					background-color: $background-color;
-					border-radius: 0;
-					box-shadow: $container-box-shadow;
-					pointer-events: auto;
+        .app-menu {
+          background-color: $background-color;
+          border-radius: 0;
+          box-shadow: $container-box-shadow;
+          pointer-events: auto;
 	
-					> div:not(:first-child) {
-						transition: visibility 0.1s 0.3s, opacity 0.1s 0.3s;
-						visibility: visible;
-						opacity: 1;
-					}
-				}
-			}
-		}
+          > div:not(:first-child) {
+            opacity: 1;
+            transition: visibility 0.1s 0.3s, opacity 0.1s 0.3s;
+            visibility: visible;
+          }
+        }
+      }
+    }
 
-		.logo-wrapper {
-			cursor: pointer;
-			pointer-events: auto;
-		}
-	}
+    .logo-wrapper {
+      cursor: pointer;
+      pointer-events: auto;
+    }
+  }
+}
+
+@media (max-height: 499px) {
+
+  .vertical.menu {
+    justify-content: flex-start;
+
+    .app-menu {
+      height: 100% !important;
+      border-radius: 0 !important;
+    }
+  }
+
+  .logo-wrapper img {
+    width: 40px;
+  }
+
+  .app-menu a.item {
+    font-size: 1rem;
+
+    .icon {
+      margin: 0 !important;
+    }
+  }
 }

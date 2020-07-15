@@ -5,6 +5,9 @@ import statisticsController from '../controllers/StatisticsController';
 import { getTodaySeconds } from '../utils/time';
 import settingsController from '../controllers/SettingsController';
 import settingsNames from '../constants/settingsNames';
+import Word from '../utils/spacedRepetition/Word';
+import WordDefinition from '../utils/spacedRepetition/WordDefinition';
+import notificationSubject from '../utils/observers/NotificationSubject';
 
 export default class WordModel {
   constructor() {
@@ -59,13 +62,19 @@ export default class WordModel {
   };
 
   /**
-   * @param {Word} word
+   * @param {Word} wordToUpdate
    * @param {boolean} isNew
    */
-  updateWord = async (word, isNew) => {
+  updateWord = async (wordToUpdate, isNew) => {
     let method = 'PUT';
     if (isNew) {
       method = 'POST';
+    }
+    let word = null;
+    if (wordToUpdate instanceof Word) {
+      word = wordToUpdate;
+    } else {
+      word = new Word(null, new WordDefinition(wordToUpdate), wordToUpdate.optional);
     }
     const wordToPost = {
       difficulty: `${word.hasUserDifficulty() ? word.getUserDifficulty() : word.getAlgDifficulty()}`,
@@ -92,13 +101,13 @@ export default class WordModel {
           `users/%%userId%%/words/${word.definition.wordId}`,
           wordToPost);
         if (!postResponse.ok) {
-          console.debug(postData);
-          throw new Error(`${method} Word failed with ${postResponse.status} ${postResponse.statusText}`);
+          notificationSubject.notify('cannot get/update data',
+            `${method} Word failed with ${postResponse.status} ${postResponse.statusText}`);
         }
         return postData;
       }
-      console.debug(data);
-      throw new Error(`${method} Word failed with ${response.status} ${response.statusText}`);
+      notificationSubject.notify('cannot get/update data',
+        `${method} Word failed with ${response.status} ${response.statusText}`);
     }
     return data;
   };
@@ -111,7 +120,8 @@ export default class WordModel {
       params,
     );
     if (!response.ok) {
-      throw new Error(`GET Words failed with ${response.status} ${response.statusText}`);
+      notificationSubject.notify('cannot get/update data',
+        `query words failed with ${response.status} ${response.statusText}`);
     }
     const [data] = dataArray;
     const words = data.paginatedResults;
@@ -148,10 +158,15 @@ export default class WordModel {
     return this.queryWords(params);
   }
 
-  getWordsFromSavedQueue = async () => {
-    let words = statisticsController.get().optional.todayQueue.queue.map((qWord) => (qWord.w));
-    words = words.filter((word, pos) => words.indexOf(word) === pos);
-    words = words.map((word) => ({ word }));
+  getWordsFromSavedQueue = async (currentWords) => {
+    let words = null;
+    if (words) {
+      words = currentWords.map(({ definition: { word } }) => ({ word }));
+    } else {
+      words = statisticsController.get().optional.todayQueue.queue.map((qWord) => (qWord.w));
+      words = words.filter((word, pos) => words.indexOf(word) === pos);
+      words = words.map((word) => ({ word }));
+    }
     const filter = {
       $or: words,
     };

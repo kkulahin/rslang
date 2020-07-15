@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import RadioButtonContainer from '../radioButton/radioButtonContainer/RadioButtonContainer';
@@ -25,7 +25,6 @@ const CardContent = (props) => {
     isPrevWord,
     isEducation,
     isWordDeleted,
-    setWordDeleted,
     wordDifficulty,
     isCorrect,
     isShowBtnClick,
@@ -53,7 +52,7 @@ const CardContent = (props) => {
       dataTitle="Delete the word from training"
       dataPlacement="top"
       icon={<DeleteIcon iconTitle="delete icon" />}
-      clickHandler={(id) => { onCardBtnClick(id, true); setWordDeleted(true); }}
+      clickHandler={(id) => { onCardBtnClick(id, true); }}
     />
   );
 
@@ -64,7 +63,7 @@ const CardContent = (props) => {
       dataTitle="Undo delete word from training"
       dataPlacement="top"
       icon={<RestoreIcon iconTitle="restore icon" />}
-      clickHandler={(id) => { onCardBtnClick(id, false); setWordDeleted(false); }}
+      clickHandler={(id) => { onCardBtnClick(id, false); }}
     />
   );
 
@@ -139,7 +138,6 @@ CardContent.propTypes = {
   isCorrect: PropTypes.bool.isRequired,
   isEducation: PropTypes.bool.isRequired,
   isWordDeleted: PropTypes.bool.isRequired,
-  setWordDeleted: PropTypes.func.isRequired,
   isPrevWord: PropTypes.bool.isRequired,
   isShowBtnClick: PropTypes.bool.isRequired,
   isAgainBtnClick: PropTypes.bool.isRequired,

@@ -56,7 +56,7 @@ $padding: 10px;
       width: 90%;
       color: $main-color;
     
-      @include flex(row, center, space-between);
+      @include flex(row);
     }
   }
 

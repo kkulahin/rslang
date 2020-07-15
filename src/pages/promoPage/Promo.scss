@@ -20,6 +20,13 @@ $padding: $margin;
     border-radius: $container-border-radius;
     box-shadow: $container-box-shadow;
 
+    a {
+      display: block;
+      margin-bottom: 15px;
+      font-size: 20px;
+      color: $enabled-color;
+    }
+
     &-title {
       margin-bottom: ($margin * 1.25);
   

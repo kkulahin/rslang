@@ -36,6 +36,7 @@ $card-default-size: 300px;
   border-radius: $container-border-radius;
   box-shadow: $container-box-shadow;
 
+  @include flex(column, stretch, stretch);
 
   .avatar_and_name {
 
@@ -55,7 +56,14 @@ $card-default-size: 300px;
   }
     
   .about_person {
-      margin-top: ($margin * 2);
+    flex-grow: 2;
+    margin-top: ($margin * 2);
+
+    @include flex(column, stretch, stretch);
+  }
+
+  .contribution {
+    flex-grow: 2;
   }
     
   .about_person > p,

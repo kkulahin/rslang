@@ -8,10 +8,12 @@ import StatisticShort from '../../components/statisticShort/StatisticShort';
 import statisticsController from '../../controllers/StatisticsController';
 import Button from '../../components/button/Button';
 import Dropdown from '../../components/dropdown/Dropdown';
+import PageSpinner from '../../components/pageSpinner/PageSpinner';
 import './Home.scss';
 import settingsController from '../../controllers/SettingsController';
 import getModifiedSettings from '../../components/wordCard/getModifiedSettings';
 import WordQueue from '../../utils/spacedRepetition/WordQueue';
+import wordsReloadedSubject from '../../utils/observers/WordsReloadedSubject';
 
 /**
  * @param {Object} param
@@ -19,6 +21,7 @@ import WordQueue from '../../utils/spacedRepetition/WordQueue';
 const Home = () => {
   wordController.init();
   const [wordQueue, setWordQueue] = useState(wordController.getQueue());
+  const [reloadWords, setWordsRealoaded] = useState(wordQueue === null);
   const [word, setWord] = useState(wordQueue && wordQueue.getCurrentWord() ? wordQueue.getCurrentWord() : null);
   const [wordDifficulty, setWordDifficulty] = useState(wordQueue ? wordQueue.getWordDifficulty() : null);
   const [isWordDeleted, setWordDeleted] = useState(wordQueue ? wordQueue.isWordDeleted() : false);
@@ -36,14 +39,19 @@ const Home = () => {
 
   useEffect(() => {
     wordQueueSubject.subscribe(updateWordQueue);
+    wordsReloadedSubject.subscribe(setWordsRealoaded);
     statisticsSubject.subscribe(setStatistics);
     settingsSubject.subscribe(setSettings);
+    if (!reloadWords && wordQueue) {
+      wordQueue.getUpdatedWords();
+    }
     return () => {
       wordQueueSubject.unsubscribe(updateWordQueue);
+      wordsReloadedSubject.unsubscribe(setWordsRealoaded);
       statisticsSubject.unsubscribe(setStatistics);
       settingsSubject.unsubscribe(setSettings);
     };
-  }, [setStatistics]);
+  }, [setStatistics, setSettings, setWordsRealoaded, reloadWords, wordQueue]);
 
   let cardSettings;
   if (settings) {
@@ -53,10 +61,13 @@ const Home = () => {
   const handleNextBtnClick = () => {
     setWord(wordQueue.changeWord());
     setWordDeleted(wordQueue.isWordDeleted());
+    setWordDifficulty(wordQueue.getWordDifficulty());
   };
 
   const handlePrevBtnClick = () => {
     setWord(wordQueue.getPreviousWord());
+    setWordDeleted(wordQueue.isWordDeleted());
+    setWordDifficulty(wordQueue.getWordDifficulty());
   };
 
   if (wordQueue && !word && wordQueue.getLength() <= wordQueue.getCurrentPosition() && wordQueue.getLength() > 0) {
@@ -88,13 +99,10 @@ const Home = () => {
       </div>
     );
   }
-  if (!word) {
+  if (!word || !reloadWords) {
     return (
-      <div className="spinner">
-        <span />
-        <span />
-        <span />
-        <span />
+      <div className="home-spinner-container">
+        <PageSpinner />
       </div>
     );
   }
@@ -112,12 +120,11 @@ const Home = () => {
         settings={cardSettings}
         onAgainBtnClick={wordQueue.setAgain}
         onComplexityBtnClick={(id) => { wordQueue.setWordDifficulty(id); setWordDifficulty(wordQueue.getWordDifficulty()); }}
-        onDeleteBtnClick={wordQueue.setWordDeleted}
+        onDeleteBtnClick={(value) => { setWordDeleted(value); wordQueue.setWordDeleted(value); }}
         onNextBtnClick={handleNextBtnClick}
         onPrevBtnClick={handlePrevBtnClick}
         isEducation={word.isEducation}
         isWordDeleted={isWordDeleted}
-        setWordDeleted={setWordDeleted}
         wordDifficulty={wordDifficulty}
         isAnswered={wordQueue.isCurrentWordAnswered()}
         onWordAnswered={wordQueue.setWordAnswered}

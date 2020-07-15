@@ -26,7 +26,7 @@ const requiredFieldError = {
 };
 
 const nicknameError = {
-  content: 'Please enter valid nickname. Nickname should more than 3 symbols',
+  content: 'Please enter valid nickname. Nickname should have more than 3 symbols',
   pointing: 'below',
 };
 

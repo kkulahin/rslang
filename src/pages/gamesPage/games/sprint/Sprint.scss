@@ -3,9 +3,13 @@
 @import '../../../../styles/variables.scss';
 
 .game-sprint {
-  width: 90%;
-  margin: auto;
+  position: relative;
+  width: 100%;
   padding: 30px 10px;
 
   @include flex(row);
+
+  @media (max-width: 320px) {
+    padding: 30px 0;
+  }
 }
