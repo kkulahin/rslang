@@ -21,3 +21,4 @@
 | Use stylefix for all styles | 11.07.2020 | 11.07.2020 | 5 min |
 | Fix responsive, resolve conflict | 12.07.2020 | 12.07.2020 | 4 h |
 | Remove "forgot password" btn from sign-in page, edit styles about team page, fix nav panel responsive | 15.07.2020 | 15.07.2020 | 2 h |
+| Feat responsive for sprint mini-game | 15.07.2020 | 15.07.2020 | 2 h |
