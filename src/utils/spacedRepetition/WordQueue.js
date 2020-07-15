@@ -9,6 +9,8 @@ import wordQueueSubject from '../observers/WordQueueSubject';
 import settingsWordCountSubject from '../observers/SettingWordCountSubject';
 import parameters from './parameters';
 import wordsReloadedSubject from '../observers/WordsReloadedSubject';
+import confirmResponseSubject from '../observers/ConfirmResponseSubject';
+import confirmSubject from '../observers/ConfirmSubject';
 
 export default class WordQueue {
   constructor() {
@@ -22,6 +24,7 @@ export default class WordQueue {
     this.previousWordIndex = null;
     this.setQueueType();
     settingsWordCountSubject.subscribe(this.confirmReset);
+    confirmResponseSubject.subscribe(this.continueConfirmReset);
   }
 
   static queueTypes = { all: 'All words', new: 'New Words', hard: 'Hard words' };
@@ -77,14 +80,22 @@ export default class WordQueue {
 
   confirmReset = () => {
     this.needAnUpdate = null;
-    const isQueueStarted = this.queue.some(({ isDone }) => isDone === true);
-    if (isQueueStarted) {
-      this.needAnUpdate = confirm('You have started today learning. Do you want to recreate today game?');
+    const isQueueStarted = this.queue !== null && this.queue.some(({ isDone }) => isDone === true);
+    if (isQueueStarted && !this.needAnUpdate) {
+      confirmSubject.notify('Confirm', 'You have started today learning. Do you want to recreate today game?');
+    } else {
+      this.continueConfirmReset(true);
     }
+  }
+
+  continueConfirmReset = (needAnUpdate) => {
+    this.needAnUpdate = needAnUpdate;
+    const isQueueStarted = this.queue.some(({ isDone }) => isDone === true);
     if (!isQueueStarted || this.needAnUpdate) {
       this.needAnUpdate = true;
       this.words = [];
       this.subQueue = null;
+      this.queue = null;
       this.setQueueType();
       wordQueueSubject.notify(this);
       statisticsController.resetToday();
@@ -172,9 +183,6 @@ export default class WordQueue {
    * @returns {{isEducation: boolean, word: Word}} queued word
    */
   getCurrentWord = () => {
-    if (this.needAnUpdate === null) {
-      this.needAnUpdate = confirm('You have started today learning. Do you want to recreate today game?');
-    }
     if (this.needAnUpdate) {
       this.updateQueue();
       return null;
