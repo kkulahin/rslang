@@ -120,8 +120,8 @@
 
 #speakit-start-btn {
   width: 220px;
-  margin: 0 auto;
   height: 50px;
+  margin: 0 auto;
 }
 
 .results-container .result-item {
@@ -156,6 +156,7 @@
 }
 
 .container-with-shadow {
+
   &.success {
     background: greenyellow !important;
   }

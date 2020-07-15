@@ -12,6 +12,7 @@
       border-bottom : 1px solid $main-color;
 
       .tab-content__row {
+
         &::before {
           content: unset;
         }
@@ -21,17 +22,18 @@
     
   &__row {
     position: relative;
+
     @include flex(row, stretch, space-between);
 
     &::before {
-      content: '';
       position: absolute;
-      z-index: -1;
       top: 0;
       left: -10px;
+      z-index: -1;
       width: calc(100% + 20px);
       height: 100%;
       border-radius: 6px;
+      content: '';
     }
 
     &:hover::before {
@@ -45,10 +47,12 @@
       color      : $main-color;
 
       @include flex(row, center, flex-start);
+
       @include font(1.8rem, 1.2em, 400);
 
       &--crash {
         cursor: pointer;
+
         &:hover, &:hover::before {
           color: black;
           opacity: 0.5;
@@ -63,7 +67,9 @@
 }
 
 @media screen and (max-width: 600px) {
+
   .tab-content {
+
     &__row:first-child {
       margin-top: 10px;
     }
@@ -71,20 +77,24 @@
     &__row {
       flex-direction: column;
       padding: 20px 0;
+
       &::before {
         content: unset;
       }
+
       &__item {
+        justify-content: center;
         width: 100%;
         padding    : 4px 0;
-        justify-content: center;
 
         
         &--crash {
+
           &:hover, &:hover::before {
             color: $enabled-color;
             opacity: 1;
           }
+
           i.icon {
             width: unset;
             height: unset;
