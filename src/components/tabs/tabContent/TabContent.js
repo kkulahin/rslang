@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Pagination } from 'semantic-ui-react';
@@ -9,33 +11,29 @@ const Row = ({ word, onClickCrashButton, getRowId }) => {
     id, origin, transcript, translation,
   } = word;
 
-  const setActiveRow = (e) => {
-    if (!e.target.classList.contains('trash')) {
-      const rowId = e.currentTarget.getAttribute('data-element');
+  const setActiveRow = (rowId, e) => {
+    if (!e.target.classList.contains('trash')
+      && !e.target.classList.contains('tab-content__row__item--crash')) {
       getRowId(rowId);
     }
   };
 
   return (
-    <tr className="row" data-element={id} onClick={setActiveRow}>
-      <td className="row__item">{origin}</td>
-      <td className="row__item">{transcript}</td>
-      <td className="row__item">{translation}</td>
-      <td className="row__item">
-        <Icon name="trash alternate" className="row__crash-icon" onClick={onClickCrashButton} />
-      </td>
-    </tr>
+    <div className="tab-content__row" data-element={id} onClick={(e) => setActiveRow(id, e)}>
+      <div className="tab-content__row__item">{origin}</div>
+      <div className="tab-content__row__item">{transcript}</div>
+      <div className="tab-content__row__item">{translation}</div>
+      <div className="tab-content__row__item tab-content__row__item--crash" onClick={onClickCrashButton}>
+        <Icon name="trash alternate" className="tab-content__row_crash-icon" />
+      </div>
+    </div>
   );
-};
-
-Row.defaultProps = {
-  getWordId: () => {},
 };
 
 Row.propTypes = {
   word: PropTypes.instanceOf(Object).isRequired,
   onClickCrashButton: PropTypes.func.isRequired,
-  getRowId: PropTypes.func,
+  getRowId: PropTypes.func.isRequired,
 };
 
 const TabContent = ({
@@ -118,38 +116,34 @@ const TabContent = ({
   };
 
   return (
-    <table className="tab-content">
-      <thead className="tab-content__header">
-        <tr className="row">
-          <td className="row__item">Word</td>
-          <td className="row__item">Transcript</td>
-          <td className="row__item">Translation</td>
-          <td className="row__item" />
-        </tr>
-      </thead>
-      <tbody>
+    <div className="tab-content">
+      <div className="tab-content__header">
+        <div className="tab-content__row">
+          <div className="tab-content__row__item">Word</div>
+          <div className="tab-content__row__item">Transcript</div>
+          <div className="tab-content__row__item">Translation</div>
+          <div className="tab-content__row__item" />
+        </div>
+      </div>
+      <div className="tab-content__body">
         {rows}
         {
-          controlPagination.maxPage <= 1 ? null : (
-            <tr className="tab-pagination">
-              <td colSpan="4">
-                <Pagination
-                  className="tab-content__pagination"
-                  boundaryRange={0}
-                  defaultActivePage={1}
-                  ellipsisItem={null}
-                  firstItem={null}
-                  lastItem={null}
-                  siblingRange={1}
-                  totalPages={controlPagination.maxPage}
-                  onPageChange={onChangeList}
-                />
-              </td>
-            </tr>
-          )
-        }
-      </tbody>
-    </table>
+controlPagination.maxPage <= 1 ? null : (
+  <Pagination
+    className="tab-content__pagination"
+    boundaryRange={0}
+    defaultActivePage={1}
+    ellipsisItem={null}
+    firstItem={null}
+    lastItem={null}
+    siblingRange={1}
+    totalPages={controlPagination.maxPage}
+    onPageChange={onChangeList}
+  />
+)
+}
+      </div>
+    </div>
   );
 };
 
