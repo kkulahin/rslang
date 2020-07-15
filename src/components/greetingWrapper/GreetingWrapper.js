@@ -34,14 +34,22 @@ const GreetingWrapper = ({ userOnline }) => {
   }, [setCardCount, setPassedCount]);
 
   useEffect(() => {
-    const cookie = getCookie('auth');
-    if (cookie === null || cookie === '' || !userOnline) {
-      setUserInfo({ name: '' });
-    } else {
+    const setUserName = (cookie) => {
       const auth = JSON.parse(cookie);
       if (Object.keys(auth).length > 0 && userInfo.name !== auth.name) {
         setUserInfo({ name: auth.name });
       }
+    };
+
+    const cookie = getCookie('auth');
+    if (cookie === null || cookie === '') {
+      if (userOnline) {
+        setUserName(cookie);
+      } else {
+        setUserInfo({ name: '' });
+      }
+    } else {
+      setUserName(cookie);
     }
   }, [userInfo.name, userOnline]);
 
