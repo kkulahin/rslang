@@ -8,6 +8,7 @@ import StatisticShort from '../../components/statisticShort/StatisticShort';
 import statisticsController from '../../controllers/StatisticsController';
 import Button from '../../components/button/Button';
 import Dropdown from '../../components/dropdown/Dropdown';
+import PageSpinner from '../../components/pageSpinner/PageSpinner';
 import './Home.scss';
 import settingsController from '../../controllers/SettingsController';
 import getModifiedSettings from '../../components/wordCard/getModifiedSettings';
@@ -100,11 +101,8 @@ const Home = () => {
   }
   if (!word || !reloadWords) {
     return (
-      <div className="spinner">
-        <span />
-        <span />
-        <span />
-        <span />
+      <div className="home-spinner-container">
+        <PageSpinner />
       </div>
     );
   }

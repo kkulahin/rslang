@@ -3,6 +3,7 @@ import { Modal } from 'semantic-ui-react';
 import Tabs from '../../components/tabs/Tabs';
 import TabContent from '../../components/tabs/tabContent/TabContent';
 import DictionaryWordCard from '../../components/dictionaryWordCard/DictionaryWordCard';
+import PageSpinner from '../../components/pageSpinner/PageSpinner';
 import getModifiedSettings from '../../components/wordCard/getModifiedSettings';
 import { getAllUserWords } from '../../controllers/words/userWords';
 import { getWordsById } from '../../controllers/words/words';
@@ -222,11 +223,8 @@ const Dictionary = () => {
 
   if (!isRender) {
     return (
-      <div className="spinner">
-        <span />
-        <span />
-        <span />
-        <span />
+      <div className="dictionary-spinner-container">
+        <PageSpinner />
       </div>
     );
   }

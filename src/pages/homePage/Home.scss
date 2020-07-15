@@ -2,22 +2,22 @@
 
 @import '../../styles/variables.scss';
 
-$spinner-size: 100px;
-$spinner-position: calc(50% - 50px);
 $margin-end-sub-queue: 20px;
 
 .home-block {
+
   &__card {
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
   }
 
   &__end-sub-queue {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     h2 {
       margin-bottom: $margin-end-sub-queue;
     }
@@ -30,9 +30,9 @@ $margin-end-sub-queue: 20px;
 }
 
 .main-game__end-game {
+  flex-wrap: wrap;
   width: 100%;
   user-select: none;
-  flex-wrap: wrap;
 
   @include flex(row, center, center);
 
@@ -40,122 +40,20 @@ $margin-end-sub-queue: 20px;
     width: fit-content;
     height: fit-content;
     margin: 30px 0 30px 30px;
+
     @include flex(row, center, center);
   }
 }
 
-.spinner {
+.home-spinner-container {
   position: relative;
-  top: 10%;
-  left: $spinner-position;
-  border-radius: 25%;
-  transform: translate(-50%, -50%);
-  animation: rotate-spinner 2s infinite linear;  
 
-  @include size($spinner-size);
-}
+  @include flex(row, center, center);
+  flex-grow: 1;
 
-.spinner > span {
-  position: absolute;
-  display: block;
-  background-color: $background-color;
-  border-radius: 50%;
-  box-shadow: 0px 0px 15px 3px $enabled-color inset;  
-  animation: rotate-span 2s infinite ease-in-out;
-
-  @include size(40%);
-}
-
-.spinner > span::after {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  border-radius: 50%;
-  box-shadow: 0px 0px 15px 3px $enabled-color;
-  animation: translate-span-after-before 3s infinite linear;
-  content: "";
-
-  @include size(10%);
-}
-
-.spinner > span::before {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  border-radius: 50%;
-  box-shadow: 0px 0px 15px 3px $enabled-color;
-  animation: translate-span-after-before 3s infinite ;
-  content: "";
-  animation-delay: 1.5s;
-
-  @include size(10%);
-}
-
-.spinner span:nth-child(1) {
-    top: -2%;
-    left: -2%;
-}
-
-.spinner span:nth-child(2) {
-  top: -2%;
-  right: -2%;
-  -webkit-animation-delay: 0.5s;
-  animation-delay: 0.5s;
-}
-
-.spinner span:nth-child(3) {
-  right: -2%;
-  bottom: -2%;  
-  -webkit-animation-delay: 1s;
-  animation-delay: 1s;
-}
-
-.spinner span:nth-child(4) {
-  bottom: -2%;
-  left: -2%;
-  -webkit-animation-delay: 1.5s;
-  animation-delay: 1.5s;
-}
-
-@keyframes rotate-spinner {
-
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-      transform: rotate(-360deg);
-  }          
-}
-
-@keyframes rotate-span {
-
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-      transform: rotate(360deg);
-  }         
-}
-
-@keyframes translate-span-after-before {
-
-  0% {
-      transform: translate(0%);
-  }
-
-  25% {
-      transform: translate(650%);
-  }
-
-  50% {
-      transform: translate(650%, 650%);
-  }
-
-  75% {
-      transform: translate(0%, 650%);
-  }  
+  width: 100%;
+  margin: 0;
+  padding: 0 0 4rem 0;
 }
 
 .home-block__card .home_progress_bar {
@@ -176,11 +74,11 @@ $margin-end-sub-queue: 20px;
 
 .home_progress_bar .total_words {
   position: absolute;
-  width: 100%;
-  text-align: center;
   top: 50%;
   left: 50%;
+  width: 100%;
   font-size: 1.8rem;
+  text-align: center;
   transform: translate(-50%, -50%);
 }
 
@@ -189,13 +87,5 @@ $margin-end-sub-queue: 20px;
   from {
     width: 0%;
     box-shadow: 0px 0px 40px 5px white;
-  }
-}
-
-@media (max-width: 767px) {
-
-  .spinner {
-    top: 10%;
-    left: $spinner-position;
   }
 }
