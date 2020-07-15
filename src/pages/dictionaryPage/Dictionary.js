@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  Button as SemanticButton, Header, Image, Modal,
-} from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { Modal } from 'semantic-ui-react';
 import Tabs from '../../components/tabs/Tabs';
 import TabContent from '../../components/tabs/tabContent/TabContent';
+import DictionaryWordCard from '../../components/dictionaryWordCard/DictionaryWordCard';
+import getModifiedSettings from '../../components/wordCard/getModifiedSettings';
 import { getAllUserWords } from '../../controllers/words/userWords';
 import { getWordsById } from '../../controllers/words/words';
-import Button from '../../components/button/Button';
+import Button from '../../components/wordCard/button/Button';
 import { getTodaySeconds, getDateFromSeconds, checkDayDifferenceAbs } from '../../utils/time';
 import WordController from '../../controllers/WordConrtoller';
+import settingsController from '../../controllers/SettingsController';
+import settingsSubject from '../../utils/observers/SettingSubject';
 import './Dictionary.scss';
 
 const isEmptyArr = (arr) => {
@@ -30,9 +32,7 @@ const Dictionary = () => {
   const [isOpenModal, setStatusModal] = useState({
     open: false, dimmer: 'blurring', word: null, wordInfo: null,
   });
-
-  const cardWord = useRef(null);
-  const cardExample = useRef(null);
+  const [settings, setSettings] = useState(settingsController.get());
 
   useEffect(() => {
     const getDictionaryWords = async () => {
@@ -81,7 +81,9 @@ const Dictionary = () => {
           const today = getDateFromSeconds(getTodaySeconds());
           const repetition = getDateFromSeconds(nextRepetition);
 
-          if (repetition - today <= 0) {
+          if (isDeleted) {
+            oneWord.data.nextRepetition = 'never';
+          } else if (repetition - today <= 0) {
             oneWord.data.nextRepetition = 'today or soon';
           } else if (checkDayDifferenceAbs(today, repetition) === 1) {
             oneWord.data.nextRepetition = 'tomorrow or soon';
@@ -104,6 +106,18 @@ const Dictionary = () => {
     }
   }, [dictionaryInfoWords, dictionaryWords]);
 
+  useEffect(() => {
+    settingsSubject.subscribe(setSettings);
+    return () => {
+      settingsSubject.unsubscribe(setSettings);
+    };
+  }, [setSettings]);
+
+  let cardSettings;
+  if (settings) {
+    cardSettings = getModifiedSettings(settings);
+  }
+
   const buildTab = (cTab) => {
     const tab = [];
     tabContent[cTab].forEach((w) => {
@@ -112,9 +126,6 @@ const Dictionary = () => {
         origin: w.word,
         transcript: w.transcription,
         translation: w.wordTranslate,
-        totalRepetition: w.totalRepetition,
-        totalMistakes: w.totalMistakes,
-        nextRepetition: w.nextRepetition,
       });
     });
     return tab;
@@ -207,33 +218,6 @@ const Dictionary = () => {
     setStatusModal(newStatusModal);
   };
 
-  const removeTags = (text) => {
-    if (isOpenModal.word !== null && isOpenModal.wordInfo !== null) {
-      const re = /(.*)<b>(.*)<\/b>(.*)/;
-      const result = re.exec(text);
-      return result === null ? null : `${result[1]} ${result[2]} ${result[3]}`;
-    }
-    return null;
-  };
-
-  const playWord = (e) => {
-    const el = e.currentTarget;
-    const attr = el.getAttribute('name');
-    let audio = null;
-    // eslint-disable-next-line default-case
-    switch (attr) {
-      case 'cardWord':
-        audio = cardWord.current;
-        break;
-      case 'cardExample':
-        audio = cardExample.current;
-        break;
-    }
-    if (audio !== null) {
-      audio.play();
-    }
-  };
-
   if (!isRender) {
     return (
       <div className="spinner">
@@ -244,76 +228,75 @@ const Dictionary = () => {
       </div>
     );
   }
+
   return (
     <>
       <div className="dictionary">
         <Tabs getActiveTab={getActiveTab}>
           <div label="All">
             {
-isEmptyArr(tabContent.normal)
-  ? null
-  : (
-    <TabContent
-      getStatus={isUpdateButtonActive}
-      wordList={buildTab('normal')}
-      getWordList={getNewWordList}
-      isRemoveWords={isRemove}
-      getStatusRemove={getStatusRemove}
-      openModal={showModal}
-      closeModal={closeModal}
-      isOpenModal={isOpenModal.open}
-    />
-  )
-}
-
+              isEmptyArr(tabContent.normal)
+                ? null
+                : (
+                  <TabContent
+                    getStatus={isUpdateButtonActive}
+                    wordList={buildTab('normal')}
+                    getWordList={getNewWordList}
+                    isRemoveWords={isRemove}
+                    getStatusRemove={getStatusRemove}
+                    openModal={showModal}
+                    closeModal={closeModal}
+                    isOpenModal={isOpenModal.open}
+                  />
+                  )
+            }
           </div>
           <div label="Hard">
             {
-isEmptyArr(tabContent.hard)
-  ? null
-  : (
-    <TabContent
-      getStatus={isUpdateButtonActive}
-      wordList={buildTab('hard')}
-      getWordList={getNewWordList}
-      isRemoveWords={isRemove}
-      getStatusRemove={getStatusRemove}
-      openModal={showModal}
-      closeModal={closeModal}
-      isOpenModal={isOpenModal.open}
-    />
-  )
-}
+              isEmptyArr(tabContent.hard)
+                ? null
+                : (
+                  <TabContent
+                    getStatus={isUpdateButtonActive}
+                    wordList={buildTab('hard')}
+                    getWordList={getNewWordList}
+                    isRemoveWords={isRemove}
+                    getStatusRemove={getStatusRemove}
+                    openModal={showModal}
+                    closeModal={closeModal}
+                    isOpenModal={isOpenModal.open}
+                  />
+                  )
+            }
           </div>
           <div label="Deleted">
             {
-isEmptyArr(tabContent.deleted)
-  ? null
-  : (
-    <TabContent
-      getStatus={isUpdateButtonActive}
-      wordList={buildTab('deleted')}
-      getWordList={getNewWordList}
-      isRemoveWords={isRemove}
-      getStatusRemove={getStatusRemove}
-      openModal={showModal}
-      closeModal={closeModal}
-      isOpenModal={isOpenModal.open}
-    />
-  )
-}
+              isEmptyArr(tabContent.deleted)
+                ? null
+                : (
+                  <TabContent
+                    getStatus={isUpdateButtonActive}
+                    wordList={buildTab('deleted')}
+                    getWordList={getNewWordList}
+                    isRemoveWords={isRemove}
+                    getStatusRemove={getStatusRemove}
+                    openModal={showModal}
+                    closeModal={closeModal}
+                    isOpenModal={isOpenModal.open}
+                  />
+                  )
+            }
           </div>
         </Tabs>
         {
-!isUpdated ? null : (
-  <Button
-    id="dictionary-save"
-    label="update"
-    clickHandler={saveChange}
-  />
-)
-}
-
+          !isUpdated ? null : (
+            <Button
+              id="dictionary-save"
+              label="update"
+              clickHandler={saveChange}
+            />
+          )
+        }
       </div>
       <Modal
         className="dictionary-modal"
@@ -322,65 +305,19 @@ isEmptyArr(tabContent.deleted)
         onClose={closeModal}
       >
         <Modal.Header>
-          {
-`${isOpenModal.wordInfo?.word} ${isOpenModal.wordInfo?.transcription}`
-}
+          {`${isOpenModal.wordInfo?.word}`}
         </Modal.Header>
-        <Modal.Content image className="modal-content">
-          <Image
-            wrapped
-            size="medium"
-            src={`data:image/png;base64, ${isOpenModal.wordInfo?.image}`}
+        <Modal.Content>
+          <DictionaryWordCard
+            settings={cardSettings}
+            word={isOpenModal.wordInfo}
           />
-          <Modal.Description>
-            <Header>
-              <button className="circular ui icon button" name="cardWord" onClick={playWord}>
-                <i className="icon play" />
-                <audio ref={cardWord} src={`data:audio/mpeg;base64, ${isOpenModal.wordInfo?.audio}`}>
-                  <track kind="captions" />
-                </audio>
-              </button>
-              {isOpenModal.wordInfo?.word}
-            </Header>
-            <p>
-              Transcription:
-              {isOpenModal.wordInfo?.transcription}
-            </p>
-            <p>
-              Translate:
-              {' '}
-              {isOpenModal.wordInfo?.wordTranslate}
-            </p>
-            <p>
-              <button className="circular ui icon button" name="cardExample" onClick={playWord}>
-                <i className="icon play" />
-                <audio ref={cardExample} src={`data:audio/mpeg;base64, ${isOpenModal.wordInfo?.audioExample}`}>
-                  <track kind="captions" />
-                </audio>
-              </button>
-              Example:
-              {' '}
-              { removeTags(isOpenModal.wordInfo?.textExample)}
-            </p>
-            <p>
-              Mistakes:
-              {' '}
-              {isOpenModal.wordInfo?.totalMistakes}
-            </p>
-            <p>
-              Repetition:
-              {' '}
-              {isOpenModal.wordInfo?.totalRepetition}
-            </p>
-          </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
-          <SemanticButton
-            positive
-            icon="checkmark"
-            labelPosition="right"
-            content="Close"
-            onClick={closeModal}
+          <Button
+            id="modal-close"
+            label="Close"
+            clickHandler={closeModal}
           />
         </Modal.Actions>
       </Modal>
