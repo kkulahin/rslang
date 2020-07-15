@@ -13,9 +13,7 @@ const Greeting = ({ userName }) => {
 
   return (
     <ContainerWithShadow
-      width="48%"
-      height="160px"
-      padding="0"
+      clName="container-with-shadow--greeting"
     >
       <div className="greeting">
         <div className="greeting__text">

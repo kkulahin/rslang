@@ -19,9 +19,7 @@ const ContinueTrainingBlock = ({ completedWordsCount, cardsCount, isFullState })
     );
   return (
     <ContainerWithShadow
-      width="42%"
-      height="160px"
-      padding="0"
+      clName="container-with-shadow--training"
     >
       <div className="continue-training-block">
         <div className="continue-training-block__item">
