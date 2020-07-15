@@ -67,7 +67,7 @@ const GameWindow = ({
         alpha={0.9}
         weight={40}
         showMilliseconds={false}
-        size={300}
+        size={270}
         onComplete={() => setIsPreparation(false)}
       />
     )
