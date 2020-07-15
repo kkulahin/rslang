@@ -37,7 +37,7 @@ const appDefaultSettings = [
       },
       {
         name: 'Words cards per day',
-        value: 25,
+        value: 30,
       },
     ],
   },
