@@ -2,18 +2,31 @@
 
 @import '../../../../../styles/variables.scss';
 
+$element-size: 300px;
+$margin: 20px;
+$padding: $margin;
+
 .game-window {
-  width: 80%;
+  width: 100%;
 
   &__header {
-    width: 70%;
+    min-width: ($element-size * 2 + $margin);
     margin: 0 auto;
     font-size: 3.5rem;
 
     @include flex(row, center, space-around);
 
-    &__score {
-      width: 300px;
+    &__score,
+    &__round-points {
+      width: $element-size;
+      white-space: nowrap;
+    }
+
+    &__round-points {
+
+      .progress {
+        width: ($element-size - $margin * 2.5);
+      }
     }
   }
 
@@ -23,8 +36,8 @@
 
     &__round-info {
       width: 50%;
-      margin: 50px 20px 50px 100px;
-      padding: 20px;
+      margin: ($margin * 2.5) $margin ($margin * 2.5) ($margin * 5);
+      padding: $padding;
       font-size: 4.0rem;
       line-height: 2.0em;
       text-align: center;
@@ -35,13 +48,14 @@
 
   &__footer {
     position: relative;
-    padding: 0 30%;
+    width: ($element-size + $margin);
+    margin: 0 auto;
     font-size: 4.0rem;
 
     &::after {
       position: absolute;
       bottom: -65%;
-      left: 43%;
+      left: calc(50% - 70px);
       width: max-content;
       font-size: 2rem;
       opacity: 0.4;
@@ -53,7 +67,7 @@
 
     .button {
       position: relative;
-      width: 150px;
+      width: ($element-size / 2);
       line-height: 1;
 
       @include flex(row, stretch, center);
@@ -89,6 +103,66 @@
           left: 46%;
           content: 'N';
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+
+  .game-window {
+
+    &__header {
+      justify-content: center;
+      min-width: $element-size;
+
+      &__score {
+        line-height: 1.5;
+      }
+    }
+
+    *::after,
+    *::before {
+      content: '' !important;
+    }
+  }
+}
+
+@media (max-width: 639px) {
+
+  .game-window {
+
+    &__header {
+      flex-direction: column;
+      justify-content: center;
+      min-width: $element-size;
+      margin-bottom: $margin;
+
+      &__score {
+        line-height: 1.5;
+      }
+    }
+
+    &__body {
+      flex-direction: column;
+
+      &__round-info {
+        order: 2;
+        min-width: $element-size;
+        margin: $margin auto;
+      }
+
+      .react-countdown-clock {
+        order: 1;
+      }
+    }
+
+    &__footer { 
+      justify-content: space-evenly;
+      width: $element-size;
+
+      .button {
+        width: ($element-size / 2 - $margin / 2);
       }
     }
   }
