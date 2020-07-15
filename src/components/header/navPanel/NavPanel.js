@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Icon, Menu, Transition } from 'semantic-ui-react';
 import { getCookie } from '../../../utils/cookie';
@@ -8,8 +9,13 @@ import Logo from '../../../assets/image/icon/reload.png';
 
 import './navPanel.scss';
 
-const NavPanel = () => {
-  const [activeItem, setActiveItem] = useState({ link: 'home' });
+const getActiveElement = (pathname) => {
+  const activeEl = pathname.split('/')[1];
+  return activeEl === '' ? 'home' : activeEl;
+};
+
+const NavPanel = ({ getLocation }) => {
+  const [activeItem, setActiveItem] = useState({ link: getActiveElement(getLocation?.pathname) });
   const [menuSize, setMenuSize] = useState({ size: 'min' });
   const [isVisible, setVisible] = useState(false);
   const handleItemClick = (e) => {
@@ -154,6 +160,18 @@ const NavPanel = () => {
 
     </div>
   );
+};
+
+NavPanel.propTypes = {
+  getLocation: PropTypes.shape({
+    pathname: PropTypes.string,
+  }),
+};
+
+NavPanel.defaultProps = {
+  getLocation: {
+    pathname: '',
+  },
 };
 
 export default NavPanel;

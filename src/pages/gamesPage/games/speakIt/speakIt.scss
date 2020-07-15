@@ -22,7 +22,13 @@
     justify-content: center;
     align-items: center;
     width: 100%; 
+    height: 360px;
     margin-top: 30px;
+}
+
+.RSPBstep {
+    user-select: none;
+    cursor: pointer;
 }
 
 .speakIt-image__wrapper p {
@@ -36,6 +42,10 @@
     width: 500px !important;
 }
 
+#speakit-start-btn {
+    height: 50px;
+}
+
 .speakIt .step {
     margin-right: 5px !important;
 }
@@ -47,23 +57,31 @@
 .speakIt-items {
 	display: flex;
 	flex-wrap: wrap;
-	width: 1200px;
+    width: 100%;
+    max-width: 1200px;
 	margin: 20px auto;
+}
+
+.speakIt-items .container-with-shadow {
+    height: 50px !important;
+    margin: 10px !important;
+    padding: 10px !important;
+}
+
+.speakIt-items .container-with-shadow.active {
+   background-color:#b67932;
 }
 
 .speakIt .item {
     display: grid; 
-    grid-template-columns: repeat(2, 5rem);
-    width:19%;
-    min-height: 50px;
-    margin: 5px;
-    border: 1px solid #fff;
+    grid-template-columns: repeat(3, 6rem);
 }
 
 .results-container .result-item {
-    display: grid; 
-    grid-template-columns: repeat(3, 5rem);
-    border: 1px solid #fff;
+    display: grid;
+    grid-template-columns: repeat(3, 135px);
+    padding: 7px 0;
+    border-bottom: 1px solid #5e5c5c;
 }
 
 .speakIt .item-icon {
@@ -94,19 +112,13 @@
 }
 
 .speakIt button:first-child {
-    flex: 1 25%
+    flex: 1 25%;
+    margin-right: 20px;
 }
 
 .speakIt button+button {
-    flex: 2 50%
-}
-
-.speakIt button:last-child {
-   /* flex: 3 25%*/
-}
-
-.speakIt .active.item {
-    background: black;
+    flex: 2 50%;
+    margin-right: 20px;
 }
 
 .input-wrapper {
@@ -115,6 +127,16 @@
     width: 80%;
     margin: 20px auto;
 }
+
+.input-wrapper input {
+    font-size: 20px;
+    text-align: center;
+    color: white;
+    background: #2c2f33;
+    border: none;
+    border-bottom: 1px solid #c8c8c8;
+}
+
 
 .speakIt-result {
     display: flex;
@@ -135,6 +157,44 @@
     display: none !important;
 }
 
-.item.success {
+.container-with-shadow.success {
     background: greenyellow !important;
+}
+
+.container-with-shadow.resultpage {
+    display: flex;
+    flex-direction: column;
+}
+
+.resultpage {
+    width: 110%;
+}
+
+.results-errors {
+    text-align: center;
+}
+
+.results-right {
+    text-align: center;
+}
+
+.result-button__wrapper {
+    display: flex;
+    margin: 10px;
+}
+
+#speakit-again-btn {
+    margin-right: 20px;
+}
+
+.result-item {
+    cursor: pointer;
+}
+
+.result-item:hover {
+    background-color: #21ba45;
+}
+
+.result-item .item-icon {
+    margin-left: 70px;
 }

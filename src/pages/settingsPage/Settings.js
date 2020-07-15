@@ -34,7 +34,14 @@ const Settings = () => {
   };
 
   if (settings === null) {
-    return (<div>Loading...</div>);
+    return (
+      <div className="spinner">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    );
   }
 
   return (

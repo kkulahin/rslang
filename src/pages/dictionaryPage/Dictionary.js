@@ -9,7 +9,7 @@ import { getWordsById } from '../../controllers/words/words';
 import Button from '../../components/button/Button';
 import { getTodaySeconds, getDateFromSeconds, checkDayDifferenceAbs } from '../../utils/time';
 import WordController from '../../controllers/WordConrtoller';
-import './Dictionary.scss'
+import './Dictionary.scss';
 
 const isEmptyArr = (arr) => {
   if (Array.isArray(arr) && !arr.length) {

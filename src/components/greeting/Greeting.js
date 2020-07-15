@@ -6,7 +6,7 @@ import vectorMane from '../../assets/image/vector_man.png';
 import './Greeting.scss';
 
 const Greeting = ({ userName }) => {
-  const greetingMessage = `Hello, ${userName}!`;
+  const greetingMessage = `Hello, ${userName === '' ? 'stranger' : userName}!`;
   const text = (userName === 'stranger')
     ? 'It\'s good to see you.'
     : 'It\'s good to see you again.';

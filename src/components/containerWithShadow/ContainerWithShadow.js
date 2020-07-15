@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import './ContainerWithShadow.scss';
 
 const ContainerWithShadow = ({
-  children, width, height, padding,
+  children, width, height, padding, clName,
 }) => (
   <div
-    className="container-with-shadow"
+    className={`container-with-shadow ${clName}`}
     style={{ width, height, padding }}
   >
     {children}
@@ -19,6 +19,7 @@ ContainerWithShadow.defaultProps = {
   height: 'auto',
   padding: '40px',
   children: null,
+  clName: '',
 };
 
 export default ContainerWithShadow;
@@ -28,4 +29,5 @@ ContainerWithShadow.propTypes = {
   height: PropTypes.string,
   padding: PropTypes.string,
   children: PropTypes.node,
+  clName: PropTypes.string,
 };
