@@ -7,6 +7,7 @@ import settingsController from '../controllers/SettingsController';
 import settingsNames from '../constants/settingsNames';
 import Word from '../utils/spacedRepetition/Word';
 import WordDefinition from '../utils/spacedRepetition/WordDefinition';
+import notificationSubject from '../utils/observers/NotificationSubject';
 
 export default class WordModel {
   constructor() {
@@ -100,13 +101,13 @@ export default class WordModel {
           `users/%%userId%%/words/${word.definition.wordId}`,
           wordToPost);
         if (!postResponse.ok) {
-          console.debug(postData);
-          throw new Error(`${method} Word failed with ${postResponse.status} ${postResponse.statusText}`);
+          notificationSubject.notify('cannot get/update data',
+            `${method} Word failed with ${postResponse.status} ${postResponse.statusText}`);
         }
         return postData;
       }
-      console.debug(data);
-      throw new Error(`${method} Word failed with ${response.status} ${response.statusText}`);
+      notificationSubject.notify('cannot get/update data',
+        `${method} Word failed with ${response.status} ${response.statusText}`);
     }
     return data;
   };
@@ -119,7 +120,8 @@ export default class WordModel {
       params,
     );
     if (!response.ok) {
-      throw new Error(`GET Words failed with ${response.status} ${response.statusText}`);
+      notificationSubject.notify('cannot get/update data',
+        `query words failed with ${response.status} ${response.statusText}`);
     }
     const [data] = dataArray;
     const words = data.paginatedResults;

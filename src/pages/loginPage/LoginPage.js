@@ -14,6 +14,7 @@ import Checkbox from '../../components/checkbox/Checkbox';
 import Button from '../../components/button/Button';
 
 import './LoginPage.scss';
+import notificationSubject from '../../utils/observers/NotificationSubject';
 
 const errorState = {
   email: {
@@ -115,7 +116,7 @@ const LoginForm = ({ getLoginStatus, isUserOnline }) => {
           status: false,
         };
         setUserNotification(userAuthMsg);
-        throw new Error('invalid request');
+        notificationSubject.notify('Cannot get words count', error.massage);
       }
     };
     getUser();

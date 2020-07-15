@@ -11,6 +11,7 @@ import {
 } from './validation';
 
 import './SignupPage.scss';
+import notificationSubject from '../../utils/observers/NotificationSubject';
 
 const errorState = {
   email: {
@@ -208,7 +209,7 @@ const SignUpForm = () => {
           setTimeout(() => setRedirect(true), 3000);
         }
       } catch (error) {
-        throw new Error('invalid request');
+        notificationSubject.notify('cannot signup', error.message);
       }
     };
     submitUser();

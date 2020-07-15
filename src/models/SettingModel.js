@@ -3,6 +3,7 @@ import appDefaultSettings from '../config/defaultSettings';
 import responseFromServer, { makeRequest } from '../utils/responseFromServer';
 import { getCookie } from '../utils/cookie';
 import settingSubject from '../utils/observers/SettingSubject';
+import notificationSubject from '../utils/observers/NotificationSubject';
 
 class SettingModel {
   constructor() {
@@ -42,18 +43,16 @@ class SettingModel {
         );
         if (!postResponse.ok) {
           if (!postResponse.status === 401) {
-            throw new Error(
-              `POST settings failed with ${postResponse.status} ${postResponse.statusText}`,
-            );
+            notificationSubject.notify('cannot get/update data',
+              `POST settings failed with ${postResponse.status} ${postResponse.statusText}`);
           }
         } else {
           this.settings = Object.values(putData.optional);
           settingSubject.notify(this.settings);
         }
       } else if (!response.status === 401) {
-        throw new Error(
-          `Get Statisctics failed with ${response.status} ${response.statusText}`,
-        );
+        notificationSubject.notify('cannot get/update data',
+          `Get Statisctics failed with ${response.status} ${response.statusText}`);
       }
     } else {
       this.settings = Object.values(data.optional);
@@ -86,6 +85,9 @@ class SettingModel {
     const { response } = await makeRequest('PUT', 'users/%%userId%%/settings', putData);
     if (response.ok) {
       settingSubject.notify(config);
+    } else {
+      notificationSubject.notify('cannot get/update data',
+        `PUT Statisctics failed with ${response.status} ${response.statusText}`);
     }
   };
 
