@@ -9,6 +9,7 @@ import statisticsController from '../../controllers/StatisticsController';
 import wordQueueSubject from '../../utils/observers/WordQueueSubject';
 import wordController from '../../controllers/WordConrtoller';
 import { getCookie } from '../../utils/cookie';
+import wordsReloadedSubject from '../../utils/observers/WordsReloadedSubject';
 
 const GreetingWrapper = ({ userOnline }) => {
   const [cardsCount, setCardCount] = useState(wordController.getWordsCount());
@@ -25,10 +26,12 @@ const GreetingWrapper = ({ userOnline }) => {
 
   useEffect(() => {
     wordQueueSubject.subscribe(updateCardCount);
+    wordsReloadedSubject.subscribe(updateCardCount);
     statisticsSubject.subscribe(updatePassedCount);
 
     return () => {
       wordQueueSubject.unsubscribe(updateCardCount);
+      wordsReloadedSubject.unsubscribe(updateCardCount);
       statisticsSubject.unsubscribe(updatePassedCount);
     };
   }, [setCardCount, setPassedCount]);

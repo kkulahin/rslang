@@ -12,6 +12,7 @@ import WordController from '../../controllers/WordConrtoller';
 import settingsController from '../../controllers/SettingsController';
 import settingsSubject from '../../utils/observers/SettingSubject';
 import './Dictionary.scss';
+import parameters from '../../utils/spacedRepetition/parameters';
 
 const isEmptyArr = (arr) => {
   if (Array.isArray(arr) && !arr.length) {
@@ -95,7 +96,7 @@ const Dictionary = () => {
           oneWord.data.totalRepetition = totalRepetition;
           if (isDeleted !== undefined && isDeleted) {
             tabContentLocal.deleted.push(oneWord.data);
-          } else if (d.difficulty === 'normal') {
+          } else if (d.difficulty !== parameters.difficultyNames.hard) {
             tabContentLocal.normal.push(oneWord.data);
           } else {
             tabContentLocal.hard.push(oneWord.data);
