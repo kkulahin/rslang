@@ -249,7 +249,7 @@ const Dictionary = () => {
                     closeModal={closeModal}
                     isOpenModal={isOpenModal.open}
                   />
-                  )
+                )
             }
           </div>
           <div label="Hard">
@@ -267,7 +267,7 @@ const Dictionary = () => {
                     closeModal={closeModal}
                     isOpenModal={isOpenModal.open}
                   />
-                  )
+                )
             }
           </div>
           <div label="Deleted">
@@ -285,7 +285,7 @@ const Dictionary = () => {
                     closeModal={closeModal}
                     isOpenModal={isOpenModal.open}
                   />
-                  )
+                )
             }
           </div>
         </Tabs>

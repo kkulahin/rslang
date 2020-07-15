@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -11,35 +12,19 @@ const Row = ({ word, onClickCrashButton, getRowId }) => {
   } = word;
 
   const setActiveRow = (rowId, e) => {
-    if (!e.target.classList.contains('trash')) {
+    if (!e.target.classList.contains('trash')
+      && !e.target.classList.contains('tab-content__row__item--crash')) {
       getRowId(rowId);
     }
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div className="tab-content__row" data-element={id} onClick={(e) => setActiveRow(id, e)}>
-      <div className="tab-content__row__item">
-        <span>{origin}</span>
-        <div className="tooltip">
-          <span>
-            Total Repetition:
-            {totalRepetition}
-          </span>
-          <span>
-            Total Mistakes:
-            {totalMistakes}
-          </span>
-          <span>
-            Next Repetition:
-            {nextRepetition}
-          </span>
-        </div>
-      </div>
+      <div className="tab-content__row__item">{origin}</div>
       <div className="tab-content__row__item">{transcript}</div>
       <div className="tab-content__row__item">{translation}</div>
-      <div className="tab-content__row__item">
-        <Icon name="trash alternate" className="tab-content__row_crash-icon" onClick={onClickCrashButton} />
+      <div className="tab-content__row__item tab-content__row__item--crash" onClick={onClickCrashButton}>
+        <Icon name="trash alternate" className="tab-content__row_crash-icon" />
       </div>
     </div>
   );
