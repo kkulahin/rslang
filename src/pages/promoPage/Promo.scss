@@ -21,10 +21,10 @@ $padding: $margin;
     box-shadow: $container-box-shadow;
 
     a {
+      display: block;
+      margin-bottom: 15px;
       font-size: 20px;
       color: $enabled-color;
-      margin-bottom: 15px;
-      display: block;
     }
 
     &-title {
