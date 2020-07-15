@@ -21,13 +21,6 @@ const gameScreenDef = {
   result: false,
 };
 
-const optionDef = {
-  curLife: 5,
-  maxLife: 5,
-  maxWords: 25,
-  timer: 10,
-};
-
 const requestWordsPerPage = 20;
 
 const shuffleArray = (arr) => arr.map((a) => [Math.random(), a]).sort((a, b) => a[0] - b[0]).map((a) => a[1]);
@@ -81,7 +74,7 @@ const Savanna = () => {
     };
     setLevel(null);
     gameLevel = null;
-    setOption(optionDef);
+    setOption(null);
     setKit([]);
     setGameWords([]);
     setCurKitStage([]);
@@ -249,7 +242,9 @@ const Savanna = () => {
       return null;
     }
     let errors = option.maxLife - option.curLife;
-    const persent = ((option.maxWords - wordsForPlay.length) / option.maxWords) * 100;
+    const offsetWords = wordsForPlay.length > option.maxWords ? wordsForPlay.length - option.maxWords : 0;
+    let persent = ((option.maxWords - wordsForPlay.length - offsetWords) / option.maxWords) * 100;
+    persent = persent > 0 ? persent : 0;
     errors = errors === 0 ? 1 : errors;
     return Math.round(persent / errors);
   };
@@ -279,8 +274,8 @@ const Savanna = () => {
       gameLevel.current = e.currentTarget.parentElement;
     }
 
-    if (level !== type.toLocaleLowerCase()) {
-      setLevel(type.toLocaleLowerCase());
+    if (level !== type?.toLocaleLowerCase()) {
+      setLevel(type?.toLocaleLowerCase());
     }
 
     if (level === type) {
@@ -317,7 +312,7 @@ timer ? null : (
         name="check"
         buttonClassName="savanna-start"
         clickHandler={startPreloadTimer}
-        isDisabled={level === null}
+        isDisabled={level === null || level === undefined}
       />
     ) }
   </ShadowContainer>
@@ -354,14 +349,16 @@ timer ? null : (
         <ShadowContainer>
           <div className="user-result">
             <div>
+              {`Difficulty: ${level}`}
+            </div>
+            <div>
               {' '}
               Errors:
               {option?.maxLife - option?.curLife}
             </div>
             <div>
               {' '}
-              Success rate %:
-              {getSuccessRate()}
+              {`Success rate %: ${getSuccessRate()}`}
             </div>
           </div>
         </ShadowContainer>

@@ -5,6 +5,8 @@ import statisticsController from '../controllers/StatisticsController';
 import { getTodaySeconds } from '../utils/time';
 import settingsController from '../controllers/SettingsController';
 import settingsNames from '../constants/settingsNames';
+import Word from '../utils/spacedRepetition/Word';
+import WordDefinition from '../utils/spacedRepetition/WordDefinition';
 
 export default class WordModel {
   constructor() {
@@ -59,13 +61,19 @@ export default class WordModel {
   };
 
   /**
-   * @param {Word} word
+   * @param {Word} wordToUpdate
    * @param {boolean} isNew
    */
-  updateWord = async (word, isNew) => {
+  updateWord = async (wordToUpdate, isNew) => {
     let method = 'PUT';
     if (isNew) {
       method = 'POST';
+    }
+    let word = null;
+    if (wordToUpdate instanceof Word) {
+      word = wordToUpdate;
+    } else {
+      word = new Word(null, new WordDefinition(wordToUpdate), wordToUpdate.optional);
     }
     const wordToPost = {
       difficulty: `${word.hasUserDifficulty() ? word.getUserDifficulty() : word.getAlgDifficulty()}`,
@@ -148,10 +156,15 @@ export default class WordModel {
     return this.queryWords(params);
   }
 
-  getWordsFromSavedQueue = async () => {
-    let words = statisticsController.get().optional.todayQueue.queue.map((qWord) => (qWord.w));
-    words = words.filter((word, pos) => words.indexOf(word) === pos);
-    words = words.map((word) => ({ word }));
+  getWordsFromSavedQueue = async (currentWords) => {
+    let words = null;
+    if (words) {
+      words = currentWords.map(({ definition: { word } }) => ({ word }));
+    } else {
+      words = statisticsController.get().optional.todayQueue.queue.map((qWord) => (qWord.w));
+      words = words.filter((word, pos) => words.indexOf(word) === pos);
+      words = words.map((word) => ({ word }));
+    }
     const filter = {
       $or: words,
     };

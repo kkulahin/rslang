@@ -6,7 +6,7 @@ const Promo = () => (
   <div className="promo">
     <div className="promo__header">
       <h2 className="promo__header-title">RS Lang App education system</h2>
-      <p className="promo__header-text">
+      <div className="promo__header-text">
         <div>
           <h2>
             Алгоритм интервальных повторений:
@@ -130,7 +130,7 @@ const Promo = () => (
           </div>
 
         </div>
-      </p>
+      </div>
     </div>
     <div className="promo__video">
       <iframe

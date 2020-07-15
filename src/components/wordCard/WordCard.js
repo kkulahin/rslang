@@ -39,7 +39,6 @@ const WordCard = ({
   isAnswered,
   isEducation,
   isWordDeleted,
-  setWordDeleted,
   wordDifficulty,
 }) => {
   const {
@@ -113,7 +112,9 @@ const WordCard = ({
       dispatch({ type: 'resetWord' });
       onNextBtnClick();
     } else if (state.value === '') {
-      inputRef.current.focus();
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
       dispatch({
         type: 'setState',
         payload: {
@@ -122,7 +123,9 @@ const WordCard = ({
         },
       });
     } else {
-      inputRef.current.blur();
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
       dispatch({
         type: 'handleAnswer',
         payload: {
@@ -137,7 +140,9 @@ const WordCard = ({
       const { value: val } = evt.target;
 
       if (val !== '') {
-        inputRef.current.blur();
+        if (inputRef.current) {
+          inputRef.current.blur();
+        }
         dispatch({
           type: 'handleAnswer',
           payload: {
@@ -179,7 +184,9 @@ const WordCard = ({
       },
     });
 
-    inputRef.current.blur();
+    if (inputRef.current) {
+      inputRef.current.blur();
+    }
     dispatch({
       type: 'handleAnswer',
       payload: { isCorrect: false },
@@ -227,8 +234,10 @@ const WordCard = ({
 
         dispatch({ type: 'resetWord' });
         onNextBtnClick();
-      } if (state.value === '') {
-        inputRef.current.focus();
+      } else if (state.value === '') {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
         dispatch({
           type: 'setState',
           payload: {
@@ -237,7 +246,9 @@ const WordCard = ({
           },
         });
       } else {
-        inputRef.current.blur();
+        if (inputRef.current) {
+          inputRef.current.blur();
+        }
         dispatch({
           type: 'handleAnswer',
           payload: {
@@ -256,7 +267,9 @@ const WordCard = ({
     } else if (code !== 'Enter' && !state.isCorrect && !state.isShowBtnClick
                 && !isAnswered && !isEducation
                 && !state.isInputInFocus) {
-      inputRef.current.focus();
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
       dispatch({
         type: 'setState',
         payload: {
@@ -277,7 +290,9 @@ const WordCard = ({
   }, [createHandleKeydown]);
 
   useEffect(() => {
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, [word, isAnswered]);
 
   return (
@@ -304,7 +319,6 @@ const WordCard = ({
             isEducation={isEducation}
             isPrevWord={isAnswered}
             isWordDeleted={isWordDeleted}
-            setWordDeleted={setWordDeleted}
             inputRef={inputRef}
             {...state}
           />
@@ -332,6 +346,7 @@ WordCard.defaultProps = {
   isAnswered: false,
   isEducation: false,
   hasPrevious: false,
+  isWordDeleted: false,
   wordDifficulty: 'normal',
 };
 
@@ -353,8 +368,7 @@ WordCard.propTypes = {
   onWordMistaken: PropTypes.func,
   isAnswered: PropTypes.bool,
   isEducation: PropTypes.bool,
-  isWordDeleted: PropTypes.bool.isRequired,
-  setWordDeleted: PropTypes.func.isRequired,
+  isWordDeleted: PropTypes.bool,
   hasPrevious: PropTypes.bool,
   wordDifficulty: PropTypes.string,
 };
