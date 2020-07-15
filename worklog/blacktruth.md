@@ -9,4 +9,14 @@
 | Redirect sign-in  | 30.06.2020  | 02.07.2020 | 7 h |
 | Refactor import Settings code: made MVC pattern | 03.07.2020  | 03.07.2020 | 3 h |git push 
 | Connect Statistics backend to Statistics pages & Greeting page | 04.07.2020  | 05.07.2020 | 6 h |
-| Connect Statistics & Word backend to Main card page | 05.07.2020  | - | h |
+| Connect Statistics & Word backend to Main card page | 05.07.2020  | 08.07.2020 | 15h |
+| Add Short statistics in the end of the game, reset game functionality | 08.07.2020  | 09.07.2020 | 2h |
+| Make functions to delete words | 09.07.2020  | 10.07.2020 | 4h |
+| Reset & init operations on use initialization  | 11.07.2020  | 11.07.2020 | 2h |
+| Progress bar animation | 12.07.2020  | 12.07.2020 | 1h |
+| Add Promo and Promo description | 12.07.2020  | 12.07.2020 | 3h |
+| Add dropdown for new/all/hard words on main page | 12.07.2020  | 12.07.2020 | 3h |
+| Several fixes: delete, PUT/POST on new word, add next repetition to dictionary | 12.07.2020  | 12.07.2020 | 3h |
+| Fixes: change difficulty button fix, update word on dictionary, reload words on game open | 14.07.2020  | 15.07.2020 | 6h |
+| Made dictionary table responsive | 15.07.2020  | 15.07.2020 | 2h |
+| Open Route and write readme.md | 15.07.2020  | 15.07.2020 | 1h |
