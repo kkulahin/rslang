@@ -90,7 +90,7 @@ export default class WordQueue {
 
   continueConfirmReset = (needAnUpdate) => {
     this.needAnUpdate = needAnUpdate;
-    const isQueueStarted = this.queue.some(({ isDone }) => isDone === true);
+    const isQueueStarted = this.queue !== null && this.queue.some(({ isDone }) => isDone === true);
     if (!isQueueStarted || this.needAnUpdate) {
       this.needAnUpdate = true;
       this.words = [];
