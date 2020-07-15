@@ -55,6 +55,10 @@ const AudioComponent = (props) => {
   const handleAudioPlayBtnClick = () => {
     setCurrentTrack({ track: 0 });
     setIsAudioPlay(true);
+
+    if (tracks.length === 1) {
+      setIsAudioPause(false);
+    }
   };
 
   const audioPlay = () => {
