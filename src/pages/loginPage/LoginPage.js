@@ -116,7 +116,6 @@ const LoginForm = ({ getLoginStatus, isUserOnline }) => {
           status: false,
         };
         setUserNotification(userAuthMsg);
-        notificationSubject.notify('Cannot get words count', error.massage);
       }
     };
     getUser();
