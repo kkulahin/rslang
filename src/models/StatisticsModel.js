@@ -1,6 +1,7 @@
 import { makeRequest } from '../utils/responseFromServer';
 import statisticsSubject from '../utils/observers/StatisticsSubject';
 import { getTodaySeconds } from '../utils/time';
+import notificationSubject from '../utils/observers/NotificationSubject';
 
 class StatisticsModel {
   constructor() {
@@ -19,18 +20,16 @@ class StatisticsModel {
         );
         if (!postResponse.ok) {
           if (!postResponse.status === 401) {
-            throw new Error(
-              `POST Statisctics failed with ${postResponse.status} ${postResponse.statusText}`,
-            );
+            notificationSubject.notify('cannot get/update data',
+              `POST Statisctics failed with ${postResponse.status} ${postResponse.statusText}`);
           }
         } else {
           this.statistics = putData;
           statisticsSubject.notify(this.statistics);
         }
       } else if (!response.status === 401) {
-        throw new Error(
-          `Get Statisctics failed with ${response.status} ${response.statusText}`,
-        );
+        notificationSubject.notify('cannot get/update data',
+          `Get Statisctics failed with ${response.status} ${response.statusText}`);
       }
     } else {
       this.statistics = data;
@@ -85,9 +84,8 @@ class StatisticsModel {
       statistics,
     );
     if (!response.ok) {
-      throw new Error(
-        `PUT Statistics failed with ${response.status} ${response.statusText}`,
-      );
+      notificationSubject.notify('cannot get/update data',
+        `PUT Statistics failed with ${response.status} ${response.statusText}`);
     } else {
       this.statistics = statistics;
       statisticsSubject.notify(this.statistics);

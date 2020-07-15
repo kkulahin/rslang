@@ -18,9 +18,11 @@ import GamesPage from '../pages/gamesPage/GamesPage';
 import Settings from '../pages/settingsPage/Settings';
 
 import Header from '../components/header/Header';
+import Modal from '../components/modal/Modal';
 import GreetingWrapper from '../components/greetingWrapper/GreetingWrapper';
 import './App.scss';
 import PrivateRoute from '../components/route/PrivateRoute';
+import notificationSubject from '../utils/observers/NotificationSubject';
 
 document.addEventListener('click', ({ target }) => {
   const isMobileDevice = window.innerWidth <= 767;
@@ -35,10 +37,19 @@ document.addEventListener('click', ({ target }) => {
 
 const App = () => {
   const [isUserLogin, setUserLogin] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   const getLoginStatus = (status) => {
     setUserLogin(status);
   };
+
+  useEffect(() => {
+    notificationSubject.subscribe(setNotification);
+
+    return () => {
+      notificationSubject.unsubscribe(setNotification);
+    };
+  }, [setNotification]);
 
   return (
     <Router history={History}>
@@ -64,6 +75,14 @@ const App = () => {
             <PrivateRoute component={NotFound} />
           </Switch>
         </div>
+        { notification
+          ? (
+            <Modal
+              content={notification.message}
+              contentHeader={notification.title}
+              clickHandler={() => setNotification(null)}
+            />
+          ) : null }
       </div>
     </Router>
   );

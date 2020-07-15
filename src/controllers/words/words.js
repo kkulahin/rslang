@@ -2,6 +2,7 @@ import { SchoolURL } from '../../config/default';
 import responseFromServer from '../../utils/responseFromServer';
 
 import random from '../../utils/random';
+import notificationSubject from '../../utils/observers/NotificationSubject';
 
 const wordsNotification = {
   msg: '',
@@ -31,6 +32,7 @@ const getWords = async (group = 0,
     );
     return response;
   } catch (error) {
+    notificationSubject.notify('Cannot get words', error.massage);
     throw new Error('invalid request');
   }
 };
@@ -40,6 +42,7 @@ const getWordsCount = async (group = 0, notification = wordsNotification) => {
     const response = await responseFromServer(`${SchoolURL}/words?group=${group}/count`, null, notification);
     return response;
   } catch (error) {
+    notificationSubject.notify('Cannot get words count', error.massage);
     throw new Error('invalid request');
   }
 };
@@ -49,6 +52,7 @@ const getWordsById = async (id, notification = wordsNotification) => {
     const response = await responseFromServer(`${SchoolURL}/words/${id}`, null, notification);
     return response;
   } catch (error) {
+    notificationSubject.notify('Cannot get word', error.massage);
     throw new Error('invalid request');
   }
 };

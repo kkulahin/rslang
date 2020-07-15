@@ -1,6 +1,7 @@
 import { SchoolURL, cookieLifeCyrcle } from '../config/default';
 import { getCookie, setCookie, deleteCookie } from './cookie';
 import signinSubject from './observers/SignInSubject';
+import notificationSubject from './observers/NotificationSubject';
 
 const responseFromServer = async (url,
   token = null,
@@ -189,7 +190,7 @@ export const makeRequest = async (method, pathTemplate, body, params = {}) => {
   let index = 0;
   let isAuthError = false;
   let path = pathTemplate;
-  let response = {};
+  let response = { title: 'cannot get/update data', message: 'fetch error' };
   let user = AuthService.getUser();
   if (user === null) {
     isAuthError = true;
@@ -224,6 +225,7 @@ export const makeRequest = async (method, pathTemplate, body, params = {}) => {
       index += 1;
     }
   }
+  notificationSubject.notify('cannot get/update data', 'fetch error');
   return response;
 };
 
