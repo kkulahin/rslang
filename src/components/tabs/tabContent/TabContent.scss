@@ -2,24 +2,34 @@
 
 @import '../../../styles/variables.scss';
 
+$border-radius: 10rem;
+$box-shadow: 5px 5px 15px $box-shadow-first-color, 
+            -5px -5px 15px $box-shadow-second-color;
+$box-shadow-mobile: 3px 3px 5px $box-shadow-first-color, 
+                    -3px -3px 5px $box-shadow-second-color;
+
 .tab-content {
-    width: 100%;
-  
-    @include flex(column, stretch);
-  
-    &__header {
-      padding-bottom: 5px;
-      border-bottom : 1px solid $main-color;
+  width: 100%;
 
-      .tab-content__row {
+  @include flex(column, stretch);
 
-        &::before {
-          content: unset;
-        }
+  &__header {
+    padding-bottom: 5px;
+    border-bottom : 1px solid $main-color;
+
+    .tab-content__row {
+
+      &::before {
+        content: unset;
       }
     }
+  }
 
-    
+  &__body {
+
+    @include flex(column,stretch,stretch);
+  }
+
   &__row {
     position: relative;
 
@@ -139,9 +149,70 @@
   }
 }
 
+.ui.pagination.menu.tab-content__pagination {
+  flex-grow: 0;
 
+  align-self: center;
 
+  min-height: unset;
+  margin-top: 1rem;
 
+  font-family: inherit;
 
+  @include font(2.4rem, 1, 700);
 
+  color: $main-color;
 
+  background: transparent;
+
+  border: none;
+  border-radius: $border-radius;
+
+  box-shadow: $box-shadow;
+
+  outline: none;
+
+  transition: color 0.3s linear, box-shadow 0.3s linear;
+  
+  @media (max-width: 767px) {
+
+    @include font(1.8rem, 1, 700);
+
+    box-shadow: $box-shadow-mobile;
+  }
+
+  .item {
+    min-width: 5.5rem;
+    padding: 0.75rem 1rem;
+
+    font: inherit;
+    line-height: 1;
+    font-family: inherit;
+    color: inherit;
+
+    @include flex(row);
+
+    outline: none;
+
+    transition: color 0.3s linear;
+
+    &:hover {
+      color: $hover-color;
+    }
+
+    &::before {
+      background: rgba($main-color, 0.5);
+    }
+
+    @media (max-width: 767px) {
+
+      min-width: 4.5rem;
+    }
+  }
+
+  .item.active {
+    padding: 1rem 1.5rem;
+
+    color: $enabled-color;
+  }
+}

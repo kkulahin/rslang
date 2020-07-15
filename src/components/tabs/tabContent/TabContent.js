@@ -128,20 +128,20 @@ const TabContent = ({
       <div className="tab-content__body">
         {rows}
         {
-controlPagination.maxPage <= 1 ? null : (
-  <Pagination
-    className="tab-content__pagination"
-    boundaryRange={0}
-    defaultActivePage={1}
-    ellipsisItem={null}
-    firstItem={null}
-    lastItem={null}
-    siblingRange={1}
-    totalPages={controlPagination.maxPage}
-    onPageChange={onChangeList}
-  />
-)
-}
+          controlPagination.maxPage <= 1 ? null : (
+            <Pagination
+              className="tab-content__pagination"
+              boundaryRange={0}
+              defaultActivePage={1}
+              ellipsisItem={null}
+              firstItem={null}
+              lastItem={null}
+              siblingRange={1}
+              totalPages={controlPagination.maxPage}
+              onPageChange={onChangeList}
+            />
+          )
+        }
       </div>
     </div>
   );
