@@ -6,7 +6,7 @@ import {
 
 import History from '../utils/history';
 import Home from '../pages/homePage/Home';
-import NotFound from '../pages/NotFound';
+import NotFound from '../pages/notFoundPage/NotFound';
 import LoginPage from '../pages/loginPage/LoginPage';
 import Logout from '../pages/logoutPage/Logout';
 import SignupPage from '../pages/signupPage/SignupPage';
