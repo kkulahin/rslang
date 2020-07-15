@@ -75,6 +75,7 @@
       }
       &__item {
         width: 100%;
+        padding    : 4px 0;
         justify-content: center;
 
         
@@ -83,11 +84,15 @@
             color: $enabled-color;
             opacity: 1;
           }
+          i.icon {
+            width: unset;
+            height: unset;
+          }
         }
 
         &:last-child {
           justify-content: center;
-          padding-bottom: 10px;
+          padding-bottom: 4px;
         }
         
         &::before {

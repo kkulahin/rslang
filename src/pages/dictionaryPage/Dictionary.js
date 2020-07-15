@@ -7,6 +7,7 @@ import getModifiedSettings from '../../components/wordCard/getModifiedSettings';
 import { getAllUserWords } from '../../controllers/words/userWords';
 import { getWordsById } from '../../controllers/words/words';
 import Button from '../../components/wordCard/button/Button';
+import ButtonDefault from '../../components/button/Button';
 import { getTodaySeconds, getDateFromSeconds, checkDayDifferenceAbs } from '../../utils/time';
 import WordController from '../../controllers/WordConrtoller';
 import settingsController from '../../controllers/SettingsController';
@@ -291,7 +292,7 @@ const Dictionary = () => {
         </Tabs>
         {
           !isUpdated ? null : (
-            <Button
+            <ButtonDefault
               id="dictionary-save"
               label="update"
               clickHandler={saveChange}
