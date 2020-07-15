@@ -17,4 +17,7 @@
   box-shadow: $container-box-shadow;
 
   @include font (2.4rem, 1, 400);
+  width: auto;
+  height: auto;
+  padding: 40px,
 }

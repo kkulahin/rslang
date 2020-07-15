@@ -1,3 +1,18 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+$modal-padding: 2rem;
+$modal-padding-mobile: 1rem;
+
+$element-border-radius: 3px;
+$word-input-padding: 0.7rem;
+$image-width: 28rem;
+$image-width-mobile: 28rem;
+
+$font-size-main: 2.4rem;
+$font-size-main-mobile: 1.8rem;
+
 .dictionary {
   margin: 0 30px;
 
@@ -20,28 +35,353 @@
   margin: 30px auto;
 }
 
-.dictionary-modal .header {
-  text-align: center;
-}
+.dictionary-modal.ui.modal.transition.visible.active {
+  width: 80rem;
 
-.dictionary-modal .modal-content {
-  display: flex;
-  height: 260px;
-}
+  @include font($font-size-main, 1, 500);
 
-.modal-content .image {
-  flex: 1 40% !important;
-}
+  background-color: $background-color;
+  border-radius: $container-border-radius;
+  animation: modal 5s ease-in-out infinite;
 
-.modal-content .description {
-  flex: 2 45% !important;
-  color: black;
-}
+  @media (max-width: 991px) {
+    width: calc(100% - 2 * #{$modal-padding});
+    max-width: 80rem;
+  }
 
-.modal-content .description .header {
-  font-size: 24px;
-}
+  @media (max-width: 767px) {
+    font-size: $font-size-main-mobile;
+  }
 
-.modal-content .description p {
-  font-size: 18px;
+  @media (max-width: 420px) {
+    width: calc(100% - 2 * #{$modal-padding-mobile});
+    max-width: none;
+  }
+
+  @keyframes modal {
+  
+    0% {
+      box-shadow: 0px 0px 10px 6px #3b4451;
+    }
+  
+    25% {
+      box-shadow: 0px 0px 10px 1px #25CEDE;
+    }
+  
+    50% {
+      box-shadow: 0px 0px 10px 6px #3b4451;
+    }
+  
+    75% {
+      box-shadow: 0px 0px 10px 1px #25CEDE;
+    }
+  
+    100% {
+      box-shadow: 0px 0px 10px 6px #3b4451;
+    }
+  }
+
+  .header,
+  .content,
+  .actions {
+    padding: 0.5rem 1.5rem !important;
+    background-color: inherit;
+    border: none;
+  }
+
+  .header {
+    font-size: inherit;
+    letter-spacing: 0.3rem;
+    text-align: center;
+    color: $enabled-color;
+    font-weight: 700;
+
+    border-top-left-radius: $container-border-radius;
+    border-top-right-radius: $container-border-radius;
+  }
+  
+  .content {
+    font-size: inherit;
+    font-weight: inherit;
+
+    @media (max-width: 420px) {
+      padding: 0 !important;
+    }
+
+    .card-content {
+      width: 100%;
+      height: 100%;
+
+      @include flex(column, center, space-between);
+      background-color: transparent;
+    }
+
+    .help-content {
+      width: 100%;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+
+      @include flex(row, flex-start, space-between);
+
+      border-top: 1px solid rgba($main-color, 0.5);
+      border-bottom: 1px solid rgba($main-color, 0.5);
+
+      user-select: none;
+
+      @media (max-width: 767px) {
+        flex-direction: column;
+        justify-content: flex-start;
+
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+    }
+
+    .help-content__image {
+      position: relative;
+  
+      flex-shrink: 0;
+  
+      @include flex(row);
+  
+      width: $image-width;
+      height: calc(#{$image-width} * 2 / 3);
+
+      line-height: 0;
+
+      overflow: hidden;
+
+      border: none;
+      border-radius: 0.5rem;
+
+      @media (max-width: 767px) {
+        align-self: center;
+      }
+
+      @media (max-width: 420px) {
+        width: $image-width-mobile;
+        height: calc(#{$image-width-mobile} * 2 / 3);
+      }
+    }
+
+    .help-content__image .image--error {
+      width: 100%;
+      height: 100%;
+      padding: 0 2rem;
+
+      @include flex(row);
+
+      line-height: 1.6;
+      text-align: center;
+
+      border-radius: inherit;
+
+      box-shadow: $container-box-shadow-inset;
+
+      animation: fadeIn 0.3s linear;
+    }
+
+    .help-content__image img {
+      width: 100%;
+      height: auto;
+
+      object-fit: fill;
+      object-position: center;
+
+      border-radius: inherit;
+
+      animation: fadeIn 0.3s linear;
+    }
+
+    @keyframes fadeIn {
+    
+      0% {
+        opacity: 0;
+      }
+    
+      100% {
+        opacity: 1
+      }
+    }
+
+    .help-content__text {
+      width: 100%;
+  
+      margin: 0 0 0 2rem;
+      padding: 0;
+  
+      font-size: inherit;
+  
+      list-style: none;
+  
+      @media (max-width: 767px) {
+        margin: 1rem 0 0 0;
+        padding: 0 0.5rem;
+      }
+    }
+
+    .help-content-text__item {
+      position: relative;
+
+      @include flex(column, flex-start, center);
+
+      min-height: 4rem;
+      padding: 0 0 0 5rem;
+
+      @media (max-width: 767px) {
+        min-height: 3.5rem;
+        padding-left: 4rem;
+      }
+    }
+
+    .help-content-text__item + .help-content-text__item {
+      margin-top: 2rem;
+
+      @media (max-width: 767px) {
+        margin-top: 1.5rem;
+      }
+    }
+  
+    .text-item {
+      margin: 0;
+      padding: 0;
+  
+      line-height: 1.2;
+      text-align: justify;
+  
+      &--translate {
+        display: inherit;
+    
+        font-size: 0.8em;
+        text-align: justify;
+    
+        opacity: 0.75;
+    
+        user-select: none;
+      }
+
+      &--hidden {
+        display: none;
+      }
+    }
+
+    .text--marked {
+      display: inline-block;
+      height: auto;
+      padding: 0 $word-input-padding;
+  
+      background-color: $hover-color;
+  
+      border: none;
+      border-radius: $element-border-radius;
+    }
+  
+    .text--hidden {
+      color: transparent;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .card-controls__audio-btn {
+      position: absolute;
+      top: 0;
+      left: 0;
+  
+      @include size(4rem);
+
+      @include flex(row);
+  
+      @media (max-width: 767px) {
+
+        @include size(3rem);
+      }
+
+      .card-button {
+        width: 100%;
+        padding: 0.3rem;
+      }
+  
+      .card-button .st0 {
+        fill: $enabled-color;
+      }
+  
+      .card-button .st1 {
+        fill: transparent;
+      }
+    }
+
+    .repetition-data {
+      width: 100%;
+  
+      margin: 0;
+      padding: 2rem 0;
+  
+      font-size: inherit;
+
+      list-style: none;
+
+      border-bottom: 1px solid rgba($main-color, 0.5);
+
+      @media (max-width: 767px) {
+        padding: 1rem 0.5rem;
+      }
+
+      .repetition-data__item {
+  
+        @include flex(row, flex-start, flex-start);
+      }
+  
+      .repetition-data__item + .repetition-data__item {
+        margin-top: 0.5rem;
+  
+        @media (max-width: 767px) {
+          margin-top: 0;
+        }
+      }
+
+      .repetition-data__title {
+        width: 20rem;
+
+        @media (max-width: 767px) {
+          width: 14rem;
+        }
+      }
+
+      .repetition-data__data {
+        color: $enabled-color;
+      }
+    }
+  }
+
+  .actions {
+    padding-bottom: 1.0rem !important;
+
+    @include flex(row, center, flex-end);
+
+    border-bottom-left-radius: $container-border-radius;
+    border-bottom-right-radius: $container-border-radius;
+
+    @media (max-width: 420px) {
+      justify-content: center;
+    }
+
+    .card-button {
+      width: 15rem;
+      margin: 0 2rem;
+      padding: 1rem 2rem;
+
+      @media (max-width: 420px) {
+        width: 80%;
+        margin: 0;
+      }
+
+      .button__label {
+
+        @media (max-width: 767px) {
+          display: inherit;
+        }
+      }
+    
+    }
+  }
 }

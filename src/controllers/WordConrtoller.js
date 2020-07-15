@@ -28,7 +28,7 @@ class WordController {
     if (!this.model.wordQueue) {
       return null;
     }
-    return this.model.wordQueue.getWords().length;
+    return this.model.wordQueue.getWordsCount();
   }
 
   makeQueue = async () => this.model.makeQueue();

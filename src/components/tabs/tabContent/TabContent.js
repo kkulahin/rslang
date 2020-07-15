@@ -7,7 +7,7 @@ import './TabContent.scss';
 
 const Row = ({ word, onClickCrashButton, getRowId }) => {
   const {
-    id, origin, transcript, translation, totalRepetition, totalMistakes, nextRepetition,
+    id, origin, transcript, translation,
   } = word;
 
   const setActiveRow = (rowId, e) => {

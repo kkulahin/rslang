@@ -19,6 +19,7 @@ export default class WordQueue {
     this.queuePointer = 0;
     this.needAnUpdate = false;
     this.subQueue = null;
+    this.previousWordIndex = null;
     this.setQueueType();
     settingsWordCountSubject.subscribe(this.confirmReset);
   }
@@ -63,6 +64,7 @@ export default class WordQueue {
       w.userWord && w.userWord.optional ? w.userWord.optional : {}));
     // TODO: uncomment 2 lines
     this.needAnUpdate = queueSettings.hasUpdate;
+    this.previousWordIndex = queueSettings.prevIndex;
     this.setQueueType(queueSettings.queueType);
     queueSettings.queue.forEach((qWord) => {
       const [word] = this.words.filter((w) => qWord.w === w.definition.word);
@@ -90,23 +92,7 @@ export default class WordQueue {
   }
 
   createSubQueue = (sendEvent = true) => {
-    let queue = null;
-    if (WordQueue.queueTypes.all === WordQueue.getQueueTypes()[this.queueType]) {
-      this.subQueue = null;
-      queue = this.queue;
-    } else if (WordQueue.queueTypes.new === WordQueue.getQueueTypes()[this.queueType]) {
-      this.subQueue = this.queue.filter(({ word }) => word.wasNewToday());
-      queue = this.subQueue;
-    } else {
-      this.subQueue = this.queue.filter(({ word }) => word.getDifficulty() === parameters.difficultyNames.hard);
-      queue = this.subQueue;
-    }
-    this.queuePointer = queue.reduce((fInd, { isDone }, i) => {
-      if (isDone !== true && fInd === queue.length) {
-        return i;
-      }
-      return fInd;
-    }, queue.length);
+    this.queuePointer = this.getFirstUndone(this.queue, this.queue.length);
     if (sendEvent) {
       wordQueueSubject.notify(this);
     }
@@ -130,7 +116,36 @@ export default class WordQueue {
         wordInQueue.update(word.userWord.optional);
       }
     });
+    const queue = this.subQueue !== null ? this.subQueue : this.queue;
+    this.queuePointer = this.getFirstUndone(queue, queue.length);
     wordsReloadedSubject.notify(true);
+  }
+
+  getQueueFilter = () => {
+    if (WordQueue.queueTypes.all === WordQueue.getQueueTypes()[this.queueType]) {
+      return () => true;
+    }
+    if (WordQueue.queueTypes.new === WordQueue.getQueueTypes()[this.queueType]) {
+      return (word) => word.wasNewToday();
+    }
+    return (word) => word.getDifficulty() === parameters.difficultyNames.hard;
+  }
+
+  getFirstUndone = (queue, defValue) => {
+    const filter = this.getQueueFilter();
+    const first = queue.reduce((firstUndone, { isDone, word }, index) => {
+      if (!filter(word)) {
+        return firstUndone;
+      }
+      if (firstUndone || isDone || word.isDeleted) {
+        return firstUndone;
+      }
+      return index;
+    }, null);
+    if (first === null) {
+      return defValue;
+    }
+    return first;
   }
 
   static fillQueue = (words, queue) => {
@@ -214,6 +229,7 @@ export default class WordQueue {
   setWordDeleted = (value) => {
     this.getCurrentWord().word.isDeleted = value;
     this.hasWordDeleted = value;
+    this.updateWord();
   }
 
   setWordDifficulty = (name) => {
@@ -235,40 +251,15 @@ export default class WordQueue {
     : null);
 
   changeWord = () => {
-    if (this.newSubQueue) {
-      this.subQueue = this.newSubQueue;
-      this.newSubQueue = null;
-    }
-    const isSubQueue = this.subQueue !== null;
-    const queue = isSubQueue ? this.subQueue : this.queue;
+    this.previousWordIndex = this.queuePointer;
     if (this.hasWordDeleted) {
-      const { word: deletedWord } = this.getCurrentWord();
-      const [nextWord] = queue.filter((qWord, i) => i > this.queuePointer && qWord.word !== deletedWord);
-      this.queue = this.queue.filter(({ word }) => word !== deletedWord);
-      if (isSubQueue) {
-        this.subQueue = this.subQueue.filter(({ word }) => word !== deletedWord);
-      }
-      this.words = this.words.filter((word) => word !== deletedWord);
-      if (nextWord) {
-        this.queuePointer = queue.indexOf(nextWord);
-      } else {
-        this.queuePointer = queue.length;
-      }
       this.hasWordDeleted = false;
       wordQueueSubject.notify(this);
-    } else {
-      this.queuePointer = queue.reduce((fInd, { isDone }, i) => {
-        if (isDone !== true && fInd === queue.length) {
-          return i;
-        }
-        return fInd;
-      }, queue.length);
     }
+    this.queuePointer = this.getFirstUndone(this.queue, this.queue.length);
     this.beforeChange = false;
-    return queue[this.queuePointer];
+    return this.getCurrentWord();
   }
-
-  hasPreviousWord = () => (this.queuePointer > 0);
 
   setQueueType = (i) => {
     if (i) {
@@ -286,30 +277,15 @@ export default class WordQueue {
 
   getQueueType = () => this.queueType;
 
+  hasPreviousWord = () => (this.previousWordIndex !== this.queuePointer && this.previousWordIndex != null);
+
   getPreviousWord = () => {
-    if (this.newSubQueue) {
-      this.subQueue = this.newSubQueue;
-      this.newSubQueue = null;
-    }
-    const isSubQueue = this.subQueue !== null;
-    const queue = isSubQueue ? this.subQueue : this.queue;
     if (this.hasWordDeleted) {
-      const { word: deletedWord } = this.getCurrentWord();
-      const prevWord = queue.reduce((lastWord, qWord, i) => (i < this.queuePointer && qWord.word !== deletedWord
-        ? qWord : lastWord), null);
-      this.queue = this.queue.filter(({ word }) => word !== deletedWord);
-      if (isSubQueue) {
-        this.subQueue = this.subQueue.filter(({ word }) => word !== deletedWord);
-      }
-      this.words = this.words.filter((word) => word !== deletedWord);
-      if (prevWord) {
-        this.queuePointer = queue.indexOf(prevWord);
-      } else {
-        this.queuePointer = 0;
-      }
       this.hasWordDeleted = false;
-    } else if (this.hasPreviousWord()) {
-      this.queuePointer -= 1;
+      wordQueueSubject.notify(this);
+    }
+    if (this.hasPreviousWord()) {
+      this.queuePointer = this.previousWordIndex;
     }
     return this.getCurrentWord();
   }
@@ -334,11 +310,13 @@ export default class WordQueue {
 
   getTodayWords = () => this.words.map((word) => word.definition.wordId);
 
-  getLength = () => this.queue.length;
+  getLength = () => this.queue.reduce((count, { word: { isDeleted } }) => (isDeleted ? count : count + 1), 0);
 
-  getCurrentLength = () => this.queue.reduce((count, { isDone }) => (isDone !== true ? count + 1 : count), 0);
+  getCurrentLength = () => this.queue.reduce((count, { isDone, word: { isDeleted } }) => (
+    !isDone && !isDeleted ? count + 1 : count), 0);
 
-  getCurrentPosition = () => this.queue.reduce((count, { isDone }) => (isDone === true ? count + 1 : count), 0);
+  getCurrentPosition = () => this.queue.reduce((count, { isDone, word: { isDeleted } }) => (
+    isDone && !isDeleted ? count + 1 : count), 0);
 
   /**
    * @returns {{queue:[{w:string,isEd:boolean}],pointer:number,date:number}} queue
@@ -367,6 +345,7 @@ export default class WordQueue {
       date: seconds,
       hasUpdate: this.needAnUpdate,
       queueType: this.queueType,
+      prevIndex: this.previousWordIndex,
     };
   };
 
@@ -394,10 +373,13 @@ export default class WordQueue {
     this.queuePointer = 0;
     this.needAnUpdate = false;
     this.subQueue = null;
+    this.previousWordIndex = null;
     this.setQueueType();
     await statisticsController.resetQueue(this.getQueueToSave(true));
     wordQueueSubject.notify(this);
   }
 
   getWords= () => this.words;
+
+  getWordsCount = () => this.words.reduce((count, { isDeleted }) => (isDeleted ? count : count + 1), 0);
 }

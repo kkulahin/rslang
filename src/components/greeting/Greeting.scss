@@ -1,5 +1,11 @@
 @import '../../styles/mixin.scss';
 
+.container-with-shadow--greeting {
+  width: 48%;
+  height: 160px;
+  padding: 0;
+}
+
 .greeting {
   width: 100%;
   padding: 0 10px;
