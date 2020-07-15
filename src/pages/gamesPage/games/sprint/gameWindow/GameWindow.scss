@@ -150,6 +150,7 @@ $padding: $margin;
         order: 2;
         min-width: $element-size;
         margin: $margin auto;
+        word-break: break-word;
       }
 
       .react-countdown-clock {
