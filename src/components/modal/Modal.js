@@ -20,7 +20,7 @@ export default class ModalWindow extends Component {
 
   render() {
     const {
-      label, modalSize, content, contentHeader, clickHandler,
+      label, modalSize, content, contentHeader, clickHandler, okHandler, cancelHandler
     } = this.props;
 
     const { modalOpen } = this.state;
@@ -37,13 +37,13 @@ export default class ModalWindow extends Component {
           {content}
         </Modal.Content>
         <Modal.Actions>
-          {(clickHandler
+          {(okHandler
           && (
           <>
-            <Button id="1" label="Cancel" clickHandler={this.handleClose} />
-            <Button id="2" label={label} clickHandler={() => { this.handleClose(); clickHandler(); }} />
+            <Button id="1" label="Cancel" clickHandler={() => { this.handleClose(); cancelHandler(); }} />
+            <Button id="2" label={label} clickHandler={() => { this.handleClose(); okHandler(); }} />
           </>
-          )) || <Button id="2" label="Ok" clickHandler={this.handleClose} /> }
+          )) || <Button id="2" label="Ok" clickHandler={() => { this.handleClose(); clickHandler(); }} /> }
         </Modal.Actions>
       </Modal>
     );
@@ -56,11 +56,15 @@ ModalWindow.propTypes = {
   content: PropTypes.string.isRequired,
   contentHeader: PropTypes.string,
   clickHandler: PropTypes.func,
+  okHandler: PropTypes.func,
+  cancelHandler: PropTypes.func,
 };
 
 ModalWindow.defaultProps = {
   label: 'Ok',
   contentHeader: 'message',
   modalSize: 'small',
-  clickHandler: undefined,
+  clickHandler: () => {},
+  okHandler: () => {},
+  cancelHandler: () => {},
 };
