@@ -1,5 +1,9 @@
 .dictionary {
   margin: 0 30px;
+
+  @media screen and (max-width: 600px){
+    margin: 0 10px;
+  }
 }
 
 .tab-content tbody .row:hover {

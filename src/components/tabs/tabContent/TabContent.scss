@@ -2,83 +2,146 @@
 
 @import '../../../styles/variables.scss';
 
+// .tab-content {
+//   width: 100%;
+
+//   @include flex(column, stretch);
+
+//   &__header {
+//     padding-bottom: 5px;
+//     border-bottom : 1px solid $main-color;
+//   }
+// }
+
+
 .tab-content {
-  width: 100%;
+    width: 100%;
+  
+    @include flex(column, stretch);
+  
+    &__header {
+      padding-bottom: 5px;
+      border-bottom : 1px solid $main-color;
+    }
 
-  @include flex(column, stretch);
+    
+  &__row {
 
-  &__header {
-    padding-bottom: 5px;
-    border-bottom : 1px solid $main-color;
-  }
-}
+    @include flex(row, stretch, space-between);
 
-.row {
+    &:hover {
+      .tab-content__row__item {
+        .tooltip {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+    }
 
-  @include flex(row, stretch, space-between);
+    &__item {
+      position: relative;
+      width      : 25%;
+      margin-top : 20px;
+      text-align : left;
+      color      : $main-color;
 
-  &:hover {
-    & .row__item {
-      & .tooltip {
-        visibility: visible;
-        opacity: 1;
+      @include font(1.8rem, 1.2em, 400)
+    }
+
+    &__item:last-child {
+      text-align: right;
+    }
+
+    
+    &__item .tooltip {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      visibility: hidden;
+      width: 250px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 0;
+      margin-left: -10px;
+      opacity: 0;
+      transition: opacity 0.3s;
+
+    }
+
+    &__item .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+
+    &_crash-icon {
+      cursor: pointer;
+
+      &:hover {
+        color: $enabled-color; 
+        opacity: 0.5;
       }
     }
   }
+}
 
-  &__item {
-    position: relative;
-    width      : 25%;
-    margin-top : 20px;
-    text-align : left;
-    color      : $main-color;
+@media screen and (max-width: 600px) {
+  .tab-content {
+    &__row:first-child {
+      margin-top: 10px;
+    }
 
-    @include font(1.8rem, 1.2em, 400)
-  }
+    &__row {
+      flex-direction: column;
+      &__item {
+        width: 100%;
+        text-align: center;
 
-  &__item:last-child {
-    text-align: right;
-  }
+        &:last-child {
+          text-align: center;
+          padding-bottom: 10px;
+        }
+        
+        &::before {
+          color: darken(#ffffff, 30)
+        }
 
-  
-  &__item .tooltip {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    visibility: hidden;
-    width: 250px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 0;
-    margin-left: -10px;
-    opacity: 0;
-    transition: opacity 0.3s;
+        &:first-child::before {
+          content: 'Word: ';
+        }
 
-  }
+        &:nth-child(2)::before {
+          content: 'Transcript: ';
+        }
 
-  &__item .tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-  }
+        &:nth-child(3)::before {
+          content: 'Translation: ';
+        }
 
-  &__crash-icon {
-    cursor: pointer;
+        &:nth-child(4)::before {
+          content: 'Remove ';
+        }
+      }
+    }
 
-    &:hover {
-      color: $enabled-color; 
-      opacity: 0.5;
+    &__row:nth-child(2n+1) {
+      background-color: #36747b;
+      border-radius: 10px;
+    }
+
+    &__header {
+      display: none;
     }
   }
 }
