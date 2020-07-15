@@ -12,10 +12,11 @@ const DictionaryWordCard = (props) => {
     },
     word,
   } = props;
-  
+
   const data = [
     ['totalRepetition', 'Total repetition'],
     ['totalMistakes', 'Total mistakes'],
+    ['lastRepetition', 'Last repetition'],
     ['nextRepetition', 'Next repetition'],
   ];
 

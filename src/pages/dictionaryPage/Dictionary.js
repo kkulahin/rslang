@@ -78,11 +78,13 @@ const Dictionary = () => {
             totalMistakes,
             totalRepetition,
             nextRepetition,
+            time,
           } = d.optional;
           const [oneWord] = word;
 
           const today = getDateFromSeconds(getTodaySeconds());
           const repetition = getDateFromSeconds(nextRepetition);
+          const lastRepetition = getDateFromSeconds(time);
 
           if (isDeleted) {
             oneWord.data.nextRepetition = 'never';
@@ -92,6 +94,14 @@ const Dictionary = () => {
             oneWord.data.nextRepetition = 'tomorrow or soon';
           } else {
             oneWord.data.nextRepetition = `${repetition.getFullYear()}-${repetition.getMonth() + 1}-${repetition.getDate()}`;
+          }
+
+          if (checkDayDifferenceAbs(lastRepetition, today) === 0) {
+            oneWord.data.lastRepetition = 'today';
+          } else if (checkDayDifferenceAbs(lastRepetition, today) === 1) {
+            oneWord.data.lastRepetition = 'yesterday';
+          } else {
+            oneWord.data.lastRepetition = `${lastRepetition.getFullYear()}-${lastRepetition.getMonth() + 1}-${lastRepetition.getDate()}`;
           }
 
           oneWord.data.totalMistakes = totalMistakes;
