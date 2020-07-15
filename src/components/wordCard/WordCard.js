@@ -305,7 +305,7 @@ const WordCard = ({
           isInvisible={!hasPrevious}
           isDisabled={state.isCorrect || state.isShowBtnClick || isAnswered}
         />
-        <ContainerWithShadow padding="20px">
+        <ContainerWithShadow clName="container-with-shadow--card">
           <CardContent
             settings={settings}
             word={definition}

@@ -10,10 +10,7 @@ import './GameResult.scss';
 const GameResult = ({
   score, rightAnswers, errorAnswers, winStreak,
 }) => (
-  <ContainerWithShadow
-    width="max-content"
-    padding="30px 30px 20px 30px"
-  >
+  <ContainerWithShadow clName="container-with-shadow--sprint">
     <p className="game-result__score">
       Your score:
       {' '}

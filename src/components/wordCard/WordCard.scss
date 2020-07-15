@@ -28,6 +28,10 @@ $font-color-tooltip: $main-color;
   @media (pointer: fine) { @content; }
 }
 
+.container-with-shadow--card {
+  padding: 20px;
+}
+
 .card-unit {
   width: 100%;
   margin: 2rem 0;
