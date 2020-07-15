@@ -58,7 +58,7 @@ const App = () => {
             <PrivateRoute path="/dictionary" component={Dictionary} />
             <PrivateRoute path="/statistic" component={Statistic} />
             <PrivateRoute path="/settings" component={Settings} />
-            <PrivateRoute path="/promo" component={Promo} />
+            <Route path="/promo" component={Promo} />
             <PrivateRoute path="/about" component={About} />
             <PrivateRoute path="/games" component={GamesPage} />
             <PrivateRoute component={NotFound} />
