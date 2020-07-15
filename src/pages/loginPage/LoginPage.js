@@ -162,9 +162,6 @@ const LoginForm = ({ getLoginStatus, isUserOnline }) => {
               handleSwitch={isChecked}
               isChecked={rememberUser}
             />
-            <div>
-              <a href="/forgot">Forgot password?</a>
-            </div>
           </div>
           <Button
             name="light"
