@@ -146,6 +146,7 @@ const NavPanel = ({ getLocation }) => {
             {isMenuFullSize() ? <p>Less</p> : null}
           </Link>
         </div>
+
         <div className="login">
           <Link
             className={activeItem.link === 'login' ? 'item active' : 'item'}
