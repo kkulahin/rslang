@@ -15,18 +15,25 @@ import Dictaphone from '../../../../components/dictaphone/Dictaphone';
 
 import option from './gameOption';
 
+import Book from '../../../../assets/image/speakit/book.png';
+import Reward from '../../../../assets/image/speakit/reward.png';
+import Medal from '../../../../assets/image/speakit/medal.png';
+import Bell from '../../../../assets/image/speakit/bell.png';
+import Cup from '../../../../assets/image/speakit/cup.png';
+import Star from '../../../../assets/image/speakit/star.png';
+
 import './speakIt.scss';
 import 'react-step-progress-bar/styles.css';
 
 const gitDataUrl = 'https://raw.githubusercontent.com/kaxaru/rslang-data/master/';
 
 const stepPic = [
-  'https://vignette.wikia.nocookie.net/pkmnshuffle/images/9/9d/Pichu.png/revision/latest?cb=20170407222851',
-  'https://vignette.wikia.nocookie.net/pkmnshuffle/images/9/97/Pikachu_%28Smiling%29.png/revision/latest?cb=20170410234508',
-  'https://orig00.deviantart.net/493a/f/2017/095/5/4/raichu_icon_by_pokemonshuffle_icons-db4ryym.png',
-  'https://orig00.deviantart.net/493a/f/2017/095/5/4/raichu_icon_by_pokemonshuffle_icons-db4ryym.png',
-  'https://orig00.deviantart.net/493a/f/2017/095/5/4/raichu_icon_by_pokemonshuffle_icons-db4ryym.png',
-  'https://orig00.deviantart.net/493a/f/2017/095/5/4/raichu_icon_by_pokemonshuffle_icons-db4ryym.png',
+  Book,
+  Bell,
+  Reward,
+  Star,
+  Cup,
+  Medal,
 ];
 
 const isEmpty = (obj) => Object.keys(obj).length === 0;
@@ -183,14 +190,15 @@ const SpeackIt = () => {
       const rightWords = rights[curStage][`stage${curStage}`];
       rightWords.forEach((r) => {
         const el = document.querySelector(`.item[data-value=${r.word}]`);
-        el.classList.add('success');
+        const parentEl = el.parentElement;
+        parentEl.classList.add('success');
       });
     }
     return undefined;
   }, [gameplayWords, gameOption]);
 
   const removeGameModeClass = () => {
-    const els = [...document.querySelectorAll('.speakIt-items .item.success')];
+    const els = [...document.querySelectorAll('.speakIt-items .container-with-shadow.success')];
     if (els.length > 0) {
       els.forEach((e) => {
         e.classList.remove('success');
@@ -307,27 +315,29 @@ const SpeackIt = () => {
       words = curStageWords[`stage${[gameOption.curStage]}`];
     }
     const wordEl = wordSize.map((w) => (
-      <div
-        className={`${isActiveItemClass(words, w)} item`}
-        key={w}
-        onClick={onClickSetWord}
-        data-value={words !== null ? words[w].word : null}
-        role="presentation"
-      >
-        <div className="item-icon">
-          <Icon name="assistive listening systems" />
-        </div>
+      <ShadowContainer key={w} clName={`${isActiveItemClass(words, w)}`}>
         <div
-          className="item-content"
+          className={`${isActiveItemClass(words, w)} item`}
+          key={w}
+          onClick={onClickSetWord}
           data-value={words !== null ? words[w].word : null}
-          data-translate={words !== null ? words[w].wordTranslate : null}
-          data-image={words !== null ? words[w].image : null}
-          data-audio={words !== null ? words[w].audio : null}
+          role="presentation"
         >
-          <p>{words !== null ? words[w].word : null}</p>
-          <p>{words !== null ? words[w].transcription : null}</p>
+          <div className="item-icon">
+            <Icon name="assistive listening systems" />
+          </div>
+          <div
+            className="item-content"
+            data-value={words !== null ? words[w].word : null}
+            data-translate={words !== null ? words[w].wordTranslate : null}
+            data-image={words !== null ? words[w].image : null}
+            data-audio={words !== null ? words[w].audio : null}
+          >
+            <p>{words !== null ? words[w].word : null}</p>
+            <p>{words !== null ? words[w].transcription : null}</p>
+          </div>
         </div>
-      </div>
+      </ShadowContainer>
     ));
     return <>{wordEl}</>;
   };
@@ -371,7 +381,7 @@ const SpeackIt = () => {
         <>
           <p className="results-errors">
             Errors:
-            <span className="errors-num">{words.length}</span>
+            <span className="errors-num">{` ${words.length}`}</span>
           </p>
           {wordsErr}
 
@@ -402,7 +412,7 @@ const SpeackIt = () => {
         <>
           <p className="results-right">
             Rights:
-            <span className="right-num">{words.length}</span>
+            <span className="right-num">{` ${words.length}`}</span>
           </p>
           {wordsErr}
         </>
@@ -483,7 +493,7 @@ const SpeackIt = () => {
         <div className="speakIt-header">
           <Header as="h2" className="games-header">
             <Icon name="game" />
-            <Header.Content>SpeakIt</Header.Content>
+            <Header.Content>Speak it</Header.Content>
           </Header>
         </div>
         <div className="app-speakIt" />
@@ -538,35 +548,34 @@ const SpeackIt = () => {
         <div className="speakIt-progressbar" onClick={switchStage} role="presentation">
           {buildProgressStep()}
         </div>
-        <div className="resultpage">
-          <div className="results-container">
-            { buildStatistic() }
-            { buildStatistic(false) }
-            <p className="results-right">
-              Rights:
-              <span className="right-num">0</span>
-            </p>
-            <div className="right-item" />
+        <ShadowContainer clName="resultpage">
+          <div className="resultpage">
+            <div className="results-container">
+              { buildStatistic() }
+              { buildStatistic(false) }
+
+              <div className="right-item" />
+            </div>
           </div>
-        </div>
-        <div className="result-button__wrapper">
-          <Button
-            label="Start play again?"
-            id="speakit-again-btn"
-            clickHandler={restart}
-          />
-          <Button
-            label="Back"
-            id="speakit-back-btn"
-            clickHandler={backToMain}
-          />
-        </div>
-        <audio
-          className="speakIt-results__audio"
-          src={activeWordStatistic ? `${gitDataUrl}/${activeWordStatistic?.audio}` : null}
-        >
-          <track kind="captions" />
-        </audio>
+          <div className="result-button__wrapper">
+            <Button
+              label="Start play again?"
+              id="speakit-again-btn"
+              clickHandler={restart}
+            />
+            <Button
+              label="Back"
+              id="speakit-back-btn"
+              clickHandler={backToMain}
+            />
+          </div>
+          <audio
+            className="speakIt-results__audio"
+            src={activeWordStatistic ? `${gitDataUrl}/${activeWordStatistic?.audio}` : null}
+          >
+            <track kind="captions" />
+          </audio>
+        </ShadowContainer>
       </div>
     </>
   );
