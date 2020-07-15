@@ -108,13 +108,18 @@
   .game-savanna {
 
     .container-with-shadow {
-      padding: 40px 0 !important;
+      padding: 20px 0 !important;
     }
 
     .savanna-level {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      margin: 20px;
+    }
+
+    .savanna-start {
+      margin-top: 20px;
     }
 
     .savanna-wordpanel {
