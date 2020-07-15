@@ -1,5 +1,5 @@
 // eslint-disable-next-line linebreak-style
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router, Switch, Route,
 } from 'react-router-dom';
@@ -33,28 +33,40 @@ document.addEventListener('click', ({ target }) => {
   }
 });
 
-const App = () => (
-  <Router history={History}>
-    <div className="app-wrapper">
-      <Header />
-      <div className="app-main">
-        <GreetingWrapper />
-        <Switch>
-          <PrivateRoute exact path="/" component={Home} />
-          <Route path="/signin" component={LoginPage} />
-          <Route path="/signup" component={SignupPage} />
-          <Route path="/logout" component={Logout} />
-          <PrivateRoute path="/dictionary" component={Dictionary} />
-          <PrivateRoute path="/statistic" component={Statistic} />
-          <PrivateRoute path="/settings" component={Settings} />
-          <PrivateRoute path="/promo" component={Promo} />
-          <PrivateRoute path="/about" component={About} />
-          <PrivateRoute path="/games" component={GamesPage} />
-          <PrivateRoute component={NotFound} />
-        </Switch>
+const App = () => {
+  const [isUserLogin, setUserLogin] = useState(false);
+
+  const getLoginStatus = (status) => {
+    setUserLogin(status);
+  };
+
+  return (
+    <Router history={History}>
+      <div className="app-wrapper">
+        <Header />
+        <div className="app-main">
+          <GreetingWrapper userOnline={isUserLogin} />
+          <Switch>
+            <PrivateRoute exact path="/" component={Home} />
+            <Route path="/signin">
+              <LoginPage getLoginStatus={getLoginStatus} isUserOnline={isUserLogin} />
+            </Route>
+            <Route path="/signup" component={SignupPage} isUserOffline={isUserLogin} />
+            <Route path="/logout">
+              <Logout getLoginStatus={getLoginStatus} />
+            </Route>
+            <PrivateRoute path="/dictionary" component={Dictionary} />
+            <PrivateRoute path="/statistic" component={Statistic} />
+            <PrivateRoute path="/settings" component={Settings} />
+            <PrivateRoute path="/promo" component={Promo} />
+            <PrivateRoute path="/about" component={About} />
+            <PrivateRoute path="/games" component={GamesPage} />
+            <PrivateRoute component={NotFound} />
+          </Switch>
+        </div>
       </div>
-    </div>
-  </Router>
-);
+    </Router>
+  );
+};
 
 export default App;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import Greeting from '../greeting/Greeting';
 import ContinueTrainingBlock from '../continueTrainingBlock/ContinueTrainingBlock';
@@ -9,7 +10,7 @@ import wordQueueSubject from '../../utils/observers/WordQueueSubject';
 import wordController from '../../controllers/WordConrtoller';
 import { getCookie } from '../../utils/cookie';
 
-const GreetingWrapper = () => {
+const GreetingWrapper = ({ userOnline }) => {
   const [cardsCount, setCardCount] = useState(wordController.getWordsCount());
   const [passedCount, setPassedCount] = useState(statisticsController.getPassedCount());
   const [userInfo, setUserInfo] = useState({ name: '' });
@@ -33,11 +34,16 @@ const GreetingWrapper = () => {
   }, [setCardCount, setPassedCount]);
 
   useEffect(() => {
-    const auth = JSON.parse(getCookie('auth'));
-    if (Object.keys(auth).length > 0 && userInfo.name !== auth.name) {
-      setUserInfo({ name: auth.name });
+    const cookie = getCookie('auth');
+    if (cookie === null || cookie === '' || !userOnline) {
+      setUserInfo({ name: '' });
+    } else {
+      const auth = JSON.parse(cookie);
+      if (Object.keys(auth).length > 0 && userInfo.name !== auth.name) {
+        setUserInfo({ name: auth.name });
+      }
     }
-  }, [userInfo.name]);
+  }, [userInfo.name, userOnline]);
 
   const location = useLocation();
 
@@ -53,7 +59,7 @@ const GreetingWrapper = () => {
     !isAuthenticationPage
         && (
         <div className="greeting-wrapper">
-          <Greeting userName={userInfo.name}/>
+          <Greeting userName={userInfo.name} />
           <ContinueTrainingBlock
             completedWordsCount={completedWordsCount}
             cardsCount={passedCount === null || cardsCount === null ? 0 : cardsCount}
@@ -62,6 +68,14 @@ const GreetingWrapper = () => {
         </div>
         )
   );
+};
+
+GreetingWrapper.propTypes = {
+  userOnline: PropTypes.bool,
+};
+
+GreetingWrapper.defaultProps = {
+  userOnline: false,
 };
 
 export default GreetingWrapper;

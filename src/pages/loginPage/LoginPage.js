@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   Form, Grid, Image,
 } from 'semantic-ui-react';
@@ -43,7 +44,7 @@ const isRememberUserDefault = () => (localStorage.getItem('rememberUser') !== nu
 const defaultUserData = () => (localStorage.getItem('userData') !== null
   ? JSON.parse(localStorage.getItem('userData')) : userData);
 
-const LoginForm = () => {
+const LoginForm = ({ getLoginStatus, isUserOnline }) => {
   const [isDisabled, setButtonBehaviour] = useState(true);
   const [data, setUserData] = useState(defaultUserData);
   const [userNotification, setUserNotification] = useState(notification);
@@ -65,6 +66,12 @@ const LoginForm = () => {
       localStorage.setItem('userData', JSON.stringify(userData));
     }
   }, [rememberUser, data]);
+
+  useEffect(() => {
+    if (isUserOnline) {
+      setRedirect(true);
+    }
+  }, [isUserOnline]);
 
   const setEmail = (e) => {
     const userEmail = {
@@ -100,7 +107,7 @@ const LoginForm = () => {
         if (response.notification.status) {
           setCookie('auth', JSON.stringify(response.data), cookieLifeCyrcle);
           setCookie('login', JSON.stringify(data), (10 * 365 * 24 * 60 * 60));
-          setRedirect(true);
+          getLoginStatus(true);
         }
       } catch (error) {
         const userAuthMsg = {
@@ -175,6 +182,16 @@ const LoginForm = () => {
       </Grid.Column>
     </Grid>
   );
+};
+
+LoginForm.propTypes = {
+  getLoginStatus: PropTypes.func,
+  isUserOnline: PropTypes.bool,
+};
+
+LoginForm.defaultProps = {
+  getLoginStatus: () => {},
+  isUserOnline: false,
 };
 
 export default LoginForm;
