@@ -1,0 +1,131 @@
+@import '../../styles/mixin.scss';
+
+@import '../../styles/variables.scss';
+
+$page-spinner-size: 10rem;
+
+.page-spinner {
+  position: relative;
+
+  @include size($page-spinner-size);
+
+  pointer-events: none;
+  user-select: none;
+
+  animation: rotate-spinner 2s infinite linear;
+}
+
+.page-spinner > span {
+  position: absolute;
+
+  display: block;
+
+  @include size(40%);
+
+  background-color: $background-color;
+  border-radius: 50%;
+  box-shadow: 0px 0px 15px 3px $enabled-color inset;
+
+  animation: rotate-span 2s infinite ease-in-out;
+}
+
+.page-spinner > span::after {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+
+  @include size(10%);
+
+  border-radius: 50%;
+  box-shadow: 0px 0px 15px 3px $enabled-color;
+
+  animation: translate-span-after-before 3s infinite linear;
+
+  content: "";
+}
+
+.page-spinner > span::before {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+
+  @include size(10%);
+
+  border-radius: 50%;
+  box-shadow: 0px 0px 15px 3px $enabled-color;
+
+  animation: translate-span-after-before 3s infinite;
+  animation-delay: 1.5s;
+
+  content: "";
+}
+
+.page-spinner span:nth-child(1) {
+  top: -2%;
+  left: -2%;
+}
+
+.page-spinner span:nth-child(2) {
+  top: -2%;
+  right: -2%;
+
+  -webkit-animation-delay: 0.5s;
+  animation-delay: 0.5s;
+}
+
+.page-spinner span:nth-child(3) {
+  right: -2%;
+  bottom: -2%;
+
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
+}
+
+.page-spinner span:nth-child(4) {
+  bottom: -2%;
+  left: -2%;
+
+  -webkit-animation-delay: 1.5s;
+  animation-delay: 1.5s;
+}
+
+@keyframes rotate-spinner {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes rotate-span {
+
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes translate-span-after-before {
+
+  0% {
+    transform: translate(0%);
+  }
+
+  25% {
+    transform: translate(650%);
+  }
+
+  50% {
+    transform: translate(650%, 650%);
+  }
+
+  75% {
+    transform: translate(0%, 650%);
+  }
+}

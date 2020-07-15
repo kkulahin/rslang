@@ -16,9 +16,20 @@ $font-size-main-mobile: 1.8rem;
 .dictionary {
   margin: 0 30px;
 
-  @media screen and (max-width: 600px){
+  @media screen and (max-width: 600px) {
     margin: 0 10px;
   }
+}
+
+.dictionary-spinner-container {
+  position: relative;
+
+  @include flex(row, center, center);
+  flex-grow: 1;
+
+  width: 100%;
+  margin: 0;
+  padding: 0 0 4rem 0;
 }
 
 .tab-content tbody .row:hover {
