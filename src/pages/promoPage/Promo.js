@@ -6,6 +6,7 @@ const Promo = () => (
   <div className="promo">
     <div className="promo__header">
       <h2 className="promo__header-title">RS Lang App education system</h2>
+      <a href="https://github.com/BlackTruth/rslang" target="blank">Link to repo</a>
       <div className="promo__header-text">
         <div>
           <h2>
